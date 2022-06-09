@@ -14,7 +14,9 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   initialName: string;
   title: string;
   content: string;
-  language: string[];
+  language: string;
+  date?: string;
+  name?: string;
   sx?: SxProps<Theme>;
 }
 
@@ -26,6 +28,8 @@ export const PostCard = ({
   title,
   content,
   language,
+  date,
+  name,
   ...props
 }: Props) => {
   return (
@@ -38,8 +42,24 @@ export const PostCard = ({
                 <Avatar>{initialName}</Avatar>
                 <Typography variant="h6">{title}</Typography>
               </Box>
-              <Box sx={{ borderRadius: 2, bgcolor: "primary.main" }}>
+              <Box sx={{ borderRadius: 2, bgcolor: "primary.light", p: 2 }}>
                 <Typography variant="subtitle1">{content}</Typography>
+              </Box>
+              <Box
+                sx={{ display: "flex", gap: 10, alignItems: "center", px: 3 }}
+              >
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Typography variant="subtitle1">使用言語</Typography>
+                  <Typography variant="h6">{language}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Typography variant="subtitle1">日時</Typography>
+                  <Typography variant="h6">{date}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Typography variant="subtitle1">名前</Typography>
+                  <Typography variant="h6">{name}</Typography>
+                </Box>
               </Box>
             </Box>
           </CardContent>
