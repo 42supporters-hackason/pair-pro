@@ -1,13 +1,21 @@
-import React, { HTMLAttributes, ReactChild, ReactNode } from "react";
+import React, { HTMLAttributes } from "react";
 import Card from "@mui/material/Card";
-import styled from "styled-components";
-import { Avatar, CardActionArea, CardContent, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CardActionArea,
+  CardContent,
+  SxProps,
+  Theme,
+  Typography,
+} from "@mui/material";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   initialName: string;
   title: string;
   content: string;
   language: string[];
+  sx?: SxProps<Theme>;
 }
 
 /**
@@ -21,39 +29,22 @@ export const PostCard = ({
   ...props
 }: Props) => {
   return (
-    <Container {...props}>
-      <Card>
+    <Box {...props}>
+      <Card sx={{ boxShadow: 3, borderRadius: 3 }}>
         <CardActionArea>
-          <CardContent>
-            <CardContainer>
-              <TopLayout>
+          <CardContent sx={{ m: 1 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
                 <Avatar>{initialName}</Avatar>
                 <Typography variant="h6">{title}</Typography>
-              </TopLayout>
-              <ContentContainer>
+              </Box>
+              <Box sx={{ borderRadius: 2, bgcolor: "primary.main" }}>
                 <Typography variant="subtitle1">{content}</Typography>
-              </ContentContainer>
-            </CardContainer>
+              </Box>
+            </Box>
           </CardContent>
         </CardActionArea>
       </Card>
-    </Container>
+    </Box>
   );
 };
-
-const Container = styled.div``;
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ContentContainer = styled.div`
-  margin: 15px;
-`;
-
-const TopLayout = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 25px;
-`;

@@ -1,14 +1,13 @@
 import { Story, StoryContext } from "@storybook/react";
-import { ThemeProvider } from "styled-components";
-import generateThemes from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "../theme";
 
 /**
  * Storybookにthemeを反映させるためのProvider
  */
 export const StorybookProvider = (Story: Story, context: StoryContext) => {
-  const { lightTheme } = generateThemes();
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={theme}>
       <Story {...context} />
     </ThemeProvider>
   );

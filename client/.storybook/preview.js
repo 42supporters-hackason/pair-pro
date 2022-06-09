@@ -10,4 +10,4 @@ export const parameters = {
   },
 };
 
-export const decorator = [StorybookProvider];
+export const decorators = [StorybookProvider];
