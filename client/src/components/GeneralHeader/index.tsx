@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Avatar,
   Badge,
   Box,
   IconButton,
@@ -34,7 +35,7 @@ export const GeneralHeader = () => {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            P2PMatching
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
