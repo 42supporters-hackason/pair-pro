@@ -12,11 +12,12 @@ export const Card = ({ children, ...props }: Props) => {
   return (
     <Box
       sx={{
-        bgcolor: "primary.light",
+        bgcolor: "#fff",
         widht: "100%",
         height: "100%",
-        p: 2,
-        borderRadius: 2,
+        p: 4,
+        borderRadius: 4,
+        boxShadow: 3,
       }}
       {...props}
     >
