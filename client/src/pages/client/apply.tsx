@@ -1,18 +1,22 @@
 import {
   Box,
   Button,
+  Modal,
   TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import React from "react";
+import { Card } from "../../components/Card";
+import { useBoolean } from "../../hooks/useBoolean";
 import { noop } from "../../utils";
 
 /**
  * マッチングの募集をするページ
  */
 export const ApplyPage = () => {
+  const [openModal, setOpenModal] = useBoolean(false);
   return (
     <Box
       sx={{
@@ -62,7 +66,7 @@ export const ApplyPage = () => {
             sx={{ width: "50%" }}
           />
           <DesktopDatePicker
-            label="Date desktop"
+            label="日時"
             inputFormat="MM/dd/yyyy"
             value=""
             onChange={noop}
@@ -78,9 +82,15 @@ export const ApplyPage = () => {
           borderRadius: "10px",
         }}
         variant="contained"
+        onClick={setOpenModal.on}
       >
         上記の内容で募集をする
       </Button>
+      <Modal open={openModal} onClose={setOpenModal.off}>
+        <Box sx={{ m: "100px" }}>
+          <Card></Card>
+        </Box>
+      </Modal>
     </Box>
   );
 };
