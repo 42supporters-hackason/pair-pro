@@ -1,7 +1,8 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import React from "react";
 import { Card } from "../../components/Card";
 import { PostCard, Props as PostCardProps } from "../../components/PostCard";
+import { useBoolean } from "../../hooks/useBoolean";
 
 const demoPostView: PostCardProps[] = [
   {
@@ -33,7 +34,11 @@ const demoPostView: PostCardProps[] = [
   },
 ];
 
+/**
+ * home画面
+ */
 export const HomePage = () => {
+  const [openPostModal, setOpenPostModal] = useBoolean(false);
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
@@ -51,12 +56,13 @@ export const HomePage = () => {
                 language={language}
                 date={date}
                 name={name}
+                onClick={setOpenPostModal.on}
               />
             )
           )}
         </Box>
       </Box>
-      <Box sx={{ width: "40%", mx: "60px", height: "100%" }}>
+      <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>
         <Box>
           <Typography fontWeight="bold" sx={{ textAlign: "center", mb: 3 }}>
             マッチングする
@@ -89,6 +95,11 @@ export const HomePage = () => {
           <Card></Card>
         </Box>
       </Box>
+      <Modal open={openPostModal} onClose={setOpenPostModal.off}>
+        <Box sx={{ m: "100px" }}>
+          <Card></Card>
+        </Box>
+      </Modal>
     </Box>
   );
 };
