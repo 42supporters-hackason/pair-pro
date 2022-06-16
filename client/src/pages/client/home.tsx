@@ -66,8 +66,8 @@ export const HomePage = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              mb: 2,
-              gap: 1,
+              mb: "45px",
+              gap: 3,
             }}
           >
             <Button size="large" variant="outlined">
@@ -79,7 +79,11 @@ export const HomePage = () => {
           </Box>
         </Box>
         <Box>
-          <Typography sx={{ textAlign: "center", mb: 2 }} variant="h6">
+          <Typography
+            fontWeight="bold"
+            sx={{ textAlign: "center", mb: 2 }}
+            variant="subtitle1"
+          >
             Profile
           </Typography>
           <Card></Card>
