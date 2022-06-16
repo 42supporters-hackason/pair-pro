@@ -14,12 +14,6 @@ export const theme = createTheme({
       dark: "#f7a239",
       contrastText: "#fff",
     },
-    error: {
-      light: "#e1a436",
-      main: "#cc7013",
-      dark: "#c15b0f",
-      contrastText: "#fff",
-    },
     success: {
       light: "#5efc82",
       main: "#00c853",
