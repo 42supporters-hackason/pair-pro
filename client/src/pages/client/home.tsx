@@ -1,5 +1,5 @@
 import React from "react";
 
-export const Home = () => {
+export const HomePage = () => {
   return <div>home</div>;
 };
