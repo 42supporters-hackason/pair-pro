@@ -1,4 +1,5 @@
 import { RouteObject } from "react-router-dom";
+import { ClientLayout } from "../pages/components/ClientLayout";
 import { lazyImport } from "../utils";
 
 const { HomePage } = lazyImport(
@@ -28,15 +29,21 @@ export const CLIENT_ROUTE_PATH = {
 
 export const clientRoutes: RouteObject[] = [
   {
-    path: CLIENT_ROUTE_PATH.HOME,
-    element: <HomePage />,
-  },
-  {
-    path: CLIENT_ROUTE_PATH.APPLY,
-    element: <ApplyPage />,
-  },
-  {
-    path: CLIENT_ROUTE_PATH.RECRUTE,
-    element: <RecrutePage />,
+    path: "/",
+    element: <ClientLayout />,
+    children: [
+      {
+        path: CLIENT_ROUTE_PATH.HOME,
+        element: <HomePage />,
+      },
+      {
+        path: CLIENT_ROUTE_PATH.APPLY,
+        element: <ApplyPage />,
+      },
+      {
+        path: CLIENT_ROUTE_PATH.RECRUTE,
+        element: <RecrutePage />,
+      },
+    ],
   },
 ];
