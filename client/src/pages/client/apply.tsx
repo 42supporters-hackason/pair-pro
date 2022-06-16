@@ -1,5 +1,5 @@
 import React from "react";
 
-export const Apply = () => {
+export const ApplyPage = () => {
   return <div>apply</div>;
 };

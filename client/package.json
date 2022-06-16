@@ -22,6 +22,7 @@
     "react-dom": "^18.0.0",
     "react-github-login-button": "^1.0.1",
     "react-router-dom": "^6.3.0",
+    "react-social-login-buttons": "^3.6.0",
     "styled-components": "^5.3.5",
     "vite-plugin-material-ui": "^1.0.1"
   },

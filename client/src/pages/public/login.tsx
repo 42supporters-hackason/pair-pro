@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import React from "react";
 import { Card } from "../../components/Card";
-import GithubButton from "react-github-login-button";
+import { GithubLoginButton } from "react-social-login-buttons";
 
 export const LoginPage = () => {
   return (
@@ -54,7 +54,7 @@ export const LoginPage = () => {
               >
                 お手持ちのGithubで認証をします
               </Typography>
-              <GithubButton style={{ width: "600px" }} />
+              <GithubLoginButton style={{ width: "600px" }} />
             </Card>
           </Box>
         </Box>
