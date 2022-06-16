@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+export interface Props extends HTMLAttributes<HTMLDivElement> {
   initialName: string;
   title: string;
   content: string;

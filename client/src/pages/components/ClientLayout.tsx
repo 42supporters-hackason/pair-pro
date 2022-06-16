@@ -8,9 +8,16 @@ import { GeneralHeader } from "../../components/GeneralHeader";
  */
 export const ClientLayout = () => {
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        minHeight: "100vh",
+      }}
+    >
       <GeneralHeader />
-      <Box>
+      <Box sx={{ flex: "1" }}>
         <Suspense fallback={null}>
           <Outlet />
         </Suspense>
