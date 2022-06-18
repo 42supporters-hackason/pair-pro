@@ -8,15 +8,21 @@ import {
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { Card } from "../../components/Card";
 import { useBoolean } from "../../hooks/useBoolean";
 import { noop } from "../../utils";
+import { applySchema, ApplySchema } from "./validation/apply_vaildation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 /**
  * マッチングの募集をするページ
  */
 export const ApplyPage = () => {
   const [openModal, setOpenModal] = useBoolean(false);
+  const { register } = useForm<ApplySchema>({
+    resolver: zodResolver(applySchema),
+  });
   return (
     <Box
       sx={{
@@ -44,6 +50,7 @@ export const ApplyPage = () => {
           variant="standard"
           label="タイトル"
           sx={{ width: "500px" }}
+          {...register("title")}
         />
         <Box>
           <Typography variant="subtitle2" sx={{ mb: "5px", ml: "5px" }}>
@@ -57,6 +64,7 @@ export const ApplyPage = () => {
               resize: "none",
               padding: "15px",
             }}
+            {...register("content")}
           />
         </Box>
         <Box sx={{ display: "flex", width: "500px", gap: 2 }}>
@@ -64,13 +72,14 @@ export const ApplyPage = () => {
             variant="standard"
             label="使用言語"
             sx={{ width: "50%" }}
+            {...register("language")}
           />
           <DesktopDatePicker
             label="日時"
             inputFormat="MM/dd/yyyy"
             value=""
-            onChange={noop}
             renderInput={(params) => <TextField {...params} />}
+            {...register("date")}
           />
         </Box>
       </Box>
