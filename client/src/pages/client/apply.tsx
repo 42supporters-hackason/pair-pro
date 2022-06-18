@@ -7,11 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Card } from "../../components/Card";
 import { useBoolean } from "../../hooks/useBoolean";
-import { noop } from "../../utils";
 import { applySchema, ApplySchema } from "./validation/apply_vaildation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -20,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
  */
 export const ApplyPage = () => {
   const [openModal, setOpenModal] = useBoolean(false);
-  const { register } = useForm<ApplySchema>({
+  const { register, control } = useForm<ApplySchema>({
     resolver: zodResolver(applySchema),
   });
   return (
@@ -74,12 +72,18 @@ export const ApplyPage = () => {
             sx={{ width: "50%" }}
             {...register("language")}
           />
-          <DesktopDatePicker
-            label="日時"
-            inputFormat="MM/dd/yyyy"
-            value=""
-            renderInput={(params) => <TextField {...params} />}
-            {...register("date")}
+          <Controller
+            name="date"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <DesktopDatePicker
+                label="日時"
+                inputFormat="MM/dd/yyyy"
+                value={value}
+                onChange={onChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            )}
           />
         </Box>
       </Box>
