@@ -12,15 +12,26 @@ import { Card } from "../../components/Card";
 import { useBoolean } from "../../hooks/useBoolean";
 import { applySchema, ApplySchema } from "./validation/apply_vaildation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback } from "react";
 
 /**
  * マッチングの募集をするページ
  */
 export const ApplyPage = () => {
   const [openModal, setOpenModal] = useBoolean(false);
-  const { register, control } = useForm<ApplySchema>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ApplySchema>({
     resolver: zodResolver(applySchema),
   });
+
+  const handleApply = useCallback(() => {
+    setOpenModal.on();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -43,13 +54,22 @@ export const ApplyPage = () => {
           width: "100%",
           mt: 3,
         }}
+        component="form"
+        onSubmit={handleSubmit(handleApply)}
       >
-        <TextField
-          variant="standard"
-          label="タイトル"
-          sx={{ width: "500px" }}
-          {...register("title")}
-        />
+        <Box>
+          <TextField
+            variant="standard"
+            label="タイトル"
+            sx={{ width: "500px" }}
+            {...register("title")}
+          />
+          {errors.title && (
+            <Typography sx={{ mt: "5px", color: "error.main" }}>
+              {errors.title.message}
+            </Typography>
+          )}
+        </Box>
         <Box>
           <Typography variant="subtitle2" sx={{ mb: "5px", ml: "5px" }}>
             内容
@@ -64,14 +84,26 @@ export const ApplyPage = () => {
             }}
             {...register("content")}
           />
+          {errors.content && (
+            <Typography sx={{ mt: "5px", color: "error.main" }}>
+              {errors.content.message}
+            </Typography>
+          )}
         </Box>
         <Box sx={{ display: "flex", width: "500px", gap: 2 }}>
-          <TextField
-            variant="standard"
-            label="使用言語"
-            sx={{ width: "50%" }}
-            {...register("language")}
-          />
+          <Box>
+            <TextField
+              variant="standard"
+              label="使用言語"
+              sx={{ width: "50%" }}
+              {...register("language")}
+            />
+            {errors.content && (
+              <Typography sx={{ mt: "5px", color: "error.main" }}>
+                {errors.content.message}
+              </Typography>
+            )}
+          </Box>
           <Controller
             name="date"
             control={control}
@@ -86,19 +118,19 @@ export const ApplyPage = () => {
             )}
           />
         </Box>
+        <Button
+          sx={{
+            mt: "100px",
+            width: "450px",
+            height: "50px",
+            borderRadius: "10px",
+          }}
+          variant="contained"
+          type="submit"
+        >
+          上記の内容で募集をする
+        </Button>
       </Box>
-      <Button
-        sx={{
-          mt: "100px",
-          width: "450px",
-          height: "50px",
-          borderRadius: "10px",
-        }}
-        variant="contained"
-        onClick={setOpenModal.on}
-      >
-        上記の内容で募集をする
-      </Button>
       <Modal open={openModal} onClose={setOpenModal.off}>
         <Box sx={{ m: "100px" }}>
           <Card></Card>
