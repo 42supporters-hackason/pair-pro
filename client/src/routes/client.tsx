@@ -12,19 +12,19 @@ const { ApplyPage } = lazyImport(
   "ApplyPage"
 );
 
-const { RecrutePage } = lazyImport(
-  () => import("../pages/client/recrute"),
-  "RecrutePage"
+const { RecruitPage } = lazyImport(
+  () => import("../pages/client/recruit"),
+  "RecruitPage"
 );
 
 const HOME = "home";
 const APPLY = "apply";
-const RECRUTE = "recrute";
+const RECRUIT = "recruit";
 
 export const CLIENT_ROUTE_PATH = {
   HOME: `/${HOME}`,
   APPLY: `/${APPLY}`,
-  RECRUTE: `/${RECRUTE}`,
+  RECRUIT: `/${RECRUIT}`,
 } as const;
 
 export const clientRoutes: RouteObject[] = [
@@ -41,8 +41,8 @@ export const clientRoutes: RouteObject[] = [
         element: <ApplyPage />,
       },
       {
-        path: CLIENT_ROUTE_PATH.RECRUTE,
-        element: <RecrutePage />,
+        path: CLIENT_ROUTE_PATH.RECRUIT,
+        element: <RecruitPage />,
       },
     ],
   },
