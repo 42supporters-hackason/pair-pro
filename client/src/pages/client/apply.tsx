@@ -90,12 +90,12 @@ export const ApplyPage = () => {
             </Typography>
           )}
         </Box>
-        <Box sx={{ display: "flex", width: "500px", gap: 2 }}>
-          <Box>
+        <Box sx={{ display: "flex", width: "500px", gap: 1 }}>
+          <Box sx={{ width: "50%" }}>
             <TextField
               variant="standard"
               label="使用言語"
-              sx={{ width: "50%" }}
+              sx={{ width: "100%" }}
               {...register("language")}
             />
             {errors.content && (
@@ -104,19 +104,26 @@ export const ApplyPage = () => {
               </Typography>
             )}
           </Box>
-          <Controller
-            name="date"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <DesktopDatePicker
-                label="日時"
-                inputFormat="MM/dd/yyyy"
-                value={value}
-                onChange={onChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
+          <Box>
+            <Controller
+              name="date"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <DesktopDatePicker
+                  label="日時"
+                  inputFormat="MM/dd/yyyy"
+                  value={value}
+                  onChange={onChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              )}
+            />
+            {errors.date && (
+              <Typography sx={{ mt: "5px", color: "error.main" }}>
+                {errors.date.message}
+              </Typography>
             )}
-          />
+          </Box>
         </Box>
         <Button
           sx={{
