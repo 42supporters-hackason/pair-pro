@@ -141,7 +141,8 @@ export const ApplyPage = () => {
         </Box>
         <Button
           sx={{
-            mt: "100px",
+            mb: "35px",
+            mt: "auto",
             width: "450px",
             height: "50px",
             borderRadius: "10px",
@@ -154,14 +155,19 @@ export const ApplyPage = () => {
       </Box>
       <Modal open={openModal} onClose={setOpenModal.off}>
         <Box
-          sx={{ my: "100px", mx: "auto", width: "50%", textAlign: "center" }}
+          sx={{
+            my: "100px",
+            mx: "auto",
+            width: "50%",
+            textAlign: "center",
+          }}
         >
           <Card>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "25px",
+                gap: "45px",
                 justifyContent: "center",
                 mx: 3,
               }}
@@ -182,7 +188,10 @@ export const ApplyPage = () => {
                 }}
               >
                 <Typography>内容</Typography>
-                <Typography variant="h5" sx={{ overflowWrap: "break-word" }}>
+                <Typography
+                  variant="h5"
+                  sx={{ overflowWrap: "break-word", wordBreak: "break-all" }}
+                >
                   {applyFormData.content}
                 </Typography>
               </Box>
@@ -197,6 +206,18 @@ export const ApplyPage = () => {
                     format(applyFormData.date, "yyyy-MM-dd")}
                 </Typography>
               </Box>
+              <Button
+                variant="contained"
+                sx={{
+                  mx: "auto",
+                  mt: "auto",
+                  width: "450px",
+                  height: "50px",
+                  borderRadius: "10px",
+                }}
+              >
+                上記の内容で募集する
+              </Button>
             </Box>
           </Card>
         </Box>
