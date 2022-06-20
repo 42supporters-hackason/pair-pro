@@ -13,21 +13,35 @@ import { useBoolean } from "../../hooks/useBoolean";
 import { applySchema, ApplySchema } from "./validation/apply_vaildation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback } from "react";
+import format from "date-fns/format";
 
 /**
  * マッチングの募集をするページ
  */
 export const ApplyPage = () => {
+  /**
+   * misc.
+   */
   const [openModal, setOpenModal] = useBoolean(false);
+
+  /**
+   * validation
+   */
   const {
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<ApplySchema>({
     resolver: zodResolver(applySchema),
   });
 
+  const applyFormData = getValues();
+
+  /**
+   * event-handler
+   */
   const handleApply = useCallback(() => {
     setOpenModal.on();
   }, []);
@@ -139,8 +153,52 @@ export const ApplyPage = () => {
         </Button>
       </Box>
       <Modal open={openModal} onClose={setOpenModal.off}>
-        <Box sx={{ m: "100px" }}>
-          <Card></Card>
+        <Box
+          sx={{ my: "100px", mx: "auto", width: "50%", textAlign: "center" }}
+        >
+          <Card>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "25px",
+                justifyContent: "center",
+                mx: 3,
+              }}
+            >
+              <Typography variant="h6" fontWeight="bold">
+                入力内容確認
+              </Typography>
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Typography>タイトル</Typography>
+                <Typography variant="h5">{applyFormData.title}</Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Typography>内容</Typography>
+                <Typography variant="h5" sx={{ overflowWrap: "break-word" }}>
+                  {applyFormData.content}
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Typography>使用言語</Typography>
+                <Typography variant="h5">{applyFormData.language}</Typography>
+              </Box>
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Typography>日程</Typography>
+                <Typography variant="h5">
+                  {applyFormData.date &&
+                    format(applyFormData.date, "yyyy-MM-dd")}
+                </Typography>
+              </Box>
+            </Box>
+          </Card>
         </Box>
       </Modal>
     </Box>
