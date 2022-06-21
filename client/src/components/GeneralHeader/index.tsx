@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { useClientHeaderMenu } from "./useHeaderMenu";
 
 const settings = ["Profile", "Logout"];
 
@@ -20,36 +21,13 @@ const settings = ["Profile", "Logout"];
  * 全ページ共通のHeaderコンポーネント
  */
 export const GeneralHeader = () => {
-  const { goToHome, goToApply, goToRecruit } = useClientRoute();
-  const pages = [
-    {
-      content: "募集する",
-      action: goToApply,
-    },
-    {
-      content: "一覧を見る",
-      action: goToRecruit,
-    },
-  ];
-  const [anchorElNav, setAnchorElNav] =
-    React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] =
-    React.useState<null | HTMLElement>(null);
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = React.useCallback(() => {
-    setAnchorElNav(null);
-  }, [setAnchorElNav]);
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  /**
+   * misc.
+   */
+  const { goToHome } = useClientRoute();
+  const clientMenu = useClientHeaderMenu();
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   return (
     <AppBar position="static">
@@ -79,7 +57,7 @@ export const GeneralHeader = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={(event) => setAnchorElNav(event.currentTarget)}
               color="inherit"
             >
               <MenuIcon />
@@ -97,14 +75,14 @@ export const GeneralHeader = () => {
                 horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => setAnchorElNav(null)}
               sx={{
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map(({ content, action }) => (
-                <MenuItem key={content} onClick={() => action()}>
-                  <Typography textAlign="center">{content}</Typography>
+              {clientMenu.map(({ label, action }) => (
+                <MenuItem key={label} onClick={() => action()}>
+                  <Typography textAlign="center">{label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -129,20 +107,22 @@ export const GeneralHeader = () => {
             P2P Matching
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map(({ content, action }) => (
+            {clientMenu.map(({ label, action }) => (
               <Button
-                key={content}
+                key={label}
                 onClick={() => action()}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {content}
+                {label}
               </Button>
             ))}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton
+                onClick={(event) => setAnchorElUser(event.currentTarget)}
+                sx={{ p: 0 }}
+              >
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
@@ -160,10 +140,10 @@ export const GeneralHeader = () => {
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              onClose={() => setAnchorElUser(null)}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => setAnchorElUser(null)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
