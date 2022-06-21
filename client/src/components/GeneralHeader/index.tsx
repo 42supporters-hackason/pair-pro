@@ -15,8 +15,6 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useClientHeaderMenu } from "./useHeaderMenu";
 
-const settings = ["Profile", "Logout"];
-
 /**
  * 全ページ共通のHeaderコンポーネント
  */
@@ -25,7 +23,7 @@ export const GeneralHeader = () => {
    * misc.
    */
   const { goToHome } = useClientRoute();
-  const clientMenu = useClientHeaderMenu();
+  const menu = useClientHeaderMenu();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -80,7 +78,7 @@ export const GeneralHeader = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {clientMenu.map(({ label, action }) => (
+              {menu.listMenu.map(({ label, action }) => (
                 <MenuItem key={label} onClick={() => action()}>
                   <Typography textAlign="center">{label}</Typography>
                 </MenuItem>
@@ -107,7 +105,7 @@ export const GeneralHeader = () => {
             P2P Matching
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {clientMenu.map(({ label, action }) => (
+            {menu.listMenu.map(({ label, action }) => (
               <Button
                 key={label}
                 onClick={() => action()}
@@ -142,9 +140,9 @@ export const GeneralHeader = () => {
               open={Boolean(anchorElUser)}
               onClose={() => setAnchorElUser(null)}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => setAnchorElUser(null)}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {menu.userMenu.map(({ label, action }) => (
+                <MenuItem key={label} onClick={() => action()}>
+                  <Typography textAlign="center">{label}</Typography>
                 </MenuItem>
               ))}
             </Menu>

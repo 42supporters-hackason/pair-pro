@@ -8,3 +8,8 @@ export interface MenuNode {
    */
   action: () => void;
 }
+
+export interface ClientMenu {
+  listMenu: MenuNode[];
+  userMenu: MenuNode[];
+}
