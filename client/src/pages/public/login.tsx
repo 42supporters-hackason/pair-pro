@@ -3,8 +3,10 @@ import backgroundImg from "../../assets/p2p_background.jpg";
 import React from "react";
 import { Card } from "../../components/Card";
 import { GithubLoginButton } from "react-social-login-buttons";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
 export const LoginPage = () => {
+  const { goToHome } = useClientRoute();
   return (
     <>
       <Box
@@ -54,7 +56,10 @@ export const LoginPage = () => {
               >
                 お手持ちのGithubで認証をします
               </Typography>
-              <GithubLoginButton style={{ width: "600px" }} />
+              <GithubLoginButton
+                style={{ width: "600px" }}
+                onClick={() => goToHome({ replace: true })}
+              />
             </Card>
           </Box>
         </Box>

@@ -12,14 +12,25 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
-const pages = ["募集する", "一覧を見る"];
 const settings = ["Profile", "Logout"];
 
 /**
  * 全ページ共通のHeaderコンポーネント
  */
 export const GeneralHeader = () => {
+  const { goToHome, goToApply, goToRecruit } = useClientRoute();
+  const pages = [
+    {
+      content: "募集する",
+      action: goToApply,
+    },
+    {
+      content: "一覧を見る",
+      action: goToRecruit,
+    },
+  ];
   const [anchorElNav, setAnchorElNav] =
     React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] =
@@ -32,9 +43,9 @@ export const GeneralHeader = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = React.useCallback(() => {
     setAnchorElNav(null);
-  };
+  }, [setAnchorElNav]);
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -48,7 +59,7 @@ export const GeneralHeader = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            onClick={() => goToHome()}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -57,6 +68,7 @@ export const GeneralHeader = () => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer",
             }}
           >
             P2P Matching
@@ -90,9 +102,9 @@ export const GeneralHeader = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              {pages.map(({ content, action }) => (
+                <MenuItem key={content} onClick={() => action()}>
+                  <Typography textAlign="center">{content}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -117,13 +129,13 @@ export const GeneralHeader = () => {
             P2P Matching
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map(({ content, action }) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={content}
+                onClick={() => action()}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {content}
               </Button>
             ))}
           </Box>
