@@ -86,7 +86,7 @@ export const HomePage = () => {
               variant="outlined"
               onClick={() => goToRecruit()}
             >
-              募集一覧から好きな投稿を見つける
+              募集一覧から気になるマッチング相手を探す
             </Button>
           </Box>
         </Box>
