@@ -45,9 +45,9 @@ export const RecruitPage = () => {
     <Box sx={{ mx: "100px" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography
-          variant="h5"
+          variant="h6"
           fontWeight="bold"
-          sx={{ textAlign: "center", mt: 2 }}
+          sx={{ textAlign: "center", mt: "30px" }}
         >
           気になるマッチング相手を探す
         </Typography>

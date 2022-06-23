@@ -98,7 +98,23 @@ export const HomePage = () => {
           >
             Profile
           </Typography>
-          <Card></Card>
+          <Card>
+            <Box
+              component="img"
+              src="https://github-readme-stats.vercel.app/api?username=taisei-13046&theme=onedark&show_icons=true)](https://github.com/anuraghazra/github-readme-stats"
+              sx={{ width: "100%" }}
+            />
+            <Box
+              component="img"
+              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/1-repos-per-language.svg"
+              sx={{ width: "100%" }}
+            />
+            <Box
+              component="img"
+              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/3-stats.svg"
+              sx={{ width: "100%" }}
+            />
+          </Card>
         </Box>
       </Box>
       <Modal open={openPostModal} onClose={setOpenPostModal.off}>
