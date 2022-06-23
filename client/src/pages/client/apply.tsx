@@ -14,6 +14,7 @@ import { applySchema, ApplySchema } from "./validation/apply_vaildation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback } from "react";
 import format from "date-fns/format";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
 /**
  * マッチングの募集をするページ
@@ -23,6 +24,7 @@ export const ApplyPage = () => {
    * misc.
    */
   const [openModal, setOpenModal] = useBoolean(false);
+  const { goToHome } = useClientRoute();
 
   /**
    * validation
@@ -153,6 +155,21 @@ export const ApplyPage = () => {
           上記の内容で募集をする
         </Button>
       </Box>
+      <Button
+        sx={{
+          mb: "35px",
+          mt: "auto",
+          width: "450px",
+          height: "50px",
+          borderRadius: "10px",
+        }}
+        variant="contained"
+        type="button"
+        color="secondary"
+        onClick={() => goToHome()}
+      >
+        戻る
+      </Button>
       <Modal open={openModal} onClose={setOpenModal.off}>
         <Box
           sx={{

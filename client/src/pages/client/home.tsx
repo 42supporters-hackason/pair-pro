@@ -3,6 +3,7 @@ import React from "react";
 import { Card } from "../../components/Card";
 import { PostCard, Props as PostCardProps } from "../../components/PostCard";
 import { useBoolean } from "../../hooks/useBoolean";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
 const demoPostView: PostCardProps[] = [
   {
@@ -39,6 +40,7 @@ const demoPostView: PostCardProps[] = [
  */
 export const HomePage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
+  const { goToApply, goToRecruit } = useClientRoute();
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
@@ -76,10 +78,14 @@ export const HomePage = () => {
               gap: 3,
             }}
           >
-            <Button size="large" variant="outlined">
+            <Button size="large" variant="outlined" onClick={() => goToApply()}>
               自分の好きなテーマで募集する
             </Button>
-            <Button size="large" variant="outlined">
+            <Button
+              size="large"
+              variant="outlined"
+              onClick={() => goToRecruit()}
+            >
               募集一覧から好きな投稿を見つける
             </Button>
           </Box>
