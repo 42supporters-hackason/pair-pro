@@ -1,12 +1,14 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "../../components/Card";
-import { PostCard, Props as PostCardProps } from "../../components/PostCard";
+import { PostCard } from "../../components/PostCard";
+import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
-const demoPostView: PostCardProps[] = [
+const demoPostView = [
   {
+    id: 1,
     initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
@@ -16,6 +18,7 @@ const demoPostView: PostCardProps[] = [
     name: "hoge joge",
   },
   {
+    id: 2,
     initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
@@ -25,6 +28,7 @@ const demoPostView: PostCardProps[] = [
     name: "hoge joge",
   },
   {
+    id: 3,
     initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
@@ -40,6 +44,7 @@ const demoPostView: PostCardProps[] = [
  */
 export const RecruitPage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
+  const [selectedId, setSelectedId] = useState();
   const { goToHome } = useClientRoute();
   return (
     <Box sx={{ mx: "100px" }}>
@@ -53,16 +58,19 @@ export const RecruitPage = () => {
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 2 }}>
           {demoPostView.map(
-            ({ initialName, title, content, language, date, name }, index) => (
+            ({ id, initialName, title, content, language, date, name }) => (
               <PostCard
-                key={index}
+                key={id}
                 initialName={initialName}
                 title={title}
                 content={content}
                 language={language}
                 date={date}
                 name={name}
-                onClick={setOpenPostModal.on}
+                onClick={() => {
+                  setOpenPostModal.on();
+                  setSelectedId(id);
+                }}
               />
             )
           )}
@@ -83,9 +91,7 @@ export const RecruitPage = () => {
         </Button>
       </Box>
       <Modal open={openPostModal} onClose={setOpenPostModal.off}>
-        <Box sx={{ m: "100px" }}>
-          <Card></Card>
-        </Box>
+        <Box sx={{ m: "100px" }}></Box>
       </Modal>
     </Box>
   );
