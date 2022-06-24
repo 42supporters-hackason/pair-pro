@@ -15,7 +15,7 @@ const demoPostView = [
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
     date: "2000-11-11",
-    name: "hoge joge",
+    name: "taisei-13046",
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ const demoPostView = [
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
     date: "2000-11-11",
-    name: "hoge joge",
+    name: "taisei-13046",
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ const demoPostView = [
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
     date: "2000-11-11",
-    name: "hoge joge",
+    name: "taisei-13046",
   },
 ];
 
@@ -44,7 +44,7 @@ const demoPostView = [
  */
 export const RecruitPage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
-  const [selectedId, setSelectedId] = useState();
+  const [selectedId, setSelectedId] = useState<number | undefined>();
   const { goToHome } = useClientRoute();
   return (
     <Box sx={{ mx: "100px" }}>
@@ -90,8 +90,24 @@ export const RecruitPage = () => {
           戻る
         </Button>
       </Box>
-      <Modal open={openPostModal} onClose={setOpenPostModal.off}>
-        <Box sx={{ m: "100px" }}></Box>
+      <Modal
+        open={openPostModal}
+        onClose={setOpenPostModal.off}
+        sx={{ overflow: "scroll" }}
+      >
+        <Box sx={{ my: "50px", mx: "100px" }}>
+          <ProfileCard
+            githubId={demoPostView.find(({ id }) => id === selectedId)?.name}
+            title={demoPostView.find(({ id }) => id === selectedId)?.title}
+            content={demoPostView.find(({ id }) => id === selectedId)?.content}
+            date={demoPostView.find(({ id }) => id === selectedId)?.date}
+            language={
+              demoPostView.find(({ id }) => id === selectedId)?.language
+            }
+            hasButton={true}
+            onClose={setOpenPostModal.off}
+          />
+        </Box>
       </Modal>
     </Box>
   );

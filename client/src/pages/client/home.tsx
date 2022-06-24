@@ -1,37 +1,41 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "../../components/Card";
 import { PostCard, Props as PostCardProps } from "../../components/PostCard";
+import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
-const demoPostView: PostCardProps[] = [
+const demoPostView = [
   {
+    id: 1,
     initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
     date: "2000-11-11",
-    name: "hoge joge",
+    name: "taisei-13046",
   },
   {
+    id: 2,
     initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
     date: "2000-11-11",
-    name: "hoge joge",
+    name: "taisei-13046",
   },
   {
+    id: 3,
     initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
     date: "2000-11-11",
-    name: "hoge joge",
+    name: "taisei-13046",
   },
 ];
 
@@ -40,6 +44,7 @@ const demoPostView: PostCardProps[] = [
  */
 export const HomePage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
+  const [selectedId, setSelectedId] = useState<number | undefined>();
   const { goToApply, goToRecruit } = useClientRoute();
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
@@ -49,16 +54,19 @@ export const HomePage = () => {
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {demoPostView.map(
-            ({ initialName, title, content, language, date, name }, index) => (
+            ({ id, initialName, title, content, language, date, name }) => (
               <PostCard
-                key={index}
+                key={id}
                 initialName={initialName}
                 title={title}
                 content={content}
                 language={language}
                 date={date}
                 name={name}
-                onClick={setOpenPostModal.on}
+                onClick={() => {
+                  setOpenPostModal.on();
+                  setSelectedId(id);
+                }}
               />
             )
           )}
@@ -117,9 +125,23 @@ export const HomePage = () => {
           </Card>
         </Box>
       </Box>
-      <Modal open={openPostModal} onClose={setOpenPostModal.off}>
-        <Box sx={{ m: "100px" }}>
-          <Card></Card>
+      <Modal
+        open={openPostModal}
+        onClose={setOpenPostModal.off}
+        sx={{ overflow: "scroll" }}
+      >
+        <Box sx={{ my: "50px", mx: "100px" }}>
+          <ProfileCard
+            githubId={demoPostView.find(({ id }) => id === selectedId)?.name}
+            title={demoPostView.find(({ id }) => id === selectedId)?.title}
+            content={demoPostView.find(({ id }) => id === selectedId)?.content}
+            date={demoPostView.find(({ id }) => id === selectedId)?.date}
+            language={
+              demoPostView.find(({ id }) => id === selectedId)?.language
+            }
+            hasButton={true}
+            onClose={setOpenPostModal.off}
+          />
         </Box>
       </Modal>
     </Box>
