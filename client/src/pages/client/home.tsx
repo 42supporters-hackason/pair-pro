@@ -1,7 +1,7 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import { Card } from "../../components/Card";
-import { PostCard, Props as PostCardProps } from "../../components/PostCard";
+import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";

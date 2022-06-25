@@ -1,6 +1,5 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { Card } from "../../components/Card";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
