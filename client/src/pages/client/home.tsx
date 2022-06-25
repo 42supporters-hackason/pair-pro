@@ -9,7 +9,6 @@ import { useClientRoute } from "../../hooks/useClientRoute";
 const demoPostView = [
   {
     id: 1,
-    initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
@@ -19,7 +18,6 @@ const demoPostView = [
   },
   {
     id: 2,
-    initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
@@ -29,7 +27,6 @@ const demoPostView = [
   },
   {
     id: 3,
-    initialName: "AA",
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
@@ -53,23 +50,20 @@ export const HomePage = () => {
           マッチング済みの予定
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {demoPostView.map(
-            ({ id, initialName, title, content, language, date, name }) => (
-              <PostCard
-                key={id}
-                initialName={initialName}
-                title={title}
-                content={content}
-                language={language}
-                date={date}
-                name={name}
-                onClick={() => {
-                  setOpenPostModal.on();
-                  setSelectedId(id);
-                }}
-              />
-            )
-          )}
+          {demoPostView.map(({ id, title, content, language, date, name }) => (
+            <PostCard
+              key={id}
+              title={title}
+              content={content}
+              language={language}
+              date={date}
+              name={name}
+              onClick={() => {
+                setOpenPostModal.on();
+                setSelectedId(id);
+              }}
+            />
+          ))}
         </Box>
       </Box>
       <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>
