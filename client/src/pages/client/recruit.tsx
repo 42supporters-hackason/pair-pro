@@ -98,6 +98,7 @@ export const RecruitPage = () => {
               demoPostView.find(({ id }) => id === selectedId)?.language
             }
             hasButton={true}
+            agreeTitle="マッチングする"
             onClose={setOpenPostModal.off}
           />
         </Box>
