@@ -6,6 +6,11 @@ import { Card } from "../../components/Card";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import { useBoolean } from "../../hooks/useBoolean";
+import { IconButton } from "../../components/IconButton";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import LogoutIcon from "@mui/icons-material/Logout";
+import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
 
 /**
  * p2p相手とやり取りをするページ
@@ -15,28 +20,37 @@ export const ChatPage = () => {
    * misc.
    */
   const [volumeOn, setVolumeOn] = useBoolean(false);
+  const [videoOn, setVideoOn] = useBoolean(false);
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
-      <Box sx={{ width: "70%", m: 3 }}>
+      <Box sx={{ width: "70%", mx: 3, mt: 3 }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
             height: "100%",
             width: "100%",
           }}
         >
-          <Box sx={{ display: "flex", height: "80%", width: "100%", gap: 3 }}>
-            <Box sx={{ width: "50%" }}>
-              <Card>自分</Card>
-            </Box>
-            <Box sx={{ width: "50%" }}>
-              <Card>相手</Card>
-            </Box>
+          <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 3 }}>
+            <Box sx={{ width: "50%", border: 1 }}>自分</Box>
+            <Box sx={{ width: "50%", border: 1 }}>相手</Box>
           </Box>
-          <Box>{volumeOn ? <VolumeUpIcon /> : <VolumeOffIcon />}</Box>
+          <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
+            <IconButton>
+              {volumeOn ? <VolumeUpIcon /> : <VolumeOffIcon />}
+            </IconButton>
+            <IconButton>
+              {videoOn ? <VideocamIcon /> : <VideocamOffIcon />}
+            </IconButton>
+            <IconButton>
+              <PersonalVideoIcon />
+            </IconButton>
+            <IconButton>
+              <LogoutIcon />
+            </IconButton>
+          </Box>
         </Box>
       </Box>
       <Box

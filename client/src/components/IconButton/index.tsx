@@ -1,4 +1,11 @@
-import { Box, SxProps, Theme } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  SxProps,
+  Theme,
+  Box,
+} from "@mui/material";
 import React, { HTMLAttributes } from "react";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -10,19 +17,22 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
  */
 export const IconButton = ({ children, ...props }: Props) => {
   return (
-    <Box
-      sx={{
-        bgcolor: "#fff",
-        display: "inline-flex",
-        p: 2,
-        borderRadius: 4,
-        boxShadow: 3,
-        m: "auto",
-        cursor: "pointer",
-      }}
-      {...props}
-    >
-      {children}
+    <Box {...props}>
+      <CardActionArea sx={{ borderRadius: 4 }}>
+        <CardContent
+          sx={{
+            bgcolor: "#fff",
+            display: "inline-flex",
+            p: 2,
+            borderRadius: 4,
+            boxShadow: 3,
+            m: "auto",
+            cursor: "pointer",
+          }}
+        >
+          {children}
+        </CardContent>
+      </CardActionArea>
     </Box>
   );
 };
