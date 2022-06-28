@@ -15,11 +15,19 @@ import React from "react";
  */
 export const ChatPage = () => {
   return (
-    <Box sx={{ display: "flex" }}>
-      <Box sx={{ width: "70%", display: "flex" }}>
+    <Box>
+      <Box sx={{ width: "70%", float: "left" }}>
         ビデオチャット機能を追加する予定
       </Box>
-      <Box sx={{ width: "30%", display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          width: "30%",
+          display: "flex",
+          flexDirection: "column",
+          float: "left",
+          height: "calc(100vh - 68.5px)",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -33,13 +41,13 @@ export const ChatPage = () => {
           <Typography fontWeight="bold">タイトル</Typography>
           <CloseIcon sx={{ mr: "10px", cursor: "pointer" }} />
         </Box>
-        <Box sx={{ height: "450px" }}>チャット</Box>
+        <Box>チャット</Box>
         <Box
           sx={{
             width: "100%",
             display: "flex",
             gap: "15px",
-            alignItems: "flex-end",
+            mt: "auto",
           }}
         >
           <TextareaAutosize
