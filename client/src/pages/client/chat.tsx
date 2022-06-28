@@ -1,4 +1,4 @@
-import { Box, TextareaAutosize, Typography } from "@mui/material";
+import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import React from "react";
@@ -38,12 +38,24 @@ export const ChatPage = () => {
             <Box sx={{ width: "50%", border: 1 }}>相手</Box>
           </Box>
           <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
-            <IconButton>
-              {volumeOn ? <VolumeUpIcon /> : <VolumeOffIcon />}
-            </IconButton>
-            <IconButton>
-              {videoOn ? <VideocamIcon /> : <VideocamOffIcon />}
-            </IconButton>
+            {volumeOn ? (
+              <IconButton onClick={setVolumeOn.off}>
+                <VolumeUpIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={setVolumeOn.on}>
+                <VolumeOffIcon />
+              </IconButton>
+            )}
+            {videoOn ? (
+              <IconButton onClick={setVideoOn.off}>
+                <VideocamIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={setVideoOn.on}>
+                <VideocamOffIcon />
+              </IconButton>
+            )}
             <IconButton>
               <PersonalVideoIcon />
             </IconButton>
@@ -71,8 +83,14 @@ export const ChatPage = () => {
             py: "30px",
           }}
         >
-          <Typography fontWeight="bold">タイトル</Typography>
-          <CloseIcon sx={{ mr: "10px", cursor: "pointer" }} />
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            <Avatar src={`https://github.com/taisei-13046.png`} />
+            <Typography fontWeight="bold">taisei-13046</Typography>
+          </Box>
+          <IconButton sx={{ mr: 2 }}>
+            <Typography fontWeight="bold">退出する</Typography>
+            <LogoutIcon />
+          </IconButton>
         </Box>
         <Box sx={{ m: "15px" }}>チャット</Box>
         <Box
