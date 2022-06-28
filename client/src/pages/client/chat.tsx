@@ -5,19 +5,26 @@ import React from "react";
 import { Card } from "../../components/Card";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import { useBoolean } from "../../hooks/useBoolean";
 
 /**
  * p2p相手とやり取りをするページ
  */
 export const ChatPage = () => {
+  /**
+   * misc.
+   */
+  const [volumeOn, setVolumeOn] = useBoolean(false);
+
   return (
-    <Box sx={{ display: "flex" }}>
-      <Box sx={{ width: "70%", height: "calc(100vh - 68.5px)", m: 3 }}>
+    <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
+      <Box sx={{ width: "70%", m: 3 }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "calc(100% - 68.5px)",
+            justifyContent: "space-between",
+            height: "100%",
             width: "100%",
           }}
         >
@@ -29,7 +36,7 @@ export const ChatPage = () => {
               <Card>相手</Card>
             </Box>
           </Box>
-          <Box></Box>
+          <Box>{volumeOn ? <VolumeUpIcon /> : <VolumeOffIcon />}</Box>
         </Box>
       </Box>
       <Box
