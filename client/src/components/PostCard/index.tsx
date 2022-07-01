@@ -9,12 +9,28 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
+import format from "date-fns/format";
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * タイトル
+   */
   title: string;
+  /**
+   * 内容
+   */
   content: string;
+  /**
+   * 使用言語
+   */
   language: string;
-  date?: string;
+  /**
+   * 実施日時
+   */
+  date?: Date;
+  /**
+   * 名前
+   */
   name?: string;
   sx?: SxProps<Theme>;
 }
@@ -52,7 +68,9 @@ export const PostCard = ({
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography variant="subtitle1">日時</Typography>
-                  <Typography variant="h6">{date}</Typography>
+                  <Typography variant="h6">
+                    {date && format(date, "yyyy/MM/dd")}
+                  </Typography>
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography variant="subtitle1">名前</Typography>

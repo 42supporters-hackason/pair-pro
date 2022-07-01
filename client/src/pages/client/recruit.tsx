@@ -12,7 +12,7 @@ const demoPostView = [
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
-    date: "2000-11-11",
+    date: new Date("2000-11-11"),
     name: "taisei-13046",
   },
   {
@@ -21,7 +21,7 @@ const demoPostView = [
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
-    date: "2000-11-11",
+    date: new Date("2000-11-11"),
     name: "taisei-13046",
   },
   {
@@ -30,7 +30,7 @@ const demoPostView = [
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
-    date: "2000-11-11",
+    date: new Date("2000-11-11"),
     name: "taisei-13046",
   },
 ];
@@ -39,9 +39,13 @@ const demoPostView = [
  * 募集一覧ページ
  */
 export const RecruitPage = () => {
+  /**
+   * misc.
+   */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
   const { goToHome } = useClientRoute();
+
   return (
     <Box sx={{ mx: "100px" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
