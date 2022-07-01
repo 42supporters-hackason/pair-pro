@@ -11,6 +11,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
 /**
  * p2p相手とやり取りをするページ
@@ -21,6 +22,7 @@ export const ChatPage = () => {
    */
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
+  const { goToHome } = useClientRoute();
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
@@ -87,8 +89,10 @@ export const ChatPage = () => {
             <Avatar src={`https://github.com/taisei-13046.png`} />
             <Typography fontWeight="bold">taisei-13046</Typography>
           </Box>
-          <IconButton sx={{ mr: 2 }}>
-            <Typography fontWeight="bold">退出する</Typography>
+          <IconButton sx={{ mr: 2 }} onClick={() => goToHome()}>
+            <Typography fontWeight="bold" sx={{ mr: 1 }}>
+              退出する
+            </Typography>
             <LogoutIcon />
           </IconButton>
         </Box>
