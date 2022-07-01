@@ -2,16 +2,44 @@ import { Box, Button, SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/system";
 import React, { HTMLAttributes } from "react";
 import { Card } from "../Card";
+import format from "date-fns/format";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * githubId
+   */
   githubId?: string;
+  /**
+   * タイトル
+   */
   title?: string;
+  /**
+   * 内容
+   */
   content?: string;
+  /**
+   * 使用言語
+   */
   language?: string;
-  date?: string;
+  /**
+   * 実施日時
+   */
+  date?: Date;
+  /**
+   * ボタンの有無
+   */
   hasButton?: boolean;
+  /**
+   * 合意の場合のテキスト
+   */
   agreeTitle?: string;
+  /**
+   * 合意の場合のアクション
+   */
   onAgree?: () => void;
+  /**
+   * 閉じるアクション
+   */
   onClose?: () => void;
   sx?: SxProps<Theme>;
 }
@@ -100,7 +128,7 @@ export const ProfileCard = ({
             }}
           >
             <Typography variant="h6">日時</Typography>
-            <Typography>{date}</Typography>
+            <Typography>{date && format(date, "yyyy/MM/dd")}</Typography>
           </Box>
           {hasButton && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "25px" }}>

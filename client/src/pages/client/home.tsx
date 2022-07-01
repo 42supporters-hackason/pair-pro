@@ -13,7 +13,7 @@ const demoPostView = [
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
-    date: "2000-11-11",
+    date: new Date("2000-11-11"),
     name: "taisei-13046",
   },
   {
@@ -22,7 +22,7 @@ const demoPostView = [
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
-    date: "2000-11-11",
+    date: new Date("2000-11-11"),
     name: "taisei-13046",
   },
   {
@@ -31,7 +31,7 @@ const demoPostView = [
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
     language: "JAVA",
-    date: "2000-11-11",
+    date: new Date("2000-11-11"),
     name: "taisei-13046",
   },
 ];
