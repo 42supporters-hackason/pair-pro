@@ -10,6 +10,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   language?: string;
   date?: string;
   hasButton?: boolean;
+  agreeTitle?: string;
   onAgree?: () => void;
   onClose?: () => void;
   sx?: SxProps<Theme>;
@@ -25,6 +26,7 @@ export const ProfileCard = ({
   language,
   date,
   hasButton = false,
+  agreeTitle,
   onAgree,
   onClose,
   ...props
@@ -112,7 +114,7 @@ export const ProfileCard = ({
                 variant="contained"
                 onClick={onAgree}
               >
-                マッチングする
+                {agreeTitle}
               </Button>
               <Button
                 sx={{

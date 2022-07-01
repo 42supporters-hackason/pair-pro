@@ -134,6 +134,7 @@ export const HomePage = () => {
               demoPostView.find(({ id }) => id === selectedId)?.language
             }
             hasButton={true}
+            agreeTitle="チャットルームに移動する"
             onClose={setOpenPostModal.off}
           />
         </Box>
