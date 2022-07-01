@@ -10,8 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  initialName: string;
+export interface Props extends HTMLAttributes<HTMLDivElement> {
   title: string;
   content: string;
   language: string;
@@ -24,7 +23,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
  * 投稿された内容を表示するカードコンポーネント
  */
 export const PostCard = ({
-  initialName,
   title,
   content,
   language,
@@ -39,7 +37,7 @@ export const PostCard = ({
           <CardContent sx={{ m: 1 }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-                <Avatar>{initialName}</Avatar>
+                <Avatar src={`https://github.com/${name}.png`} />
                 <Typography variant="h6">{title}</Typography>
               </Box>
               <Box sx={{ borderRadius: 2, bgcolor: "primary.light", p: 2 }}>

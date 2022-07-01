@@ -1,10 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import backgroundImg from "../../assets/p2p_background.jpg";
+import sns_img from "../../assets/login_sns.jpg";
 import React from "react";
 import { Card } from "../../components/Card";
-import GithubButton from "react-github-login-button";
+import { GithubLoginButton } from "react-social-login-buttons";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
 export const LoginPage = () => {
+  const { goToHome } = useClientRoute();
   return (
     <>
       <Box
@@ -37,8 +40,35 @@ export const LoginPage = () => {
             justifyContent: "space-between",
           }}
         >
-          <Box>説明文を追加する</Box>
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              mt: "auto",
+            }}
+          >
+            <Box
+              component="img"
+              src={sns_img}
+              sx={{
+                width: "200px",
+                height: "200px",
+                mx: "auto",
+                borderRadius: "15px",
+              }}
+            />
+            <Typography variant="h6" fontWeight="bold">
+              1. 自分からペアを募集する or 募集一覧からペアを見つける
+            </Typography>
+            <Typography variant="h6" fontWeight="bold">
+              2. マッチングが成立したらチャットで相手と連絡をとる
+            </Typography>
+            <Typography variant="h6" fontWeight="bold">
+              3. P2Pでペアプログラミングを実践!!
+            </Typography>
+          </Box>
+          <Box sx={{ width: "50%", height: "50%", my: "auto" }}>
             <Card>
               <Typography
                 variant="h5"
@@ -50,11 +80,14 @@ export const LoginPage = () => {
               <Typography
                 variant="subtitle1"
                 fontWeight="bold"
-                sx={{ textAlign: "center", mb: "80px" }}
+                sx={{ textAlign: "center", mb: "50px" }}
               >
                 お手持ちのGithubで認証をします
               </Typography>
-              <GithubButton style={{ width: "600px" }} />
+              <GithubLoginButton
+                style={{ width: "100%" }}
+                onClick={() => goToHome({ replace: true })}
+              />
             </Card>
           </Box>
         </Box>

@@ -6,10 +6,10 @@ const { LoginPage } = lazyImport(
   "LoginPage"
 );
 
-const LOGIN = "login";
+const LOGIN = "/";
 
 export const PUBLIC_ROUTE_PATH = {
-  LOGIN: `/${LOGIN}`,
+  LOGIN: `${LOGIN}`,
 } as const;
 
 export const publicRoutes: RouteObject[] = [

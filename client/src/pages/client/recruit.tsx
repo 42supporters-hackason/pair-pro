@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { Card } from "../../components/Card";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
@@ -37,19 +36,23 @@ const demoPostView = [
 ];
 
 /**
- * home画面
+ * 募集一覧ページ
  */
-export const HomePage = () => {
+export const RecruitPage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
-  const { goToApply, goToRecruit } = useClientRoute();
+  const { goToHome } = useClientRoute();
   return (
-    <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
-      <Box sx={{ width: "60%" }}>
-        <Typography fontWeight="bold" sx={{ textAlign: "center", mb: 3 }}>
-          マッチング済みの予定
+    <Box sx={{ mx: "100px" }}>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          sx={{ textAlign: "center", mt: "30px" }}
+        >
+          気になるマッチング相手を探す
         </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 2 }}>
           {demoPostView.map(({ id, title, content, language, date, name }) => (
             <PostCard
               key={id}
@@ -65,59 +68,20 @@ export const HomePage = () => {
             />
           ))}
         </Box>
-      </Box>
-      <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>
-        <Box>
-          <Typography fontWeight="bold" sx={{ textAlign: "center", mb: 3 }}>
-            マッチングする
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              mb: "45px",
-              gap: 3,
-            }}
-          >
-            <Button size="large" variant="outlined" onClick={() => goToApply()}>
-              自分の好きなテーマで募集する
-            </Button>
-            <Button
-              size="large"
-              variant="outlined"
-              onClick={() => goToRecruit()}
-            >
-              募集一覧から気になるマッチング相手を探す
-            </Button>
-          </Box>
-        </Box>
-        <Box>
-          <Typography
-            fontWeight="bold"
-            sx={{ textAlign: "center", mb: 2 }}
-            variant="subtitle1"
-          >
-            Profile
-          </Typography>
-          <Card>
-            <Box
-              component="img"
-              src="https://github-readme-stats.vercel.app/api?username=taisei-13046&theme=onedark&show_icons=true)](https://github.com/anuraghazra/github-readme-stats"
-              sx={{ width: "100%" }}
-            />
-            <Box
-              component="img"
-              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/1-repos-per-language.svg"
-              sx={{ width: "100%" }}
-            />
-            <Box
-              component="img"
-              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/3-stats.svg"
-              sx={{ width: "100%" }}
-            />
-          </Card>
-        </Box>
+        <Button
+          sx={{
+            mx: "auto",
+            width: "450px",
+            my: 3,
+            height: "50px",
+            borderRadius: "10px",
+          }}
+          variant="contained"
+          color="secondary"
+          onClick={() => goToHome()}
+        >
+          戻る
+        </Button>
       </Box>
       <Modal
         open={openPostModal}
@@ -134,7 +98,7 @@ export const HomePage = () => {
               demoPostView.find(({ id }) => id === selectedId)?.language
             }
             hasButton={true}
-            agreeTitle="チャットルームに移動する"
+            agreeTitle="マッチングする"
             onClose={setOpenPostModal.off}
           />
         </Box>
