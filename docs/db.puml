@@ -1,0 +1,48 @@
+@startuml P2P-matching db
+
+entity User {
+  int id
+  varchar name
+  int matchingPoint
+  varchar githubId
+  text bio
+}
+
+' 認証
+entity Chat {
+  int id
+  int postId <<FK>>
+  int authorId
+  text message
+  datetime createdAt
+}
+
+entity Post {
+  int id
+  varchar title
+  int driverId <<FK>>
+  int navigatorId <<FK>>
+  datetime startedAt
+  datetime completedAt
+  text otherSkillRequired
+  varchar meetingUrl
+}
+
+entity RequiredSkill {
+  int id
+  int postId <<FK>>
+  int skillId <<FK>>
+}
+
+entity Skill { 
+  int id
+  varchar name
+}
+
+User ||..|{ Post
+' UserSkill ||..|| Skill
+Post ||..|{ RequiredSkill
+' RequiredSkill ||..|| Skill
+Post ||..|| Chat
+
+@enduml
