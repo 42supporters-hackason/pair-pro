@@ -4,59 +4,11 @@ services:
   db:
     image: postgres:14.1
     ports:
-      - "15432:5432"
+      - "5432:5432"
     env_file:
       - .env
     volumes:
       - backend_db:/var/lib/postgresql/data
 
-  # minio:
-  #   image: minio/minio:RELEASE.2021-06-17T00-10-46Z
-  #   ports:
-  #     - 9090:9000
-  #   env_file:
-  #     - .env
-  #   entrypoint: sh
-  #   command: -c "mkdir -p /data/.minio.sys/buckets &&
-  #     cp -r /policies/* /data/.minio.sys/ &&
-  #     mkdir -p /data/static &&
-  #     /usr/bin/minio server /data"
-  #   volumes:
-  #     - "transcendence-minio-data:/data"
-  #     - "./minio/policy:/policies/buckets/static"
-
-  api:
-    build:
-      context: api
-    ports:
-      - "8080:3000"
-    # depends_on:
-    #   - db
-    env_file:
-      - .env
-    volumes:
-      - "./api:/app:delegated"
-      - /app/node_modules
-    working_dir: /app
-    command: "yarn run dev"
-    # command: |
-    #   bash -c
-    #   "yarn run migration &&
-    #   yarn start:dev"
-
-  client:
-    build:
-      context: client
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    volumes:
-      - "./client:/app:delegated"
-      - /app/node_modules
-    working_dir: /app
-    command: "yarn run dev"
-
 volumes:
   backend_db:
-  # transcendence-minio-data:
