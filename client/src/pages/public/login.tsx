@@ -1,11 +1,10 @@
+import React from "react";
 import { Box, Typography } from "@mui/material";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import sns_img from "../../assets/login_sns.jpg";
-import React from "react";
 import { Card } from "../../components/Card";
 import { GithubLoginButton } from "react-social-login-buttons";
-import { useClientRoute } from "../../hooks/useClientRoute";
-import { getGithubUrl } from "../../utils";
+import { getGithubAuthUrl } from "../../utils";
 
 export const LoginPage = () => {
   return (
@@ -86,7 +85,7 @@ export const LoginPage = () => {
               </Typography>
               <GithubLoginButton
                 style={{ width: "100%" }}
-                onClick={() => window.location.assign(getGithubUrl())}
+                onClick={() => window.location.assign(getGithubAuthUrl())}
               />
             </Card>
           </Box>

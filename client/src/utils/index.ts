@@ -29,7 +29,7 @@ export const noop = () => {};
 /**
  * githubのOAuthに必要なurlを生成する
  */
-export const getGithubUrl = () => {
+export const getGithubAuthUrl = () => {
   const rootUrl = "https://github.com/login/oauth/authorize";
 
   const options = {
