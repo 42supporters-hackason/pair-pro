@@ -1,14 +1,14 @@
 version: "3.8"
 
 services:
-  # db:
-  #   image: postgres:14.1
-  #   ports:
-  #     - "15432:5432"
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - transcendence-db-data:/var/lib/postgresql/data
+  db:
+    image: postgres:14.1
+    ports:
+      - "15432:5432"
+    env_file:
+      - .env
+    volumes:
+      - backend_db:/var/lib/postgresql/data
 
   # minio:
   #   image: minio/minio:RELEASE.2021-06-17T00-10-46Z
@@ -57,6 +57,6 @@ services:
     working_dir: /app
     command: "yarn run dev"
 
-# volumes:
-  # transcendence-db-data:
+volumes:
+  backend_db:
   # transcendence-minio-data:
