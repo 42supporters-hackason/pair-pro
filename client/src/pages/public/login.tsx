@@ -5,9 +5,9 @@ import React from "react";
 import { Card } from "../../components/Card";
 import { GithubLoginButton } from "react-social-login-buttons";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { getGithubUrl } from "../../utils";
 
 export const LoginPage = () => {
-  const { goToHome } = useClientRoute();
   return (
     <>
       <Box
@@ -86,7 +86,7 @@ export const LoginPage = () => {
               </Typography>
               <GithubLoginButton
                 style={{ width: "100%" }}
-                onClick={() => goToHome({ replace: true })}
+                onClick={() => window.location.assign(getGithubUrl())}
               />
             </Card>
           </Box>
