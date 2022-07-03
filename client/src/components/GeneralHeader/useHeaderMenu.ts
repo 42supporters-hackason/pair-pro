@@ -31,7 +31,7 @@ export const useClientHeaderMenu = (): ClientMenu => {
         label: "ログアウト",
         action: () => {
           accessTokenStorage.clear();
-          goToApply();
+          goToLogin();
         },
       },
     ],
