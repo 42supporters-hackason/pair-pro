@@ -1,13 +1,22 @@
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import sns_img from "../../assets/login_sns.jpg";
-import React from "react";
 import { Card } from "../../components/Card";
 import { GithubLoginButton } from "react-social-login-buttons";
+import { getGithubAuthUrl } from "../../utils";
+import { accessTokenStorage } from "../../utils/local-storage/access_token";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
 export const LoginPage = () => {
   const { goToHome } = useClientRoute();
+
+  useEffect(() => {
+    if (accessTokenStorage.load() !== null) {
+      goToHome({ replace: true });
+    }
+  }, []);
+
   return (
     <>
       <Box
@@ -86,7 +95,7 @@ export const LoginPage = () => {
               </Typography>
               <GithubLoginButton
                 style={{ width: "100%" }}
-                onClick={() => goToHome({ replace: true })}
+                onClick={() => window.location.assign(getGithubAuthUrl())}
               />
             </Card>
           </Box>

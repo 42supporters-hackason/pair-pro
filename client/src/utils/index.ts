@@ -25,3 +25,20 @@ export function lazyImport<
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => {};
+
+/**
+ * githubのOAuthに必要なurlを生成する
+ */
+export const getGithubAuthUrl = () => {
+  const rootUrl = "https://github.com/login/oauth/authorize";
+
+  const options = {
+    client_id: import.meta.env.VITE_GITHUB_OAUTH_CLIENT_ID as string,
+    redirect_uri: import.meta.env.VITE_GITHUB_OAUTH_REDIRECT_URL as string,
+    scope: "user:email",
+  };
+
+  const queryString = new URLSearchParams(options);
+
+  return `${rootUrl}?${queryString.toString()}`;
+};

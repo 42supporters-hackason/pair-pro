@@ -40,9 +40,13 @@ const demoPostView = [
  * home画面
  */
 export const HomePage = () => {
+  /**
+   * misc.
+   */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
   const { goToApply, goToRecruit } = useClientRoute();
+
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
