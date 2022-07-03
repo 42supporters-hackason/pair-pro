@@ -1,3 +1,5 @@
+import { usePublicRoute } from "./../../hooks/usePublicRoute";
+import { accessTokenStorage } from "./../../utils/local-storage/access_token";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
 import { ClientMenu } from "./types";
@@ -7,6 +9,7 @@ import { ClientMenu } from "./types";
  */
 export const useClientHeaderMenu = (): ClientMenu => {
   const { goToApply, goToRecruit } = useClientRoute();
+  const { goToLogin } = usePublicRoute();
 
   return {
     listMenu: [
@@ -26,7 +29,10 @@ export const useClientHeaderMenu = (): ClientMenu => {
       },
       {
         label: "ログアウト",
-        action: noop,
+        action: () => {
+          accessTokenStorage.clear();
+          goToApply();
+        },
       },
     ],
   };

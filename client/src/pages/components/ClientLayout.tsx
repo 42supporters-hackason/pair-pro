@@ -20,7 +20,7 @@ export const ClientLayout = () => {
     if (accessTokenStorage.load() === null) {
       goToLogin({ replace: true });
     }
-  }, []);
+  }, [accessTokenStorage.load, goToLogin]);
 
   return (
     <Box
