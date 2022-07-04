@@ -1,4 +1,4 @@
-必要なもの: `docker`コマンド、やる気
+必要なもの: `docker`コマンド
 
 ### postgres database コンテナの起動
 ```
