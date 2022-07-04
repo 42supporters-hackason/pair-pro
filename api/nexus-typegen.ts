@@ -34,6 +34,13 @@ export interface NexusGenObjects {
     title: string; // String!
   }
   Query: {};
+  User: { // root type
+    bio: string; // String!
+    githubId: string; // String!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -55,6 +62,13 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     ok: boolean; // Boolean!
   }
+  User: { // field return type
+    bio: string; // String!
+    githubId: string; // String!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
+  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -65,6 +79,13 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     ok: 'Boolean'
+  }
+  User: { // field return type name
+    bio: 'String'
+    githubId: 'String'
+    id: 'Int'
+    matchingPoint: 'Int'
+    name: 'String'
   }
 }
 
