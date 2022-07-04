@@ -12,6 +12,7 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
   name      String
   matchingPoint Int
   githubId String
@@ -32,7 +33,7 @@ model Post {
   navigatorId Int?
   completedAt DateTime?
   message        Message[] @relation(name: "Message")
-  requiredSkill RequiredSkill[] @relation(name: "RequiredSkill")
+  requiredSkill Skill[] @relation(name: "RequiredBy")
 }
 
 model Message {
@@ -40,19 +41,11 @@ model Message {
   post        Post     @relation(name: "Message", fields: [postId], references: [id])
   postId      Int
   content     String
-  createdAt DateTime
-}
-
-model RequiredSkill {
-  id          Int      @id @default(autoincrement())
-  post        Post     @relation(name: "RequiredSkill", fields: [postId], references: [id])
-  postId      Int
-  skill       Skill @relation(fields: [skillId], references: [id])
-  skillId     Int @unique
+  createdAt DateTime @default(now())
 }
 
 model Skill {
   id          Int      @id @default(autoincrement())
   name        String
-  requiredSkill RequiredSkill[]
+  requiredBy  Post[] @relation(name: "RequiredBy")
 }
