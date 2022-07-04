@@ -17,6 +17,11 @@ type Query {
   ok: Boolean!
 }
 
+type Skill {
+  id: Int!
+  name: String!
+}
+
 type User {
   bio: String!
   githubId: String!

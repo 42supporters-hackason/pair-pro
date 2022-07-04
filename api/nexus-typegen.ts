@@ -38,6 +38,10 @@ export interface NexusGenObjects {
     title: string; // String!
   }
   Query: {};
+  Skill: { // root type
+    id: number; // Int!
+    name: string; // String!
+  }
   User: { // root type
     bio: string; // String!
     githubId: string; // String!
@@ -70,6 +74,10 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     ok: boolean; // Boolean!
   }
+  Skill: { // field return type
+    id: number; // Int!
+    name: string; // String!
+  }
   User: { // field return type
     bio: string; // String!
     githubId: string; // String!
@@ -91,6 +99,10 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     ok: 'Boolean'
+  }
+  Skill: { // field return type name
+    id: 'Int'
+    name: 'String'
   }
   User: { // field return type name
     bio: 'String'
