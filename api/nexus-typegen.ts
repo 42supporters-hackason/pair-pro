@@ -28,6 +28,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Message: { // root type
+    content: string; // String!
+    id: number; // Int!
+  }
   Post: { // root type
     description: string; // String!
     id: number; // Int!
@@ -54,6 +58,10 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Message: { // field return type
+    content: string; // String!
+    id: number; // Int!
+  }
   Post: { // field return type
     description: string; // String!
     id: number; // Int!
@@ -72,6 +80,10 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Message: { // field return type name
+    content: 'String'
+    id: 'Int'
+  }
   Post: { // field return type name
     description: 'String'
     id: 'Int'
