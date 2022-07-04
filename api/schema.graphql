@@ -7,6 +7,10 @@ type Message {
   id: Int!
 }
 
+type Mutation {
+  post(description: String!, title: String!): Post!
+}
+
 type Post {
   description: String!
   id: Int!
@@ -14,7 +18,7 @@ type Post {
 }
 
 type Query {
-  ok: Boolean!
+  feed: [Post!]!
 }
 
 type Skill {

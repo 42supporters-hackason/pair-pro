@@ -4,7 +4,7 @@
  */
 
 
-
+import type { Context } from "./src/context"
 
 
 
@@ -32,6 +32,7 @@ export interface NexusGenObjects {
     content: string; // String!
     id: number; // Int!
   }
+  Mutation: {};
   Post: { // root type
     description: string; // String!
     id: number; // Int!
@@ -66,13 +67,16 @@ export interface NexusGenFieldTypes {
     content: string; // String!
     id: number; // Int!
   }
+  Mutation: { // field return type
+    post: NexusGenRootTypes['Post']; // Post!
+  }
   Post: { // field return type
     description: string; // String!
     id: number; // Int!
     title: string; // String!
   }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    feed: NexusGenRootTypes['Post'][]; // [Post!]!
   }
   Skill: { // field return type
     id: number; // Int!
@@ -92,13 +96,16 @@ export interface NexusGenFieldTypeNames {
     content: 'String'
     id: 'Int'
   }
+  Mutation: { // field return type name
+    post: 'Post'
+  }
   Post: { // field return type name
     description: 'String'
     id: 'Int'
     title: 'String'
   }
   Query: { // field return type name
-    ok: 'Boolean'
+    feed: 'Post'
   }
   Skill: { // field return type name
     id: 'Int'
@@ -114,6 +121,12 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    post: { // args
+      description: string; // String!
+      title: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
@@ -147,7 +160,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
