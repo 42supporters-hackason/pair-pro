@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  name      String
+  matchingPoint Int
+  githubId String
+  bio String?
+  driverPost Post[] @relation(name: "Driver")
+  navigatorPost Post[] @relation(name: "Navigator")
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  description String
+  title       String
+
+  driver      User? @relation(name: "Driver", fields: [driverId], references: [id])
+  driverId    Int?
+  navigator   User? @relation(name: "Navigator", fields: [navigatorId], references: [id])
+  navigatorId Int?
+  completedAt DateTime?
+  message        Message[] @relation(name: "Message")
+  requiredSkill Skill[] @relation(name: "RequiredBy")
+}
+
+model Message {
+  id          Int      @id @default(autoincrement())
+  post        Post     @relation(name: "Message", fields: [postId], references: [id])
+  postId      Int
+  content     String
+  createdAt DateTime @default(now())
+}
+
+model Skill {
+  id          Int      @id @default(autoincrement())
+  name        String
+  requiredBy  Post[] @relation(name: "RequiredBy")
+}

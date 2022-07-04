@@ -8,30 +8,22 @@ entity User {
   text bio
 }
 
-' 認証
-entity Chat {
+entity Message {
   int id
   int postId <<FK>>
   int authorId
-  text message
+  text content
   datetime createdAt
 }
 
 entity Post {
   int id
   varchar title
+  varchar description
   int driverId <<FK>>
   int navigatorId <<FK>>
-  datetime startedAt
   datetime completedAt
-  text otherSkillRequired
   varchar meetingUrl
-}
-
-entity RequiredSkill {
-  int id
-  int postId <<FK>>
-  int skillId <<FK>>
 }
 
 entity Skill { 
@@ -40,9 +32,7 @@ entity Skill {
 }
 
 User ||..|{ Post
-' UserSkill ||..|| Skill
-Post ||..|{ RequiredSkill
-' RequiredSkill ||..|| Skill
-Post ||..|| Chat
+Post }|..|{ Skill
+Post ||..|{ Message
 
 @enduml
