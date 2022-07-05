@@ -29,5 +29,21 @@ export const useClientRoute = () => {
     [navigate]
   );
 
-  return { goToHome, goToApply, goToRecruit };
+  const goToChat = useCallback(
+    (id?: number, options?: NavigateOptions) => {
+      if (id === undefined) {
+        return;
+      }
+      navigate(
+        {
+          pathname: CLIENT_ROUTE_PATH.CHAT,
+          search: `?room_id=${id}`,
+        },
+        options
+      );
+    },
+    [navigate]
+  );
+
+  return { goToHome, goToApply, goToRecruit, goToChat };
 };
