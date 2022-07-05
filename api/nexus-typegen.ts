@@ -4,7 +4,7 @@
  */
 
 
-
+import type { Context } from "./src/context"
 
 
 
@@ -28,7 +28,28 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Message: { // root type
+    content: string; // String!
+    id: number; // Int!
+  }
+  Mutation: {};
+  Post: { // root type
+    description: string; // String!
+    id: number; // Int!
+    title: string; // String!
+  }
   Query: {};
+  Skill: { // root type
+    id: number; // Int!
+    name: string; // String!
+  }
+  User: { // root type
+    bio: string; // String!
+    githubId: string; // String!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -42,18 +63,70 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Message: { // field return type
+    content: string; // String!
+    id: number; // Int!
+  }
+  Mutation: { // field return type
+    post: NexusGenRootTypes['Post']; // Post!
+  }
+  Post: { // field return type
+    description: string; // String!
+    id: number; // Int!
+    title: string; // String!
+  }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    feed: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
+  Skill: { // field return type
+    id: number; // Int!
+    name: string; // String!
+  }
+  User: { // field return type
+    bio: string; // String!
+    githubId: string; // String!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  Message: { // field return type name
+    content: 'String'
+    id: 'Int'
+  }
+  Mutation: { // field return type name
+    post: 'Post'
+  }
+  Post: { // field return type name
+    description: 'String'
+    id: 'Int'
+    title: 'String'
+  }
   Query: { // field return type name
-    ok: 'Boolean'
+    feed: 'Post'
+  }
+  Skill: { // field return type name
+    id: 'Int'
+    name: 'String'
+  }
+  User: { // field return type name
+    bio: 'String'
+    githubId: 'String'
+    id: 'Int'
+    matchingPoint: 'Int'
+    name: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    post: { // args
+      description: string; // String!
+      title: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
@@ -87,7 +160,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
