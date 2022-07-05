@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Card } from "../../components/Card";
 import { useBoolean } from "../../hooks/useBoolean";
 import { applySchema, ApplySchema } from "./validation/apply_vaildation";
@@ -69,7 +69,7 @@ export const ApplyPage = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "60px",
+          gap: "25px",
           width: "100%",
           mt: 3,
         }}
@@ -109,54 +109,54 @@ export const ApplyPage = () => {
             </Typography>
           )}
         </Box>
-        <Box sx={{ display: "flex", width: "500px", gap: 1 }}>
-          <Box sx={{ width: "50%" }}>
-            <Controller
-              control={control}
-              name="language"
-              render={({ field: { onChange } }) => (
-                <Autocomplete
-                  options={demoOptions}
-                  multiple
-                  renderInput={(params) => (
-                    <TextField {...params} label="使用言語" />
-                  )}
-                  onChange={(_, data) => {
-                    onChange(data);
-                    return data;
-                  }}
-                />
-              )}
-            />
-            {errors.language && (
-              <Typography sx={{ mt: "5px", color: "error.main" }}></Typography>
+        <Box sx={{ width: "500px" }}>
+          <Controller
+            control={control}
+            name="language"
+            render={({ field: { onChange } }) => (
+              <Autocomplete
+                options={demoOptions}
+                multiple
+                renderInput={(params) => (
+                  <TextField {...params} label="使用言語" />
+                )}
+                onChange={(_, data) => {
+                  onChange(data);
+                  return data;
+                }}
+              />
             )}
-          </Box>
-          <Box>
-            <Controller
-              name="date"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <DesktopDatePicker
-                  label="日時"
-                  inputFormat="MM/dd/yyyy"
-                  value={value}
-                  onChange={onChange}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              )}
-            />
-            {errors.date && (
-              <Typography sx={{ mt: "5px", color: "error.main" }}>
-                {errors.date.message}
-              </Typography>
+          />
+          {errors.language && (
+            <Typography sx={{ mt: "5px", color: "error.main" }}>
+              使用言語を入力してください
+            </Typography>
+          )}
+        </Box>
+        <Box>
+          <Controller
+            name="date"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <DesktopDatePicker
+                label="日時"
+                inputFormat="MM/dd/yyyy"
+                value={value}
+                onChange={onChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
             )}
-          </Box>
+          />
+          {errors.date && (
+            <Typography sx={{ mt: "5px", color: "error.main" }}>
+              {errors.date.message}
+            </Typography>
+          )}
         </Box>
         <Button
           sx={{
             mb: "35px",
-            mt: "auto",
+            mt: "15px",
             width: "450px",
             height: "50px",
             borderRadius: "10px",
@@ -226,7 +226,9 @@ export const ApplyPage = () => {
               </Box>
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Typography>使用言語</Typography>
-                <Typography variant="h5">{applyFormData.language}</Typography>
+                {applyFormData.language.map((language) => (
+                  <Typography variant="h5">{language}</Typography>
+                ))}
               </Box>
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Typography>日程</Typography>
