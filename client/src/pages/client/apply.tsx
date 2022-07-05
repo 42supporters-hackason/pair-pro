@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Autocomplete,
   Box,
@@ -8,14 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import format from "date-fns/format";
+import { Controller, useForm } from "react-hook-form";
 import { Card } from "../../components/Card";
 import { useBoolean } from "../../hooks/useBoolean";
-import { applySchema, ApplySchema } from "./validation/apply_vaildation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback } from "react";
-import format from "date-fns/format";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { applySchema, ApplySchema } from "./validation/apply_vaildation";
 
 const demoOptions = ["Java", "C言語"];
 
@@ -49,7 +49,7 @@ export const ApplyPage = () => {
    */
   const handleApply = useCallback(() => {
     setOpenModal.on();
-  }, []);
+  }, [setOpenModal]);
 
   return (
     <Box

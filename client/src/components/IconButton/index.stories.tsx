@@ -1,6 +1,6 @@
-import { IconButton } from ".";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { IconButton } from ".";
 
 export default {
   title: "IconButton",

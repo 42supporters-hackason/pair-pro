@@ -1,5 +1,5 @@
-import { GeneralHeader } from ".";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { GeneralHeader } from ".";
 
 export default {
   title: "GeneralHeader",

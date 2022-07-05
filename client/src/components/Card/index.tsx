@@ -1,5 +1,5 @@
-import { Box, SxProps, Theme } from "@mui/system";
 import React, { HTMLAttributes } from "react";
+import { Box, SxProps, Theme } from "@mui/system";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   sx?: SxProps<Theme>;

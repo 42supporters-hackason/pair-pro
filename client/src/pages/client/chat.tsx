@@ -1,16 +1,13 @@
-import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import React from "react";
-import { Card } from "../../components/Card";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import { useBoolean } from "../../hooks/useBoolean";
-import { IconButton } from "../../components/IconButton";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
+import { IconButton } from "../../components/IconButton";
+import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
 /**

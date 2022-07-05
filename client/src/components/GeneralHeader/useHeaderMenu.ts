@@ -1,7 +1,7 @@
-import { usePublicRoute } from "./../../hooks/usePublicRoute";
-import { accessTokenStorage } from "./../../utils/local-storage/access_token";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
+import { usePublicRoute } from "./../../hooks/usePublicRoute";
+import { accessTokenStorage } from "./../../utils/local-storage/access_token";
 import { ClientMenu } from "./types";
 
 /**

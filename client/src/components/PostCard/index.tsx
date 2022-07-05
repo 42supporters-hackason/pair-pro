@@ -1,5 +1,4 @@
 import React, { HTMLAttributes } from "react";
-import Card from "@mui/material/Card";
 import {
   Avatar,
   Box,
@@ -9,6 +8,7 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
+import Card from "@mui/material/Card";
 import format from "date-fns/format";
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {

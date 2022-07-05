@@ -1,5 +1,5 @@
-import { ProfileCard } from ".";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { ProfileCard } from ".";
 
 export default {
   title: "ProfileCard",

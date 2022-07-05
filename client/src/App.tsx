@@ -1,8 +1,8 @@
+import { Suspense } from "react";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./routes";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { Suspense } from "react";
 
 function App() {
   return (
