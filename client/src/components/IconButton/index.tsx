@@ -1,12 +1,11 @@
+import React, { HTMLAttributes } from "react";
 import {
-  Card,
   CardActionArea,
   CardContent,
   SxProps,
   Theme,
   Box,
 } from "@mui/material";
-import React, { HTMLAttributes } from "react";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   sx?: SxProps<Theme>;

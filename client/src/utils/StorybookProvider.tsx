@@ -1,5 +1,5 @@
-import { Story, StoryContext } from "@storybook/react";
 import { ThemeProvider } from "@mui/material/styles";
+import { Story, StoryContext } from "@storybook/react";
 import { theme } from "../theme";
 
 /**

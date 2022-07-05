@@ -1,5 +1,5 @@
-import { PostCard } from ".";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { PostCard } from ".";
 
 export default {
   title: "PostCard",

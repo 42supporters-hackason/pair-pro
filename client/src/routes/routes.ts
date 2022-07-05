@@ -1,5 +1,5 @@
-import { clientRoutes } from "./client";
 import { useRoutes } from "react-router-dom";
+import { clientRoutes } from "./client";
 import { publicRoutes } from "./public";
 
 /**

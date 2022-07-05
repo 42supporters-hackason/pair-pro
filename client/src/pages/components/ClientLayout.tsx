@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
 import { Suspense, useEffect } from "react";
+import { Box } from "@mui/material";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { usePublicRoute } from "../../hooks/usePublicRoute";

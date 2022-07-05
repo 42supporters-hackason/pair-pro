@@ -1,8 +1,8 @@
+import React, { HTMLAttributes } from "react";
 import { Box, Button, SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/system";
-import React, { HTMLAttributes } from "react";
-import { Card } from "../Card";
 import format from "date-fns/format";
+import { Card } from "../Card";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
