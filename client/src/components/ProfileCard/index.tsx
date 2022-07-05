@@ -68,7 +68,7 @@ export const ProfileCard = ({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "15px",
+            gap: "10px",
           }}
         >
           <Typography variant="h5">{githubId}</Typography>
@@ -97,8 +97,10 @@ export const ProfileCard = ({
               alignItems: "center",
             }}
           >
-            <Typography variant="h6">募集タイトル</Typography>
-            <Typography>{title}</Typography>
+            <Typography>募集タイトル</Typography>
+            <Typography fontWeight="bold" variant="subtitle2">
+              {title}
+            </Typography>
           </Box>
           <Box
             sx={{
@@ -107,8 +109,10 @@ export const ProfileCard = ({
               alignItems: "center",
             }}
           >
-            <Typography variant="h6">募集詳細</Typography>
-            <Typography>{content}</Typography>
+            <Typography>募集詳細</Typography>
+            <Typography fontWeight="bold" variant="subtitle2">
+              {content}
+            </Typography>
           </Box>
           <Box
             sx={{
@@ -117,8 +121,10 @@ export const ProfileCard = ({
               alignItems: "center",
             }}
           >
-            <Typography variant="h6">使用言語</Typography>
-            <Typography>{language}</Typography>
+            <Typography>使用言語</Typography>
+            <Typography fontWeight="bold" variant="subtitle2">
+              {language}
+            </Typography>
           </Box>
           <Box
             sx={{
@@ -127,8 +133,10 @@ export const ProfileCard = ({
               alignItems: "center",
             }}
           >
-            <Typography variant="h6">日時</Typography>
-            <Typography>{date && format(date, "yyyy/MM/dd")}</Typography>
+            <Typography>日時</Typography>
+            <Typography variant="subtitle2" fontWeight="bold">
+              {date && format(date, "yyyy/MM/dd")}
+            </Typography>
           </Box>
           {hasButton && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "25px" }}>
@@ -136,7 +144,7 @@ export const ProfileCard = ({
                 sx={{
                   mt: "15px",
                   width: "450px",
-                  height: "50px",
+                  height: "40px",
                   borderRadius: "10px",
                 }}
                 variant="contained"
@@ -146,10 +154,9 @@ export const ProfileCard = ({
               </Button>
               <Button
                 sx={{
-                  mb: "35px",
                   mt: "auto",
                   width: "450px",
-                  height: "50px",
+                  height: "40px",
                   borderRadius: "10px",
                 }}
                 variant="contained"
