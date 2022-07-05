@@ -154,7 +154,6 @@ export const ProfileCard = ({
               </Button>
               <Button
                 sx={{
-                  mb: "10px",
                   mt: "auto",
                   width: "450px",
                   height: "40px",
