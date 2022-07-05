@@ -45,7 +45,7 @@ export const HomePage = () => {
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
-  const { goToApply, goToRecruit } = useClientRoute();
+  const { goToApply, goToRecruit, goToChat } = useClientRoute();
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
@@ -139,6 +139,7 @@ export const HomePage = () => {
             }
             hasButton={true}
             agreeTitle="チャットルームに移動する"
+            onAgree={() => goToChat(selectedId)}
             onClose={setOpenPostModal.off}
           />
         </Box>
