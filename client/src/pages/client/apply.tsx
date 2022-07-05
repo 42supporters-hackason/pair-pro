@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Modal,
@@ -15,6 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback } from "react";
 import format from "date-fns/format";
 import { useClientRoute } from "../../hooks/useClientRoute";
+
+const demoOptions = ["Java", "C言語"];
 
 /**
  * マッチングの募集をするページ
@@ -108,16 +111,25 @@ export const ApplyPage = () => {
         </Box>
         <Box sx={{ display: "flex", width: "500px", gap: 1 }}>
           <Box sx={{ width: "50%" }}>
-            <TextField
-              variant="standard"
-              label="使用言語"
-              sx={{ width: "100%" }}
-              {...register("language")}
+            <Controller
+              control={control}
+              name="language"
+              render={({ field: { onChange } }) => (
+                <Autocomplete
+                  options={demoOptions}
+                  multiple
+                  renderInput={(params) => (
+                    <TextField {...params} label="使用言語" />
+                  )}
+                  onChange={(_, data) => {
+                    onChange(data);
+                    return data;
+                  }}
+                />
+              )}
             />
-            {errors.content && (
-              <Typography sx={{ mt: "5px", color: "error.main" }}>
-                {errors.content.message}
-              </Typography>
+            {errors.language && (
+              <Typography sx={{ mt: "5px", color: "error.main" }}></Typography>
             )}
           </Box>
           <Box>
