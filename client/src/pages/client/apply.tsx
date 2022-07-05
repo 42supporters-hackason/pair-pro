@@ -226,9 +226,10 @@ export const ApplyPage = () => {
               </Box>
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Typography>使用言語</Typography>
-                {applyFormData.language.map((language) => (
-                  <Typography variant="h5">{language}</Typography>
-                ))}
+                {applyFormData.language &&
+                  applyFormData.language.map((language) => (
+                    <Typography variant="h5">{language}</Typography>
+                  ))}
               </Box>
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Typography>日程</Typography>
