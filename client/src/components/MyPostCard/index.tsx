@@ -36,7 +36,14 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
 /**
  * 自分が投稿したPost
  */
-export const MyPostCard = ({ title, content, languages, ...props }: Props) => {
+export const MyPostCard = ({
+  title,
+  content,
+  languages,
+  onEdit,
+  onDelete,
+  ...props
+}: Props) => {
   return (
     <Box {...props}>
       <Card sx={{ boxShadow: 3, borderRadius: 3 }}>
@@ -68,8 +75,12 @@ export const MyPostCard = ({ title, content, languages, ...props }: Props) => {
                 </Box>
               </Box>
               <Box sx={{ display: "flex", gap: 5, alignItems: "center" }}>
-                <Button variant="outlined">内容を修正する</Button>
-                <Button variant="outlined">削除する</Button>
+                <Button variant="outlined" onClick={onEdit}>
+                  内容を修正する
+                </Button>
+                <Button variant="outlined" onClick={onDelete}>
+                  削除する
+                </Button>
               </Box>
             </Box>
           </Box>

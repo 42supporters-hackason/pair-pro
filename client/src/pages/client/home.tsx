@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
+import { AgreeModal } from "../../components/AgreeModal";
 import { GithubProfile } from "../../components/GithubProfile";
 import { HomeTitleToggle } from "../../components/HomeTitleToggle";
 import { MyPostCard } from "../../components/MyPostCard";
@@ -77,7 +78,7 @@ export const HomePage = () => {
                   content={content}
                   languages={language}
                   onEdit={noop}
-                  onDelete={noop}
+                  onDelete={setOpenDeleteModal.on}
                 />
               ))}
         </Box>
@@ -130,8 +131,18 @@ export const HomePage = () => {
           />
         </Box>
       </Modal>
-      <Modal open={openDeleteModal} onClose={setOpenDeleteModal.off}>
-        <Box></Box>
+      <Modal
+        open={openDeleteModal}
+        onClose={setOpenDeleteModal.off}
+        sx={{ top: "40%", mx: "auto", width: "600px" }}
+      >
+        <Box>
+          <AgreeModal
+            content="本当にこの募集を削除してよろしいですか？"
+            onAgree={noop}
+            onCancel={setOpenDeleteModal.off}
+          />
+        </Box>
       </Modal>
     </Box>
   );
