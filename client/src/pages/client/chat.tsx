@@ -101,7 +101,7 @@ export const ChatPage = () => {
             alignItems: "center",
             gap: "15px",
             mt: "auto",
-            mb: "10px",
+            mb: "30px",
           }}
         >
           <TextareaAutosize

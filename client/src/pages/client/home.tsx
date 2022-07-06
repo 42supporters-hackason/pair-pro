@@ -44,6 +44,7 @@ export const HomePage = () => {
    * misc.
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
+  const [openDeleteModal, setOpenDeleteModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
   const [showList, setShowList] = useState<"myPostList" | "matchedList">(
     "myPostList"
@@ -128,6 +129,9 @@ export const HomePage = () => {
             onClose={setOpenPostModal.off}
           />
         </Box>
+      </Modal>
+      <Modal open={openDeleteModal} onClose={setOpenDeleteModal.off}>
+        <Box></Box>
       </Modal>
     </Box>
   );
