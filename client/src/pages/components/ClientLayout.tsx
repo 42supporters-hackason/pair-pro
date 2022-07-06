@@ -5,6 +5,8 @@ import { GeneralHeader } from "../../components/GeneralHeader";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { accessTokenStorage } from "../../utils/local-storage/access_token";
 
+const DEMO_MP = 2;
+
 /**
  * Client画面共通のLayout
  */
@@ -31,7 +33,7 @@ export const ClientLayout = () => {
         minHeight: "100vh",
       }}
     >
-      <GeneralHeader />
+      <GeneralHeader matchingPoint={DEMO_MP} />
       <Box sx={{ flex: "1" }}>
         <Suspense fallback={null}>
           <Outlet />

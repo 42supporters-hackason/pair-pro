@@ -15,10 +15,14 @@ import Typography from "@mui/material/Typography";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useClientHeaderMenu } from "./useHeaderMenu";
 
+interface Props {
+  matchingPoint: number;
+}
+
 /**
  * 全ページ共通のHeaderコンポーネント
  */
-export const GeneralHeader = () => {
+export const GeneralHeader = ({ matchingPoint }: Props) => {
   /**
    * misc.
    */
@@ -115,6 +119,9 @@ export const GeneralHeader = () => {
               </Button>
             ))}
           </Box>
+          <Typography variant="h6" sx={{ mr: "35px" }}>
+            Matching Point: {matchingPoint}
+          </Typography>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton
