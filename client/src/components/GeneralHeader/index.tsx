@@ -120,7 +120,10 @@ export const GeneralHeader = ({ matchingPoint }: Props) => {
             ))}
           </Box>
           <Typography variant="h6" sx={{ mr: "35px" }}>
-            Matching Point: {matchingPoint}
+            Matching Point:{" "}
+            <Typography component="span" variant="h6" fontWeight="bold">
+              {matchingPoint}
+            </Typography>
           </Typography>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
