@@ -7,6 +7,11 @@ export const Post = objectType({
     t.nonNull.dateTime("createdAt");
     t.nonNull.string("description");
     t.nonNull.string("title");
+    t.dateTime("completedAt");
+    // navigator
+    // driver
+    // requiredSkill
+    // message
   }
 }) 
 

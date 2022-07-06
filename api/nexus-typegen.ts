@@ -54,6 +54,7 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Post: { // root type
+    completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
     id: number; // Int!
@@ -99,6 +100,7 @@ export interface NexusGenFieldTypes {
     updateMe: NexusGenRootTypes['User'] | null; // User
   }
   Post: { // field return type
+    completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
     id: number; // Int!
@@ -142,6 +144,7 @@ export interface NexusGenFieldTypeNames {
     updateMe: 'User'
   }
   Post: { // field return type name
+    completedAt: 'DateTime'
     createdAt: 'DateTime'
     description: 'String'
     id: 'Int'

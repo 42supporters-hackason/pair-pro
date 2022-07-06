@@ -26,6 +26,7 @@ type Mutation {
 }
 
 type Post {
+  completedAt: DateTime
   createdAt: DateTime!
   description: String!
   id: Int!
