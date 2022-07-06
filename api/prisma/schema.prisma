@@ -19,6 +19,7 @@ model User {
   bio String?
   driverPost Post[] @relation(name: "Driver")
   navigatorPost Post[] @relation(name: "Navigator")
+  messages Message[] @relation(name: "createdBy")
 }
 
 model Post {
@@ -34,6 +35,7 @@ model Post {
   completedAt DateTime?
   message        Message[] @relation(name: "Message")
   requiredSkill Skill[] @relation(name: "RequiredBy")
+
 }
 
 model Message {
@@ -42,6 +44,8 @@ model Message {
   postId      Int
   content     String
   createdAt DateTime @default(now())
+  createdBy User @relation(name: "createdBy", fields: [createdById], references: [id])
+  createdById Int
 }
 
 model Skill {
