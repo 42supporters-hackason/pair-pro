@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { Card } from "../../components/Card";
+import { GithubProfile } from "../../components/GithubProfile";
+import { HomeTitleToggle } from "../../components/HomeTitleToggle";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { GithubProfile } from "../../components/GithubProfile";
 
 const demoPostView = [
   {
@@ -54,50 +54,7 @@ export const HomePage = () => {
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
-        <Box
-          sx={{
-            display: "flex",
-            mb: 3,
-            justifyContent: "center",
-            gap: "50px",
-          }}
-        >
-          {showList === "matchedList" ? (
-            <>
-              <Typography
-                fontWeight="bold"
-                sx={{ textDecoration: "underline" }}
-              >
-                マッチング済みの予定
-              </Typography>
-              <Typography
-                fontWeight="bold"
-                color="secondary.main"
-                onClick={() => setShowList("myPostList")}
-                sx={{ cursor: "pointer" }}
-              >
-                募集中の投稿
-              </Typography>
-            </>
-          ) : (
-            <>
-              <Typography
-                fontWeight="bold"
-                color="secondary.main"
-                onClick={() => setShowList("matchedList")}
-                sx={{ cursor: "pointer" }}
-              >
-                マッチング済みの予定
-              </Typography>
-              <Typography
-                fontWeight="bold"
-                sx={{ textDecoration: "underline" }}
-              >
-                募集中の投稿
-              </Typography>
-            </>
-          )}
-        </Box>
+        <HomeTitleToggle showList={showList} setShowList={setShowList} />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {showList === "matchedList"
             ? demoPostView.map(
