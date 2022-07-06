@@ -104,6 +104,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
     id: number; // Int!
+    navigator: NexusGenRootTypes['User'] | null; // User
     title: string; // String!
   }
   Query: { // field return type
@@ -148,6 +149,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     description: 'String'
     id: 'Int'
+    navigator: 'User'
     title: 'String'
   }
   Query: { // field return type name
@@ -181,6 +183,7 @@ export interface NexusGenArgTypes {
     post: { // args
       description: string; // String!
       title: string; // String!
+      userId: number; // Int!
     }
     updateMe: { // args
       bio?: string | null; // String

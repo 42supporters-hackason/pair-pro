@@ -1,4 +1,4 @@
-import { extendType, nonNull, objectType, stringArg } from "nexus"
+import { extendType, intArg, nonNull, objectType, stringArg } from "nexus"
 
 export const Post = objectType({
   name: "Post",
@@ -8,6 +8,14 @@ export const Post = objectType({
     t.nonNull.string("description");
     t.nonNull.string("title");
     t.dateTime("completedAt");
+    t.field("navigator", {
+      type: "User",
+      resolve(parent, args, context) {
+        return context.prisma.post
+          .findUnique({ where: { id: parent.id } })
+          .navigator();
+      }
+    })
     // navigator
     // driver
     // requiredSkill
@@ -35,12 +43,14 @@ export const PostMutation = extendType({
             args: {
                 description: nonNull(stringArg()),
                 title: nonNull(stringArg()),
+                userId: nonNull(intArg())
             },
             resolve(parent, args, context) { 
                 const newPost = context.prisma.post.create({
                     data: {
                         description: args.description,
                         title: args.title,
+                        navigator: { connect: { id: args.userId } }
                     },
                 });
                 return newPost;
