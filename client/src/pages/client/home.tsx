@@ -5,6 +5,7 @@ import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { GithubProfile } from "../../components/GithubProfile";
 
 const demoPostView = [
   {
@@ -159,32 +160,7 @@ export const HomePage = () => {
             </Button>
           </Box>
         </Box>
-        <Box>
-          <Typography
-            fontWeight="bold"
-            sx={{ textAlign: "center", mb: 2 }}
-            variant="subtitle1"
-          >
-            Profile
-          </Typography>
-          <Card>
-            <Box
-              component="img"
-              src="https://github-readme-stats.vercel.app/api?username=taisei-13046&theme=onedark&show_icons=true)](https://github.com/anuraghazra/github-readme-stats"
-              sx={{ width: "100%" }}
-            />
-            <Box
-              component="img"
-              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/1-repos-per-language.svg"
-              sx={{ width: "100%" }}
-            />
-            <Box
-              component="img"
-              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/3-stats.svg"
-              sx={{ width: "100%" }}
-            />
-          </Card>
-        </Box>
+        <GithubProfile githubId="taisei-13046" />
       </Box>
       <Modal
         open={openPostModal}
