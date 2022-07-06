@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { GithubProfile } from "../../components/GithubProfile";
 import { HomeTitleToggle } from "../../components/HomeTitleToggle";
+import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { noop } from "../../utils";
 
 const demoPostView = [
   {
@@ -13,8 +15,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
   {
@@ -22,8 +23,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
   {
@@ -31,8 +31,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
 ];
@@ -57,38 +56,29 @@ export const HomePage = () => {
         <HomeTitleToggle showList={showList} setShowList={setShowList} />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {showList === "matchedList"
-            ? demoPostView.map(
-                ({ id, title, content, language, date, name }) => (
-                  <PostCard
-                    key={id}
-                    title={title}
-                    content={content}
-                    language={language}
-                    date={date}
-                    name={name}
-                    onClick={() => {
-                      setOpenPostModal.on();
-                      setSelectedId(id);
-                    }}
-                  />
-                )
-              )
-            : demoPostView.map(
-                ({ id, title, content, language, date, name }) => (
-                  <PostCard
-                    key={id}
-                    title={title}
-                    content={content}
-                    language={language}
-                    date={date}
-                    name={name}
-                    onClick={() => {
-                      setOpenPostModal.on();
-                      setSelectedId(id);
-                    }}
-                  />
-                )
-              )}
+            ? demoPostView.map(({ id, title, content, language, name }) => (
+                <PostCard
+                  key={id}
+                  title={title}
+                  content={content}
+                  languages={language}
+                  name={name}
+                  onClick={() => {
+                    setOpenPostModal.on();
+                    setSelectedId(id);
+                  }}
+                />
+              ))
+            : demoPostView.map(({ id, title, content, language }) => (
+                <MyPostCard
+                  key={id}
+                  title={title}
+                  content={content}
+                  languages={language}
+                  onEdit={noop}
+                  onDelete={noop}
+                />
+              ))}
         </Box>
       </Box>
       <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>
@@ -129,8 +119,7 @@ export const HomePage = () => {
             githubId={demoPostView.find(({ id }) => id === selectedId)?.name}
             title={demoPostView.find(({ id }) => id === selectedId)?.title}
             content={demoPostView.find(({ id }) => id === selectedId)?.content}
-            date={demoPostView.find(({ id }) => id === selectedId)?.date}
-            language={
+            languages={
               demoPostView.find(({ id }) => id === selectedId)?.language
             }
             hasButton={true}
