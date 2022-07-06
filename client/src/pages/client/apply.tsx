@@ -9,8 +9,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import format from "date-fns/format";
 import { Controller, useForm } from "react-hook-form";
 import { Card } from "../../components/Card";
 import { useBoolean } from "../../hooks/useBoolean";
@@ -69,7 +67,7 @@ export const ApplyPage = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "25px",
+          gap: "35px",
           width: "100%",
           mt: 3,
         }}
@@ -130,26 +128,6 @@ export const ApplyPage = () => {
           {errors.language && (
             <Typography sx={{ mt: "5px", color: "error.main" }}>
               使用言語を入力してください
-            </Typography>
-          )}
-        </Box>
-        <Box>
-          <Controller
-            name="date"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <DesktopDatePicker
-                label="日時"
-                inputFormat="MM/dd/yyyy"
-                value={value}
-                onChange={onChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            )}
-          />
-          {errors.date && (
-            <Typography sx={{ mt: "5px", color: "error.main" }}>
-              {errors.date.message}
             </Typography>
           )}
         </Box>
@@ -228,15 +206,10 @@ export const ApplyPage = () => {
                 <Typography>使用言語</Typography>
                 {applyFormData.language &&
                   applyFormData.language.map((language) => (
-                    <Typography variant="h5">{language}</Typography>
+                    <Typography key={language} variant="h5">
+                      {language}
+                    </Typography>
                   ))}
-              </Box>
-              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                <Typography>日程</Typography>
-                <Typography variant="h5">
-                  {applyFormData.date &&
-                    format(applyFormData.date, "yyyy-MM-dd")}
-                </Typography>
               </Box>
               <Button
                 variant="contained"

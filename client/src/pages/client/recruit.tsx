@@ -11,8 +11,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
   {
@@ -20,8 +19,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
   {
@@ -29,8 +27,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
 ];
@@ -57,13 +54,12 @@ export const RecruitPage = () => {
           気になるマッチング相手を探す
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 2 }}>
-          {demoPostView.map(({ id, title, content, language, date, name }) => (
+          {demoPostView.map(({ id, title, content, language, name }) => (
             <PostCard
               key={id}
               title={title}
               content={content}
-              language={language}
-              date={date}
+              languages={language}
               name={name}
               onClick={() => {
                 setOpenPostModal.on();
@@ -97,8 +93,7 @@ export const RecruitPage = () => {
             githubId={demoPostView.find(({ id }) => id === selectedId)?.name}
             title={demoPostView.find(({ id }) => id === selectedId)?.title}
             content={demoPostView.find(({ id }) => id === selectedId)?.content}
-            date={demoPostView.find(({ id }) => id === selectedId)?.date}
-            language={
+            languages={
               demoPostView.find(({ id }) => id === selectedId)?.language
             }
             hasButton={true}

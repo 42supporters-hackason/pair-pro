@@ -1,7 +1,6 @@
 import React, { HTMLAttributes } from "react";
 import { Box, Button, SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/system";
-import format from "date-fns/format";
 import { Card } from "../Card";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -20,11 +19,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
    * 使用言語
    */
-  language?: string;
-  /**
-   * 実施日時
-   */
-  date?: Date;
+  languages?: string[];
   /**
    * ボタンの有無
    */
@@ -51,8 +46,7 @@ export const ProfileCard = ({
   githubId = "taisei-13046",
   title,
   content,
-  language,
-  date,
+  languages,
   hasButton = false,
   agreeTitle,
   onAgree,
@@ -122,21 +116,18 @@ export const ProfileCard = ({
             }}
           >
             <Typography>使用言語</Typography>
-            <Typography fontWeight="bold" variant="subtitle2">
-              {language}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography>日時</Typography>
-            <Typography variant="subtitle2" fontWeight="bold">
-              {date && format(date, "yyyy/MM/dd")}
-            </Typography>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              {languages &&
+                languages.map((language) => (
+                  <Typography
+                    fontWeight="bold"
+                    variant="subtitle2"
+                    key={language}
+                  >
+                    {language}
+                  </Typography>
+                ))}
+            </Box>
           </Box>
           {hasButton && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "25px" }}>

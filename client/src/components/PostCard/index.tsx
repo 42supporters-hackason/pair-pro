@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import Card from "@mui/material/Card";
-import format from "date-fns/format";
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
@@ -23,11 +22,7 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
    * 使用言語
    */
-  language: string;
-  /**
-   * 実施日時
-   */
-  date?: Date;
+  languages: string[];
   /**
    * 名前
    */
@@ -41,8 +36,7 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
 export const PostCard = ({
   title,
   content,
-  language,
-  date,
+  languages,
   name,
   ...props
 }: Props) => {
@@ -64,13 +58,11 @@ export const PostCard = ({
               >
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography variant="subtitle1">使用言語</Typography>
-                  <Typography variant="h6">{language}</Typography>
-                </Box>
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  <Typography variant="subtitle1">日時</Typography>
-                  <Typography variant="h6">
-                    {date && format(date, "yyyy/MM/dd")}
-                  </Typography>
+                  {languages.map((language) => (
+                    <Typography variant="h6" key={language}>
+                      {language}
+                    </Typography>
+                  ))}
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography variant="subtitle1">名前</Typography>

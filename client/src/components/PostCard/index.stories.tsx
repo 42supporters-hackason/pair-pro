@@ -9,5 +9,4 @@ export default {
 const Template: ComponentStory<typeof PostCard> = (props) => (
   <PostCard {...props} />
 );
-
 export const Default = Template.bind({});

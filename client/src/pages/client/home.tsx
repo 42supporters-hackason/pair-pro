@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { Card } from "../../components/Card";
+import { AgreeModal } from "../../components/AgreeModal";
+import { GithubProfile } from "../../components/GithubProfile";
+import { HomeTitleToggle } from "../../components/HomeTitleToggle";
+import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { noop } from "../../utils";
 
 const demoPostView = [
   {
@@ -12,8 +16,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
   {
@@ -21,8 +24,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
   {
@@ -30,8 +32,7 @@ const demoPostView = [
     title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
     content:
       "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: "JAVA",
-    date: new Date("2000-11-11"),
+    language: ["JAVA", "C言語"],
     name: "taisei-13046",
   },
 ];
@@ -44,30 +45,42 @@ export const HomePage = () => {
    * misc.
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
+  const [openDeleteModal, setOpenDeleteModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
+  const [showList, setShowList] = useState<"myPostList" | "matchedList">(
+    "myPostList"
+  );
   const { goToApply, goToRecruit, goToChat } = useClientRoute();
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
-        <Typography fontWeight="bold" sx={{ textAlign: "center", mb: 3 }}>
-          マッチング済みの予定
-        </Typography>
+        <HomeTitleToggle showList={showList} setShowList={setShowList} />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {demoPostView.map(({ id, title, content, language, date, name }) => (
-            <PostCard
-              key={id}
-              title={title}
-              content={content}
-              language={language}
-              date={date}
-              name={name}
-              onClick={() => {
-                setOpenPostModal.on();
-                setSelectedId(id);
-              }}
-            />
-          ))}
+          {showList === "matchedList"
+            ? demoPostView.map(({ id, title, content, language, name }) => (
+                <PostCard
+                  key={id}
+                  title={title}
+                  content={content}
+                  languages={language}
+                  name={name}
+                  onClick={() => {
+                    setOpenPostModal.on();
+                    setSelectedId(id);
+                  }}
+                />
+              ))
+            : demoPostView.map(({ id, title, content, language }) => (
+                <MyPostCard
+                  key={id}
+                  title={title}
+                  content={content}
+                  languages={language}
+                  onEdit={noop}
+                  onDelete={setOpenDeleteModal.on}
+                />
+              ))}
         </Box>
       </Box>
       <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>
@@ -96,32 +109,7 @@ export const HomePage = () => {
             </Button>
           </Box>
         </Box>
-        <Box>
-          <Typography
-            fontWeight="bold"
-            sx={{ textAlign: "center", mb: 2 }}
-            variant="subtitle1"
-          >
-            Profile
-          </Typography>
-          <Card>
-            <Box
-              component="img"
-              src="https://github-readme-stats.vercel.app/api?username=taisei-13046&theme=onedark&show_icons=true)](https://github.com/anuraghazra/github-readme-stats"
-              sx={{ width: "100%" }}
-            />
-            <Box
-              component="img"
-              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/1-repos-per-language.svg"
-              sx={{ width: "100%" }}
-            />
-            <Box
-              component="img"
-              src="https://raw.githubusercontent.com/taisei-13046/taisei-13046/main/profile-summary-card-output/default/3-stats.svg"
-              sx={{ width: "100%" }}
-            />
-          </Card>
-        </Box>
+        <GithubProfile githubId="taisei-13046" />
       </Box>
       <Modal
         open={openPostModal}
@@ -133,14 +121,26 @@ export const HomePage = () => {
             githubId={demoPostView.find(({ id }) => id === selectedId)?.name}
             title={demoPostView.find(({ id }) => id === selectedId)?.title}
             content={demoPostView.find(({ id }) => id === selectedId)?.content}
-            date={demoPostView.find(({ id }) => id === selectedId)?.date}
-            language={
+            languages={
               demoPostView.find(({ id }) => id === selectedId)?.language
             }
             hasButton={true}
             agreeTitle="チャットルームに移動する"
             onAgree={() => goToChat(selectedId)}
             onClose={setOpenPostModal.off}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={openDeleteModal}
+        onClose={setOpenDeleteModal.off}
+        sx={{ top: "40%", mx: "auto", width: "600px" }}
+      >
+        <Box>
+          <AgreeModal
+            content="本当にこの募集を削除してよろしいですか？"
+            onAgree={noop}
+            onCancel={setOpenDeleteModal.off}
           />
         </Box>
       </Modal>
