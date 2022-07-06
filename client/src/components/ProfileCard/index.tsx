@@ -116,16 +116,18 @@ export const ProfileCard = ({
             }}
           >
             <Typography>使用言語</Typography>
-            {languages &&
-              languages.map((language) => (
-                <Typography
-                  fontWeight="bold"
-                  variant="subtitle2"
-                  key={language}
-                >
-                  {language}
-                </Typography>
-              ))}
+            <Box sx={{ display: "flex", gap: 2 }}>
+              {languages &&
+                languages.map((language) => (
+                  <Typography
+                    fontWeight="bold"
+                    variant="subtitle2"
+                    key={language}
+                  >
+                    {language}
+                  </Typography>
+                ))}
+            </Box>
           </Box>
           {hasButton && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "25px" }}>
