@@ -45,29 +45,92 @@ export const HomePage = () => {
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
+  const [showList, setShowList] = useState<"myPostList" | "matchedList">(
+    "myPostList"
+  );
   const { goToApply, goToRecruit, goToChat } = useClientRoute();
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
-        <Typography fontWeight="bold" sx={{ textAlign: "center", mb: 3 }}>
-          マッチング済みの予定
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            mb: 3,
+            justifyContent: "center",
+            gap: "50px",
+          }}
+        >
+          {showList === "matchedList" ? (
+            <>
+              <Typography
+                fontWeight="bold"
+                sx={{ textDecoration: "underline" }}
+              >
+                マッチング済みの予定
+              </Typography>
+              <Typography
+                fontWeight="bold"
+                color="secondary.main"
+                onClick={() => setShowList("myPostList")}
+                sx={{ cursor: "pointer" }}
+              >
+                募集中の投稿
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography
+                fontWeight="bold"
+                color="secondary.main"
+                onClick={() => setShowList("matchedList")}
+                sx={{ cursor: "pointer" }}
+              >
+                マッチング済みの予定
+              </Typography>
+              <Typography
+                fontWeight="bold"
+                sx={{ textDecoration: "underline" }}
+              >
+                募集中の投稿
+              </Typography>
+            </>
+          )}
+        </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {demoPostView.map(({ id, title, content, language, date, name }) => (
-            <PostCard
-              key={id}
-              title={title}
-              content={content}
-              language={language}
-              date={date}
-              name={name}
-              onClick={() => {
-                setOpenPostModal.on();
-                setSelectedId(id);
-              }}
-            />
-          ))}
+          {showList === "matchedList"
+            ? demoPostView.map(
+                ({ id, title, content, language, date, name }) => (
+                  <PostCard
+                    key={id}
+                    title={title}
+                    content={content}
+                    language={language}
+                    date={date}
+                    name={name}
+                    onClick={() => {
+                      setOpenPostModal.on();
+                      setSelectedId(id);
+                    }}
+                  />
+                )
+              )
+            : demoPostView.map(
+                ({ id, title, content, language, date, name }) => (
+                  <PostCard
+                    key={id}
+                    title={title}
+                    content={content}
+                    language={language}
+                    date={date}
+                    name={name}
+                    onClick={() => {
+                      setOpenPostModal.on();
+                      setSelectedId(id);
+                    }}
+                  />
+                )
+              )}
         </Box>
       </Box>
       <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>

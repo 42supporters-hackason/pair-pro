@@ -228,7 +228,9 @@ export const ApplyPage = () => {
                 <Typography>使用言語</Typography>
                 {applyFormData.language &&
                   applyFormData.language.map((language) => (
-                    <Typography variant="h5">{language}</Typography>
+                    <Typography key={language} variant="h5">
+                      {language}
+                    </Typography>
                   ))}
               </Box>
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
