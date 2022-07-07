@@ -10,9 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { Card } from "../../components/Card";
+import { FormDataModal } from "../../components/FormDataModal";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { noop } from "../../utils";
 import { applySchema, ApplySchema } from "./validation/apply_vaildation";
 
 const demoOptions = ["Java", "C言語"];
@@ -169,62 +170,13 @@ export const ApplyPage = () => {
             textAlign: "center",
           }}
         >
-          <Card>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "45px",
-                justifyContent: "center",
-                mx: 3,
-              }}
-            >
-              <Typography variant="h6" fontWeight="bold">
-                入力内容確認
-              </Typography>
-              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                <Typography>タイトル</Typography>
-                <Typography variant="h5">{applyFormData.title}</Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 2,
-                  alignItems: "center",
-                  flexWrap: "wrap",
-                }}
-              >
-                <Typography>内容</Typography>
-                <Typography
-                  variant="h5"
-                  sx={{ overflowWrap: "break-word", wordBreak: "break-all" }}
-                >
-                  {applyFormData.content}
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                <Typography>使用言語</Typography>
-                {applyFormData.language &&
-                  applyFormData.language.map((language) => (
-                    <Typography key={language} variant="h5">
-                      {language}
-                    </Typography>
-                  ))}
-              </Box>
-              <Button
-                variant="contained"
-                sx={{
-                  mx: "auto",
-                  mt: "auto",
-                  width: "450px",
-                  height: "50px",
-                  borderRadius: "10px",
-                }}
-              >
-                上記の内容で募集する
-              </Button>
-            </Box>
-          </Card>
+          <FormDataModal
+            title={applyFormData.title}
+            content={applyFormData.content}
+            languages={applyFormData.language}
+            onAgree={noop}
+            onCancel={setOpenModal.off}
+          />
         </Box>
       </Modal>
     </Box>

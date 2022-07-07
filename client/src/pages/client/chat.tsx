@@ -1,12 +1,8 @@
 import LogoutIcon from "@mui/icons-material/Logout";
-import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import VideocamOffIcon from "@mui/icons-material/VideocamOff";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
 import { IconButton } from "../../components/IconButton";
+import { VideoButtons } from "../../components/VideoButtons";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
@@ -37,30 +33,12 @@ export const ChatPage = () => {
             <Box sx={{ width: "50%", border: 1 }}>相手</Box>
           </Box>
           <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
-            {volumeOn ? (
-              <IconButton onClick={setVolumeOn.off}>
-                <VolumeUpIcon />
-              </IconButton>
-            ) : (
-              <IconButton onClick={setVolumeOn.on}>
-                <VolumeOffIcon />
-              </IconButton>
-            )}
-            {videoOn ? (
-              <IconButton onClick={setVideoOn.off}>
-                <VideocamIcon />
-              </IconButton>
-            ) : (
-              <IconButton onClick={setVideoOn.on}>
-                <VideocamOffIcon />
-              </IconButton>
-            )}
-            <IconButton>
-              <PersonalVideoIcon />
-            </IconButton>
-            <IconButton>
-              <LogoutIcon />
-            </IconButton>
+            <VideoButtons
+              volumeOn={volumeOn}
+              videoOn={videoOn}
+              onClickVideo={setVideoOn.toggle}
+              onClickVolume={setVolumeOn.toggle}
+            />
           </Box>
         </Box>
       </Box>

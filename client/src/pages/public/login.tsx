@@ -15,7 +15,7 @@ export const LoginPage = () => {
     if (accessTokenStorage.load() !== null) {
       goToHome({ replace: true });
     }
-  }, []);
+  }, [goToHome]);
 
   return (
     <>
