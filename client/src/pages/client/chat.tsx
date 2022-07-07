@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
@@ -39,6 +40,48 @@ const demoChat = [
       "おはようございますあああああああああああああああああああああああああああああああ",
     createdBy: "taisei-13046",
   },
+  {
+    id: 3,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 4,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 5,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 6,
+    content:
+      "おはようございますあああああああああああああああああああああああああああああああ",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 3,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 4,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 5,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 6,
+    content:
+      "おはようございますあああああああああああああああああああああああああああああああ",
+    createdBy: "taisei-13046",
+  },
 ];
 
 /**
@@ -51,6 +94,11 @@ export const ChatPage = () => {
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
   const { goToHome } = useClientRoute();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    ref.current?.scrollIntoView(false);
+  }, []);
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
@@ -117,11 +165,13 @@ export const ChatPage = () => {
           }}
         >
           {demoChat.map(({ id, content, createdBy }) => (
-            <ChatMessage
-              key={id}
-              content={content}
-              side={createdBy === "taisei-13046" ? "right" : "left"}
-            />
+            <Box ref={ref} key={id}>
+              <ChatMessage
+                key={id}
+                content={content}
+                side={createdBy === "taisei-13046" ? "right" : "left"}
+              />
+            </Box>
           ))}
         </Box>
         <Box
