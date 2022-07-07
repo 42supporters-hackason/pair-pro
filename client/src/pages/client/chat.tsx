@@ -6,6 +6,39 @@ import { VideoButtons } from "../../components/VideoButtons";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
+const demoChat = [
+  {
+    id: 1,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 2,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 3,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 4,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 5,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 6,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+];
+
 /**
  * p2p相手とやり取りをするページ
  */
@@ -71,7 +104,7 @@ export const ChatPage = () => {
             <LogoutIcon />
           </IconButton>
         </Box>
-        <Box sx={{ m: "15px" }}>チャット</Box>
+        <Box sx={{ m: "15px", overflow: "scroll" }}></Box>
         <Box
           sx={{
             width: "100%",
