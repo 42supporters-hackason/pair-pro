@@ -1,6 +1,7 @@
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
+import { ChatMessage } from "../../components/ChatMessage";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
 import { useBoolean } from "../../hooks/useBoolean";
@@ -34,7 +35,8 @@ const demoChat = [
   },
   {
     id: 6,
-    content: "おはようございます",
+    content:
+      "おはようございますあああああああああああああああああああああああああああああああ",
     createdBy: "taisei-13046",
   },
 ];
@@ -104,7 +106,24 @@ export const ChatPage = () => {
             <LogoutIcon />
           </IconButton>
         </Box>
-        <Box sx={{ m: "15px", overflow: "scroll" }}></Box>
+        <Box
+          sx={{
+            my: "15px",
+            mx: "25px",
+            overflow: "scroll",
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
+          {demoChat.map(({ id, content, createdBy }) => (
+            <ChatMessage
+              key={id}
+              content={content}
+              side={createdBy === "taisei-13046" ? "right" : "left"}
+            />
+          ))}
+        </Box>
         <Box
           sx={{
             width: "100%",
