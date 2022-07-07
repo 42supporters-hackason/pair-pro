@@ -59,6 +59,7 @@ export const ChatMessage = ({ content, side }: Props) => {
               display: "inline-block",
               wordBreak: "break-word",
               maxWidth: "70%",
+              textAlign: "left",
             }}
           >
             {content}
