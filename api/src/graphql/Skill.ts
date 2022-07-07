@@ -1,5 +1,5 @@
 import { extendType, objectType } from "nexus";
-import json from "../assets/json/languages.json";
+import { languagesObject } from "../utils";
 
 export const Skill = objectType({
   name: "Skill",
@@ -8,15 +8,6 @@ export const Skill = objectType({
     t.nonNull.string("name");
   },
 });
-
-/**
- * 全ての言語名を持ったオブジェクトの配列
- * idはjsonの順番でそれぞれindexを付与
- */
-const languagesObject = json.languages.map((language, index) => ({
-  id: index,
-  name: language,
-}));
 
 export const SkillQuery = extendType({
   type: "Query",
