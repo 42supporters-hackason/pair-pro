@@ -77,6 +77,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
+    skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
   }
   Skill: { // field return type
     id: number; // Int!
@@ -106,6 +107,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     feed: 'Post'
+    skills: 'Skill'
   }
   Skill: { // field return type name
     id: 'Int'
