@@ -50,6 +50,7 @@ export interface NexusGenObjects {
   User: { // root type
     bio: string; // String!
     githubId: string; // String!
+    githubLogin: string; // String!
     id: number; // Int!
     matchingPoint: number; // Int!
     name: string; // String!
@@ -94,6 +95,7 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     bio: string; // String!
     githubId: string; // String!
+    githubLogin: string; // String!
     id: number; // Int!
     matchingPoint: number; // Int!
     name: string; // String!
@@ -128,6 +130,7 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     bio: 'String'
     githubId: 'String'
+    githubLogin: 'String'
     id: 'Int'
     matchingPoint: 'Int'
     name: 'String'

@@ -38,7 +38,7 @@ export const AuthMutation = extendType({
 
         const {
           id: githubId,
-          login: name,
+          login: githubLogin,
           bio,
         } = await get_github_info(access_token);
 
@@ -50,7 +50,13 @@ export const AuthMutation = extendType({
 
         if (!user) {
           user = await context.prisma.user.create({
-            data: { name, matchingPoint: defaultMatchingPoint, githubId, bio },
+            data: {
+              name: githubLogin,
+              githubLogin,
+              matchingPoint: defaultMatchingPoint,
+              githubId,
+              bio,
+            },
           });
         }
 

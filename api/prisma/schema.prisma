@@ -16,6 +16,7 @@ model User {
   name      String
   matchingPoint Int
   githubId String
+  githubLogin String
   bio String
   driverPost Post[] @relation(name: "Driver")
   navigatorPost Post[] @relation(name: "Navigator")

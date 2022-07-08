@@ -35,6 +35,7 @@ type Skill {
 type User {
   bio: String!
   githubId: String!
+  githubLogin: String!
   id: Int!
   matchingPoint: Int!
   name: String!
