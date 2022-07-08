@@ -9,7 +9,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chromatic": "npx chromatic --project-token=a278191cd814",
-    "lint": "prettier -c -w src/**/*.{ts,tsx} && eslint src/**/*.{ts,tsx}"
+    "lint": "prettier -c -w src/**/*.{ts,tsx} && eslint src/**/*.{ts,tsx}",
+    "generate": "graphql-codegen"
   },
   "husky": {
     "hooks": {
@@ -20,9 +21,15 @@
     "*.{ts,tsx}": "lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.9",
     "@date-io/date-fns": "^2.14.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@graphql-codegen/cli": "^2.7.0",
+    "@graphql-codegen/typed-document-node": "^2.2.14",
+    "@graphql-codegen/typescript": "^2.6.0",
+    "@graphql-codegen/typescript-operations": "^2.4.3",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.17",
     "@hookform/resolvers": "^2.9.1",
     "@mui/icons-material": "^5.8.3",
     "@mui/material": "^5.8.3",
@@ -39,6 +46,7 @@
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "graphql": "^16.5.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
