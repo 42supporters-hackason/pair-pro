@@ -1,10 +1,15 @@
 import { gql } from "@apollo/client";
 
 export const SIGNIN = gql`
-  mutation SignIn() {
-    authGithub() {
+  mutation SignIn($code: String!) {
+    authGithub(code: $code) {
       token
-      user
+      user {
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
     }
   }
 `;
