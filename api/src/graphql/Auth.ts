@@ -3,10 +3,10 @@ import { Token } from "graphql";
 import axios, { AxiosError } from "axios";
 import * as jwt from "jsonwebtoken";
 import { stringify, parse } from "querystring";
+import { jwtKey } from "../utils/auth";
 
 const defaultMatchingPoint = 3;
 
-const jwtKey = process.env.JWT_KEY as string;
 const clientId = process.env.GH_CLIENT_ID;
 const clientSecret = process.env.GH_CLIENT_SECRET;
 
@@ -34,12 +34,15 @@ export const AuthMutation = extendType({
       async resolve(_parent, args, context) {
         const { code } = args;
         const access_token = await get_access_token(code) as string;
+        // const access_token = "";
 
         const {
           id: githubId,
           login: name,
           bio,
         } = await get_github_info(access_token);
+
+        // console.log(access_token);
 
         let user = await context.prisma.user.findFirst({
           where: { githubId },
