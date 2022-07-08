@@ -1,9 +1,8 @@
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Box } from "@mui/material";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
-import { accessTokenStorage } from "../../utils/local-storage/access_token";
 
 const DEMO_MP = 2;
 
@@ -14,15 +13,6 @@ export const ClientLayout = () => {
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
   const { goToLogin } = usePublicRoute();
-
-  useEffect(() => {
-    if (code && accessTokenStorage.load() === null) {
-      accessTokenStorage.save(code);
-    }
-    if (accessTokenStorage.load() === null) {
-      goToLogin({ replace: true });
-    }
-  }, [goToLogin, code]);
 
   return (
     <Box
