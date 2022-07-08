@@ -2,12 +2,18 @@
 ### Do not make changes to this file directly
 
 
+type AuthPayLoad {
+  token: String!
+  user: User!
+}
+
 type Message {
   content: String!
   id: Int!
 }
 
 type Mutation {
+  authGithub(code: String!): AuthPayLoad!
   post(description: String!, title: String!): Post!
 }
 

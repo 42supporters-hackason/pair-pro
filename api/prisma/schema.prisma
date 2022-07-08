@@ -16,7 +16,7 @@ model User {
   name      String
   matchingPoint Int
   githubId String
-  bio String?
+  bio String
   driverPost Post[] @relation(name: "Driver")
   navigatorPost Post[] @relation(name: "Navigator")
   messages Message[] @relation(name: "createdBy")
