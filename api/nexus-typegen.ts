@@ -79,6 +79,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     post: NexusGenRootTypes['Post']; // Post!
+    updateMe: NexusGenRootTypes['User'] | null; // User
   }
   Post: { // field return type
     description: string; // String!
@@ -87,7 +88,10 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
+    me: NexusGenRootTypes['User']; // User!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
+    user: NexusGenRootTypes['User'] | null; // User
+    users: NexusGenRootTypes['User'][]; // [User!]!
   }
   Skill: { // field return type
     id: number; // Int!
@@ -95,11 +99,13 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     bio: string; // String!
+    driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
     matchingPoint: number; // Int!
     name: string; // String!
+    navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
   }
 }
 
@@ -115,6 +121,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
     post: 'Post'
+    updateMe: 'User'
   }
   Post: { // field return type name
     description: 'String'
@@ -123,7 +130,10 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     feed: 'Post'
+    me: 'User'
     skills: 'Skill'
+    user: 'User'
+    users: 'User'
   }
   Skill: { // field return type name
     id: 'Int'
@@ -131,11 +141,13 @@ export interface NexusGenFieldTypeNames {
   }
   User: { // field return type name
     bio: 'String'
+    driverPost: 'Post'
     githubId: 'String'
     githubLogin: 'String'
     id: 'Int'
     matchingPoint: 'Int'
     name: 'String'
+    navigatorPost: 'Post'
   }
 }
 
@@ -147,6 +159,15 @@ export interface NexusGenArgTypes {
     post: { // args
       description: string; // String!
       title: string; // String!
+    }
+    updateMe: { // args
+      bio?: string | null; // String
+      name?: string | null; // String
+    }
+  }
+  Query: {
+    user: { // args
+      id: number; // Int!
     }
   }
 }
