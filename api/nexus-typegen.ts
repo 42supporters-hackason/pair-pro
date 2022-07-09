@@ -183,7 +183,6 @@ export interface NexusGenArgTypes {
     post: { // args
       description: string; // String!
       title: string; // String!
-      userId: number; // Int!
     }
     updateMe: { // args
       bio?: string | null; // String

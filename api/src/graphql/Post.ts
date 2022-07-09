@@ -15,9 +15,23 @@ export const Post = objectType({
           .findUnique({ where: { id: parent.id } })
           .navigator();
       }
-    })
-    // navigator
-    // driver
+    });
+    t.field("driver", {
+      type: "User",
+      resolve(parent, args, context) {
+        return context.prisma.post
+          .findUnique({ where: { id: parent.id } })
+          .driver();
+      }
+    });
+    t.field("requiredSkills", {
+      type: "Skill",
+      resolve(parent, args, context) {
+        return context.prisma.post
+          .findUnique({ where: { id: parent.id } })
+          .requiredSkills();
+      }
+    });
     // requiredSkill
     // message
   }
@@ -36,25 +50,26 @@ export const PostQuery = extendType({
 });
 
 export const PostMutation = extendType({
-    type: "Mutation",
-    definition(t) {
-        t.nonNull.field("post", {
-            type: "Post",
-            args: {
-                description: nonNull(stringArg()),
-                title: nonNull(stringArg()),
-                userId: nonNull(intArg())
-            },
-            resolve(parent, args, context) { 
-                const newPost = context.prisma.post.create({
-                    data: {
-                        description: args.description,
-                        title: args.title,
-                        navigator: { connect: { id: args.userId } }
-                    },
-                });
-                return newPost;
-            },
+  type: "Mutation",
+  definition(t) {
+    t.nonNull.field("post", {
+      type: "Post",
+      args: {
+        description: nonNull(stringArg()),
+        title: nonNull(stringArg()),
+        requiredSkills: intArg()
+      },
+      resolve(parent, args, context) { 
+        const newPost = context.prisma.post.create({
+          data: {
+            description: args.description,
+            title: args.title,
+            requiredSkills: { connect: { id: args.requiredSkills } },
+            driver: { connect: { id: context.userId } }
+          },
         });
-    },
+        return newPost;
+      },
+    });
+  },
 });
