@@ -33,16 +33,13 @@ export const AuthMutation = extendType({
       },
       async resolve(_parent, args, context) {
         const { code } = args;
-        const access_token = await get_access_token(code) as string;
-        // const access_token = "";
+        const access_token = await getAccessToken(code) as string;
 
         const {
           id: githubId,
           login: githubLogin,
           bio,
-        } = await get_github_info(access_token);
-
-        // console.log(access_token);
+        } = await getGithubInfo(access_token);
 
         let user = await context.prisma.user.findFirst({
           where: { githubId },
@@ -71,7 +68,7 @@ export const AuthMutation = extendType({
   },
 });
 
-async function get_access_token(code: string) {
+async function getAccessToken(code: string) {
   const { data } = await axios.post(
     accessTokenUrl,
     stringify({
@@ -89,7 +86,7 @@ async function get_access_token(code: string) {
   return parse(data).access_token;
 }
 
-async function get_github_info(access_token: string) {
+async function getGithubInfo(access_token: string) {
   const { data: user } = await axios.post(
     apiUrl,
     {
