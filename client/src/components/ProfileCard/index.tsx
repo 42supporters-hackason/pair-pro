@@ -5,9 +5,13 @@ import { Card } from "../Card";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
-   * githubId
+   * プロフィール名
    */
-  githubId?: string;
+  name?: string;
+  /**
+   * githubLogin
+   */
+  githubLogin?: string;
   /**
    * タイトル
    */
@@ -43,7 +47,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
  * ユーザ情報を表示するカード
  */
 export const ProfileCard = ({
-  githubId = "taisei-13046",
+  name = "taisei yasui",
+  githubLogin = "taisei-13046",
   title,
   content,
   languages,
@@ -65,18 +70,18 @@ export const ProfileCard = ({
             gap: "10px",
           }}
         >
-          <Typography variant="h5">{githubId}</Typography>
+          <Typography variant="h5">{name}</Typography>
           <Typography variant="h6">Status</Typography>
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             <Box
               component="img"
               sx={{ height: "150px" }}
-              src={`https://github-readme-stats.vercel.app/api?username=${githubId}&theme=onedark&show_icons=true`}
+              src={`https://github-readme-stats.vercel.app/api?username=${githubLogin}&theme=onedark&show_icons=true`}
             />
             <Box
               component="img"
               sx={{ height: "150px" }}
-              src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${githubId}&layout=compact`}
+              src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${githubLogin}&layout=compact`}
             />
           </Box>
           <Box
