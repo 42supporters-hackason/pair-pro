@@ -5,6 +5,7 @@ export const SIGNIN = gql`
     authGithub(code: $code) {
       token
       user {
+        id
         name
         githubLogin
         matchingPoint

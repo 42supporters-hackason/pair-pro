@@ -6,6 +6,7 @@ import { HomeTitleToggle } from "../../components/HomeTitleToggle";
 import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
+import { useProfile } from "../../context/auth";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
@@ -51,6 +52,7 @@ export const HomePage = () => {
     "myPostList"
   );
   const { goToApply, goToRecruit, goToChat } = useClientRoute();
+  const { profile } = useProfile();
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
@@ -109,7 +111,7 @@ export const HomePage = () => {
             </Button>
           </Box>
         </Box>
-        <GithubProfile githubLogin="taisei-13046" />
+        <GithubProfile githubLogin={profile?.githubLogin ?? ""} />
       </Box>
       <Modal
         open={openPostModal}
