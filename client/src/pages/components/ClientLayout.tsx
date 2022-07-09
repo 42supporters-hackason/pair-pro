@@ -22,18 +22,21 @@ export const ClientLayout = () => {
 
   useEffect(() => {
     const signIn = async () => {
-      if (code !== null) {
-        try {
-          const { data } = await signInMutation({ variables: { code } });
-          tokenStorage.save(data?.authGithub.token ?? "");
-          setIsLogin.on();
-          setProfile({
-            githubLogin: data?.authGithub.user.githubLogin,
-            name: data?.authGithub.user.name,
-            matchingPoint: data?.authGithub.user.matchingPoint,
-            bio: data?.authGithub.user.bio,
-          });
-        } catch (error) {
+      if (code !== null && tokenStorage.load() === null) {
+        await signInMutation({
+          variables: { code },
+          onCompleted: (data) => {
+            tokenStorage.save(data?.authGithub.token ?? "");
+            setIsLogin.on();
+            setProfile({
+              githubLogin: data?.authGithub.user.githubLogin,
+              name: data?.authGithub.user.name,
+              matchingPoint: data?.authGithub.user.matchingPoint,
+              bio: data?.authGithub.user.bio,
+            });
+          },
+        });
+        if (tokenStorage.load() === null) {
           goToLogin();
         }
       }

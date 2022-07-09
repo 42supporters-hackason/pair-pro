@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { useProfile } from "../../context/auth";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useClientHeaderMenu } from "./useHeaderMenu";
 
@@ -30,6 +31,7 @@ export const GeneralHeader = ({ matchingPoint }: Props) => {
   const menu = useClientHeaderMenu();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const { profile } = useProfile();
 
   return (
     <AppBar position="static">
@@ -131,7 +133,9 @@ export const GeneralHeader = ({ matchingPoint }: Props) => {
                 onClick={(event) => setAnchorElUser(event.currentTarget)}
                 sx={{ p: 0 }}
               >
-                <Avatar src={`https://github.com/taisei-13046.png`} />
+                <Avatar
+                  src={`https://github.com/${profile?.githubLogin}.png`}
+                />
               </IconButton>
             </Tooltip>
             <Menu
