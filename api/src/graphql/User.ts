@@ -8,6 +8,7 @@ export const User = objectType({
     t.nonNull.string("name");
     t.nonNull.int("matchingPoint");
     t.nonNull.string("githubId");
+    t.nonNull.string("githubLogin");
     t.nonNull.string("bio");
   }
 })

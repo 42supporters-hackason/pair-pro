@@ -28,6 +28,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AuthPayLoad: { // root type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   Message: { // root type
     content: string; // String!
     id: number; // Int!
@@ -46,6 +50,7 @@ export interface NexusGenObjects {
   User: { // root type
     bio: string; // String!
     githubId: string; // String!
+    githubLogin: string; // String!
     id: number; // Int!
     matchingPoint: number; // Int!
     name: string; // String!
@@ -63,11 +68,16 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AuthPayLoad: { // field return type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   Message: { // field return type
     content: string; // String!
     id: number; // Int!
   }
   Mutation: { // field return type
+    authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     post: NexusGenRootTypes['Post']; // Post!
   }
   Post: { // field return type
@@ -86,6 +96,7 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     bio: string; // String!
     githubId: string; // String!
+    githubLogin: string; // String!
     id: number; // Int!
     matchingPoint: number; // Int!
     name: string; // String!
@@ -93,11 +104,16 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  AuthPayLoad: { // field return type name
+    token: 'String'
+    user: 'User'
+  }
   Message: { // field return type name
     content: 'String'
     id: 'Int'
   }
   Mutation: { // field return type name
+    authGithub: 'AuthPayLoad'
     post: 'Post'
   }
   Post: { // field return type name
@@ -116,6 +132,7 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     bio: 'String'
     githubId: 'String'
+    githubLogin: 'String'
     id: 'Int'
     matchingPoint: 'Int'
     name: 'String'
@@ -124,6 +141,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    authGithub: { // args
+      code: string; // String!
+    }
     post: { // args
       description: string; // String!
       title: string; // String!
