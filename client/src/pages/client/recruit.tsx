@@ -90,7 +90,7 @@ export const RecruitPage = () => {
       >
         <Box sx={{ my: "50px", mx: "100px" }}>
           <ProfileCard
-            githubId={demoPostView.find(({ id }) => id === selectedId)?.name}
+            githubLogin={demoPostView.find(({ id }) => id === selectedId)?.name}
             title={demoPostView.find(({ id }) => id === selectedId)?.title}
             content={demoPostView.find(({ id }) => id === selectedId)?.content}
             languages={
