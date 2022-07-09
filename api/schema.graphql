@@ -15,6 +15,7 @@ type Message {
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
   post(description: String!, title: String!): Post!
+  updateMe(bio: String, name: String): User
 }
 
 type Post {
@@ -25,7 +26,10 @@ type Post {
 
 type Query {
   feed: [Post!]!
+  me: User!
   skills: [Skill!]!
+  user(id: Int!): User
+  users: [User!]!
 }
 
 type Skill {
@@ -35,9 +39,11 @@ type Skill {
 
 type User {
   bio: String!
+  driverPost: [Post!]!
   githubId: String!
   githubLogin: String!
   id: Int!
   matchingPoint: Int!
   name: String!
+  navigatorPost: [Post!]!
 }
