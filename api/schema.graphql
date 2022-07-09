@@ -25,6 +25,7 @@ type Post {
 
 type Query {
   feed: [Post!]!
+  skills: [Skill!]!
 }
 
 type Skill {

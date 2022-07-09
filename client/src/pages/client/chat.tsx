@@ -1,10 +1,88 @@
+import { useEffect, useRef } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
+import { ChatMessage } from "../../components/ChatMessage";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+
+const demoChat = [
+  {
+    id: 1,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 2,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 3,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 4,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 5,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 6,
+    content:
+      "おはようございますあああああああああああああああああああああああああああああああ",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 3,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 4,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 5,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 6,
+    content:
+      "おはようございますあああああああああああああああああああああああああああああああ",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 3,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 4,
+    content: "おはようございます",
+    createdBy: "taisei-13046",
+  },
+  {
+    id: 5,
+    content: "おはようございます",
+    createdBy: "ataisei-13046",
+  },
+  {
+    id: 6,
+    content:
+      "おはようございますあああああああああああああああああああああああああああああああ",
+    createdBy: "taisei-13046",
+  },
+];
 
 /**
  * p2p相手とやり取りをするページ
@@ -16,6 +94,11 @@ export const ChatPage = () => {
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
   const { goToHome } = useClientRoute();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    ref.current?.scrollIntoView(false);
+  }, []);
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
@@ -71,7 +154,26 @@ export const ChatPage = () => {
             <LogoutIcon />
           </IconButton>
         </Box>
-        <Box sx={{ m: "15px" }}>チャット</Box>
+        <Box
+          sx={{
+            my: "15px",
+            mx: "25px",
+            overflow: "scroll",
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
+          {demoChat.map(({ id, content, createdBy }) => (
+            <Box ref={ref} key={id}>
+              <ChatMessage
+                key={id}
+                content={content}
+                side={createdBy === "taisei-13046" ? "right" : "left"}
+              />
+            </Box>
+          ))}
+        </Box>
         <Box
           sx={{
             width: "100%",
