@@ -21,17 +21,21 @@ interface Props {
    * MP
    */
   matchingPoint?: number;
+  /**
+   * ログアウトハンドラ
+   */
+  onLogout: () => void;
 }
 
 /**
  * 全ページ共通のHeaderコンポーネント
  */
-export const GeneralHeader = ({ matchingPoint }: Props) => {
+export const GeneralHeader = ({ matchingPoint, onLogout }: Props) => {
   /**
    * misc.
    */
   const { goToHome } = useClientRoute();
-  const menu = useClientHeaderMenu();
+  const menu = useClientHeaderMenu({ onLogout });
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const { profile } = useProfile();
