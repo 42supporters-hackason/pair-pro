@@ -29,6 +29,13 @@ export const useClientRoute = () => {
     [navigate]
   );
 
+  const goToEditProfile = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(CLIENT_ROUTE_PATH.EDIT_PROFILE, options);
+    },
+    [navigate]
+  );
+
   const goToChat = useCallback(
     (id?: number, options?: NavigateOptions) => {
       if (id === undefined) {
@@ -45,5 +52,5 @@ export const useClientRoute = () => {
     [navigate]
   );
 
-  return { goToHome, goToApply, goToRecruit, goToChat };
+  return { goToHome, goToApply, goToRecruit, goToEditProfile, goToChat };
 };

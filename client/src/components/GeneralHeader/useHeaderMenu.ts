@@ -1,5 +1,4 @@
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { noop } from "../../utils";
 import { tokenStorage } from "../../utils/local-storage/token";
 import { usePublicRoute } from "./../../hooks/usePublicRoute";
 import { ClientMenu } from "./types";
@@ -8,7 +7,7 @@ import { ClientMenu } from "./types";
  * 一般ユーザ向けmenu
  */
 export const useClientHeaderMenu = (): ClientMenu => {
-  const { goToApply, goToRecruit } = useClientRoute();
+  const { goToApply, goToRecruit, goToEditProfile } = useClientRoute();
   const { goToLogin } = usePublicRoute();
 
   return {
@@ -25,7 +24,7 @@ export const useClientHeaderMenu = (): ClientMenu => {
     userMenu: [
       {
         label: "プロフィール",
-        action: noop,
+        action: goToEditProfile,
       },
       {
         label: "ログアウト",

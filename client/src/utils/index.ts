@@ -21,6 +21,16 @@ export function lazyImport<
 }
 
 /**
+ * 到達不可能なコードを記載した際にエラーを起こす
+ */
+export const unreachable = (errorText?: string) => {
+  if (errorText) {
+    throw new Error(errorText);
+  }
+  throw new Error("このコードに到達してしまっています");
+};
+
+/**
  * No operation
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-function
