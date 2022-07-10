@@ -11,12 +11,11 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { FormDataModal } from "../../components/FormDataModal";
+import { useFetchSkillsQuery } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
 import { applySchema, ApplySchema } from "./validation/apply_vaildation";
-
-const demoOptions = ["Java", "C言語"];
 
 /**
  * マッチングの募集をするページ
@@ -27,6 +26,9 @@ export const ApplyPage = () => {
    */
   const [openModal, setOpenModal] = useBoolean(false);
   const { goToHome } = useClientRoute();
+  const { data } = useFetchSkillsQuery();
+
+  const languages = data?.skills.map(({ name }) => name);
 
   /**
    * validation
@@ -114,7 +116,7 @@ export const ApplyPage = () => {
             name="language"
             render={({ field: { onChange } }) => (
               <Autocomplete
-                options={demoOptions}
+                options={languages ?? []}
                 multiple
                 renderInput={(params) => (
                   <TextField {...params} label="使用言語" />
