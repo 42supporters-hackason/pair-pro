@@ -7,8 +7,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "../../../context/auth";
+import { useUpdateProfileMutation } from "../../../gen/graphql-client";
+import { useClientRoute } from "../../../hooks/useClientRoute";
+import { unreachable } from "../../../utils";
+import { profileStorage } from "../../../utils/local-storage/profile";
 import {
   editProfileSchema,
   EditProfileSchema,
@@ -26,11 +31,37 @@ export const EditProfilePage = () => {
     resolver: zodResolver(editProfileSchema),
   });
 
+  /**
+   * misc.
+   */
   const navigate = useNavigate();
+  const [updateProfile] = useUpdateProfileMutation();
+  const { profile, setProfile } = useProfile();
+  const { goToHome } = useClientRoute();
 
-  const handleEditProfile = useCallback(() => {
-    console.log();
-  }, []);
+  const handleEditProfile: SubmitHandler<EditProfileSchema> = useCallback(
+    async ({ name, bio }) => {
+      await updateProfile({
+        variables: { name, bio },
+        onCompleted: (data) => {
+          profileStorage.save({
+            id: profile.id ?? unreachable(),
+            githubLogin: profile.githubLogin ?? unreachable(),
+            name: data.updateMe?.name
+              ? data.updateMe.name
+              : profile.name
+              ? profile.name
+              : unreachable(),
+            bio: data.updateMe?.bio ?? "",
+            matchingPoint: profile.matchingPoint ?? unreachable(),
+          });
+          setProfile(profileStorage.load() ?? {});
+          goToHome();
+        },
+      });
+    },
+    [updateProfile, profile, setProfile, goToHome]
+  );
 
   return (
     <Box
@@ -69,11 +100,11 @@ export const EditProfilePage = () => {
               resize: "none",
               padding: "15px",
             }}
-            {...register("profile")}
+            {...register("bio")}
           />
-          {errors.profile && (
+          {errors.bio && (
             <Typography sx={{ mt: "5px", color: "error.main" }}>
-              {errors.profile.message}
+              {errors.bio.message}
             </Typography>
           )}
         </Box>
