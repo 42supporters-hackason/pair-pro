@@ -9,11 +9,14 @@ type AuthPayLoad {
 
 type Message {
   content: String!
+  createdBy: User!
   id: Int!
+  post: Post!
 }
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
+  createMessage(content: String!, postId: Int!): Message
   post(description: String!, title: String!): Post!
   updateMe(bio: String, name: String): User
 }
@@ -35,6 +38,10 @@ type Query {
 type Skill {
   id: Int!
   name: String!
+}
+
+type Subscription {
+  waitForMessage(postId: Int!): Message
 }
 
 type User {
