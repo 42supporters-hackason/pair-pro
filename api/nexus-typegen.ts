@@ -65,6 +65,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     name: string; // String!
   }
+  Subscription: {};
   User: { // root type
     bio: string; // String!
     githubId: string; // String!
@@ -92,10 +93,13 @@ export interface NexusGenFieldTypes {
   }
   Message: { // field return type
     content: string; // String!
+    createdBy: NexusGenRootTypes['User']; // User!
     id: number; // Int!
+    post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    createMessage: NexusGenRootTypes['Message'] | null; // Message
     post: NexusGenRootTypes['Post']; // Post!
     updateMe: NexusGenRootTypes['User'] | null; // User
   }
@@ -125,6 +129,9 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     name: string; // String!
   }
+  Subscription: { // field return type
+    waitForMessage: NexusGenRootTypes['Message'] | null; // Message
+  }
   User: { // field return type
     bio: string; // String!
     driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -144,10 +151,13 @@ export interface NexusGenFieldTypeNames {
   }
   Message: { // field return type name
     content: 'String'
+    createdBy: 'User'
     id: 'Int'
+    post: 'Post'
   }
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
+    createMessage: 'Message'
     post: 'Post'
     updateMe: 'User'
   }
@@ -177,6 +187,9 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     name: 'String'
   }
+  Subscription: { // field return type name
+    waitForMessage: 'Message'
+  }
   User: { // field return type name
     bio: 'String'
     driverPost: 'Post'
@@ -194,6 +207,10 @@ export interface NexusGenArgTypes {
     authGithub: { // args
       code: string; // String!
     }
+    createMessage: { // args
+      content: string; // String!
+      postId: number; // Int!
+    }
     post: { // args
       description: string; // String!
       requiredSkillsId: number[]; // [Int!]!
@@ -210,6 +227,11 @@ export interface NexusGenArgTypes {
     }
     user: { // args
       id: number; // Int!
+    }
+  }
+  Subscription: {
+    waitForMessage: { // args
+      postId: number; // Int!
     }
   }
 }

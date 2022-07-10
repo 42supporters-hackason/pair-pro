@@ -1,13 +1,52 @@
-import { ApolloServer } from "apollo-server";
-import { context } from "./context";   
+// import { ApolloServer } from "apollo-server";
+import { ApolloServer } from "apollo-server-express";
+import express from "express";
+import { createServer } from "http";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 
+import { context } from "./context";
 import { schema } from "./schema";
-export const server = new ApolloServer({
-  schema,
-  context
+
+const app = express();
+const httpServer = createServer(app);
+
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: "/graphql",
 });
 
-const port = 4000;
-server.listen({ port }).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+const serverCleanup = useServer({ schema, context }, wsServer);
+
+const server = new ApolloServer({
+  schema,
+  context,
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose();
+          },
+        };
+      },
+    },
+  ],
 });
+
+// top level await causes an error
+async function startServer() {
+  await server.start();
+  server.applyMiddleware({ app });
+
+  const port = 4000;
+  httpServer.listen(port, () => {
+    console.log(
+      `🚀Server is now running on http://localhost:${port}${server.graphqlPath}`
+    );
+  });
+}
+
+startServer();
