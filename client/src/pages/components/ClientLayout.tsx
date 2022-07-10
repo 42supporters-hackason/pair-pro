@@ -3,6 +3,7 @@ import { Box, Modal } from "@mui/material";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
+import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
 import { useAuth, useProfile } from "../../context/auth";
 import { useBoolean } from "../../hooks/useBoolean";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
@@ -23,6 +24,7 @@ export const ClientLayout = () => {
     profile: { matchingPoint },
   } = useProfile();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
+  const menu = useClientHeaderMenu({ onLogout: setOpenLogoutModal.on });
 
   /**
    * event-handler
@@ -47,10 +49,7 @@ export const ClientLayout = () => {
         minHeight: "100vh",
       }}
     >
-      <GeneralHeader
-        matchingPoint={matchingPoint}
-        onLogout={setOpenLogoutModal.on}
-      />
+      <GeneralHeader matchingPoint={matchingPoint} menu={menu} />
       <Box sx={{ flex: "1" }}>
         <Suspense fallback={null}>
           <Outlet />

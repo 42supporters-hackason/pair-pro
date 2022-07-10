@@ -14,7 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useProfile } from "../../context/auth";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { useClientHeaderMenu } from "./useHeaderMenu";
+import { ClientMenu } from "./types";
 
 interface Props {
   /**
@@ -22,20 +22,19 @@ interface Props {
    */
   matchingPoint?: number;
   /**
-   * ログアウトハンドラ
+   * headerのmenu
    */
-  onLogout: () => void;
+  menu: ClientMenu;
 }
 
 /**
  * 全ページ共通のHeaderコンポーネント
  */
-export const GeneralHeader = ({ matchingPoint, onLogout }: Props) => {
+export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
   /**
    * misc.
    */
   const { goToHome } = useClientRoute();
-  const menu = useClientHeaderMenu({ onLogout });
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const { profile } = useProfile();
