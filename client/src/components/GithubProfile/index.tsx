@@ -10,12 +10,16 @@ interface Props {
    * name
    */
   name?: string;
+  /**
+   * 自己紹介
+   */
+  bio?: string;
 }
 
 /**
  * Githubのプロフィールコンポーネント
  */
-export const GithubProfile = ({ githubLogin, name }: Props) => {
+export const GithubProfile = ({ githubLogin, name, bio }: Props) => {
   return (
     <Box sx={{ width: "80%", mx: "auto" }}>
       <Typography fontWeight="bold" sx={{ textAlign: "center", mb: 2 }}>
@@ -39,6 +43,12 @@ export const GithubProfile = ({ githubLogin, name }: Props) => {
           sx={{ width: "100%" }}
           src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${githubLogin}&layout=compact`}
         />
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Typography fontWeight="bold" sx={{ textAlign: "center", mt: 2 }}>
+            自己紹介
+          </Typography>
+          <Typography sx={{ mx: 1, textAlign: "center" }}>{bio}</Typography>
+        </Box>
       </Card>
     </Box>
   );
