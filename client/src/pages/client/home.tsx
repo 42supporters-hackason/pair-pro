@@ -111,7 +111,7 @@ export const HomePage = () => {
             </Button>
           </Box>
         </Box>
-        <GithubProfile githubLogin={profile?.githubLogin ?? ""} />
+        <GithubProfile githubLogin={profile?.githubLogin} name={profile.name} />
       </Box>
       <Modal
         open={openPostModal}

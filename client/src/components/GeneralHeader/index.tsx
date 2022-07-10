@@ -17,7 +17,10 @@ import { useClientRoute } from "../../hooks/useClientRoute";
 import { useClientHeaderMenu } from "./useHeaderMenu";
 
 interface Props {
-  matchingPoint: number;
+  /**
+   * MP
+   */
+  matchingPoint?: number;
 }
 
 /**

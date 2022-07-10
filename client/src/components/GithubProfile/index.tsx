@@ -5,22 +5,33 @@ interface Props {
   /**
    * github login
    */
-  githubLogin: string;
+  githubLogin?: string;
+  /**
+   * name
+   */
+  name?: string;
 }
 
 /**
  * Githubのプロフィールコンポーネント
  */
-export const GithubProfile = ({ githubLogin }: Props) => {
+export const GithubProfile = ({ githubLogin, name }: Props) => {
   return (
     <Box sx={{ width: "80%", mx: "auto" }}>
       <Typography fontWeight="bold" sx={{ textAlign: "center", mb: 2 }}>
         Profile
       </Typography>
       <Card>
+        <Typography
+          sx={{ textAlign: "center", textDecoration: "underline" }}
+          fontWeight="bold"
+          variant="h6"
+        >
+          {name}
+        </Typography>
         <Box
           component="img"
-          sx={{ width: "100%", mb: 2 }}
+          sx={{ width: "100%", my: 2 }}
           src={`https://github-readme-stats.vercel.app/api?username=${githubLogin}&theme=onedark&show_icons=true`}
         />
         <Box
