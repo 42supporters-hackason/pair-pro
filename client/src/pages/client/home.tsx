@@ -49,7 +49,7 @@ export const HomePage = () => {
   const [openDeleteModal, setOpenDeleteModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<number | undefined>();
   const [showList, setShowList] = useState<"myPostList" | "matchedList">(
-    "myPostList"
+    "matchedList"
   );
   const { goToApply, goToRecruit, goToChat } = useClientRoute();
   const { profile } = useProfile();

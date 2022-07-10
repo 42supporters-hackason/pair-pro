@@ -1,14 +1,18 @@
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { tokenStorage } from "../../utils/local-storage/token";
-import { usePublicRoute } from "./../../hooks/usePublicRoute";
 import { ClientMenu } from "./types";
+
+interface Props {
+  /**
+   * ログアウトハンドラ
+   */
+  onLogout: () => void;
+}
 
 /**
  * 一般ユーザ向けmenu
  */
-export const useClientHeaderMenu = (): ClientMenu => {
+export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
   const { goToApply, goToRecruit, goToEditProfile } = useClientRoute();
-  const { goToLogin } = usePublicRoute();
 
   return {
     listMenu: [
@@ -28,10 +32,7 @@ export const useClientHeaderMenu = (): ClientMenu => {
       },
       {
         label: "ログアウト",
-        action: () => {
-          tokenStorage.clear();
-          goToLogin();
-        },
+        action: onLogout,
       },
     ],
   };
