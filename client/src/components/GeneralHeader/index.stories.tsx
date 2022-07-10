@@ -6,6 +6,8 @@ export default {
   component: GeneralHeader,
 } as ComponentMeta<typeof GeneralHeader>;
 
-const Template: ComponentStory<typeof GeneralHeader> = () => <GeneralHeader />;
+const Template: ComponentStory<typeof GeneralHeader> = ({ ...props }) => (
+  <GeneralHeader {...props} />
+);
 
 export const Default = Template.bind({});
