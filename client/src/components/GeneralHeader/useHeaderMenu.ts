@@ -1,7 +1,7 @@
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
+import { tokenStorage } from "../../utils/local-storage/token";
 import { usePublicRoute } from "./../../hooks/usePublicRoute";
-import { accessTokenStorage } from "./../../utils/local-storage/access_token";
 import { ClientMenu } from "./types";
 
 /**
@@ -30,7 +30,7 @@ export const useClientHeaderMenu = (): ClientMenu => {
       {
         label: "ログアウト",
         action: () => {
-          accessTokenStorage.clear();
+          tokenStorage.clear();
           goToLogin();
         },
       },

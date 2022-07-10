@@ -2,10 +2,7 @@ import { Suspense, useEffect } from "react";
 import { Box } from "@mui/material";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { GeneralHeader } from "../../components/GeneralHeader";
-import { usePublicRoute } from "../../hooks/usePublicRoute";
-import { accessTokenStorage } from "../../utils/local-storage/access_token";
-
-const DEMO_MP = 2;
+import { useAuth, useProfile } from "../../context/auth";
 
 /**
  * Client画面共通のLayout
@@ -13,16 +10,16 @@ const DEMO_MP = 2;
 export const ClientLayout = () => {
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
-  const { goToLogin } = usePublicRoute();
+  const { isLogin, signIn } = useAuth();
+  const {
+    profile: { matchingPoint },
+  } = useProfile();
 
   useEffect(() => {
-    if (code && accessTokenStorage.load() === null) {
-      accessTokenStorage.save(code);
+    if (!isLogin && code !== null) {
+      signIn(code);
     }
-    if (accessTokenStorage.load() === null) {
-      goToLogin({ replace: true });
-    }
-  }, [goToLogin, code]);
+  }, [code, signIn, isLogin]);
 
   return (
     <Box
@@ -33,7 +30,7 @@ export const ClientLayout = () => {
         minHeight: "100vh",
       }}
     >
-      <GeneralHeader matchingPoint={DEMO_MP} />
+      <GeneralHeader matchingPoint={matchingPoint} />
       <Box sx={{ flex: "1" }}>
         <Suspense fallback={null}>
           <Outlet />

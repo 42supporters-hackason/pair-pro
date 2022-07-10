@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Typography } from "@mui/material";
 import { GithubLoginButton } from "react-social-login-buttons";
 import sns_img from "../../assets/login_sns.jpg";
@@ -6,16 +6,9 @@ import backgroundImg from "../../assets/p2p_background.jpg";
 import { Card } from "../../components/Card";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { getGithubAuthUrl } from "../../utils";
-import { accessTokenStorage } from "../../utils/local-storage/access_token";
 
 export const LoginPage = () => {
   const { goToHome } = useClientRoute();
-
-  useEffect(() => {
-    if (accessTokenStorage.load() !== null) {
-      goToHome({ replace: true });
-    }
-  }, [goToHome]);
 
   return (
     <>
