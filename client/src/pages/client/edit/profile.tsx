@@ -21,6 +21,14 @@ import {
 
 export const EditProfilePage = () => {
   /**
+   * misc.
+   */
+  const navigate = useNavigate();
+  const [updateProfile] = useUpdateProfileMutation();
+  const { profile, setProfile } = useProfile();
+  const { goToHome } = useClientRoute();
+
+  /**
    * form validation
    */
   const {
@@ -29,15 +37,11 @@ export const EditProfilePage = () => {
     handleSubmit,
   } = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
+    defaultValues: {
+      name: profile.name,
+      bio: profile.bio,
+    },
   });
-
-  /**
-   * misc.
-   */
-  const navigate = useNavigate();
-  const [updateProfile] = useUpdateProfileMutation();
-  const { profile, setProfile } = useProfile();
-  const { goToHome } = useClientRoute();
 
   const handleEditProfile: SubmitHandler<EditProfileSchema> = useCallback(
     async ({ name, bio }) => {
@@ -121,7 +125,7 @@ export const EditProfilePage = () => {
           variant="contained"
           type="submit"
         >
-          上記の内容で募集をする
+          更新する
         </Button>
         <Button
           sx={{
