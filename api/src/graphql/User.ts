@@ -57,17 +57,16 @@ export const UserQuery = extendType({
     });
     t.nonNull.field("me", {
       type: "User",
-      resolve(parent, args, context) {
+      async resolve(parent, args, context) {
         const { userId } = context;
 
         if (!userId) {
           throw new Error("You have to log in.");
         }
 
-        const user = context.prisma.user.findUnique({
+        const user = await context.prisma.user.findUnique({
           where: { id: userId },
         });
-        // todo: maybe because of createdAt?
         return user as UserType;
       },
     });
