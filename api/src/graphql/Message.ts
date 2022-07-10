@@ -39,10 +39,28 @@ export const MessageObject = objectType({
   },
 });
 
+export const MessageQuery = extendType({
+  type: "Query",
+  definition(t) {
+    t.nonNull.list.nonNull.field("messagesByPostId", {
+      type: "Message",
+      args: {
+        postId: nonNull(intArg()),
+      },
+      async resolve(parent, args, context) {
+        const { postId } = args;
+        return await context.prisma.message.findMany({
+          where: { postId },
+        });
+      },
+    });
+  },
+});
+
 export const MessageMutation = extendType({
   type: "Mutation",
   definition(t) {
-    t.field("createMessage", {
+    t.nonNull.field("createMessage", {
       type: "Message",
       args: {
         postId: nonNull(intArg()),
@@ -77,6 +95,7 @@ export const MessageMutation = extendType({
 
 export const MessageSubscription = subscriptionType({
   definition(t) {
+    // todo: should it be non-nullable?
     t.field("waitForMessage", {
       type: "Message",
       args: {

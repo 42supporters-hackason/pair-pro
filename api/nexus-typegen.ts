@@ -81,7 +81,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
-    createMessage: NexusGenRootTypes['Message'] | null; // Message
+    createMessage: NexusGenRootTypes['Message']; // Message!
     post: NexusGenRootTypes['Post']; // Post!
     updateMe: NexusGenRootTypes['User'] | null; // User
   }
@@ -93,6 +93,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     me: NexusGenRootTypes['User']; // User!
+    messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['User'][]; // [User!]!
@@ -141,6 +142,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     feed: 'Post'
     me: 'User'
+    messagesByPostId: 'Message'
     skills: 'Skill'
     user: 'User'
     users: 'User'
@@ -183,6 +185,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    messagesByPostId: { // args
+      postId: number; // Int!
+    }
     user: { // args
       id: number; // Int!
     }
