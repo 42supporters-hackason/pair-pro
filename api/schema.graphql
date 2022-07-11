@@ -25,6 +25,7 @@ type Post {
 }
 
 type Query {
+  accessToken(identity: String, room: String): Video!
   feed: [Post!]!
   me: User!
   skills: [Skill!]!
@@ -46,4 +47,8 @@ type User {
   matchingPoint: Int!
   name: String!
   navigatorPost: [Post!]!
+}
+
+type Video {
+  accessToken: String!
 }

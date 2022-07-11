@@ -55,6 +55,9 @@ export interface NexusGenObjects {
     matchingPoint: number; // Int!
     name: string; // String!
   }
+  Video: { // root type
+    accessToken: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -87,6 +90,7 @@ export interface NexusGenFieldTypes {
     title: string; // String!
   }
   Query: { // field return type
+    accessToken: NexusGenRootTypes['Video']; // Video!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     me: NexusGenRootTypes['User']; // User!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
@@ -106,6 +110,9 @@ export interface NexusGenFieldTypes {
     matchingPoint: number; // Int!
     name: string; // String!
     navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
+  Video: { // field return type
+    accessToken: string; // String!
   }
 }
 
@@ -129,6 +136,7 @@ export interface NexusGenFieldTypeNames {
     title: 'String'
   }
   Query: { // field return type name
+    accessToken: 'Video'
     feed: 'Post'
     me: 'User'
     skills: 'Skill'
@@ -149,6 +157,9 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     navigatorPost: 'Post'
   }
+  Video: { // field return type name
+    accessToken: 'String'
+  }
 }
 
 export interface NexusGenArgTypes {
@@ -166,6 +177,10 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    accessToken: { // args
+      identity?: string | null; // String
+      room?: string | null; // String
+    }
     user: { // args
       id: number; // Int!
     }
