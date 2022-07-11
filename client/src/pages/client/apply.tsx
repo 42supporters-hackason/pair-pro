@@ -15,7 +15,7 @@ import { useFetchSkillsQuery } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
-import { applySchema, ApplySchema } from "./validation/apply_vaildation";
+import { applySchema, ApplySchema } from "../validation/apply_vaildation";
 
 /**
  * マッチングの募集をするページ
