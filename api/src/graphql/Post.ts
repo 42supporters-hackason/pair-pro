@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import {
   extendType,
   intArg,
@@ -80,24 +81,31 @@ export const PostMutation = extendType({
           throw new Error("You have to log in");
         }
 
-        const requiredSkills = await context.prisma.skill.findMany({
-          where: {
-            id: {
-              in: requiredSkillsId,
-            },
-          },
+        const user = (await context.prisma.user.findUnique({
+          where: { id: userId },
+        })) as User;
+        if (user.matchingPoint == 0) {
+          throw new Error(
+            "You have to have at least 1 matching point to create a new post"
+          );
+        }
+
+        // todo: when there is no 'await', update does not occur
+        await context.prisma.user.update({
+          where: { id: userId },
+          data: { matchingPoint: user.matchingPoint - 1 },
         });
-        const newPost = context.prisma.post.create({
+
+        return context.prisma.post.create({
           data: {
-            description: args.description,
-            title: args.title,
+            description,
+            title,
             requiredSkills: {
-              create: requiredSkills,
+              connect: requiredSkillsId.map((id) => ({ id })),
             },
-            driver: { connect: { id: context.userId } },
+            driver: { connect: { id: userId } },
           },
         });
-        return newPost;
       },
     });
   },
