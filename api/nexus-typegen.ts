@@ -113,7 +113,9 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     me: NexusGenRootTypes['User']; // User!
+    post: NexusGenRootTypes['Post'] | null; // Post
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
+    unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
@@ -161,7 +163,9 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     feed: 'Post'
     me: 'User'
+    post: 'Post'
     skills: 'Skill'
+    unmatchedPosts: 'Post'
     user: 'User'
     users: 'User'
   }
@@ -197,6 +201,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    post: { // args
+      id: number; // Int!
+    }
     user: { // args
       id: number; // Int!
     }

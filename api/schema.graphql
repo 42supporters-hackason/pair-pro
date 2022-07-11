@@ -38,7 +38,9 @@ type Post {
 type Query {
   feed: [Post!]!
   me: User!
+  post(id: Int!): Post
   skills: [Skill!]!
+  unmatchedPosts: [Post]!
   user(id: Int!): User
   users: [User!]!
 }

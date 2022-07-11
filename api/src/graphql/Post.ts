@@ -60,6 +60,26 @@ export const PostQuery = extendType({
         return context.prisma.post.findMany();
       },
     });
+    t.field("post", {
+      type: "Post",
+      args: {
+        id: nonNull(intArg()),
+      },
+      resolve(parent, args, context) {
+        const { id } = args;
+        return context.prisma.post.findUnique({
+          where: { id },
+        });
+      },
+    });
+    t.nonNull.list.field("unmatchedPosts", {
+      type: "Post",
+      resolve(parent, args, context) {
+        return context.prisma.post.findMany({
+          where: { navigatorId: null },
+        });
+      },
+    });
   },
 });
 
