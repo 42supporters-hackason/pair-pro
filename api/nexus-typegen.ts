@@ -103,8 +103,11 @@ export interface NexusGenFieldTypes {
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
+    driver: NexusGenRootTypes['User'] | null; // User
     id: number; // Int!
+    messages: NexusGenRootTypes['Message'][]; // [Message!]!
     navigator: NexusGenRootTypes['User'] | null; // User
+    requiredSkills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     title: string; // String!
   }
   Query: { // field return type
@@ -148,8 +151,11 @@ export interface NexusGenFieldTypeNames {
     completedAt: 'DateTime'
     createdAt: 'DateTime'
     description: 'String'
+    driver: 'User'
     id: 'Int'
+    messages: 'Message'
     navigator: 'User'
+    requiredSkills: 'Skill'
     title: 'String'
   }
   Query: { // field return type name
@@ -182,6 +188,7 @@ export interface NexusGenArgTypes {
     }
     post: { // args
       description: string; // String!
+      requiredSkillsId: number[]; // [Int!]!
       title: string; // String!
     }
     updateMe: { // args

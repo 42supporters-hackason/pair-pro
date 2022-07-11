@@ -1,4 +1,11 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from "nexus"
+import {
+  extendType,
+  intArg,
+  nonNull,
+  objectType,
+  stringArg,
+  list,
+} from "nexus";
 
 export const Post = objectType({
   name: "Post",
@@ -14,7 +21,7 @@ export const Post = objectType({
         return context.prisma.post
           .findUnique({ where: { id: parent.id } })
           .navigator();
-      }
+      },
     });
     t.field("driver", {
       type: "User",
@@ -22,20 +29,26 @@ export const Post = objectType({
         return context.prisma.post
           .findUnique({ where: { id: parent.id } })
           .driver();
-      }
+      },
     });
-    t.field("requiredSkills", {
+    t.nonNull.list.nonNull.field("requiredSkills", {
       type: "Skill",
       resolve(parent, args, context) {
         return context.prisma.post
           .findUnique({ where: { id: parent.id } })
           .requiredSkills();
-      }
+      },
     });
-    // requiredSkill
-    // message
-  }
-}) 
+    t.nonNull.list.nonNull.field("messages", {
+      type: "Message",
+      resolve(parent, args, context) {
+        return context.prisma.post
+          .findUnique({ where: { id: parent.id } })
+          .messages();
+      },
+    });
+  },
+});
 
 export const PostQuery = extendType({
   type: "Query",
@@ -44,9 +57,9 @@ export const PostQuery = extendType({
       type: "Post",
       resolve(parent, args, context) {
         return context.prisma.post.findMany();
-      }
+      },
     });
-  }
+  },
 });
 
 export const PostMutation = extendType({
@@ -57,15 +70,31 @@ export const PostMutation = extendType({
       args: {
         description: nonNull(stringArg()),
         title: nonNull(stringArg()),
-        requiredSkills: intArg()
+        requiredSkillsId: nonNull(list(nonNull(intArg()))),
       },
-      resolve(parent, args, context) { 
+      async resolve(parent, args, context) {
+        const { description, title, requiredSkillsId } = args;
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        const requiredSkills = await context.prisma.skill.findMany({
+          where: {
+            id: {
+              in: requiredSkillsId,
+            },
+          },
+        });
         const newPost = context.prisma.post.create({
           data: {
             description: args.description,
             title: args.title,
-            requiredSkills: { connect: { id: args.requiredSkills } },
-            driver: { connect: { id: context.userId } }
+            requiredSkills: {
+              create: requiredSkills,
+            },
+            driver: { connect: { id: context.userId } },
           },
         });
         return newPost;
