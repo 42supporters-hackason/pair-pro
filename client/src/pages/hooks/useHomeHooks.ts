@@ -21,6 +21,7 @@ const matchedPostsTaranslator = (matchedPosts: FetchMatchedPostQuery) =>
       content: description,
       languages: requiredSkills.map(({ name }) => name),
       name: navigator?.name,
+      githubLogin: navigator?.githubLogin,
     })
   );
 

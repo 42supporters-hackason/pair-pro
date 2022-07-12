@@ -134,7 +134,7 @@ export const HomePage = () => {
           <ProfileCard
             githubLogin={
               matchedPosts &&
-              matchedPosts.find(({ id }) => id === selectedId)?.name
+              matchedPosts.find(({ id }) => id === selectedId)?.githubLogin
             }
             title={
               matchedPosts &&
@@ -147,6 +147,10 @@ export const HomePage = () => {
             languages={
               matchedPosts &&
               matchedPosts.find(({ id }) => id === selectedId)?.languages
+            }
+            name={
+              matchedPosts &&
+              matchedPosts.find(({ id }) => id === selectedId)?.name
             }
             hasButton={true}
             agreeTitle="チャットルームに移動する"

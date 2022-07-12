@@ -160,6 +160,7 @@ export const RecruitPage = () => {
             languages={
               posts && posts.find(({ id }) => id === selectedId)?.language
             }
+            name={posts && posts.find(({ id }) => id === selectedId)?.name}
             hasButton={true}
             agreeTitle="マッチングする"
             onClose={setOpenPostModal.off}

@@ -47,8 +47,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
  * ユーザ情報を表示するカード
  */
 export const ProfileCard = ({
-  name = "taisei yasui",
-  githubLogin = "taisei-13046",
+  name,
+  githubLogin,
   title,
   content,
   languages,
