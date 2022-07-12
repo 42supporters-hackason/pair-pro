@@ -11,10 +11,12 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { FormDataModal } from "../../components/FormDataModal";
-import { useFetchSkillsQuery } from "../../gen/graphql-client";
+import {
+  useCreatePostMutation,
+  useFetchSkillsQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { noop } from "../../utils";
 import { applySchema, ApplySchema } from "../validation/apply_vaildation";
 
 /**
@@ -26,9 +28,10 @@ export const ApplyPage = () => {
    */
   const [openModal, setOpenModal] = useBoolean(false);
   const { goToHome } = useClientRoute();
-  const { data } = useFetchSkillsQuery();
+  const { data: languagesData } = useFetchSkillsQuery();
+  const [createPost] = useCreatePostMutation();
 
-  const languages = data?.skills.map(({ name }) => name);
+  const languages = languagesData?.skills.map(({ name }) => name);
 
   /**
    * validation
@@ -51,6 +54,34 @@ export const ApplyPage = () => {
   const handleApply = useCallback(() => {
     setOpenModal.on();
   }, [setOpenModal]);
+
+  const handleApplyAgree = useCallback(async () => {
+    const requiredSkillsId = applyFormData.language.map(
+      (language) =>
+        languagesData?.skills.find(({ name }) => name === language)
+          ?.id as number
+    );
+
+    if (requiredSkillsId !== undefined) {
+      await createPost({
+        variables: {
+          title: applyFormData.title,
+          description: applyFormData.content,
+          requiredSkillsId,
+        },
+        onCompleted: () => {
+          setOpenModal.off();
+          goToHome();
+        },
+      });
+    }
+  }, [
+    createPost,
+    applyFormData,
+    goToHome,
+    languagesData?.skills,
+    setOpenModal,
+  ]);
 
   return (
     <Box
@@ -176,7 +207,7 @@ export const ApplyPage = () => {
             title={applyFormData.title}
             content={applyFormData.content}
             languages={applyFormData.language}
-            onAgree={noop}
+            onAgree={handleApplyAgree}
             onCancel={setOpenModal.off}
           />
         </Box>

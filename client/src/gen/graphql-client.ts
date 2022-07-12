@@ -13,6 +13,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: any;
 };
 
 export type AuthPayLoad = {
@@ -42,6 +44,7 @@ export type MutationAuthGithubArgs = {
 
 export type MutationPostArgs = {
   description: Scalars['String'];
+  requiredSkillsId: Array<Scalars['Int']>;
   title: Scalars['String'];
 };
 
@@ -53,8 +56,14 @@ export type MutationUpdateMeArgs = {
 
 export type Post = {
   __typename?: 'Post';
+  completedAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Scalars['DateTime'];
   description: Scalars['String'];
+  driver?: Maybe<User>;
   id: Scalars['Int'];
+  messages: Array<Message>;
+  navigator?: Maybe<User>;
+  requiredSkills: Array<Skill>;
   title: Scalars['String'];
 };
 
@@ -62,9 +71,16 @@ export type Query = {
   __typename?: 'Query';
   feed: Array<Post>;
   me: User;
+  post?: Maybe<Post>;
   skills: Array<Skill>;
+  unmatchedPosts: Array<Maybe<Post>>;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryPostArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -104,6 +120,15 @@ export type UpdateProfileMutationVariables = Exact<{
 
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateMe?: { __typename?: 'User', name: string, bio: string } | null };
+
+export type CreatePostMutationVariables = Exact<{
+  description: Scalars['String'];
+  title: Scalars['String'];
+  requiredSkillsId: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }>, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
 
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -186,6 +211,57 @@ export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const CreatePostDocument = gql`
+    mutation createPost($description: String!, $title: String!, $requiredSkillsId: [Int!]!) {
+  post(
+    description: $description
+    title: $title
+    requiredSkillsId: $requiredSkillsId
+  ) {
+    description
+    title
+    requiredSkills {
+      id
+      name
+    }
+    driver {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+  }
+}
+    `;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+
+/**
+ * __useCreatePostMutation__
+ *
+ * To run a mutation, you first call `useCreatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
+ *   variables: {
+ *      description: // value for 'description'
+ *      title: // value for 'title'
+ *      requiredSkillsId: // value for 'requiredSkillsId'
+ *   },
+ * });
+ */
+export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
+      }
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {
