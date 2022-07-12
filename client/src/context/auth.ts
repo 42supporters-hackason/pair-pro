@@ -23,7 +23,7 @@ export interface Profile {
   /**
    * プロフィール
    */
-  bio: string;
+  bio?: string;
 }
 
 export const [AuthProvider, useAuth, useProfile] = constate(

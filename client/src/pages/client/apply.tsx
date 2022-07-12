@@ -11,12 +11,15 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { FormDataModal } from "../../components/FormDataModal";
+import { useProfile } from "../../context/auth";
 import {
   useCreatePostMutation,
   useFetchSkillsQuery,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { unreachable } from "../../utils";
+import { profileStorage } from "../../utils/local-storage/profile";
 import { applySchema, ApplySchema } from "../validation/apply_vaildation";
 
 /**
@@ -30,6 +33,7 @@ export const ApplyPage = () => {
   const { goToHome } = useClientRoute();
   const { data: languagesData } = useFetchSkillsQuery();
   const [createPost] = useCreatePostMutation();
+  const { setProfile } = useProfile();
 
   const languages = languagesData?.skills.map(({ name }) => name);
 
@@ -69,8 +73,17 @@ export const ApplyPage = () => {
           description: applyFormData.content,
           requiredSkillsId,
         },
-        onCompleted: () => {
+        onCompleted: (data) => {
           setOpenModal.off();
+          const profile = profileStorage.load();
+          profileStorage.save({
+            id: profile?.id ?? unreachable(),
+            matchingPoint: data.post.driver?.matchingPoint ?? unreachable(),
+            name: profile?.name ?? unreachable(),
+            githubLogin: profile?.githubLogin ?? unreachable(),
+            bio: profile?.bio,
+          });
+          setProfile(profileStorage.load() ?? {});
           goToHome();
         },
       });
@@ -81,6 +94,7 @@ export const ApplyPage = () => {
     goToHome,
     languagesData?.skills,
     setOpenModal,
+    setProfile,
   ]);
 
   return (
