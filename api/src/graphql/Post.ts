@@ -148,7 +148,7 @@ export const PostMutation = extendType({
         const user = (await context.prisma.user.findUnique({
           where: { id: userId },
         })) as User;
-        if (user.matchingPoint == 0) {
+        if (user.matchingPoint < 1) {
           throw new Error(
             "You have to have at least 1 matching point to create a new post"
           );
