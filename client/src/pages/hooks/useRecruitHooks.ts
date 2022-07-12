@@ -14,6 +14,9 @@ const postsTranslator = (posts: FetchUnmatchedPostQuery) =>
     githubLogin: post?.driver?.githubLogin,
   }));
 
+/**
+ * pages/client/recruitで使用されるHooks
+ */
 export const useRecruitHooks = () => {
   const { data } = useFetchSkillsQuery();
   const { data: fetchPosts } = useFetchUnmatchedPostQuery();

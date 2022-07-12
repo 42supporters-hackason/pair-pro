@@ -71,6 +71,8 @@ export type Query = {
   __typename?: 'Query';
   feed: Array<Post>;
   me: User;
+  myDrivingPosts: Array<Post>;
+  myMatchedPosts: Array<Post>;
   post?: Maybe<Post>;
   skills: Array<Skill>;
   unmatchedPosts: Array<Maybe<Post>>;
@@ -139,6 +141,16 @@ export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
+
+export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchMyPostQuery = { __typename?: 'Query', myDrivingPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+
+export type FetchMatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 
 export const SignInDocument = gql`
@@ -349,3 +361,90 @@ export function useFetchUnmatchedPostLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type FetchUnmatchedPostQueryHookResult = ReturnType<typeof useFetchUnmatchedPostQuery>;
 export type FetchUnmatchedPostLazyQueryHookResult = ReturnType<typeof useFetchUnmatchedPostLazyQuery>;
 export type FetchUnmatchedPostQueryResult = Apollo.QueryResult<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>;
+export const FetchMyPostDocument = gql`
+    query fetchMyPost {
+  myDrivingPosts {
+    id
+    description
+    title
+    requiredSkills {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchMyPostQuery__
+ *
+ * To run a query within a React component, call `useFetchMyPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMyPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMyPostQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchMyPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchMyPostQuery, FetchMyPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMyPostQuery, FetchMyPostQueryVariables>(FetchMyPostDocument, options);
+      }
+export function useFetchMyPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMyPostQuery, FetchMyPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMyPostQuery, FetchMyPostQueryVariables>(FetchMyPostDocument, options);
+        }
+export type FetchMyPostQueryHookResult = ReturnType<typeof useFetchMyPostQuery>;
+export type FetchMyPostLazyQueryHookResult = ReturnType<typeof useFetchMyPostLazyQuery>;
+export type FetchMyPostQueryResult = Apollo.QueryResult<FetchMyPostQuery, FetchMyPostQueryVariables>;
+export const FetchMatchedPostDocument = gql`
+    query fetchMatchedPost {
+  myMatchedPosts {
+    id
+    description
+    title
+    navigator {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+    requiredSkills {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchMatchedPostQuery__
+ *
+ * To run a query within a React component, call `useFetchMatchedPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMatchedPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMatchedPostQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchMatchedPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>(FetchMatchedPostDocument, options);
+      }
+export function useFetchMatchedPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>(FetchMatchedPostDocument, options);
+        }
+export type FetchMatchedPostQueryHookResult = ReturnType<typeof useFetchMatchedPostQuery>;
+export type FetchMatchedPostLazyQueryHookResult = ReturnType<typeof useFetchMatchedPostLazyQuery>;
+export type FetchMatchedPostQueryResult = Apollo.QueryResult<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>;

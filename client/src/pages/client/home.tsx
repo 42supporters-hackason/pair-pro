@@ -10,6 +10,7 @@ import { useProfile } from "../../context/auth";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
+import { useHomeHooks } from "../hooks/useHomeHooks";
 
 const demoPostView = [
   {
@@ -54,18 +55,24 @@ export const HomePage = () => {
   const { goToApply, goToRecruit, goToChat } = useClientRoute();
   const { profile } = useProfile();
 
+  /**
+   * page hooks
+   */
+  const { myPosts, matchedPosts } = useHomeHooks();
+
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
         <HomeTitleToggle showList={showList} setShowList={setShowList} />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {showList === "matchedList"
-            ? demoPostView.map(({ id, title, content, language, name }) => (
+            ? matchedPosts &&
+              matchedPosts.map(({ id, title, content, languages, name }) => (
                 <PostCard
                   key={id}
                   title={title}
                   content={content}
-                  languages={language}
+                  languages={languages}
                   name={name}
                   onClick={() => {
                     setOpenPostModal.on();
@@ -73,12 +80,13 @@ export const HomePage = () => {
                   }}
                 />
               ))
-            : demoPostView.map(({ id, title, content, language }) => (
+            : myPosts &&
+              myPosts.map(({ id, title, content, languages }) => (
                 <MyPostCard
                   key={id}
                   title={title}
                   content={content}
-                  languages={language}
+                  languages={languages}
                   onEdit={noop}
                   onDelete={setOpenDeleteModal.on}
                 />
@@ -124,11 +132,21 @@ export const HomePage = () => {
       >
         <Box sx={{ my: "50px", mx: "100px" }}>
           <ProfileCard
-            githubLogin={demoPostView.find(({ id }) => id === selectedId)?.name}
-            title={demoPostView.find(({ id }) => id === selectedId)?.title}
-            content={demoPostView.find(({ id }) => id === selectedId)?.content}
+            githubLogin={
+              matchedPosts &&
+              matchedPosts.find(({ id }) => id === selectedId)?.name
+            }
+            title={
+              matchedPosts &&
+              matchedPosts.find(({ id }) => id === selectedId)?.title
+            }
+            content={
+              matchedPosts &&
+              matchedPosts.find(({ id }) => id === selectedId)?.content
+            }
             languages={
-              demoPostView.find(({ id }) => id === selectedId)?.language
+              matchedPosts &&
+              matchedPosts.find(({ id }) => id === selectedId)?.languages
             }
             hasButton={true}
             agreeTitle="チャットルームに移動する"

@@ -29,3 +29,38 @@ export const FETCH_UNMATCHED_POST = gql`
     }
   }
 `;
+
+export const FETCH_MY_POST = gql`
+  query fetchMyPost {
+    myDrivingPosts {
+      id
+      description
+      title
+      requiredSkills {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const FETCH_MATCHED_POST = gql`
+  query fetchMatchedPost {
+    myMatchedPosts {
+      id
+      description
+      title
+      navigator {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+      requiredSkills {
+        id
+        name
+      }
+    }
+  }
+`;
