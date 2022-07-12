@@ -6,6 +6,7 @@ import {
   objectType,
   stringArg,
   list,
+  booleanArg,
 } from "nexus";
 
 export const Post = objectType({
@@ -75,8 +76,51 @@ export const PostQuery = extendType({
     t.nonNull.list.field("unmatchedPosts", {
       type: "Post",
       resolve(parent, args, context) {
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
         return context.prisma.post.findMany({
-          where: { navigatorId: null },
+          where: {
+            navigatorId: null,
+            driverId: {
+              not: userId,
+            },
+          },
+        });
+      },
+    });
+    t.nonNull.list.nonNull.field("myDrivingPosts", {
+      type: "Post",
+      resolve(parent, args, context) {
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        return context.prisma.post.findMany({
+          where: {
+            navigatorId: null,
+            driverId: userId,
+          },
+        });
+      },
+    });
+    t.nonNull.list.nonNull.field("myMatchedPosts", {
+      type: "Post",
+      resolve(parent, args, context) {
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        return context.prisma.post.findMany({
+          where: {
+            OR: [{ navigatorId: userId }, { driverId: userId }],
+            navigatorId: { not: null },
+            driverId: { not: null },
+          },
         });
       },
     });

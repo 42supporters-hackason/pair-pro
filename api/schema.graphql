@@ -38,6 +38,8 @@ type Post {
 type Query {
   feed: [Post!]!
   me: User!
+  myDrivingPosts: [Post!]!
+  myMatchedPosts: [Post!]!
   post(id: Int!): Post
   skills: [Skill!]!
   unmatchedPosts: [Post]!
