@@ -28,15 +28,13 @@ model Post {
   createdAt   DateTime @default(now())
   description String
   title       String
-
   driver      User? @relation(name: "Driver", fields: [driverId], references: [id])
   driverId    Int?
   navigator   User? @relation(name: "Navigator", fields: [navigatorId], references: [id])
   navigatorId Int?
   completedAt DateTime?
-  message        Message[] @relation(name: "Message")
-  requiredSkill Skill[] @relation(name: "RequiredBy")
-
+  messages        Message[] @relation(name: "Message")
+  requiredSkills Skill[] @relation(name: "RequiredBy")
 }
 
 model Message {
