@@ -8,3 +8,24 @@ export const FETCH_SKILLS = gql`
     }
   }
 `;
+
+export const FETCH_UNMATCHED_POST = gql`
+  query fetchUnmatchedPost {
+    unmatchedPosts {
+      id
+      description
+      title
+      driver {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+      requiredSkills {
+        id
+        name
+      }
+    }
+  }
+`;

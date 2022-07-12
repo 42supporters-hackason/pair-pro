@@ -135,6 +135,11 @@ export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchSkillsQuery = { __typename?: 'Query', skills: Array<{ __typename?: 'Skill', id: number, name: string }> };
 
+export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
+
 
 export const SignInDocument = gql`
     mutation SignIn($code: String!) {
@@ -297,3 +302,50 @@ export function useFetchSkillsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type FetchSkillsQueryHookResult = ReturnType<typeof useFetchSkillsQuery>;
 export type FetchSkillsLazyQueryHookResult = ReturnType<typeof useFetchSkillsLazyQuery>;
 export type FetchSkillsQueryResult = Apollo.QueryResult<FetchSkillsQuery, FetchSkillsQueryVariables>;
+export const FetchUnmatchedPostDocument = gql`
+    query fetchUnmatchedPost {
+  unmatchedPosts {
+    id
+    description
+    title
+    driver {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+    requiredSkills {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchUnmatchedPostQuery__
+ *
+ * To run a query within a React component, call `useFetchUnmatchedPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchUnmatchedPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchUnmatchedPostQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchUnmatchedPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>(FetchUnmatchedPostDocument, options);
+      }
+export function useFetchUnmatchedPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>(FetchUnmatchedPostDocument, options);
+        }
+export type FetchUnmatchedPostQueryHookResult = ReturnType<typeof useFetchUnmatchedPostQuery>;
+export type FetchUnmatchedPostLazyQueryHookResult = ReturnType<typeof useFetchUnmatchedPostLazyQuery>;
+export type FetchUnmatchedPostQueryResult = Apollo.QueryResult<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>;
