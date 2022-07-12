@@ -7,6 +7,11 @@ type AuthPayLoad {
   user: User!
 }
 
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
 type Message {
   content: String!
   id: Int!
@@ -14,20 +19,30 @@ type Message {
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
-  post(description: String!, title: String!): Post!
+  post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   updateMe(bio: String, name: String): User
 }
 
 type Post {
+  completedAt: DateTime
+  createdAt: DateTime!
   description: String!
+  driver: User
   id: Int!
+  messages: [Message!]!
+  navigator: User
+  requiredSkills: [Skill!]!
   title: String!
 }
 
 type Query {
   feed: [Post!]!
   me: User!
+  myDrivingPosts: [Post!]!
+  myMatchedPosts: [Post!]!
+  post(id: Int!): Post
   skills: [Skill!]!
+  unmatchedPosts: [Post]!
   user(id: Int!): User
   users: [User!]!
 }
