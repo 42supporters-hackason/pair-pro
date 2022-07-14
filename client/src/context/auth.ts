@@ -5,6 +5,7 @@ import { useBoolean } from "../hooks/useBoolean";
 import { usePublicRoute } from "../hooks/usePublicRoute";
 import { profileStorage } from "../utils/local-storage/profile";
 import { tokenStorage } from "../utils/local-storage/token";
+import { useHomeHooks } from "./../pages/hooks/useHomeHooks";
 
 export interface Profile {
   id: number;
@@ -23,7 +24,7 @@ export interface Profile {
   /**
    * プロフィール
    */
-  bio: string;
+  bio?: string;
 }
 
 export const [AuthProvider, useAuth, useProfile] = constate(
@@ -34,6 +35,7 @@ export const [AuthProvider, useAuth, useProfile] = constate(
     );
     const [signInMutation] = useSignInMutation();
     const { goToLogin } = usePublicRoute();
+    const { refetchMatchedPosts, refetchMyPosts } = useHomeHooks();
 
     const signIn = async (code: string) => {
       if (tokenStorage.load() === null) {
@@ -56,6 +58,8 @@ export const [AuthProvider, useAuth, useProfile] = constate(
               matchingPoint: data?.authGithub.user.matchingPoint,
               bio: data?.authGithub.user.bio,
             });
+            refetchMatchedPosts();
+            refetchMyPosts();
           },
         });
         if (tokenStorage.load() === null) {

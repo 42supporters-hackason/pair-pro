@@ -2,9 +2,11 @@ import { useEffect, useRef } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 import { ChatMessage } from "../../components/ChatMessage";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
+import { useFetchSpecificPostQuery } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
@@ -95,6 +97,13 @@ export const ChatPage = () => {
   const [videoOn, setVideoOn] = useBoolean(false);
   const { goToHome } = useClientRoute();
   const ref = useRef<HTMLDivElement>(null);
+  const [searchParams] = useSearchParams();
+  const roomId = searchParams.get("room_id");
+  const { data: post } = useFetchSpecificPostQuery({
+    variables: {
+      id: Number(roomId),
+    },
+  });
 
   useEffect(() => {
     ref.current?.scrollIntoView(false);
@@ -144,8 +153,12 @@ export const ChatPage = () => {
           }}
         >
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            <Avatar src={`https://github.com/taisei-13046.png`} />
-            <Typography fontWeight="bold">taisei-13046</Typography>
+            <Avatar
+              src={`https://github.com/${post?.post?.navigator?.githubLogin}.png`}
+            />
+            <Typography fontWeight="bold">
+              {post?.post?.navigator?.name}
+            </Typography>
           </Box>
           <IconButton sx={{ mr: 2 }} onClick={() => goToHome()}>
             <Typography fontWeight="bold" sx={{ mr: 1 }}>

@@ -23,3 +23,31 @@ export const UPDATE_PROFILE = gql`
     }
   }
 `;
+
+export const CREATE_POST = gql`
+  mutation createPost(
+    $description: String!
+    $title: String!
+    $requiredSkillsId: [Int!]!
+  ) {
+    post(
+      description: $description
+      title: $title
+      requiredSkillsId: $requiredSkillsId
+    ) {
+      description
+      title
+      requiredSkills {
+        id
+        name
+      }
+      driver {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+    }
+  }
+`;

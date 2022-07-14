@@ -14,15 +14,15 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
    * タイトル
    */
-  title: string;
+  title?: string;
   /**
    * 内容
    */
-  content: string;
+  content?: string;
   /**
    * 使用言語
    */
-  languages: string[];
+  languages?: string[];
   /**
    * 名前
    */
@@ -58,11 +58,12 @@ export const PostCard = ({
               >
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography variant="subtitle1">使用言語</Typography>
-                  {languages.map((language) => (
-                    <Typography variant="h6" key={language}>
-                      {language}
-                    </Typography>
-                  ))}
+                  {languages &&
+                    languages.map((language) => (
+                      <Typography variant="h6" key={language}>
+                        {language}
+                      </Typography>
+                    ))}
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography variant="subtitle1">名前</Typography>

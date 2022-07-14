@@ -11,10 +11,15 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { FormDataModal } from "../../components/FormDataModal";
-import { useFetchSkillsQuery } from "../../gen/graphql-client";
+import { useProfile } from "../../context/auth";
+import {
+  useCreatePostMutation,
+  useFetchSkillsQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { noop } from "../../utils";
+import { unreachable } from "../../utils";
+import { profileStorage } from "../../utils/local-storage/profile";
 import { applySchema, ApplySchema } from "../validation/apply_vaildation";
 
 /**
@@ -26,9 +31,11 @@ export const ApplyPage = () => {
    */
   const [openModal, setOpenModal] = useBoolean(false);
   const { goToHome } = useClientRoute();
-  const { data } = useFetchSkillsQuery();
+  const { data: languagesData } = useFetchSkillsQuery();
+  const [createPost] = useCreatePostMutation();
+  const { setProfile } = useProfile();
 
-  const languages = data?.skills.map(({ name }) => name);
+  const languages = languagesData?.skills.map(({ name }) => name);
 
   /**
    * validation
@@ -51,6 +58,44 @@ export const ApplyPage = () => {
   const handleApply = useCallback(() => {
     setOpenModal.on();
   }, [setOpenModal]);
+
+  const handleApplyAgree = useCallback(async () => {
+    const requiredSkillsId = applyFormData.language.map(
+      (language) =>
+        languagesData?.skills.find(({ name }) => name === language)
+          ?.id as number
+    );
+
+    if (requiredSkillsId !== undefined) {
+      await createPost({
+        variables: {
+          title: applyFormData.title,
+          description: applyFormData.content,
+          requiredSkillsId,
+        },
+        onCompleted: (data) => {
+          setOpenModal.off();
+          const profile = profileStorage.load();
+          profileStorage.save({
+            id: profile?.id ?? unreachable(),
+            matchingPoint: data.post.driver?.matchingPoint ?? unreachable(),
+            name: profile?.name ?? unreachable(),
+            githubLogin: profile?.githubLogin ?? unreachable(),
+            bio: profile?.bio,
+          });
+          setProfile(profileStorage.load() ?? {});
+          goToHome();
+        },
+      });
+    }
+  }, [
+    createPost,
+    applyFormData,
+    goToHome,
+    languagesData?.skills,
+    setOpenModal,
+    setProfile,
+  ]);
 
   return (
     <Box
@@ -176,7 +221,7 @@ export const ApplyPage = () => {
             title={applyFormData.title}
             content={applyFormData.content}
             languages={applyFormData.language}
-            onAgree={noop}
+            onAgree={handleApplyAgree}
             onCancel={setOpenModal.off}
           />
         </Box>
