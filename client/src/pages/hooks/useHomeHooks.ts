@@ -29,11 +29,12 @@ const matchedPostsTaranslator = (matchedPosts: FetchMatchedPostQuery) =>
  * pages/client/homeで使用されるHooks
  */
 export const useHomeHooks = () => {
-  const { data: fetchMyPosts } = useFetchMyPostQuery();
-  const { data: fetchMatchedPosts } = useFetchMatchedPostQuery();
+  const { data: fetchMyPosts, refetch: refetchMyPosts } = useFetchMyPostQuery();
+  const { data: fetchMatchedPosts, refetch: refetchMatchedPosts } =
+    useFetchMatchedPostQuery();
 
   const myPosts = fetchMyPosts && myPostsTranslator(fetchMyPosts);
   const matchedPosts =
     fetchMatchedPosts && matchedPostsTaranslator(fetchMatchedPosts);
-  return { myPosts, matchedPosts };
+  return { myPosts, matchedPosts, refetchMatchedPosts, refetchMyPosts };
 };
