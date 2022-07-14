@@ -12,33 +12,6 @@ import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
 import { useHomeHooks } from "../hooks/useHomeHooks";
 
-const demoPostView = [
-  {
-    id: 1,
-    title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
-    content:
-      "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: ["JAVA", "C言語"],
-    name: "taisei-13046",
-  },
-  {
-    id: 2,
-    title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
-    content:
-      "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: ["JAVA", "C言語"],
-    name: "taisei-13046",
-  },
-  {
-    id: 3,
-    title: "Javaを使ったオブジェクト指向プログラミングを学びたい",
-    content:
-      "普段はフロントエンドを業務で行っているので、バックエンドについての理解も深めたい",
-    language: ["JAVA", "C言語"],
-    name: "taisei-13046",
-  },
-];
-
 /**
  * home画面
  */

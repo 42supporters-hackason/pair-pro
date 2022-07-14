@@ -64,3 +64,24 @@ export const FETCH_MATCHED_POST = gql`
     }
   }
 `;
+
+export const FETCH_SPECIFIC_POST = gql`
+  query fetchSpecificPost($id: Int!) {
+    post(id: $id) {
+      id
+      description
+      title
+      navigator {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+      requiredSkills {
+        id
+        name
+      }
+    }
+  }
+`;
