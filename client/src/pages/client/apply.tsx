@@ -11,15 +11,9 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { FormDataModal } from "../../components/FormDataModal";
-import { useProfile } from "../../context/auth";
-import {
-  useCreatePostMutation,
-  useFetchSkillsQuery,
-} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { unreachable } from "../../utils";
-import { profileStorage } from "../../utils/local-storage/profile";
+import { useApplyHooks } from "../hooks/useApplyHooks";
 import { applySchema, ApplySchema } from "../validation/apply_vaildation";
 
 /**
@@ -31,9 +25,7 @@ export const ApplyPage = () => {
    */
   const [openModal, setOpenModal] = useBoolean(false);
   const { goToHome } = useClientRoute();
-  const { data: languagesData } = useFetchSkillsQuery();
-  const [createPost] = useCreatePostMutation();
-  const { setProfile } = useProfile();
+  const { createPost, languagesData } = useApplyHooks();
 
   const languages = languagesData?.skills.map(({ name }) => name);
 
@@ -60,42 +52,8 @@ export const ApplyPage = () => {
   }, [setOpenModal]);
 
   const handleApplyAgree = useCallback(async () => {
-    const requiredSkillsId = applyFormData.language.map(
-      (language) =>
-        languagesData?.skills.find(({ name }) => name === language)
-          ?.id as number
-    );
-
-    if (requiredSkillsId !== undefined) {
-      await createPost({
-        variables: {
-          title: applyFormData.title,
-          description: applyFormData.content,
-          requiredSkillsId,
-        },
-        onCompleted: (data) => {
-          setOpenModal.off();
-          const profile = profileStorage.load();
-          profileStorage.save({
-            id: profile?.id ?? unreachable(),
-            matchingPoint: data.post.driver?.matchingPoint ?? unreachable(),
-            name: profile?.name ?? unreachable(),
-            githubLogin: profile?.githubLogin ?? unreachable(),
-            bio: profile?.bio,
-          });
-          setProfile(profileStorage.load() ?? {});
-          goToHome();
-        },
-      });
-    }
-  }, [
-    createPost,
-    applyFormData,
-    goToHome,
-    languagesData?.skills,
-    setOpenModal,
-    setProfile,
-  ]);
+    createPost({ formData: applyFormData, closeModal: setOpenModal.off });
+  }, [createPost, applyFormData, setOpenModal]);
 
   return (
     <Box
