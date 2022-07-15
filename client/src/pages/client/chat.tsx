@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
@@ -95,6 +95,7 @@ export const ChatPage = () => {
    */
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
+  const [track, setTrack] = useState(null);
   const { goToHome } = useClientRoute();
   const ref = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
@@ -121,8 +122,11 @@ export const ChatPage = () => {
           }}
         >
           <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 3 }}>
-            <Box sx={{ width: "50%", border: 1 }}>自分</Box>
-            <Box sx={{ width: "50%", border: 1 }}>相手</Box>
+            {track === null ? (
+              <></>
+            ) : (
+              <Box sx={{ width: "50%", border: 1 }}>自分</Box>
+            )}
           </Box>
           <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
             <VideoButtons
