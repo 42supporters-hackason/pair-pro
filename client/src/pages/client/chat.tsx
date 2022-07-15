@@ -1,15 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
+import { connect, Room } from "twilio-video";
 import { ChatMessage } from "../../components/ChatMessage";
 import { EnterButton } from "../../components/EnterButton";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
-import { useFetchSpecificPostQuery } from "../../gen/graphql-client";
+import { useProfile } from "../../context/auth";
+import {
+  useFetchSpecificPostQuery,
+  useGetVideoAccessTokenQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { unreachable } from "../../utils";
 
 const demoChat = [
   {
@@ -96,7 +102,7 @@ export const ChatPage = () => {
    */
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
-  const [track, setTrack] = useState(null);
+  const [roomData, setRoomData] = useState<Room | null>(null);
   const { goToHome } = useClientRoute();
   const ref = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
@@ -106,6 +112,31 @@ export const ChatPage = () => {
       id: Number(roomId),
     },
   });
+  const { profile } = useProfile();
+  const { data: accessTokenReturnValue } = useGetVideoAccessTokenQuery({
+    variables: {
+      identity: profile.githubLogin ?? "",
+      room: roomId ?? unreachable(),
+    },
+  });
+  console.log(profile.githubLogin, roomId);
+
+  /**
+   * event-handler
+   */
+  const handleEnterRoom = useCallback(async () => {
+    if (accessTokenReturnValue?.accessToken.accessToken) {
+      const room = await connect(
+        accessTokenReturnValue.accessToken.accessToken,
+        {
+          name: roomId,
+          audio: true,
+          video: true,
+        }
+      );
+      setRoomData(room);
+    }
+  }, [accessTokenReturnValue, roomId]);
 
   useEffect(() => {
     ref.current?.scrollIntoView(false);
@@ -123,8 +154,8 @@ export const ChatPage = () => {
           }}
         >
           <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 3 }}>
-            {track === null ? (
-              <EnterButton />
+            {roomData === null ? (
+              <EnterButton onClick={handleEnterRoom} />
             ) : (
               <Box sx={{ width: "50%", border: 1 }}>自分</Box>
             )}
