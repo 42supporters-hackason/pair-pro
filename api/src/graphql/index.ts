@@ -4,3 +4,4 @@ export * from "./Message";
 export * from "./Skill";
 export * from "./Auth";
 export * from "./Video";
+export * from "./scalars/Date";

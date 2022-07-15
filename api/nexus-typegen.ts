@@ -5,8 +5,23 @@
 
 
 import type { Context } from "./src/context"
-
-
+import type { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    /**
+     * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+     */
+    dateTime<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    /**
+     * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+     */
+    dateTime<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateTime";
+  }
+}
 
 
 declare global {
@@ -25,6 +40,7 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  DateTime: any
 }
 
 export interface NexusGenObjects {
@@ -38,6 +54,8 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Post: { // root type
+    completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
     id: number; // Int!
     title: string; // String!
@@ -85,15 +103,25 @@ export interface NexusGenFieldTypes {
     updateMe: NexusGenRootTypes['User'] | null; // User
   }
   Post: { // field return type
+    completedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
+    driver: NexusGenRootTypes['User'] | null; // User
     id: number; // Int!
+    messages: NexusGenRootTypes['Message'][]; // [Message!]!
+    navigator: NexusGenRootTypes['User'] | null; // User
+    requiredSkills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     title: string; // String!
   }
   Query: { // field return type
     accessToken: NexusGenRootTypes['Video']; // Video!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     me: NexusGenRootTypes['User']; // User!
+    myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    post: NexusGenRootTypes['Post'] | null; // Post
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
+    unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
@@ -131,15 +159,25 @@ export interface NexusGenFieldTypeNames {
     updateMe: 'User'
   }
   Post: { // field return type name
+    completedAt: 'DateTime'
+    createdAt: 'DateTime'
     description: 'String'
+    driver: 'User'
     id: 'Int'
+    messages: 'Message'
+    navigator: 'User'
+    requiredSkills: 'Skill'
     title: 'String'
   }
   Query: { // field return type name
     accessToken: 'Video'
     feed: 'Post'
     me: 'User'
+    myDrivingPosts: 'Post'
+    myMatchedPosts: 'Post'
+    post: 'Post'
     skills: 'Skill'
+    unmatchedPosts: 'Post'
     user: 'User'
     users: 'User'
   }
@@ -169,6 +207,7 @@ export interface NexusGenArgTypes {
     }
     post: { // args
       description: string; // String!
+      requiredSkillsId: number[]; // [Int!]!
       title: string; // String!
     }
     updateMe: { // args
@@ -180,6 +219,9 @@ export interface NexusGenArgTypes {
     accessToken: { // args
       identity?: string | null; // String
       room?: string | null; // String
+    }
+    post: { // args
+      id: number; // Int!
     }
     user: { // args
       id: number; // Int!

@@ -17,7 +17,7 @@ import { profileStorage } from "../../../utils/local-storage/profile";
 import {
   editProfileSchema,
   EditProfileSchema,
-} from "../validation/edit_profile_validation";
+} from "../../validation/edit_profile_validation";
 
 export const EditProfilePage = () => {
   /**
