@@ -12,21 +12,16 @@ interface Props {
  * twilio-video Track コンポーネント
  */
 export const VideoTrack = ({ track }: Props) => {
-  const ref = useRef<HTMLVideoElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const el = ref.current;
     if (el !== null) {
-      track.attach(el);
+      const child = track.attach();
+      el.classList.add(track.kind);
+      el.appendChild(child);
     }
-
-    return () => {
-      if (el !== null) {
-        track.detach(el);
-        el.srcObject = null;
-      }
-    };
   }, [track]);
 
-  return <video ref={ref} />;
+  return <div ref={ref} />;
 };
