@@ -24,6 +24,10 @@ interface Props {
    * videoのtoggle
    */
   onClickVideo: () => void;
+  /**
+   * 退出ボタンのアクション
+   */
+  onExit: () => void;
 }
 
 /**
@@ -34,6 +38,7 @@ export const VideoButtons = ({
   videoOn,
   onClickVideo,
   onClickVolume,
+  onExit,
 }: Props) => {
   return (
     <>
@@ -58,7 +63,7 @@ export const VideoButtons = ({
       <IconButton>
         <PersonalVideoIcon />
       </IconButton>
-      <IconButton>
+      <IconButton onClick={onExit}>
         <LogoutIcon />
       </IconButton>
     </>

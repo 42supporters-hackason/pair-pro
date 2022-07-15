@@ -138,6 +138,17 @@ export const ChatPage = () => {
     }
   }, [accessTokenReturnValue, roomId]);
 
+  const handleExitRoom = useCallback(async () => {
+    if (accessTokenReturnValue?.accessToken.accessToken) {
+      await connect(accessTokenReturnValue.accessToken.accessToken, {
+        name: roomId,
+        audio: false,
+        video: false,
+      });
+      setRoomData(null);
+    }
+  }, [accessTokenReturnValue, roomId]);
+
   useEffect(() => {
     ref.current?.scrollIntoView(false);
   }, []);
@@ -160,14 +171,17 @@ export const ChatPage = () => {
               <Box sx={{ width: "50%", border: 1 }}>自分</Box>
             )}
           </Box>
-          <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
-            <VideoButtons
-              volumeOn={volumeOn}
-              videoOn={videoOn}
-              onClickVideo={setVideoOn.toggle}
-              onClickVolume={setVolumeOn.toggle}
-            />
-          </Box>
+          {roomData !== null && (
+            <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
+              <VideoButtons
+                volumeOn={volumeOn}
+                videoOn={videoOn}
+                onClickVideo={setVideoOn.toggle}
+                onClickVolume={setVolumeOn.toggle}
+                onExit={handleExitRoom}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
       <Box
