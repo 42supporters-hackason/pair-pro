@@ -4,6 +4,7 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { ChatMessage } from "../../components/ChatMessage";
+import { EnterButton } from "../../components/EnterButton";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
 import { useFetchSpecificPostQuery } from "../../gen/graphql-client";
@@ -123,7 +124,7 @@ export const ChatPage = () => {
         >
           <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 3 }}>
             {track === null ? (
-              <></>
+              <EnterButton />
             ) : (
               <Box sx={{ width: "50%", border: 1 }}>自分</Box>
             )}
