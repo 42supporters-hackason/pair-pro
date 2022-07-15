@@ -14,12 +14,15 @@ scalar DateTime
 
 type Message {
   content: String!
+  createdBy: User!
   id: Int!
+  post: Post!
 }
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
+  createMessage(content: String!, postId: Int!): Message!
   updateMe(bio: String, name: String): User
 }
 
@@ -38,9 +41,13 @@ type Post {
 type Query {
   feed: [Post!]!
   me: User!
+<<<<<<< HEAD
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
   post(id: Int!): Post
+=======
+  messagesByPostId(postId: Int!): [Message!]!
+>>>>>>> 7e69e86a34e7b4b473b825fedffa5dfdae0dea6f
   skills: [Skill!]!
   unmatchedPosts: [Post]!
   user(id: Int!): User
@@ -50,6 +57,10 @@ type Query {
 type Skill {
   id: Int!
   name: String!
+}
+
+type Subscription {
+  waitForMessage(postId: Int!): Message
 }
 
 type User {

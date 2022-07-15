@@ -65,6 +65,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     name: string; // String!
   }
+  Subscription: {};
   User: { // root type
     bio: string; // String!
     githubId: string; // String!
@@ -92,10 +93,13 @@ export interface NexusGenFieldTypes {
   }
   Message: { // field return type
     content: string; // String!
+    createdBy: NexusGenRootTypes['User']; // User!
     id: number; // Int!
+    post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    createMessage: NexusGenRootTypes['Message']; // Message!
     post: NexusGenRootTypes['Post']; // Post!
     updateMe: NexusGenRootTypes['User'] | null; // User
   }
@@ -116,6 +120,7 @@ export interface NexusGenFieldTypes {
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     post: NexusGenRootTypes['Post'] | null; // Post
+    messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     user: NexusGenRootTypes['User'] | null; // User
@@ -124,6 +129,9 @@ export interface NexusGenFieldTypes {
   Skill: { // field return type
     id: number; // Int!
     name: string; // String!
+  }
+  Subscription: { // field return type
+    waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
     bio: string; // String!
@@ -144,10 +152,13 @@ export interface NexusGenFieldTypeNames {
   }
   Message: { // field return type name
     content: 'String'
+    createdBy: 'User'
     id: 'Int'
+    post: 'Post'
   }
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
+    createMessage: 'Message'
     post: 'Post'
     updateMe: 'User'
   }
@@ -168,6 +179,7 @@ export interface NexusGenFieldTypeNames {
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
     post: 'Post'
+    messagesByPostId: 'Message'
     skills: 'Skill'
     unmatchedPosts: 'Post'
     user: 'User'
@@ -176,6 +188,9 @@ export interface NexusGenFieldTypeNames {
   Skill: { // field return type name
     id: 'Int'
     name: 'String'
+  }
+  Subscription: { // field return type name
+    waitForMessage: 'Message'
   }
   User: { // field return type name
     bio: 'String'
@@ -194,6 +209,10 @@ export interface NexusGenArgTypes {
     authGithub: { // args
       code: string; // String!
     }
+    createMessage: { // args
+      content: string; // String!
+      postId: number; // Int!
+    }
     post: { // args
       description: string; // String!
       requiredSkillsId: number[]; // [Int!]!
@@ -207,9 +226,16 @@ export interface NexusGenArgTypes {
   Query: {
     post: { // args
       id: number; // Int!
+    messagesByPostId: { // args
+      postId: number; // Int!
     }
     user: { // args
       id: number; // Int!
+    }
+  }
+  Subscription: {
+    waitForMessage: { // args
+      postId: number; // Int!
     }
   }
 }

@@ -2,12 +2,15 @@ import { PrismaClient } from "@prisma/client";
 import { decodeAuthHeader } from "./utils/auth";
 import { Request } from "express";
 import { languagesObject } from "./utils";
+import { PubSub } from "graphql-subscriptions";
 
 export const prisma = new PrismaClient();
+export const pubsub = new PubSub();
 
 export interface Context {
   prisma: PrismaClient;
   userId?: number;
+  pubsub: PubSub;
 }
 
 // run this once after db is initialized.
@@ -28,5 +31,6 @@ export const context = ({ req }: { req: Request }): Context => {
   return {
     prisma,
     userId: token?.userId,
+    pubsub,
   };
 };
