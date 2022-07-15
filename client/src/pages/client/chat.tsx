@@ -140,11 +140,15 @@ export const ChatPage = () => {
 
   const handleExitRoom = useCallback(async () => {
     if (accessTokenReturnValue?.accessToken.accessToken) {
-      await connect(accessTokenReturnValue.accessToken.accessToken, {
-        name: roomId,
-        audio: false,
-        video: false,
-      });
+      const room = await connect(
+        accessTokenReturnValue.accessToken.accessToken,
+        {
+          name: roomId,
+          audio: false,
+          video: false,
+        }
+      );
+      room.disconnect();
       setRoomData(null);
     }
   }, [accessTokenReturnValue, roomId]);
