@@ -81,7 +81,9 @@ export const ChatPage = () => {
       };
       if (message !== undefined && message !== null) {
         setMessages((prevMessage) => {
-          prevMessage.push(message);
+          if (!prevMessage.find(({ id }) => id === message.id)) {
+            prevMessage.push(message);
+          }
           return prevMessage;
         });
       }
@@ -115,7 +117,7 @@ export const ChatPage = () => {
 
   useEffect(() => {
     ref.current?.scrollIntoView(false);
-  }, [messages]);
+  }, [messages, setMessages]);
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
