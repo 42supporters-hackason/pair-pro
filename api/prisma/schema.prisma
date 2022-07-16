@@ -34,7 +34,7 @@ model Post {
   navigatorId Int?
   completedAt DateTime?
   messages        Message[] @relation(name: "Message")
-  w Skill[] @relation(name: "RequiredBy")
+  requiredSkills Skill[] @relation(name: "RequiredBy")
 }
 
 model Message {

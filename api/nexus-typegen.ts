@@ -98,6 +98,7 @@ export interface NexusGenFieldTypes {
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     deletePost: NexusGenRootTypes['Post']; // Post!
     post: NexusGenRootTypes['Post']; // Post!
+    registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateMe: NexusGenRootTypes['User'] | null; // User
   }
   Post: { // field return type
@@ -151,6 +152,7 @@ export interface NexusGenFieldTypeNames {
     authGithub: 'AuthPayLoad'
     deletePost: 'Post'
     post: 'Post'
+    registerNavigator: 'Post'
     updateMe: 'User'
   }
   Post: { // field return type name
@@ -203,6 +205,10 @@ export interface NexusGenArgTypes {
       description: string; // String!
       requiredSkillsId: number[]; // [Int!]!
       title: string; // String!
+    }
+    registerNavigator: { // args
+      navigatorId: number; // Int!
+      postId: string; // String!
     }
     updateMe: { // args
       bio?: string | null; // String

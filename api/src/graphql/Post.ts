@@ -6,7 +6,6 @@ import {
   objectType,
   stringArg,
   list,
-  booleanArg,
 } from "nexus";
 
 export const Post = objectType({
@@ -206,6 +205,63 @@ export const PostMutation = extendType({
         return context.prisma.post.delete({
           where: { id: postId }
         })
+      }
+    });
+
+    t.nonNull.field("registerNavigator", {
+      type: "Post",
+      args: {
+        postId: nonNull(stringArg()),
+        navigatorId: nonNull(intArg())
+      },
+      async resolve(parent, args, context) {
+        const { postId, navigatorId } = args;
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        // check if the post exists
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId },
+        });
+        if (!post) {
+          throw new Error("There is no such post");
+        }
+
+        // check if the post is createdBy the user
+        if (post.driverId !== userId) {
+          throw new Error("You do not have rights to update this post");
+        }
+
+        // check if post's navigator already exists
+        if (post.navigatorId) {
+          throw new Error("There is a registered navigator already");
+        }
+
+        // check if the navigator exists
+        const navigator = await context.prisma.user.findUnique({
+          where: { id: navigatorId },
+        });
+        if (!navigator) {
+          throw new Error("There is no such navigator");
+        }
+
+        // increment navigator's matching point
+        await context.prisma.user.update({
+          where: { id: navigatorId },
+          data: { matchingPoint: navigator.matchingPoint + 1 }
+        });
+
+        // update navigator and completedAt
+        return context.prisma.post.update({
+          where: { id: postId },
+          data: {
+            navigator: { connect: { id: navigatorId } },
+            completedAt: new Date()
+          }
+        });
       }
     });
   },
