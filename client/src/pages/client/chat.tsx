@@ -1,7 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import { Avatar, Box, TextareaAutosize, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  TextareaAutosize,
+  Typography,
+} from "@mui/material";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { ChatMessage } from "../../components/ChatMessage";
 import { IconButton } from "../../components/IconButton";
@@ -9,85 +17,11 @@ import { VideoButtons } from "../../components/VideoButtons";
 import {
   useFetchMessagesQuery,
   useFetchSpecificPostQuery,
+  useSendMessageMutation,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
-
-const demoChat = [
-  {
-    id: 1,
-    content: "おはようございます",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 2,
-    content: "おはようございます",
-    createdBy: "ataisei-13046",
-  },
-  {
-    id: 3,
-    content: "おはようございます",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 4,
-    content: "おはようございます",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 5,
-    content: "おはようございます",
-    createdBy: "ataisei-13046",
-  },
-  {
-    id: 6,
-    content:
-      "おはようございますあああああああああああああああああああああああああああああああ",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 3,
-    content: "おはようございます",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 4,
-    content: "おはようございます",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 5,
-    content: "おはようございます",
-    createdBy: "ataisei-13046",
-  },
-  {
-    id: 6,
-    content:
-      "おはようございますあああああああああああああああああああああああああああああああ",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 3,
-    content: "おはようございます",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 4,
-    content: "おはようございます",
-    createdBy: "taisei-13046",
-  },
-  {
-    id: 5,
-    content: "おはようございます",
-    createdBy: "ataisei-13046",
-  },
-  {
-    id: 6,
-    content:
-      "おはようございますあああああああああああああああああああああああああああああああ",
-    createdBy: "taisei-13046",
-  },
-];
+import { ChatSchema, chatSchema } from "../validation/chat_validation";
 
 /**
  * p2p相手とやり取りをするページ
@@ -120,9 +54,36 @@ export const ChatPage = () => {
     })
   );
 
+  const [sendMessage] = useSendMessageMutation();
+
+  /**
+   * form validation
+   */
+  const { register, handleSubmit, setValue } = useForm<ChatSchema>({
+    resolver: zodResolver(chatSchema),
+  });
+
+  /**
+   * event-handler
+   */
+  const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
+    async ({ message }) => {
+      await sendMessage({
+        variables: {
+          postId: Number(roomId),
+          content: message,
+        },
+        onCompleted: () => {
+          setValue("message", "");
+        },
+      });
+    },
+    [sendMessage, roomId, setValue]
+  );
+
   useEffect(() => {
     ref.current?.scrollIntoView(false);
-  }, []);
+  }, [messages]);
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
@@ -208,10 +169,11 @@ export const ChatPage = () => {
             width: "100%",
             display: "flex",
             alignItems: "center",
-            gap: "15px",
             mt: "auto",
             mb: "30px",
           }}
+          component="form"
+          onSubmit={handleSubmit(handleMessageSubmit)}
         >
           <TextareaAutosize
             minRows={3}
@@ -222,8 +184,11 @@ export const ChatPage = () => {
               resize: "none",
               padding: "15px",
             }}
+            {...register("message")}
           />
-          <SendRoundedIcon sx={{ cursor: "pointer", mb: "10px", mt: "auto" }} />
+          <Button type="submit">
+            <SendRoundedIcon sx={{ cursor: "pointer", m: "auto" }} />
+          </Button>
         </Box>
       </Box>
     </Box>
