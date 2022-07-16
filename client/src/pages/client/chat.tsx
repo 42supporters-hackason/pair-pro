@@ -6,7 +6,10 @@ import { useSearchParams } from "react-router-dom";
 import { ChatMessage } from "../../components/ChatMessage";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
-import { useFetchSpecificPostQuery } from "../../gen/graphql-client";
+import {
+  useFetchMessagesQuery,
+  useFetchSpecificPostQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
@@ -104,6 +107,18 @@ export const ChatPage = () => {
       id: Number(roomId),
     },
   });
+  const { data: messagesData } = useFetchMessagesQuery({
+    variables: {
+      postId: Number(roomId),
+    },
+  });
+  const messages = messagesData?.messagesByPostId.map(
+    ({ content, createdBy, id }) => ({
+      id,
+      content,
+      createdBy: createdBy.githubLogin,
+    })
+  );
 
   useEffect(() => {
     ref.current?.scrollIntoView(false);
@@ -177,15 +192,16 @@ export const ChatPage = () => {
             gap: 3,
           }}
         >
-          {demoChat.map(({ id, content, createdBy }) => (
-            <Box ref={ref} key={id}>
-              <ChatMessage
-                key={id}
-                content={content}
-                side={createdBy === "taisei-13046" ? "right" : "left"}
-              />
-            </Box>
-          ))}
+          {messages &&
+            messages.map(({ id, content, createdBy }) => (
+              <Box ref={ref} key={id}>
+                <ChatMessage
+                  key={id}
+                  content={content}
+                  side={createdBy === "taisei-13046" ? "right" : "left"}
+                />
+              </Box>
+            ))}
         </Box>
         <Box
           sx={{

@@ -21,8 +21,8 @@ type Message {
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
-  post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   createMessage(content: String!, postId: Int!): Message!
+  post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   updateMe(bio: String, name: String): User
 }
 
@@ -41,13 +41,10 @@ type Post {
 type Query {
   feed: [Post!]!
   me: User!
-<<<<<<< HEAD
+  messagesByPostId(postId: Int!): [Message!]!
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
   post(id: Int!): Post
-=======
-  messagesByPostId(postId: Int!): [Message!]!
->>>>>>> 7e69e86a34e7b4b473b825fedffa5dfdae0dea6f
   skills: [Skill!]!
   unmatchedPosts: [Post]!
   user(id: Int!): User

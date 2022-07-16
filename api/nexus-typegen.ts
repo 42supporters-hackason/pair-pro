@@ -117,10 +117,10 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     me: NexusGenRootTypes['User']; // User!
+    messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     post: NexusGenRootTypes['Post'] | null; // Post
-    messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     user: NexusGenRootTypes['User'] | null; // User
@@ -176,10 +176,10 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     feed: 'Post'
     me: 'User'
+    messagesByPostId: 'Message'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
     post: 'Post'
-    messagesByPostId: 'Message'
     skills: 'Skill'
     unmatchedPosts: 'Post'
     user: 'User'
@@ -224,10 +224,11 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    post: { // args
-      id: number; // Int!
     messagesByPostId: { // args
       postId: number; // Int!
+    }
+    post: { // args
+      id: number; // Int!
     }
     user: { // args
       id: number; // Int!
