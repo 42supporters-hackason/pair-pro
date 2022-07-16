@@ -199,6 +199,13 @@ export type FetchMessagesQueryVariables = Exact<{
 
 export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } }> };
 
+export type FetchMessageSubscriptionVariables = Exact<{
+  postId: Scalars['Int'];
+}>;
+
+
+export type FetchMessageSubscription = { __typename?: 'Subscription', waitForMessage?: { __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } } | null };
+
 
 export const SignInDocument = gql`
     mutation SignIn($code: String!) {
@@ -621,3 +628,41 @@ export function useFetchMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type FetchMessagesQueryHookResult = ReturnType<typeof useFetchMessagesQuery>;
 export type FetchMessagesLazyQueryHookResult = ReturnType<typeof useFetchMessagesLazyQuery>;
 export type FetchMessagesQueryResult = Apollo.QueryResult<FetchMessagesQuery, FetchMessagesQueryVariables>;
+export const FetchMessageDocument = gql`
+    subscription fetchMessage($postId: Int!) {
+  waitForMessage(postId: $postId) {
+    id
+    content
+    createdBy {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchMessageSubscription__
+ *
+ * To run a query within a React component, call `useFetchMessageSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMessageSubscription({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useFetchMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<FetchMessageSubscription, FetchMessageSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<FetchMessageSubscription, FetchMessageSubscriptionVariables>(FetchMessageDocument, options);
+      }
+export type FetchMessageSubscriptionHookResult = ReturnType<typeof useFetchMessageSubscription>;
+export type FetchMessageSubscriptionResult = Apollo.SubscriptionResult<FetchMessageSubscription>;
