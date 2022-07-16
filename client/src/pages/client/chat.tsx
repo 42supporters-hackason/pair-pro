@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
@@ -14,14 +14,10 @@ import { useSearchParams } from "react-router-dom";
 import { ChatMessage } from "../../components/ChatMessage";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
-import {
-  useFetchMessagesQuery,
-  useFetchMessageSubscription,
-  useFetchSpecificPostQuery,
-  useSendMessageMutation,
-} from "../../gen/graphql-client";
+import { useSendMessageMutation } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { useChatHooks } from "../hooks/useChatHooks";
 import { ChatSchema, chatSchema } from "../validation/chat_validation";
 
 interface Message {
@@ -39,56 +35,13 @@ export const ChatPage = () => {
    */
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
-  const [messages, setMessages] = useState<Message[]>([]);
   const { goToHome } = useClientRoute();
   const ref = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("room_id");
-  const { data: post } = useFetchSpecificPostQuery({
-    variables: {
-      id: Number(roomId),
-    },
-  });
-  useFetchMessagesQuery({
-    variables: {
-      postId: Number(roomId),
-    },
-    onCompleted: (data) => {
-      const messages = data?.messagesByPostId.map(
-        ({ content, createdBy, id }) => ({
-          id,
-          content,
-          createdBy: createdBy.githubLogin,
-        })
-      );
-      setMessages(messages);
-    },
-  });
+  const { messages, post } = useChatHooks(Number(roomId));
 
   const [sendMessage] = useSendMessageMutation();
-
-  useFetchMessageSubscription({
-    variables: {
-      postId: Number(roomId),
-    },
-    onSubscriptionData(data) {
-      const message: Message | undefined | null = data.subscriptionData.data
-        ?.waitForMessage && {
-        id: data.subscriptionData.data.waitForMessage.id,
-        content: data.subscriptionData.data.waitForMessage.content,
-        createdBy:
-          data.subscriptionData.data.waitForMessage.createdBy.githubLogin,
-      };
-      if (message !== undefined && message !== null) {
-        setMessages((prevMessage) => {
-          if (!prevMessage.find(({ id }) => id === message.id)) {
-            prevMessage.push(message);
-          }
-          return prevMessage;
-        });
-      }
-    },
-  });
 
   /**
    * form validation
@@ -117,7 +70,7 @@ export const ChatPage = () => {
 
   useEffect(() => {
     ref.current?.scrollIntoView(false);
-  }, [messages, setMessages]);
+  }, [messages]);
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
