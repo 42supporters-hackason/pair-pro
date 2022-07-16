@@ -172,5 +172,41 @@ export const PostMutation = extendType({
         });
       },
     });
+
+    t.nonNull.field("deletePost", {
+      type: "Post",
+      args: {
+        id: nonNull(stringArg()),
+      },
+      async resolve(parent, args, context) {
+        const postId = args.id;
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        // check if the post exists
+        const postToDelete = (await context.prisma.post.findUnique({
+          where: { id: postId },
+        }));
+        if (!postToDelete) {
+          throw new Error("There is no such post");
+        }
+
+        // return matching point
+        const user = (await context.prisma.user.findUnique({
+          where: { id: userId },
+        })) as User;
+        await context.prisma.user.update({
+          where: { id: userId },
+          data: { matchingPoint: user.matchingPoint + 1 },
+        });
+
+        return context.prisma.post.delete({
+          where: { id: postId }
+        })
+      }
+    });
   },
 });
