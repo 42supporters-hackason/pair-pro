@@ -12,7 +12,7 @@ import {
 export const Post = objectType({
   name: "Post",
   definition(t) {
-    t.nonNull.int("id");
+    t.nonNull.string("id");
     t.nonNull.dateTime("createdAt");
     t.nonNull.string("description");
     t.nonNull.string("title");
@@ -64,7 +64,7 @@ export const PostQuery = extendType({
     t.field("post", {
       type: "Post",
       args: {
-        id: nonNull(intArg()),
+        id: nonNull(stringArg()),
       },
       resolve(parent, args, context) {
         const { id } = args;

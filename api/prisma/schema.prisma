@@ -24,7 +24,7 @@ model User {
 }
 
 model Post {
-  id          Int      @id @default(autoincrement())
+  id          String      @id @default(uuid())
   createdAt   DateTime @default(now())
   description String
   title       String
@@ -40,7 +40,7 @@ model Post {
 model Message {
   id          Int      @id @default(autoincrement())
   post        Post     @relation(name: "Message", fields: [postId], references: [id])
-  postId      Int
+  postId      String
   content     String
   createdAt DateTime @default(now())
   createdBy User @relation(name: "createdBy", fields: [createdById], references: [id])

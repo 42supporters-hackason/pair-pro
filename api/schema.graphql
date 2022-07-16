@@ -28,7 +28,7 @@ type Post {
   createdAt: DateTime!
   description: String!
   driver: User
-  id: Int!
+  id: String!
   messages: [Message!]!
   navigator: User
   requiredSkills: [Skill!]!
@@ -40,7 +40,7 @@ type Query {
   me: User!
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
-  post(id: Int!): Post
+  post(id: String!): Post
   skills: [Skill!]!
   unmatchedPosts: [Post]!
   user(id: Int!): User

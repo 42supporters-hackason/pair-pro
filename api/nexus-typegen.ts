@@ -57,7 +57,7 @@ export interface NexusGenObjects {
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
-    id: number; // Int!
+    id: string; // String!
     title: string; // String!
   }
   Query: {};
@@ -104,7 +104,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
     driver: NexusGenRootTypes['User'] | null; // User
-    id: number; // Int!
+    id: string; // String!
     messages: NexusGenRootTypes['Message'][]; // [Message!]!
     navigator: NexusGenRootTypes['User'] | null; // User
     requiredSkills: NexusGenRootTypes['Skill'][]; // [Skill!]!
@@ -156,7 +156,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     description: 'String'
     driver: 'User'
-    id: 'Int'
+    id: 'String'
     messages: 'Message'
     navigator: 'User'
     requiredSkills: 'Skill'
@@ -206,7 +206,7 @@ export interface NexusGenArgTypes {
   }
   Query: {
     post: { // args
-      id: number; // Int!
+      id: string; // String!
     }
     user: { // args
       id: number; // Int!
