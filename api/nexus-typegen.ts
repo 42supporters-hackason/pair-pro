@@ -65,6 +65,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     name: string; // String!
   }
+  Subscription: {};
   User: { // root type
     bio: string; // String!
     githubId: string; // String!
@@ -92,10 +93,13 @@ export interface NexusGenFieldTypes {
   }
   Message: { // field return type
     content: string; // String!
+    createdBy: NexusGenRootTypes['User']; // User!
     id: number; // Int!
+    post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    createMessage: NexusGenRootTypes['Message']; // Message!
     deletePost: NexusGenRootTypes['Post']; // Post!
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
@@ -116,6 +120,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     me: NexusGenRootTypes['User']; // User!
+    messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     post: NexusGenRootTypes['Post'] | null; // Post
@@ -127,6 +132,9 @@ export interface NexusGenFieldTypes {
   Skill: { // field return type
     id: number; // Int!
     name: string; // String!
+  }
+  Subscription: { // field return type
+    waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
     bio: string; // String!
@@ -147,10 +155,13 @@ export interface NexusGenFieldTypeNames {
   }
   Message: { // field return type name
     content: 'String'
+    createdBy: 'User'
     id: 'Int'
+    post: 'Post'
   }
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
+    createMessage: 'Message'
     deletePost: 'Post'
     post: 'Post'
     registerNavigator: 'Post'
@@ -171,6 +182,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     feed: 'Post'
     me: 'User'
+    messagesByPostId: 'Message'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
     post: 'Post'
@@ -182,6 +194,9 @@ export interface NexusGenFieldTypeNames {
   Skill: { // field return type name
     id: 'Int'
     name: 'String'
+  }
+  Subscription: { // field return type name
+    waitForMessage: 'Message'
   }
   User: { // field return type name
     bio: 'String'
@@ -199,6 +214,10 @@ export interface NexusGenArgTypes {
   Mutation: {
     authGithub: { // args
       code: string; // String!
+    }
+    createMessage: { // args
+      content: string; // String!
+      postId: number; // Int!
     }
     deletePost: { // args
       id: string; // String!
@@ -224,11 +243,19 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    messagesByPostId: { // args
+      postId: number; // Int!
+    }
     post: { // args
       id: string; // String!
     }
     user: { // args
       id: number; // Int!
+    }
+  }
+  Subscription: {
+    waitForMessage: { // args
+      postId: number; // Int!
     }
   }
 }
