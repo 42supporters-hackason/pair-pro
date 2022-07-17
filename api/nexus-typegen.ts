@@ -100,6 +100,7 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateMe: NexusGenRootTypes['User'] | null; // User
+    updatePost: NexusGenRootTypes['Post']; // Post!
   }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -154,6 +155,7 @@ export interface NexusGenFieldTypeNames {
     post: 'Post'
     registerNavigator: 'Post'
     updateMe: 'User'
+    updatePost: 'Post'
   }
   Post: { // field return type name
     completedAt: 'DateTime'
@@ -213,6 +215,12 @@ export interface NexusGenArgTypes {
     updateMe: { // args
       bio?: string | null; // String
       name?: string | null; // String
+    }
+    updatePost: { // args
+      description?: string | null; // String
+      id: string; // String!
+      requiredSkillsIds?: Array<number | null> | null; // [Int]
+      title?: string | null; // String
     }
   }
   Query: {

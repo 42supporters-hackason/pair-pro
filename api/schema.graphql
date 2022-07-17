@@ -23,6 +23,7 @@ type Mutation {
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
   updateMe(bio: String, name: String): User
+  updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
 type Post {

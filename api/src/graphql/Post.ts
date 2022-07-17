@@ -208,6 +208,47 @@ export const PostMutation = extendType({
       }
     });
 
+    t.nonNull.field("updatePost", {
+      type: "Post",
+      args: {
+        id: nonNull(stringArg()),
+        title: stringArg(),
+        description: stringArg(),
+        requiredSkillsIds: list(intArg())
+      },
+      async resolve(parent, args, context) {
+        const { id, title, description, requiredSkillsIds } = args;
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        // check if the post exists
+        const post = await context.prisma.post.findUnique({
+          where: { id: id },
+        });
+        if (!post) {
+          throw new Error("There is no such post");
+        }
+
+        // check if the post is createdBy the user
+        if (post.driverId !== userId) {
+          throw new Error("You do not have rights to update this post");
+        }
+
+        return context.prisma.post.update({
+          where: { id: id },
+          data: {
+            title: title as string,
+            description: description as string,
+            // requiredSkills: {
+            //   connect: requiredSkillsIds.map(id => ({ id })),
+            // }
+          }
+        });
+      }
+    });
+
     t.nonNull.field("registerNavigator", {
       type: "Post",
       args: {
