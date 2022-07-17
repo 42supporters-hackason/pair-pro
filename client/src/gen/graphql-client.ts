@@ -26,12 +26,15 @@ export type AuthPayLoad = {
 export type Message = {
   __typename?: 'Message';
   content: Scalars['String'];
+  createdBy: User;
   id: Scalars['Int'];
+  post: Post;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   authGithub: AuthPayLoad;
+  createMessage: Message;
   post: Post;
   updateMe?: Maybe<User>;
 };
@@ -39,6 +42,12 @@ export type Mutation = {
 
 export type MutationAuthGithubArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationCreateMessageArgs = {
+  content: Scalars['String'];
+  postId: Scalars['Int'];
 };
 
 
@@ -71,6 +80,7 @@ export type Query = {
   __typename?: 'Query';
   feed: Array<Post>;
   me: User;
+  messagesByPostId: Array<Message>;
   myDrivingPosts: Array<Post>;
   myMatchedPosts: Array<Post>;
   post?: Maybe<Post>;
@@ -78,6 +88,11 @@ export type Query = {
   unmatchedPosts: Array<Maybe<Post>>;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryMessagesByPostIdArgs = {
+  postId: Scalars['Int'];
 };
 
 
@@ -94,6 +109,16 @@ export type Skill = {
   __typename?: 'Skill';
   id: Scalars['Int'];
   name: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  waitForMessage?: Maybe<Message>;
+};
+
+
+export type SubscriptionWaitForMessageArgs = {
+  postId: Scalars['Int'];
 };
 
 export type User = {
@@ -132,6 +157,14 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }>, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
 
+export type SendMessageMutationVariables = Exact<{
+  postId: Scalars['Int'];
+  content: Scalars['String'];
+}>;
+
+
+export type SendMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string } };
+
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -158,6 +191,20 @@ export type FetchSpecificPostQueryVariables = Exact<{
 
 
 export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
+
+export type FetchMessagesQueryVariables = Exact<{
+  postId: Scalars['Int'];
+}>;
+
+
+export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } }> };
+
+export type FetchMessageSubscriptionVariables = Exact<{
+  postId: Scalars['Int'];
+}>;
+
+
+export type FetchMessageSubscription = { __typename?: 'Subscription', waitForMessage?: { __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } } | null };
 
 
 export const SignInDocument = gql`
@@ -286,6 +333,41 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const SendMessageDocument = gql`
+    mutation sendMessage($postId: Int!, $content: String!) {
+  createMessage(postId: $postId, content: $content) {
+    id
+    content
+  }
+}
+    `;
+export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation, SendMessageMutationVariables>;
+
+/**
+ * __useSendMessageMutation__
+ *
+ * To run a mutation, you first call `useSendMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendMessageMutation, { data, loading, error }] = useSendMessageMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(SendMessageDocument, options);
+      }
+export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
+export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
+export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {
@@ -503,3 +585,84 @@ export function useFetchSpecificPostLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type FetchSpecificPostQueryHookResult = ReturnType<typeof useFetchSpecificPostQuery>;
 export type FetchSpecificPostLazyQueryHookResult = ReturnType<typeof useFetchSpecificPostLazyQuery>;
 export type FetchSpecificPostQueryResult = Apollo.QueryResult<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>;
+export const FetchMessagesDocument = gql`
+    query fetchMessages($postId: Int!) {
+  messagesByPostId(postId: $postId) {
+    id
+    content
+    createdBy {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchMessagesQuery__
+ *
+ * To run a query within a React component, call `useFetchMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMessagesQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useFetchMessagesQuery(baseOptions: Apollo.QueryHookOptions<FetchMessagesQuery, FetchMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMessagesQuery, FetchMessagesQueryVariables>(FetchMessagesDocument, options);
+      }
+export function useFetchMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMessagesQuery, FetchMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMessagesQuery, FetchMessagesQueryVariables>(FetchMessagesDocument, options);
+        }
+export type FetchMessagesQueryHookResult = ReturnType<typeof useFetchMessagesQuery>;
+export type FetchMessagesLazyQueryHookResult = ReturnType<typeof useFetchMessagesLazyQuery>;
+export type FetchMessagesQueryResult = Apollo.QueryResult<FetchMessagesQuery, FetchMessagesQueryVariables>;
+export const FetchMessageDocument = gql`
+    subscription fetchMessage($postId: Int!) {
+  waitForMessage(postId: $postId) {
+    id
+    content
+    createdBy {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchMessageSubscription__
+ *
+ * To run a query within a React component, call `useFetchMessageSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMessageSubscription({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useFetchMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<FetchMessageSubscription, FetchMessageSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<FetchMessageSubscription, FetchMessageSubscriptionVariables>(FetchMessageDocument, options);
+      }
+export type FetchMessageSubscriptionHookResult = ReturnType<typeof useFetchMessageSubscription>;
+export type FetchMessageSubscriptionResult = Apollo.SubscriptionResult<FetchMessageSubscription>;

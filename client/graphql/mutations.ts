@@ -51,3 +51,12 @@ export const CREATE_POST = gql`
     }
   }
 `;
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($postId: Int!, $content: String!) {
+    createMessage(postId: $postId, content: $content) {
+      id
+      content
+    }
+  }
+`;
