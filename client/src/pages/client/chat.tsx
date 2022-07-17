@@ -20,12 +20,6 @@ import { useClientRoute } from "../../hooks/useClientRoute";
 import { useChatHooks } from "../hooks/useChatHooks";
 import { ChatSchema, chatSchema } from "../validation/chat_validation";
 
-interface Message {
-  id: number;
-  content: string;
-  createdBy: string;
-}
-
 /**
  * p2p相手とやり取りをするページ
  */
@@ -69,7 +63,7 @@ export const ChatPage = () => {
   );
 
   useEffect(() => {
-    ref.current?.scrollIntoView(false);
+    ref.current?.scrollIntoView();
   }, [messages]);
 
   return (
@@ -142,7 +136,7 @@ export const ChatPage = () => {
         >
           {messages &&
             messages.map(({ id, content, createdBy }) => (
-              <Box ref={ref} key={id}>
+              <Box key={id}>
                 <ChatMessage
                   key={id}
                   content={content}
@@ -150,6 +144,7 @@ export const ChatPage = () => {
                 />
               </Box>
             ))}
+          <div ref={ref} />
         </Box>
         <Box
           sx={{
