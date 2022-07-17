@@ -217,7 +217,7 @@ export interface NexusGenArgTypes {
     }
     createMessage: { // args
       content: string; // String!
-      postId: number; // Int!
+      postId: string; // String!
     }
     deletePost: { // args
       id: string; // String!
@@ -244,7 +244,7 @@ export interface NexusGenArgTypes {
   }
   Query: {
     messagesByPostId: { // args
-      postId: number; // Int!
+      postId: string; // String!
     }
     post: { // args
       id: string; // String!
@@ -255,7 +255,7 @@ export interface NexusGenArgTypes {
   }
   Subscription: {
     waitForMessage: { // args
-      postId: number; // Int!
+      postId: string; // String!
     }
   }
 }
