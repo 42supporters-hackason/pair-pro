@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GithubProfile } from "../../components/GithubProfile";
@@ -7,6 +7,7 @@ import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useProfile } from "../../context/auth";
+import { useDeletePostMutation } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { noop } from "../../utils";
@@ -27,11 +28,31 @@ export const HomePage = () => {
   );
   const { goToApply, goToRecruit, goToChat } = useClientRoute();
   const { profile } = useProfile();
+  const [deletePost] = useDeletePostMutation();
 
   /**
    * page hooks
    */
-  const { myPosts, matchedPosts } = useHomeHooks();
+  const { myPosts, matchedPosts, refetchMyPosts } = useHomeHooks();
+
+  /**
+   * event-handler
+   */
+  const handleDeletePost = useCallback(async () => {
+    if (selectedId) {
+      await deletePost({
+        variables: {
+          id: selectedId,
+        },
+        onCompleted: () => {
+          console.log("hello");
+
+          setOpenDeleteModal.off();
+          refetchMyPosts();
+        },
+      });
+    }
+  }, [deletePost, selectedId, setOpenDeleteModal, refetchMyPosts]);
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
@@ -61,7 +82,10 @@ export const HomePage = () => {
                   content={content}
                   languages={languages}
                   onEdit={noop}
-                  onDelete={setOpenDeleteModal.on}
+                  onDelete={() => {
+                    setSelectedId(id);
+                    setOpenDeleteModal.on();
+                  }}
                 />
               ))}
         </Box>
@@ -140,7 +164,7 @@ export const HomePage = () => {
         <Box>
           <AgreeModal
             content="本当にこの募集を削除してよろしいですか？"
-            onAgree={noop}
+            onAgree={handleDeletePost}
             onCancel={setOpenDeleteModal.off}
           />
         </Box>

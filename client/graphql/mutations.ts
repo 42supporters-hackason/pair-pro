@@ -60,3 +60,11 @@ export const SEND_MESSAGE = gql`
     }
   }
 `;
+
+export const DELETE_POST = gql`
+  mutation deletePost($id: String!) {
+    deletePost(id: $id) {
+      id
+    }
+  }
+`;

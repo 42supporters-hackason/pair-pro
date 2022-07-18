@@ -27,7 +27,7 @@ export const RecruitPage = () => {
    * misc.
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
-  const [selectedId, setSelectedId] = useState<number | undefined>();
+  const [selectedId, setSelectedId] = useState<string | undefined>();
   const { goToHome } = useClientRoute();
 
   /**
