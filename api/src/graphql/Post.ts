@@ -6,13 +6,12 @@ import {
   objectType,
   stringArg,
   list,
-  booleanArg,
 } from "nexus";
 
 export const Post = objectType({
   name: "Post",
   definition(t) {
-    t.nonNull.int("id");
+    t.nonNull.string("id");
     t.nonNull.dateTime("createdAt");
     t.nonNull.string("description");
     t.nonNull.string("title");
@@ -64,7 +63,7 @@ export const PostQuery = extendType({
     t.field("post", {
       type: "Post",
       args: {
-        id: nonNull(intArg()),
+        id: nonNull(stringArg()),
       },
       resolve(parent, args, context) {
         const { id } = args;
@@ -171,6 +170,140 @@ export const PostMutation = extendType({
           },
         });
       },
+    });
+
+    t.nonNull.field("deletePost", {
+      type: "Post",
+      args: {
+        id: nonNull(stringArg()),
+      },
+      async resolve(parent, args, context) {
+        const postId = args.id;
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        // check if the post exists
+        const postToDelete = (await context.prisma.post.findUnique({
+          where: { id: postId },
+        }));
+        if (!postToDelete) {
+          throw new Error("There is no such post");
+        }
+
+        // return matching point
+        const user = (await context.prisma.user.findUnique({
+          where: { id: userId },
+        })) as User;
+        await context.prisma.user.update({
+          where: { id: userId },
+          data: { matchingPoint: user.matchingPoint + 1 },
+        });
+
+        return context.prisma.post.delete({
+          where: { id: postId }
+        })
+      }
+    });
+
+    t.nonNull.field("updatePost", {
+      type: "Post",
+      args: {
+        id: nonNull(stringArg()),
+        title: stringArg(),
+        description: stringArg(),
+        requiredSkillsIds: list(intArg())
+      },
+      async resolve(parent, args, context) {
+        const { id, title, description, requiredSkillsIds } = args;
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        // check if the post exists
+        const post = await context.prisma.post.findUnique({
+          where: { id: id },
+        });
+        if (!post) {
+          throw new Error("There is no such post");
+        }
+
+        // check if the post is createdBy the user
+        if (post.driverId !== userId) {
+          throw new Error("You do not have rights to update this post");
+        }
+
+        return context.prisma.post.update({
+          where: { id: id },
+          data: {
+            title: title as string,
+            description: description as string,
+            // requiredSkills: {
+            //   connect: requiredSkillsIds.map(id => ({ id })),
+            // }
+          }
+        });
+      }
+    });
+
+    t.nonNull.field("registerNavigator", {
+      type: "Post",
+      args: {
+        postId: nonNull(stringArg()),
+        navigatorId: nonNull(intArg())
+      },
+      async resolve(parent, args, context) {
+        const { postId, navigatorId } = args;
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+
+        // check if the post exists
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId },
+        });
+        if (!post) {
+          throw new Error("There is no such post");
+        }
+
+        // check if the post is createdBy the user
+        if (post.driverId !== userId) {
+          throw new Error("You do not have rights to update this post");
+        }
+
+        // check if post's navigator already exists
+        if (post.navigatorId) {
+          throw new Error("There is a registered navigator already");
+        }
+
+        // check if the navigator exists
+        const navigator = await context.prisma.user.findUnique({
+          where: { id: navigatorId },
+        });
+        if (!navigator) {
+          throw new Error("There is no such navigator");
+        }
+
+        // increment navigator's matching point
+        await context.prisma.user.update({
+          where: { id: navigatorId },
+          data: { matchingPoint: navigator.matchingPoint + 1 }
+        });
+
+        // update navigator and completedAt
+        return context.prisma.post.update({
+          where: { id: postId },
+          data: {
+            navigator: { connect: { id: navigatorId } },
+            completedAt: new Date()
+          }
+        });
+      }
     });
   },
 });

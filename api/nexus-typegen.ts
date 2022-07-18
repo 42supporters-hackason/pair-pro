@@ -57,7 +57,7 @@ export interface NexusGenObjects {
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
-    id: number; // Int!
+    id: string; // String!
     title: string; // String!
   }
   Query: {};
@@ -100,15 +100,18 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     createMessage: NexusGenRootTypes['Message']; // Message!
+    deletePost: NexusGenRootTypes['Post']; // Post!
     post: NexusGenRootTypes['Post']; // Post!
+    registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateMe: NexusGenRootTypes['User'] | null; // User
+    updatePost: NexusGenRootTypes['Post']; // Post!
   }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
     driver: NexusGenRootTypes['User'] | null; // User
-    id: number; // Int!
+    id: string; // String!
     messages: NexusGenRootTypes['Message'][]; // [Message!]!
     navigator: NexusGenRootTypes['User'] | null; // User
     requiredSkills: NexusGenRootTypes['Skill'][]; // [Skill!]!
@@ -159,15 +162,18 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
     createMessage: 'Message'
+    deletePost: 'Post'
     post: 'Post'
+    registerNavigator: 'Post'
     updateMe: 'User'
+    updatePost: 'Post'
   }
   Post: { // field return type name
     completedAt: 'DateTime'
     createdAt: 'DateTime'
     description: 'String'
     driver: 'User'
-    id: 'Int'
+    id: 'String'
     messages: 'Message'
     navigator: 'User'
     requiredSkills: 'Skill'
@@ -211,24 +217,37 @@ export interface NexusGenArgTypes {
     }
     createMessage: { // args
       content: string; // String!
-      postId: number; // Int!
+      postId: string; // String!
+    }
+    deletePost: { // args
+      id: string; // String!
     }
     post: { // args
       description: string; // String!
       requiredSkillsId: number[]; // [Int!]!
       title: string; // String!
     }
+    registerNavigator: { // args
+      navigatorId: number; // Int!
+      postId: string; // String!
+    }
     updateMe: { // args
       bio?: string | null; // String
       name?: string | null; // String
     }
+    updatePost: { // args
+      description?: string | null; // String
+      id: string; // String!
+      requiredSkillsIds?: Array<number | null> | null; // [Int]
+      title?: string | null; // String
+    }
   }
   Query: {
     messagesByPostId: { // args
-      postId: number; // Int!
+      postId: string; // String!
     }
     post: { // args
-      id: number; // Int!
+      id: string; // String!
     }
     user: { // args
       id: number; // Int!
@@ -236,7 +255,7 @@ export interface NexusGenArgTypes {
   }
   Subscription: {
     waitForMessage: { // args
-      postId: number; // Int!
+      postId: string; // String!
     }
   }
 }
