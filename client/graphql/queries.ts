@@ -93,3 +93,19 @@ export const FETCH_SPECIFIC_POST = gql`
     }
   }
 `;
+
+export const FETCH_MESSAGES = gql`
+  query fetchMessages($postId: Int!) {
+    messagesByPostId(postId: $postId) {
+      id
+      content
+      createdBy {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+    }
+  }
+`;
