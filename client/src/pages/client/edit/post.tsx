@@ -1,15 +1,17 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
+import { useFetchSpecificPostQuery } from "../../../gen/graphql-client";
 import { useClientRoute } from "../../../hooks/useClientRoute";
 import { unreachable } from "../../../utils";
 import { useEditPostHooks } from "../../hooks/useEditPostHooks";
@@ -29,10 +31,16 @@ export const EditPostPage = () => {
   const [searchParams] = useSearchParams();
   const postId = searchParams.get("post_id");
 
+  const { data: postData, loading: postLoading } = useFetchSpecificPostQuery({
+    variables: {
+      id: postId ?? unreachable(),
+    },
+  });
+
   /**
    * page hooks
    */
-  const { languagesData, post } = useEditPostHooks(postId ?? unreachable());
+  const { languagesData } = useEditPostHooks();
 
   const languages = languagesData?.skills.map(({ name }) => name);
 
@@ -44,17 +52,14 @@ export const EditPostPage = () => {
     control,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm<EditPostSchema>({
     resolver: zodResolver(editPostSchema),
-    defaultValues: {
-      title: post?.post?.title,
-      content: post?.post?.description,
-      language: post?.post?.requiredSkills.map(({ name }) => name),
-    },
+    shouldUnregister: false,
   });
 
-  const applyFormData = getValues();
+  const editFormData = getValues();
 
   /**
    * event-handler
@@ -62,6 +67,15 @@ export const EditPostPage = () => {
   const handleEditPost = useCallback(() => {
     console.log();
   }, []);
+
+  useEffect(() => {
+    setValue("title", postData?.post?.title ?? "");
+    setValue("content", postData?.post?.description ?? "");
+  }, [setValue, postData]);
+
+  if (postLoading) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box
