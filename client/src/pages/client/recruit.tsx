@@ -11,6 +11,8 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
+import { useProfile } from "../../context/auth";
+import { useMatchPostMutation } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useRecruitHooks } from "../hooks/useRecruitHooks";
@@ -29,6 +31,8 @@ export const RecruitPage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const { goToHome } = useClientRoute();
+  const [matchPost] = useMatchPostMutation();
+  const { profile } = useProfile();
 
   /**
    * page hooks
@@ -48,6 +52,17 @@ export const RecruitPage = () => {
   const handleFilter = useCallback(() => {
     console.log();
   }, []);
+
+  const handleMatch = useCallback(() => {
+    if (selectedId !== undefined && profile.id !== undefined) {
+      matchPost({
+        variables: {
+          postId: selectedId,
+          navigatorId: profile.id,
+        },
+      });
+    }
+  }, [selectedId, profile, matchPost]);
 
   return (
     <Box sx={{ mx: "100px" }}>
@@ -164,6 +179,7 @@ export const RecruitPage = () => {
             hasButton={true}
             agreeTitle="マッチングする"
             onClose={setOpenPostModal.off}
+            onAgree={handleMatch}
           />
         </Box>
       </Modal>

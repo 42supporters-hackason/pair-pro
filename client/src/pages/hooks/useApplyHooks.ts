@@ -19,9 +19,6 @@ interface CreatePostProps {
    * modalを開けるハンドラ
    */
   closeModal: () => void;
-  /**
-   *
-   */
 }
 
 /**

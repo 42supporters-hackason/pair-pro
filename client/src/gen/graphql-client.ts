@@ -194,6 +194,14 @@ export type DeletePostMutationVariables = Exact<{
 
 export type DeletePostMutation = { __typename?: 'Mutation', deletePost: { __typename?: 'Post', id: string } };
 
+export type MatchPostMutationVariables = Exact<{
+  postId: Scalars['String'];
+  navigatorId: Scalars['Int'];
+}>;
+
+
+export type MatchPostMutation = { __typename?: 'Mutation', registerNavigator: { __typename?: 'Post', navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
+
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -430,6 +438,46 @@ export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const MatchPostDocument = gql`
+    mutation matchPost($postId: String!, $navigatorId: Int!) {
+  registerNavigator(postId: $postId, navigatorId: $navigatorId) {
+    navigator {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+  }
+}
+    `;
+export type MatchPostMutationFn = Apollo.MutationFunction<MatchPostMutation, MatchPostMutationVariables>;
+
+/**
+ * __useMatchPostMutation__
+ *
+ * To run a mutation, you first call `useMatchPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMatchPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [matchPostMutation, { data, loading, error }] = useMatchPostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      navigatorId: // value for 'navigatorId'
+ *   },
+ * });
+ */
+export function useMatchPostMutation(baseOptions?: Apollo.MutationHookOptions<MatchPostMutation, MatchPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MatchPostMutation, MatchPostMutationVariables>(MatchPostDocument, options);
+      }
+export type MatchPostMutationHookResult = ReturnType<typeof useMatchPostMutation>;
+export type MatchPostMutationResult = Apollo.MutationResult<MatchPostMutation>;
+export type MatchPostMutationOptions = Apollo.BaseMutationOptions<MatchPostMutation, MatchPostMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {

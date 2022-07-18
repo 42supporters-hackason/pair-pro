@@ -68,3 +68,17 @@ export const DELETE_POST = gql`
     }
   }
 `;
+
+export const MATCH_POST = gql`
+  mutation matchPost($postId: String!, $navigatorId: Int!) {
+    registerNavigator(postId: $postId, navigatorId: $navigatorId) {
+      navigator {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+    }
+  }
+`;
