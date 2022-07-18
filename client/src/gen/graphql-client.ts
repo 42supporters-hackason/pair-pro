@@ -35,8 +35,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   authGithub: AuthPayLoad;
   createMessage: Message;
+  deletePost: Post;
   post: Post;
+  registerNavigator: Post;
   updateMe?: Maybe<User>;
+  updatePost: Post;
 };
 
 
@@ -47,7 +50,12 @@ export type MutationAuthGithubArgs = {
 
 export type MutationCreateMessageArgs = {
   content: Scalars['String'];
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
+};
+
+
+export type MutationDeletePostArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -58,9 +66,23 @@ export type MutationPostArgs = {
 };
 
 
+export type MutationRegisterNavigatorArgs = {
+  navigatorId: Scalars['Int'];
+  postId: Scalars['String'];
+};
+
+
 export type MutationUpdateMeArgs = {
   bio?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdatePostArgs = {
+  description?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type Post = {
@@ -69,7 +91,7 @@ export type Post = {
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   driver?: Maybe<User>;
-  id: Scalars['Int'];
+  id: Scalars['String'];
   messages: Array<Message>;
   navigator?: Maybe<User>;
   requiredSkills: Array<Skill>;
@@ -92,12 +114,12 @@ export type Query = {
 
 
 export type QueryMessagesByPostIdArgs = {
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 };
 
 
 export type QueryPostArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -118,7 +140,7 @@ export type Subscription = {
 
 
 export type SubscriptionWaitForMessageArgs = {
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 };
 
 export type User = {
@@ -158,7 +180,7 @@ export type CreatePostMutationVariables = Exact<{
 export type CreatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }>, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
 
 export type SendMessageMutationVariables = Exact<{
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
   content: Scalars['String'];
 }>;
 
@@ -173,34 +195,34 @@ export type FetchSkillsQuery = { __typename?: 'Query', skills: Array<{ __typenam
 export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
 
 export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchMyPostQuery = { __typename?: 'Query', myDrivingPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+export type FetchMyPostQuery = { __typename?: 'Query', myDrivingPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchMatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchSpecificPostQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['String'];
 }>;
 
 
-export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
+export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
 
 export type FetchMessagesQueryVariables = Exact<{
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 }>;
 
 
 export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } }> };
 
 export type FetchMessageSubscriptionVariables = Exact<{
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 }>;
 
 
@@ -334,7 +356,7 @@ export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutati
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const SendMessageDocument = gql`
-    mutation sendMessage($postId: Int!, $content: String!) {
+    mutation sendMessage($postId: String!, $content: String!) {
   createMessage(postId: $postId, content: $content) {
     id
     content
@@ -538,7 +560,7 @@ export type FetchMatchedPostQueryHookResult = ReturnType<typeof useFetchMatchedP
 export type FetchMatchedPostLazyQueryHookResult = ReturnType<typeof useFetchMatchedPostLazyQuery>;
 export type FetchMatchedPostQueryResult = Apollo.QueryResult<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>;
 export const FetchSpecificPostDocument = gql`
-    query fetchSpecificPost($id: Int!) {
+    query fetchSpecificPost($id: String!) {
   post(id: $id) {
     id
     description
@@ -586,7 +608,7 @@ export type FetchSpecificPostQueryHookResult = ReturnType<typeof useFetchSpecifi
 export type FetchSpecificPostLazyQueryHookResult = ReturnType<typeof useFetchSpecificPostLazyQuery>;
 export type FetchSpecificPostQueryResult = Apollo.QueryResult<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>;
 export const FetchMessagesDocument = gql`
-    query fetchMessages($postId: Int!) {
+    query fetchMessages($postId: String!) {
   messagesByPostId(postId: $postId) {
     id
     content
@@ -629,7 +651,7 @@ export type FetchMessagesQueryHookResult = ReturnType<typeof useFetchMessagesQue
 export type FetchMessagesLazyQueryHookResult = ReturnType<typeof useFetchMessagesLazyQuery>;
 export type FetchMessagesQueryResult = Apollo.QueryResult<FetchMessagesQuery, FetchMessagesQueryVariables>;
 export const FetchMessageDocument = gql`
-    subscription fetchMessage($postId: Int!) {
+    subscription fetchMessage($postId: String!) {
   waitForMessage(postId: $postId) {
     id
     content

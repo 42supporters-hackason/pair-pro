@@ -66,7 +66,7 @@ export const FETCH_MATCHED_POST = gql`
 `;
 
 export const FETCH_SPECIFIC_POST = gql`
-  query fetchSpecificPost($id: Int!) {
+  query fetchSpecificPost($id: String!) {
     post(id: $id) {
       id
       description
@@ -87,7 +87,7 @@ export const FETCH_SPECIFIC_POST = gql`
 `;
 
 export const FETCH_MESSAGES = gql`
-  query fetchMessages($postId: Int!) {
+  query fetchMessages($postId: String!) {
     messagesByPostId(postId: $postId) {
       id
       content

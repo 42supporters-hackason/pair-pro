@@ -17,6 +17,7 @@ import { VideoButtons } from "../../components/VideoButtons";
 import { useSendMessageMutation } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { unreachable } from "../../utils";
 import { useChatHooks } from "../hooks/useChatHooks";
 import { ChatSchema, chatSchema } from "../validation/chat_validation";
 
@@ -33,7 +34,7 @@ export const ChatPage = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("room_id");
-  const { messages, post } = useChatHooks(Number(roomId));
+  const { messages, post } = useChatHooks(roomId ?? unreachable());
 
   const [sendMessage] = useSendMessageMutation();
 
@@ -49,15 +50,17 @@ export const ChatPage = () => {
    */
   const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
     async ({ message }) => {
-      await sendMessage({
-        variables: {
-          postId: Number(roomId),
-          content: message,
-        },
-        onCompleted: () => {
-          setValue("message", "");
-        },
-      });
+      if (roomId !== null) {
+        await sendMessage({
+          variables: {
+            postId: roomId,
+            content: message,
+          },
+          onCompleted: () => {
+            setValue("message", "");
+          },
+        });
+      }
     },
     [sendMessage, roomId, setValue]
   );

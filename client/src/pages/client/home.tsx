@@ -21,7 +21,7 @@ export const HomePage = () => {
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [openDeleteModal, setOpenDeleteModal] = useBoolean(false);
-  const [selectedId, setSelectedId] = useState<number | undefined>();
+  const [selectedId, setSelectedId] = useState<string | undefined>();
   const [showList, setShowList] = useState<"myPostList" | "matchedList">(
     "matchedList"
   );

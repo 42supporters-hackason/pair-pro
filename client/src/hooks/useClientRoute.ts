@@ -37,7 +37,7 @@ export const useClientRoute = () => {
   );
 
   const goToChat = useCallback(
-    (id?: number, options?: NavigateOptions) => {
+    (id?: string, options?: NavigateOptions) => {
       if (id === undefined) {
         return;
       }

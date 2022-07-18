@@ -14,18 +14,18 @@ interface Message {
 /**
  * client/chatで使用されるhooks
  */
-export const useChatHooks = (roomId: number) => {
+export const useChatHooks = (roomId: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const { data: post } = useFetchSpecificPostQuery({
     variables: {
-      id: Number(roomId),
+      id: roomId,
     },
   });
 
   useFetchMessagesQuery({
     variables: {
-      postId: Number(roomId),
+      postId: roomId,
     },
     onCompleted: (data) => {
       const messages = data?.messagesByPostId.map(
@@ -41,7 +41,7 @@ export const useChatHooks = (roomId: number) => {
 
   useFetchMessageSubscription({
     variables: {
-      postId: Number(roomId),
+      postId: roomId,
     },
     onSubscriptionData(data) {
       const message: Message | undefined | null = data.subscriptionData.data
