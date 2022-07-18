@@ -193,6 +193,11 @@ export const PostMutation = extendType({
           throw new Error("There is no such post");
         }
 
+        // check if the post is createdBy the user
+        if (postToDelete.driverId !== userId) {
+          throw new Error("You do not have rights to update this post");
+        }
+
         // return matching point
         const user = (await context.prisma.user.findUnique({
           where: { id: userId },
@@ -269,11 +274,6 @@ export const PostMutation = extendType({
         });
         if (!post) {
           throw new Error("There is no such post");
-        }
-
-        // check if the post is createdBy the user
-        if (post.driverId !== userId) {
-          throw new Error("You do not have rights to update this post");
         }
 
         // check if post's navigator already exists
