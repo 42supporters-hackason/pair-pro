@@ -227,7 +227,7 @@ export type FetchSpecificPostQueryVariables = Exact<{
 }>;
 
 
-export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
+export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
 
 export type FetchMessagesQueryVariables = Exact<{
   postId: Scalars['String'];
@@ -661,6 +661,13 @@ export const FetchSpecificPostDocument = gql`
     description
     title
     navigator {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+    driver {
       id
       name
       githubLogin

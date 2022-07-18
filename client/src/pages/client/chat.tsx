@@ -34,7 +34,9 @@ export const ChatPage = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("room_id");
-  const { messages, post } = useChatHooks(roomId ?? unreachable());
+  const { messages, opponentGithubLogin, opponentName } = useChatHooks(
+    roomId ?? unreachable()
+  );
 
   const [sendMessage] = useSendMessageMutation();
 
@@ -113,12 +115,8 @@ export const ChatPage = () => {
           }}
         >
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            <Avatar
-              src={`https://github.com/${post?.post?.navigator?.githubLogin}.png`}
-            />
-            <Typography fontWeight="bold">
-              {post?.post?.navigator?.name}
-            </Typography>
+            <Avatar src={`https://github.com/${opponentGithubLogin}.png`} />
+            <Typography fontWeight="bold">{opponentName}</Typography>
           </Box>
           <IconButton sx={{ mr: 2 }} onClick={() => goToHome()}>
             <Typography fontWeight="bold" sx={{ mr: 1 }}>
