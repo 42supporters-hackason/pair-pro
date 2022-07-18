@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
-import { useFetchSpecificPostQuery } from "../../../gen/graphql-client";
 import { useClientRoute } from "../../../hooks/useClientRoute";
 import { unreachable } from "../../../utils";
 import { useEditPostHooks } from "../../hooks/useEditPostHooks";
@@ -31,16 +30,12 @@ export const EditPostPage = () => {
   const [searchParams] = useSearchParams();
   const postId = searchParams.get("post_id");
 
-  const { data: postData, loading: postLoading } = useFetchSpecificPostQuery({
-    variables: {
-      id: postId ?? unreachable(),
-    },
-  });
-
   /**
    * page hooks
    */
-  const { languagesData } = useEditPostHooks();
+  const { languagesData, updatePost, postData, postLoading } = useEditPostHooks(
+    postId ?? unreachable()
+  );
 
   const languages = languagesData?.skills.map(({ name }) => name);
 
@@ -51,7 +46,6 @@ export const EditPostPage = () => {
     register,
     control,
     handleSubmit,
-    getValues,
     setValue,
     watch,
     formState: { errors },
@@ -59,16 +53,14 @@ export const EditPostPage = () => {
     resolver: zodResolver(editPostSchema),
     shouldUnregister: false,
   });
-  const { language } = watch();
-
-  const editFormData = getValues();
+  const editFormData = watch();
 
   /**
    * event-handler
    */
-  const handleEditPost = useCallback(() => {
-    console.log();
-  }, []);
+  const handleEditPost = useCallback(async () => {
+    updatePost(editFormData);
+  }, [updatePost, editFormData]);
 
   useEffect(() => {
     setValue("title", postData?.post?.title ?? "");
@@ -79,7 +71,10 @@ export const EditPostPage = () => {
     );
   }, [setValue, postData]);
 
-  if (postLoading || language === undefined) {
+  /**
+   * RHFのdefault valueに値をsetするためにfetchが完了するまで待つ
+   */
+  if (postLoading || editFormData.language === undefined) {
     return <CircularProgress />;
   }
 
@@ -94,7 +89,7 @@ export const EditPostPage = () => {
       }}
     >
       <Typography variant="h6" fontWeight="bold" sx={{ textAlign: "center" }}>
-        情報を入力してマッチング相手を募集しましょう
+        入力情報の更新
       </Typography>
       <Box
         sx={{
@@ -149,7 +144,7 @@ export const EditPostPage = () => {
               <Autocomplete
                 options={languages ?? []}
                 multiple
-                value={language}
+                value={editFormData.language}
                 renderInput={(params) => (
                   <TextField {...params} label="使用言語" />
                 )}
@@ -177,7 +172,7 @@ export const EditPostPage = () => {
           variant="contained"
           type="submit"
         >
-          上記の内容で募集をする
+          更新する
         </Button>
       </Box>
       <Button
