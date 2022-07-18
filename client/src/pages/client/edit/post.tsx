@@ -9,7 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 import { useClientRoute } from "../../../hooks/useClientRoute";
+import { unreachable } from "../../../utils";
 import { useEditPostHooks } from "../../hooks/useEditPostHooks";
 import {
   editPostSchema,
@@ -21,16 +23,18 @@ import {
  */
 export const EditPostPage = () => {
   /**
-   * page hooks
-   */
-  const { languagesData } = useEditPostHooks();
-
-  const languages = languagesData?.skills.map(({ name }) => name);
-
-  /**
    * misc.
    */
   const { goToHome } = useClientRoute();
+  const [searchParams] = useSearchParams();
+  const postId = searchParams.get("post_id");
+
+  /**
+   * page hooks
+   */
+  const { languagesData, post } = useEditPostHooks(postId ?? unreachable());
+
+  const languages = languagesData?.skills.map(({ name }) => name);
 
   /**
    * validation
@@ -43,6 +47,11 @@ export const EditPostPage = () => {
     formState: { errors },
   } = useForm<EditPostSchema>({
     resolver: zodResolver(editPostSchema),
+    defaultValues: {
+      title: post?.post?.title,
+      content: post?.post?.description,
+      language: post?.post?.requiredSkills.map(({ name }) => name),
+    },
   });
 
   const applyFormData = getValues();

@@ -10,7 +10,6 @@ import { useProfile } from "../../context/auth";
 import { useDeletePostMutation } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { noop } from "../../utils";
 import { useHomeHooks } from "../hooks/useHomeHooks";
 
 /**
@@ -26,7 +25,7 @@ export const HomePage = () => {
   const [showList, setShowList] = useState<"myPostList" | "matchedList">(
     "matchedList"
   );
-  const { goToApply, goToRecruit, goToChat } = useClientRoute();
+  const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
   const { profile } = useProfile();
   const [deletePost] = useDeletePostMutation();
 
@@ -81,7 +80,7 @@ export const HomePage = () => {
                   title={title}
                   content={content}
                   languages={languages}
-                  onEdit={noop}
+                  onEdit={() => goToEditPost(id)}
                   onDelete={() => {
                     setSelectedId(id);
                     setOpenDeleteModal.on();

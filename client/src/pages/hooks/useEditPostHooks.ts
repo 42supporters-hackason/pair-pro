@@ -1,9 +1,18 @@
-import { useFetchSkillsQuery } from "../../gen/graphql-client";
+import {
+  useFetchSkillsQuery,
+  useFetchSpecificPostQuery,
+} from "../../gen/graphql-client";
 
 /**
  * page/client/edit/postで使用されるhooks
  */
-export const useEditPostHooks = () => {
+export const useEditPostHooks = (postId: string) => {
   const { data: languagesData } = useFetchSkillsQuery();
-  return { languagesData };
+  const { data: post } = useFetchSpecificPostQuery({
+    variables: {
+      id: postId,
+    },
+  });
+
+  return { languagesData, post };
 };
