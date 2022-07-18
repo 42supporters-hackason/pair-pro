@@ -53,11 +53,13 @@ export const EditPostPage = () => {
     handleSubmit,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<EditPostSchema>({
     resolver: zodResolver(editPostSchema),
     shouldUnregister: false,
   });
+  const { language } = watch();
 
   const editFormData = getValues();
 
@@ -71,9 +73,13 @@ export const EditPostPage = () => {
   useEffect(() => {
     setValue("title", postData?.post?.title ?? "");
     setValue("content", postData?.post?.description ?? "");
+    setValue(
+      "language",
+      postData?.post?.requiredSkills.map(({ name }) => name) ?? []
+    );
   }, [setValue, postData]);
 
-  if (postLoading) {
+  if (postLoading || language === undefined) {
     return <CircularProgress />;
   }
 
@@ -143,6 +149,7 @@ export const EditPostPage = () => {
               <Autocomplete
                 options={languages ?? []}
                 multiple
+                value={language}
                 renderInput={(params) => (
                   <TextField {...params} label="使用言語" />
                 )}
