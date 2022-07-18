@@ -12,7 +12,10 @@ import { Controller, useForm } from "react-hook-form";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useProfile } from "../../context/auth";
-import { useMatchPostMutation } from "../../gen/graphql-client";
+import {
+  useFetchMatchedPostQuery,
+  useMatchPostMutation,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useRecruitHooks } from "../hooks/useRecruitHooks";
@@ -32,6 +35,7 @@ export const RecruitPage = () => {
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const { goToHome } = useClientRoute();
   const [matchPost] = useMatchPostMutation();
+  const { refetch: refetchMatchedPost } = useFetchMatchedPostQuery();
   const { profile } = useProfile();
 
   /**
@@ -59,6 +63,11 @@ export const RecruitPage = () => {
         variables: {
           postId: selectedId,
           navigatorId: profile.id,
+        },
+        onCompleted: () => {
+          setOpenPostModal.off();
+          refetchMatchedPost();
+          goToHome();
         },
       });
     }
