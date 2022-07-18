@@ -71,7 +71,14 @@ export const RecruitPage = () => {
         },
       });
     }
-  }, [selectedId, profile, matchPost]);
+  }, [
+    selectedId,
+    profile,
+    matchPost,
+    setOpenPostModal,
+    refetchMatchedPost,
+    goToHome,
+  ]);
 
   return (
     <Box sx={{ mx: "100px" }}>

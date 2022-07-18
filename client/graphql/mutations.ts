@@ -82,3 +82,21 @@ export const MATCH_POST = gql`
     }
   }
 `;
+
+export const UPDATE_POST = gql`
+  mutation UpdatePost(
+    $id: String!
+    $title: String
+    $description: String
+    $requiredSkillsIds: [Int]
+  ) {
+    updatePost(
+      id: $id
+      title: $title
+      description: $description
+      requiredSkillsIds: $requiredSkillsIds
+    ) {
+      id
+    }
+  }
+`;

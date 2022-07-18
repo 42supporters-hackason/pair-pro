@@ -202,6 +202,16 @@ export type MatchPostMutationVariables = Exact<{
 
 export type MatchPostMutation = { __typename?: 'Mutation', registerNavigator: { __typename?: 'Post', navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
 
+export type UpdatePostMutationVariables = Exact<{
+  id: Scalars['String'];
+  title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+}>;
+
+
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string } };
+
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -478,6 +488,47 @@ export function useMatchPostMutation(baseOptions?: Apollo.MutationHookOptions<Ma
 export type MatchPostMutationHookResult = ReturnType<typeof useMatchPostMutation>;
 export type MatchPostMutationResult = Apollo.MutationResult<MatchPostMutation>;
 export type MatchPostMutationOptions = Apollo.BaseMutationOptions<MatchPostMutation, MatchPostMutationVariables>;
+export const UpdatePostDocument = gql`
+    mutation UpdatePost($id: String!, $title: String, $description: String, $requiredSkillsIds: [Int]) {
+  updatePost(
+    id: $id
+    title: $title
+    description: $description
+    requiredSkillsIds: $requiredSkillsIds
+  ) {
+    id
+  }
+}
+    `;
+export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
+
+/**
+ * __useUpdatePostMutation__
+ *
+ * To run a mutation, you first call `useUpdatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      requiredSkillsIds: // value for 'requiredSkillsIds'
+ *   },
+ * });
+ */
+export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument, options);
+      }
+export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
+export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
+export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {
