@@ -1,3 +1,4 @@
+import { useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
   useFetchMatchedPostQuery,
@@ -13,15 +14,22 @@ const myPostsTranslator = (myPosts: FetchMyPostQuery) =>
     languages: requiredSkills.map(({ name }) => name),
   }));
 
-const matchedPostsTaranslator = (matchedPosts: FetchMatchedPostQuery) =>
+const matchedPostsTaranslator = (
+  matchedPosts: FetchMatchedPostQuery,
+  myGithubLogin: string
+) =>
   matchedPosts.myMatchedPosts.map(
-    ({ id, title, description, navigator, requiredSkills }) => ({
+    ({ id, title, description, navigator, requiredSkills, driver }) => ({
       id,
       title,
       content: description,
       languages: requiredSkills.map(({ name }) => name),
-      name: navigator?.name,
-      githubLogin: navigator?.githubLogin,
+      name:
+        myGithubLogin === driver?.githubLogin ? navigator?.name : driver?.name,
+      githubLogin:
+        myGithubLogin === driver?.githubLogin
+          ? navigator?.githubLogin
+          : driver?.githubLogin,
     })
   );
 
@@ -32,9 +40,11 @@ export const useHomeHooks = () => {
   const { data: fetchMyPosts, refetch: refetchMyPosts } = useFetchMyPostQuery();
   const { data: fetchMatchedPosts, refetch: refetchMatchedPosts } =
     useFetchMatchedPostQuery();
+  const { profile } = useProfile();
 
   const myPosts = fetchMyPosts && myPostsTranslator(fetchMyPosts);
   const matchedPosts =
-    fetchMatchedPosts && matchedPostsTaranslator(fetchMatchedPosts);
+    fetchMatchedPosts &&
+    matchedPostsTaranslator(fetchMatchedPosts, profile?.githubLogin ?? "");
   return { myPosts, matchedPosts, refetchMatchedPosts, refetchMyPosts };
 };

@@ -57,6 +57,13 @@ export const FETCH_MATCHED_POST = gql`
         matchingPoint
         bio
       }
+      driver {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
       requiredSkills {
         id
         name
