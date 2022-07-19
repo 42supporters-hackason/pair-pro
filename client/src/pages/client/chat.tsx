@@ -72,7 +72,7 @@ export const ChatPage = () => {
         {
           name: roomId,
           audio: true,
-          video: true,
+          video: { width: 460 },
         }
       );
       setRoomData(room);

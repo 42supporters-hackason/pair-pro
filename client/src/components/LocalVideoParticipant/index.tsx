@@ -10,7 +10,7 @@ interface Props {
 /**
  * twilio-video/local participant
  */
-export const VideoParticipant = ({ participant }: Props) => {
+export const LocalVideoParticipant = ({ participant }: Props) => {
   const tracks = Array.from(participant.tracks.values())
     .map((publication) => publication.track)
     .filter((track) => track !== null);
@@ -18,7 +18,6 @@ export const VideoParticipant = ({ participant }: Props) => {
   return (
     <Box
       sx={{
-        width: "50%",
         display: "flex",
       }}
     >
