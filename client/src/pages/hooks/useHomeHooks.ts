@@ -1,6 +1,10 @@
+import { useCallback } from "react";
+import { useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
+  useDeletePostMutation,
   useFetchMatchedPostQuery,
+  useFetchMeLazyQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
@@ -13,28 +17,82 @@ const myPostsTranslator = (myPosts: FetchMyPostQuery) =>
     languages: requiredSkills.map(({ name }) => name),
   }));
 
-const matchedPostsTaranslator = (matchedPosts: FetchMatchedPostQuery) =>
+const matchedPostsTaranslator = (
+  matchedPosts: FetchMatchedPostQuery,
+  myGithubLogin: string
+) =>
   matchedPosts.myMatchedPosts.map(
-    ({ id, title, description, navigator, requiredSkills }) => ({
+    ({ id, title, description, navigator, requiredSkills, driver }) => ({
       id,
       title,
       content: description,
       languages: requiredSkills.map(({ name }) => name),
-      name: navigator?.name,
-      githubLogin: navigator?.githubLogin,
+      name:
+        myGithubLogin === driver?.githubLogin ? navigator?.name : driver?.name,
+      githubLogin:
+        myGithubLogin === driver?.githubLogin
+          ? navigator?.githubLogin
+          : driver?.githubLogin,
     })
   );
+
+interface DeletePostProps {
+  selectedId: string;
+  closeModal: () => void;
+}
 
 /**
  * pages/client/homeで使用されるHooks
  */
 export const useHomeHooks = () => {
+  /**
+   * misc.
+   */
+  const { profile, setProfile, updateMatchingPoint } = useProfile();
+  const [fetchMe] = useFetchMeLazyQuery();
+  const [deletePostMutation] = useDeletePostMutation();
+
+  /**
+   * 自分が投稿したPOSTを取得
+   */
   const { data: fetchMyPosts, refetch: refetchMyPosts } = useFetchMyPostQuery();
+  const myPosts = fetchMyPosts && myPostsTranslator(fetchMyPosts);
+
+  /**
+   * マッチしたPOSTを取得
+   */
   const { data: fetchMatchedPosts, refetch: refetchMatchedPosts } =
     useFetchMatchedPostQuery();
-
-  const myPosts = fetchMyPosts && myPostsTranslator(fetchMyPosts);
   const matchedPosts =
-    fetchMatchedPosts && matchedPostsTaranslator(fetchMatchedPosts);
-  return { myPosts, matchedPosts, refetchMatchedPosts, refetchMyPosts };
+    fetchMatchedPosts &&
+    matchedPostsTaranslator(fetchMatchedPosts, profile?.githubLogin ?? "");
+
+  /**
+   * POSTを削除するhandler
+   */
+  const deletePost = useCallback(
+    async ({ selectedId, closeModal }: DeletePostProps) => {
+      if (selectedId) {
+        await deletePostMutation({
+          variables: {
+            id: selectedId,
+          },
+          onCompleted: async () => {
+            closeModal();
+            refetchMyPosts();
+            updateMatchingPoint();
+          },
+        });
+      }
+    },
+    [deletePostMutation, refetchMyPosts, updateMatchingPoint]
+  );
+
+  return {
+    myPosts,
+    matchedPosts,
+    refetchMatchedPosts,
+    refetchMyPosts,
+    deletePost,
+  };
 };

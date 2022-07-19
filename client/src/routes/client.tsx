@@ -27,12 +27,18 @@ const { EditProfilePage } = lazyImport(
   "EditProfilePage"
 );
 
+const { EditPostPage } = lazyImport(
+  () => import("../pages/client/edit/post"),
+  "EditPostPage"
+);
+
 const HOME = "home";
 const APPLY = "apply";
 const RECRUIT = "recruit";
 const CHAT = "chat";
 const EDIT = "edit";
 const PROFILE = "profile";
+const POST = "post";
 
 export const CLIENT_ROUTE_PATH = {
   HOME: `/${HOME}`,
@@ -40,6 +46,7 @@ export const CLIENT_ROUTE_PATH = {
   RECRUIT: `/${RECRUIT}`,
   CHAT: `/${CHAT}`,
   EDIT_PROFILE: `/${EDIT}/${PROFILE}`,
+  EDIT_POST: `/${EDIT}/${POST}`,
 } as const;
 
 export const clientRoutes: RouteObject[] = [
@@ -66,6 +73,10 @@ export const clientRoutes: RouteObject[] = [
       {
         path: CLIENT_ROUTE_PATH.EDIT_PROFILE,
         element: <EditProfilePage />,
+      },
+      {
+        path: CLIENT_ROUTE_PATH.EDIT_POST,
+        element: <EditPostPage />,
       },
     ],
   },

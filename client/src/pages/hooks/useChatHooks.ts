@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useProfile } from "../../context/auth";
 import {
   useFetchMessagesQuery,
   useFetchMessageSubscription,
@@ -14,18 +15,29 @@ interface Message {
 /**
  * client/chatで使用されるhooks
  */
-export const useChatHooks = (roomId: number) => {
+export const useChatHooks = (roomId: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const { profile } = useProfile();
 
   const { data: post } = useFetchSpecificPostQuery({
     variables: {
-      id: Number(roomId),
+      id: roomId,
     },
   });
 
+  const opponentGithubLogin =
+    profile.githubLogin === post?.post?.driver?.githubLogin
+      ? post?.post?.navigator?.githubLogin
+      : post?.post?.driver?.githubLogin;
+
+  const opponentName =
+    profile.name === post?.post?.driver?.name
+      ? post?.post?.navigator?.name
+      : post?.post?.driver?.name;
+
   useFetchMessagesQuery({
     variables: {
-      postId: Number(roomId),
+      postId: roomId,
     },
     onCompleted: (data) => {
       const messages = data?.messagesByPostId.map(
@@ -41,7 +53,7 @@ export const useChatHooks = (roomId: number) => {
 
   useFetchMessageSubscription({
     variables: {
-      postId: Number(roomId),
+      postId: roomId,
     },
     onSubscriptionData(data) {
       const message: Message | undefined | null = data.subscriptionData.data
@@ -61,5 +73,5 @@ export const useChatHooks = (roomId: number) => {
       }
     },
   });
-  return { messages, post };
+  return { messages, opponentGithubLogin, opponentName };
 };

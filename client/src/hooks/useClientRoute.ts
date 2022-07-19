@@ -36,8 +36,24 @@ export const useClientRoute = () => {
     [navigate]
   );
 
+  const goToEditPost = useCallback(
+    (id?: string, options?: NavigateOptions) => {
+      if (id === undefined) {
+        return;
+      }
+      navigate(
+        {
+          pathname: CLIENT_ROUTE_PATH.EDIT_POST,
+          search: `?post_id=${id}`,
+        },
+        options
+      );
+    },
+    [navigate]
+  );
+
   const goToChat = useCallback(
-    (id?: number, options?: NavigateOptions) => {
+    (id?: string, options?: NavigateOptions) => {
       if (id === undefined) {
         return;
       }
@@ -52,5 +68,12 @@ export const useClientRoute = () => {
     [navigate]
   );
 
-  return { goToHome, goToApply, goToRecruit, goToEditProfile, goToChat };
+  return {
+    goToHome,
+    goToApply,
+    goToRecruit,
+    goToEditProfile,
+    goToEditPost,
+    goToChat,
+  };
 };

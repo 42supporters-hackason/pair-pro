@@ -21,9 +21,12 @@ type Message {
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
-  createMessage(content: String!, postId: Int!): Message!
+  createMessage(content: String!, postId: String!): Message!
+  deletePost(id: String!): Post!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
+  registerNavigator(navigatorId: Int!, postId: String!): Post!
   updateMe(bio: String, name: String): User
+  updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
 type Post {
@@ -31,7 +34,7 @@ type Post {
   createdAt: DateTime!
   description: String!
   driver: User
-  id: Int!
+  id: String!
   messages: [Message!]!
   navigator: User
   requiredSkills: [Skill!]!
@@ -42,10 +45,10 @@ type Query {
   accessToken(identity: String, room: String): Video!
   feed: [Post!]!
   me: User!
-  messagesByPostId(postId: Int!): [Message!]!
+  messagesByPostId(postId: String!): [Message!]!
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
-  post(id: Int!): Post
+  post(id: String!): Post
   skills: [Skill!]!
   unmatchedPosts: [Post]!
   user(id: Int!): User
@@ -58,7 +61,7 @@ type Skill {
 }
 
 type Subscription {
-  waitForMessage(postId: Int!): Message
+  waitForMessage(postId: String!): Message
 }
 
 type User {

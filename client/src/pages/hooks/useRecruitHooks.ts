@@ -1,8 +1,13 @@
+import { useCallback } from "react";
+import { useProfile } from "../../context/auth";
 import {
   FetchUnmatchedPostQuery,
+  useFetchMatchedPostQuery,
   useFetchSkillsQuery,
   useFetchUnmatchedPostQuery,
+  useMatchPostMutation,
 } from "../../gen/graphql-client";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
 const postsTranslator = (posts: FetchUnmatchedPostQuery) =>
   posts.unmatchedPosts.map((post) => ({
@@ -14,15 +19,64 @@ const postsTranslator = (posts: FetchUnmatchedPostQuery) =>
     githubLogin: post?.driver?.githubLogin,
   }));
 
+interface MatchPostProps {
+  selectedId: string;
+  profileId: number;
+  closeModal: () => void;
+}
+
 /**
  * pages/client/recruitで使用されるHooks
  */
 export const useRecruitHooks = () => {
-  const { data } = useFetchSkillsQuery();
-  const { data: fetchPosts } = useFetchUnmatchedPostQuery();
+  /**
+   * misc.
+   */
+  const [matchPostMutation] = useMatchPostMutation();
+  const { refetch: refetchMatchedPost } = useFetchMatchedPostQuery();
+  const { goToHome } = useClientRoute();
+  const { updateMatchingPoint } = useProfile();
 
+  /**
+   * requiredSkillsのデータ
+   */
+  const { data: skillsData } = useFetchSkillsQuery();
+  const languages = skillsData?.skills.map(({ name }) => name);
+
+  /**
+   * マッチングしていないPOST一覧
+   */
+  const { data: fetchPosts, refetch: refetchPosts } =
+    useFetchUnmatchedPostQuery();
   const posts = fetchPosts && postsTranslator(fetchPosts);
 
-  const languages = data?.skills.map(({ name }) => name);
-  return { posts, languages };
+  /**
+   * POSTをマッチさせるhandler
+   */
+  const matchPost = useCallback(
+    ({ selectedId, profileId, closeModal }: MatchPostProps) => {
+      matchPostMutation({
+        variables: {
+          postId: selectedId,
+          navigatorId: profileId,
+        },
+        onCompleted: () => {
+          closeModal();
+          refetchMatchedPost();
+          updateMatchingPoint();
+          refetchPosts();
+          goToHome();
+        },
+      });
+    },
+    [
+      matchPostMutation,
+      refetchMatchedPost,
+      goToHome,
+      updateMatchingPoint,
+      refetchPosts,
+    ]
+  );
+
+  return { posts, languages, matchPost };
 };

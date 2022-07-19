@@ -35,8 +35,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   authGithub: AuthPayLoad;
   createMessage: Message;
+  deletePost: Post;
   post: Post;
+  registerNavigator: Post;
   updateMe?: Maybe<User>;
+  updatePost: Post;
 };
 
 
@@ -47,7 +50,12 @@ export type MutationAuthGithubArgs = {
 
 export type MutationCreateMessageArgs = {
   content: Scalars['String'];
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
+};
+
+
+export type MutationDeletePostArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -58,9 +66,23 @@ export type MutationPostArgs = {
 };
 
 
+export type MutationRegisterNavigatorArgs = {
+  navigatorId: Scalars['Int'];
+  postId: Scalars['String'];
+};
+
+
 export type MutationUpdateMeArgs = {
   bio?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdatePostArgs = {
+  description?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type Post = {
@@ -69,7 +91,7 @@ export type Post = {
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   driver?: Maybe<User>;
-  id: Scalars['Int'];
+  id: Scalars['String'];
   messages: Array<Message>;
   navigator?: Maybe<User>;
   requiredSkills: Array<Skill>;
@@ -99,12 +121,12 @@ export type QueryAccessTokenArgs = {
 
 
 export type QueryMessagesByPostIdArgs = {
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 };
 
 
 export type QueryPostArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -125,7 +147,7 @@ export type Subscription = {
 
 
 export type SubscriptionWaitForMessageArgs = {
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 };
 
 export type User = {
@@ -170,12 +192,37 @@ export type CreatePostMutationVariables = Exact<{
 export type CreatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }>, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
 
 export type SendMessageMutationVariables = Exact<{
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
   content: Scalars['String'];
 }>;
 
 
 export type SendMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string } };
+
+export type DeletePostMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', deletePost: { __typename?: 'Post', id: string } };
+
+export type MatchPostMutationVariables = Exact<{
+  postId: Scalars['String'];
+  navigatorId: Scalars['Int'];
+}>;
+
+
+export type MatchPostMutation = { __typename?: 'Mutation', registerNavigator: { __typename?: 'Post', navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
+
+export type UpdatePostMutationVariables = Exact<{
+  id: Scalars['String'];
+  title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
+}>;
+
+
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string } };
 
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -193,34 +240,39 @@ export type GetVideoAccessTokenQuery = { __typename?: 'Query', accessToken: { __
 export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
 
 export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchMyPostQuery = { __typename?: 'Query', myDrivingPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+export type FetchMyPostQuery = { __typename?: 'Query', myDrivingPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchMatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: number, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchSpecificPostQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['String'];
 }>;
 
 
-export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: number, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
+export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
 
 export type FetchMessagesQueryVariables = Exact<{
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 }>;
 
 
 export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } }> };
 
+export type FetchMeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchMeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } };
+
 export type FetchMessageSubscriptionVariables = Exact<{
-  postId: Scalars['Int'];
+  postId: Scalars['String'];
 }>;
 
 
@@ -354,7 +406,7 @@ export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutati
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const SendMessageDocument = gql`
-    mutation sendMessage($postId: Int!, $content: String!) {
+    mutation sendMessage($postId: String!, $content: String!) {
   createMessage(postId: $postId, content: $content) {
     id
     content
@@ -388,6 +440,120 @@ export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
 export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
 export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const DeletePostDocument = gql`
+    mutation deletePost($id: String!) {
+  deletePost(id: $id) {
+    id
+  }
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const MatchPostDocument = gql`
+    mutation matchPost($postId: String!, $navigatorId: Int!) {
+  registerNavigator(postId: $postId, navigatorId: $navigatorId) {
+    navigator {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+  }
+}
+    `;
+export type MatchPostMutationFn = Apollo.MutationFunction<MatchPostMutation, MatchPostMutationVariables>;
+
+/**
+ * __useMatchPostMutation__
+ *
+ * To run a mutation, you first call `useMatchPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMatchPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [matchPostMutation, { data, loading, error }] = useMatchPostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      navigatorId: // value for 'navigatorId'
+ *   },
+ * });
+ */
+export function useMatchPostMutation(baseOptions?: Apollo.MutationHookOptions<MatchPostMutation, MatchPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MatchPostMutation, MatchPostMutationVariables>(MatchPostDocument, options);
+      }
+export type MatchPostMutationHookResult = ReturnType<typeof useMatchPostMutation>;
+export type MatchPostMutationResult = Apollo.MutationResult<MatchPostMutation>;
+export type MatchPostMutationOptions = Apollo.BaseMutationOptions<MatchPostMutation, MatchPostMutationVariables>;
+export const UpdatePostDocument = gql`
+    mutation UpdatePost($id: String!, $title: String, $description: String, $requiredSkillsIds: [Int]) {
+  updatePost(
+    id: $id
+    title: $title
+    description: $description
+    requiredSkillsIds: $requiredSkillsIds
+  ) {
+    id
+  }
+}
+    `;
+export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
+
+/**
+ * __useUpdatePostMutation__
+ *
+ * To run a mutation, you first call `useUpdatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      requiredSkillsIds: // value for 'requiredSkillsIds'
+ *   },
+ * });
+ */
+export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument, options);
+      }
+export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
+export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
+export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {
@@ -559,6 +725,13 @@ export const FetchMatchedPostDocument = gql`
       matchingPoint
       bio
     }
+    driver {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
     requiredSkills {
       id
       name
@@ -594,12 +767,19 @@ export type FetchMatchedPostQueryHookResult = ReturnType<typeof useFetchMatchedP
 export type FetchMatchedPostLazyQueryHookResult = ReturnType<typeof useFetchMatchedPostLazyQuery>;
 export type FetchMatchedPostQueryResult = Apollo.QueryResult<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>;
 export const FetchSpecificPostDocument = gql`
-    query fetchSpecificPost($id: Int!) {
+    query fetchSpecificPost($id: String!) {
   post(id: $id) {
     id
     description
     title
     navigator {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+    driver {
       id
       name
       githubLogin
@@ -642,7 +822,7 @@ export type FetchSpecificPostQueryHookResult = ReturnType<typeof useFetchSpecifi
 export type FetchSpecificPostLazyQueryHookResult = ReturnType<typeof useFetchSpecificPostLazyQuery>;
 export type FetchSpecificPostQueryResult = Apollo.QueryResult<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>;
 export const FetchMessagesDocument = gql`
-    query fetchMessages($postId: Int!) {
+    query fetchMessages($postId: String!) {
   messagesByPostId(postId: $postId) {
     id
     content
@@ -684,8 +864,46 @@ export function useFetchMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type FetchMessagesQueryHookResult = ReturnType<typeof useFetchMessagesQuery>;
 export type FetchMessagesLazyQueryHookResult = ReturnType<typeof useFetchMessagesLazyQuery>;
 export type FetchMessagesQueryResult = Apollo.QueryResult<FetchMessagesQuery, FetchMessagesQueryVariables>;
+export const FetchMeDocument = gql`
+    query fetchMe {
+  me {
+    id
+    name
+    githubLogin
+    matchingPoint
+    bio
+  }
+}
+    `;
+
+/**
+ * __useFetchMeQuery__
+ *
+ * To run a query within a React component, call `useFetchMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchMeQuery(baseOptions?: Apollo.QueryHookOptions<FetchMeQuery, FetchMeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMeQuery, FetchMeQueryVariables>(FetchMeDocument, options);
+      }
+export function useFetchMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMeQuery, FetchMeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMeQuery, FetchMeQueryVariables>(FetchMeDocument, options);
+        }
+export type FetchMeQueryHookResult = ReturnType<typeof useFetchMeQuery>;
+export type FetchMeLazyQueryHookResult = ReturnType<typeof useFetchMeLazyQuery>;
+export type FetchMeQueryResult = Apollo.QueryResult<FetchMeQuery, FetchMeQueryVariables>;
 export const FetchMessageDocument = gql`
-    subscription fetchMessage($postId: Int!) {
+    subscription fetchMessage($postId: String!) {
   waitForMessage(postId: $postId) {
     id
     content
