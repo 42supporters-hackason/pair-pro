@@ -10,11 +10,12 @@ interface Props {
  */
 export const LocalTrack = ({ track }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
+  const child = track.attach();
 
   useEffect(() => {
-    ref.current?.appendChild(track.attach());
     ref.current?.classList.add(track.kind);
-  }, [ref, track]);
+    ref.current?.appendChild(child);
+  }, [ref, track, child]);
 
   return <div ref={ref} />;
 };

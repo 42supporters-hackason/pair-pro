@@ -18,9 +18,7 @@ export const VideoParticipant = ({ participant }: Props) => {
   return (
     <Box
       sx={{
-        boxSizing: "border-box",
-        position: "relative",
-        width: "100%",
+        width: "50%",
         display: "flex",
       }}
     >

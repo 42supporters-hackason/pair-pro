@@ -12,7 +12,7 @@ interface Props {
  */
 export const VideoRoom = ({ room }: Props) => {
   return (
-    <Box sx={{ height: "1000px", width: "100%" }}>
+    <Box sx={{ width: "100%" }}>
       <VideoParticipant participant={room.localParticipant} />
     </Box>
   );
