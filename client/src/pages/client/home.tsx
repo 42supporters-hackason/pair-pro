@@ -7,7 +7,6 @@ import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useProfile } from "../../context/auth";
-import { useDeletePostMutation } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useHomeHooks } from "../hooks/useHomeHooks";
@@ -27,31 +26,23 @@ export const HomePage = () => {
   );
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
   const { profile } = useProfile();
-  const [deletePost] = useDeletePostMutation();
 
   /**
    * page hooks
    */
-  const { myPosts, matchedPosts, refetchMyPosts } = useHomeHooks();
+  const { myPosts, matchedPosts, deletePost } = useHomeHooks();
 
   /**
    * event-handler
    */
   const handleDeletePost = useCallback(async () => {
     if (selectedId) {
-      await deletePost({
-        variables: {
-          id: selectedId,
-        },
-        onCompleted: () => {
-          console.log("hello");
-
-          setOpenDeleteModal.off();
-          refetchMyPosts();
-        },
+      deletePost({
+        selectedId,
+        closeModal: setOpenDeleteModal.off,
       });
     }
-  }, [deletePost, selectedId, setOpenDeleteModal, refetchMyPosts]);
+  }, [deletePost, selectedId, setOpenDeleteModal]);
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>

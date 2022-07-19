@@ -1,9 +1,14 @@
+import { useCallback } from "react";
 import { useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
+  useDeletePostMutation,
   useFetchMatchedPostQuery,
+  useFetchMeLazyQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
+import { unreachable } from "../../utils";
+import { profileStorage } from "../../utils/local-storage/profile";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
 
 const myPostsTranslator = (myPosts: FetchMyPostQuery) =>
@@ -33,18 +38,74 @@ const matchedPostsTaranslator = (
     })
   );
 
+interface DeletePostProps {
+  selectedId: string;
+  closeModal: () => void;
+}
+
 /**
  * pages/client/homeで使用されるHooks
  */
 export const useHomeHooks = () => {
+  /**
+   * misc.
+   */
+  const { profile, setProfile } = useProfile();
+  const [fetchMe] = useFetchMeLazyQuery();
+  const [deletePostMutation] = useDeletePostMutation();
+
+  /**
+   * 自分が投稿したPOSTを取得
+   */
   const { data: fetchMyPosts, refetch: refetchMyPosts } = useFetchMyPostQuery();
+  const myPosts = fetchMyPosts && myPostsTranslator(fetchMyPosts);
+
+  /**
+   * マッチしたPOSTを取得
+   */
   const { data: fetchMatchedPosts, refetch: refetchMatchedPosts } =
     useFetchMatchedPostQuery();
-  const { profile } = useProfile();
-
-  const myPosts = fetchMyPosts && myPostsTranslator(fetchMyPosts);
   const matchedPosts =
     fetchMatchedPosts &&
     matchedPostsTaranslator(fetchMatchedPosts, profile?.githubLogin ?? "");
-  return { myPosts, matchedPosts, refetchMatchedPosts, refetchMyPosts };
+
+  /**
+   * POSTを削除するhandler
+   */
+  const deletePost = useCallback(
+    async ({ selectedId, closeModal }: DeletePostProps) => {
+      if (selectedId) {
+        await deletePostMutation({
+          variables: {
+            id: selectedId,
+          },
+          onCompleted: async () => {
+            closeModal();
+            refetchMyPosts();
+            await fetchMe({
+              onCompleted: (data) => {
+                profileStorage.save({
+                  id: profile.id ?? unreachable(),
+                  name: profile.name ?? unreachable(),
+                  githubLogin: profile.githubLogin ?? unreachable(),
+                  matchingPoint: data.me.matchingPoint,
+                  bio: profile.bio,
+                });
+                setProfile(profileStorage.load() ?? unreachable());
+              },
+            });
+          },
+        });
+      }
+    },
+    [deletePostMutation, refetchMyPosts, profile, fetchMe, setProfile]
+  );
+
+  return {
+    myPosts,
+    matchedPosts,
+    refetchMatchedPosts,
+    refetchMyPosts,
+    deletePost,
+  };
 };

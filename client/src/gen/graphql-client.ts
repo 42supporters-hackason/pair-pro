@@ -246,6 +246,11 @@ export type FetchMessagesQueryVariables = Exact<{
 
 export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } }> };
 
+export type FetchMeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchMeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } };
+
 export type FetchMessageSubscriptionVariables = Exact<{
   postId: Scalars['String'];
 }>;
@@ -803,6 +808,44 @@ export function useFetchMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type FetchMessagesQueryHookResult = ReturnType<typeof useFetchMessagesQuery>;
 export type FetchMessagesLazyQueryHookResult = ReturnType<typeof useFetchMessagesLazyQuery>;
 export type FetchMessagesQueryResult = Apollo.QueryResult<FetchMessagesQuery, FetchMessagesQueryVariables>;
+export const FetchMeDocument = gql`
+    query fetchMe {
+  me {
+    id
+    name
+    githubLogin
+    matchingPoint
+    bio
+  }
+}
+    `;
+
+/**
+ * __useFetchMeQuery__
+ *
+ * To run a query within a React component, call `useFetchMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchMeQuery(baseOptions?: Apollo.QueryHookOptions<FetchMeQuery, FetchMeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMeQuery, FetchMeQueryVariables>(FetchMeDocument, options);
+      }
+export function useFetchMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMeQuery, FetchMeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMeQuery, FetchMeQueryVariables>(FetchMeDocument, options);
+        }
+export type FetchMeQueryHookResult = ReturnType<typeof useFetchMeQuery>;
+export type FetchMeLazyQueryHookResult = ReturnType<typeof useFetchMeLazyQuery>;
+export type FetchMeQueryResult = Apollo.QueryResult<FetchMeQuery, FetchMeQueryVariables>;
 export const FetchMessageDocument = gql`
     subscription fetchMessage($postId: String!) {
   waitForMessage(postId: $postId) {

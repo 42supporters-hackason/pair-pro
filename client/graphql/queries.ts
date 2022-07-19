@@ -115,3 +115,15 @@ export const FETCH_MESSAGES = gql`
     }
   }
 `;
+
+export const FETCH_ME = gql`
+  query fetchMe {
+    me {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
+    }
+  }
+`;
