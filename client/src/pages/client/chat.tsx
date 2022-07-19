@@ -16,6 +16,7 @@ import { ChatMessage } from "../../components/ChatMessage";
 import { EnterButton } from "../../components/EnterButton";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
+import { VideoRoom } from "../../components/VideoRoom";
 import { useProfile } from "../../context/auth";
 import {
   useGetVideoAccessTokenQuery,
@@ -60,7 +61,6 @@ export const ChatPage = () => {
       room: roomId ?? unreachable(),
     },
   });
-  console.log(profile.githubLogin, roomId);
 
   /**
    * event-handler
@@ -133,7 +133,7 @@ export const ChatPage = () => {
             {roomData === null ? (
               <EnterButton onClick={handleEnterRoom} />
             ) : (
-              <Box sx={{ width: "50%", border: 1 }}>自分</Box>
+              <VideoRoom room={roomData} />
             )}
           </Box>
           {roomData !== null && (
