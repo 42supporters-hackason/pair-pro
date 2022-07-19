@@ -57,6 +57,13 @@ export const FETCH_MATCHED_POST = gql`
         matchingPoint
         bio
       }
+      driver {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
       requiredSkills {
         id
         name
@@ -66,12 +73,19 @@ export const FETCH_MATCHED_POST = gql`
 `;
 
 export const FETCH_SPECIFIC_POST = gql`
-  query fetchSpecificPost($id: Int!) {
+  query fetchSpecificPost($id: String!) {
     post(id: $id) {
       id
       description
       title
       navigator {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+      driver {
         id
         name
         githubLogin
@@ -87,7 +101,7 @@ export const FETCH_SPECIFIC_POST = gql`
 `;
 
 export const FETCH_MESSAGES = gql`
-  query fetchMessages($postId: Int!) {
+  query fetchMessages($postId: String!) {
     messagesByPostId(postId: $postId) {
       id
       content
@@ -98,6 +112,18 @@ export const FETCH_MESSAGES = gql`
         matchingPoint
         bio
       }
+    }
+  }
+`;
+
+export const FETCH_ME = gql`
+  query fetchMe {
+    me {
+      id
+      name
+      githubLogin
+      matchingPoint
+      bio
     }
   }
 `;

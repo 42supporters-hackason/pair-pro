@@ -53,10 +53,50 @@ export const CREATE_POST = gql`
 `;
 
 export const SEND_MESSAGE = gql`
-  mutation sendMessage($postId: Int!, $content: String!) {
+  mutation sendMessage($postId: String!, $content: String!) {
     createMessage(postId: $postId, content: $content) {
       id
       content
+    }
+  }
+`;
+
+export const DELETE_POST = gql`
+  mutation deletePost($id: String!) {
+    deletePost(id: $id) {
+      id
+    }
+  }
+`;
+
+export const MATCH_POST = gql`
+  mutation matchPost($postId: String!, $navigatorId: Int!) {
+    registerNavigator(postId: $postId, navigatorId: $navigatorId) {
+      navigator {
+        id
+        name
+        githubLogin
+        matchingPoint
+        bio
+      }
+    }
+  }
+`;
+
+export const UPDATE_POST = gql`
+  mutation UpdatePost(
+    $id: String!
+    $title: String
+    $description: String
+    $requiredSkillsIds: [Int]
+  ) {
+    updatePost(
+      id: $id
+      title: $title
+      description: $description
+      requiredSkillsIds: $requiredSkillsIds
+    ) {
+      id
     }
   }
 `;

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import constate from "constate";
-import { useSignInMutation } from "../gen/graphql-client";
+import { useFetchMeLazyQuery, useSignInMutation } from "../gen/graphql-client";
 import { useBoolean } from "../hooks/useBoolean";
 import { usePublicRoute } from "../hooks/usePublicRoute";
+import { unreachable } from "../utils";
 import { profileStorage } from "../utils/local-storage/profile";
 import { tokenStorage } from "../utils/local-storage/token";
 import { useHomeHooks } from "./../pages/hooks/useHomeHooks";
@@ -36,6 +37,7 @@ export const [AuthProvider, useAuth, useProfile] = constate(
     const [signInMutation] = useSignInMutation();
     const { goToLogin } = usePublicRoute();
     const { refetchMatchedPosts, refetchMyPosts } = useHomeHooks();
+    const [fetchMe] = useFetchMeLazyQuery();
 
     const signIn = async (code: string) => {
       if (tokenStorage.load() === null) {
@@ -68,8 +70,34 @@ export const [AuthProvider, useAuth, useProfile] = constate(
       }
     };
 
-    return { isLogin, setIsLogin, profile, setProfile, signIn };
+    const updateMatchingPoint = useCallback(async () => {
+      await fetchMe({
+        onCompleted: (data) => {
+          profileStorage.save({
+            id: profile.id ?? unreachable(),
+            name: profile.name ?? unreachable(),
+            githubLogin: profile.githubLogin ?? unreachable(),
+            matchingPoint: data.me.matchingPoint,
+            bio: profile.bio,
+          });
+          setProfile(profileStorage.load() ?? unreachable());
+        },
+      });
+    }, [fetchMe, profile]);
+
+    return {
+      isLogin,
+      setIsLogin,
+      profile,
+      setProfile,
+      signIn,
+      updateMatchingPoint,
+    };
   },
   ({ signIn, isLogin, setIsLogin }) => ({ signIn, isLogin, setIsLogin }),
-  ({ profile, setProfile }) => ({ profile, setProfile })
+  ({ profile, setProfile, updateMatchingPoint }) => ({
+    profile,
+    setProfile,
+    updateMatchingPoint,
+  })
 );

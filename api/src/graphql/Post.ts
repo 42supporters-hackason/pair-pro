@@ -186,9 +186,9 @@ export const PostMutation = extendType({
         }
 
         // check if the post exists
-        const postToDelete = (await context.prisma.post.findUnique({
+        const postToDelete = await context.prisma.post.findUnique({
           where: { id: postId },
-        }));
+        });
         if (!postToDelete) {
           throw new Error("There is no such post");
         }
@@ -208,9 +208,9 @@ export const PostMutation = extendType({
         });
 
         return context.prisma.post.delete({
-          where: { id: postId }
-        })
-      }
+          where: { id: postId },
+        });
+      },
     });
 
     t.nonNull.field("updatePost", {
@@ -219,7 +219,7 @@ export const PostMutation = extendType({
         id: nonNull(stringArg()),
         title: stringArg(),
         description: stringArg(),
-        requiredSkillsIds: list(intArg())
+        requiredSkillsIds: list(intArg()),
       },
       async resolve(parent, args, context) {
         const { id, title, description, requiredSkillsIds } = args;
@@ -249,16 +249,16 @@ export const PostMutation = extendType({
             // requiredSkills: {
             //   connect: requiredSkillsIds.map(id => ({ id })),
             // }
-          }
+          },
         });
-      }
+      },
     });
 
     t.nonNull.field("registerNavigator", {
       type: "Post",
       args: {
         postId: nonNull(stringArg()),
-        navigatorId: nonNull(intArg())
+        navigatorId: nonNull(intArg()),
       },
       async resolve(parent, args, context) {
         const { postId, navigatorId } = args;
@@ -292,7 +292,7 @@ export const PostMutation = extendType({
         // increment navigator's matching point
         await context.prisma.user.update({
           where: { id: navigatorId },
-          data: { matchingPoint: navigator.matchingPoint + 1 }
+          data: { matchingPoint: navigator.matchingPoint + 1 },
         });
 
         // update navigator and completedAt
@@ -300,10 +300,10 @@ export const PostMutation = extendType({
           where: { id: postId },
           data: {
             navigator: { connect: { id: navigatorId } },
-            completedAt: new Date()
-          }
+            completedAt: new Date(),
+          },
         });
-      }
+      },
     });
   },
 });
