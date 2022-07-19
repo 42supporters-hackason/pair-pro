@@ -45,7 +45,7 @@ export const MessageQuery = extendType({
     t.nonNull.list.nonNull.field("messagesByPostId", {
       type: "Message",
       args: {
-        postId: nonNull(intArg()),
+        postId: nonNull(stringArg()),
       },
       async resolve(parent, args, context) {
         const { postId } = args;
@@ -63,7 +63,7 @@ export const MessageMutation = extendType({
     t.nonNull.field("createMessage", {
       type: "Message",
       args: {
-        postId: nonNull(intArg()),
+        postId: nonNull(stringArg()),
         content: nonNull(stringArg()),
       },
       async resolve(parent, args, context) {
@@ -99,11 +99,11 @@ export const MessageSubscription = subscriptionType({
     t.field("waitForMessage", {
       type: "Message",
       args: {
-        postId: nonNull(intArg()),
+        postId: nonNull(stringArg()),
       },
       subscribe(parent, args, context) {
         const { postId } = args;
-        return context.pubsub.asyncIterator(postId.toString());
+        return context.pubsub.asyncIterator(postId);
       },
       async resolve(messagePromise: Promise<Message>) {
         return await messagePromise;
