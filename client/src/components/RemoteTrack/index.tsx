@@ -11,6 +11,7 @@ interface Props {
 export const RemoteTrack = ({ track }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const child = track.attach();
+  child.style.borderRadius = "35px";
 
   useEffect(() => {
     ref.current?.classList.add(track.kind);

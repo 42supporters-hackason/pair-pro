@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { LocalVideoTrack } from "twilio-video";
 
 interface Props {
@@ -8,14 +8,16 @@ interface Props {
 /**
  * twilio-video/localのtrackを扱う
  */
-export const LocalTrack = ({ track }: Props) => {
+export const LocalTrack = memo(({ track }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const child = track.attach();
+  child.style.borderRadius = "35px";
 
   useEffect(() => {
-    ref.current?.classList.add(track.kind);
     ref.current?.appendChild(child);
   }, [ref, track, child]);
 
   return <div ref={ref} />;
-};
+});
+
+LocalTrack.displayName = "LocalTrack";

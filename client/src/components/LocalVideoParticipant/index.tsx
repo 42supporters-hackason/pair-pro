@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box } from "@mui/material";
 import { LocalParticipant, LocalVideoTrack } from "twilio-video";
 import { LocalTrack } from "../LocalTrack";
@@ -11,9 +11,13 @@ interface Props {
  * twilio-video/local participant
  */
 export const LocalVideoParticipant = ({ participant }: Props) => {
-  const tracks = Array.from(participant.tracks.values())
-    .map((publication) => publication.track)
-    .filter((track) => track !== null);
+  const tracks = useMemo(
+    () =>
+      Array.from(participant.tracks.values())
+        .map((publication) => publication.track)
+        .filter((track) => track !== null),
+    [participant]
+  );
 
   return (
     <Box

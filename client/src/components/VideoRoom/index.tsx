@@ -28,7 +28,8 @@ export const VideoRoom = ({ room }: Props) => {
   }, [room]);
 
   return (
-    <Box sx={{ width: "100%", display: "flex" }}>
+    <Box sx={{ width: "100%", display: "flex", gap: 2, mx: "auto" }}>
+      <LocalVideoParticipant participant={room.localParticipant} />
       <LocalVideoParticipant participant={room.localParticipant} />
       {remoteParticipant.map((participant, index) => (
         <RemoteVideoParticipant key={index} participant={participant} />
