@@ -7,8 +7,6 @@ import {
   useFetchMeLazyQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
-import { unreachable } from "../../utils";
-import { profileStorage } from "../../utils/local-storage/profile";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
 
 const myPostsTranslator = (myPosts: FetchMyPostQuery) =>
@@ -50,7 +48,7 @@ export const useHomeHooks = () => {
   /**
    * misc.
    */
-  const { profile, setProfile } = useProfile();
+  const { profile, setProfile, updateMatchingPoint } = useProfile();
   const [fetchMe] = useFetchMeLazyQuery();
   const [deletePostMutation] = useDeletePostMutation();
 
@@ -82,23 +80,12 @@ export const useHomeHooks = () => {
           onCompleted: async () => {
             closeModal();
             refetchMyPosts();
-            await fetchMe({
-              onCompleted: (data) => {
-                profileStorage.save({
-                  id: profile.id ?? unreachable(),
-                  name: profile.name ?? unreachable(),
-                  githubLogin: profile.githubLogin ?? unreachable(),
-                  matchingPoint: data.me.matchingPoint,
-                  bio: profile.bio,
-                });
-                setProfile(profileStorage.load() ?? unreachable());
-              },
-            });
+            updateMatchingPoint();
           },
         });
       }
     },
-    [deletePostMutation, refetchMyPosts, profile, fetchMe, setProfile]
+    [deletePostMutation, refetchMyPosts, updateMatchingPoint]
   );
 
   return {
