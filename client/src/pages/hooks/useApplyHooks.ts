@@ -6,8 +6,6 @@ import {
   useFetchSkillsQuery,
 } from "../../gen/graphql-client";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { unreachable } from "../../utils";
-import { profileStorage } from "../../utils/local-storage/profile";
 import { ApplySchema } from "./../validation/apply_vaildation";
 
 interface CreatePostProps {
@@ -26,11 +24,14 @@ interface CreatePostProps {
  */
 export const useApplyHooks = () => {
   const [createPostMutation] = useCreatePostMutation();
-  const { setProfile } = useProfile();
+  const { updateMatchingPoint } = useProfile();
   const { data: languagesData } = useFetchSkillsQuery();
   const { goToHome } = useClientRoute();
   const { refetch: refetchMyPosts } = useFetchMyPostQuery();
 
+  /**
+   * POSTを作成するhandler
+   */
   const createPost = useCallback(
     async ({ formData, closeModal }: CreatePostProps) => {
       const requiredSkillsId = formData.language.map(
@@ -46,17 +47,9 @@ export const useApplyHooks = () => {
             description: formData.content,
             requiredSkillsId,
           },
-          onCompleted: (data) => {
+          onCompleted: () => {
             closeModal();
-            const profile = profileStorage.load();
-            profileStorage.save({
-              id: profile?.id ?? unreachable(),
-              matchingPoint: data.post.driver?.matchingPoint ?? unreachable(),
-              name: profile?.name ?? unreachable(),
-              githubLogin: profile?.githubLogin ?? unreachable(),
-              bio: profile?.bio,
-            });
-            setProfile(profileStorage.load() ?? {});
+            updateMatchingPoint();
             refetchMyPosts();
             goToHome();
           },
@@ -66,10 +59,11 @@ export const useApplyHooks = () => {
     [
       createPostMutation,
       goToHome,
-      setProfile,
-      languagesData?.skills,
       refetchMyPosts,
+      updateMatchingPoint,
+      languagesData?.skills,
     ]
   );
+
   return { createPost, languagesData };
 };

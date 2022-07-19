@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
@@ -97,12 +96,11 @@ export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href=""
+            onClick={() => goToHome()}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -112,6 +110,7 @@ export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer",
             }}
           >
             P2P Matching

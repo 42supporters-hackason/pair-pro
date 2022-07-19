@@ -12,10 +12,6 @@ import { Controller, useForm } from "react-hook-form";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useProfile } from "../../context/auth";
-import {
-  useFetchMatchedPostQuery,
-  useMatchPostMutation,
-} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useRecruitHooks } from "../hooks/useRecruitHooks";
@@ -34,14 +30,12 @@ export const RecruitPage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const { goToHome } = useClientRoute();
-  const [matchPost] = useMatchPostMutation();
-  const { refetch: refetchMatchedPost } = useFetchMatchedPostQuery();
   const { profile } = useProfile();
 
   /**
    * page hooks
    */
-  const { posts, languages } = useRecruitHooks();
+  const { posts, languages, matchPost } = useRecruitHooks();
 
   /**
    * form validation
@@ -60,25 +54,12 @@ export const RecruitPage = () => {
   const handleMatch = useCallback(() => {
     if (selectedId !== undefined && profile.id !== undefined) {
       matchPost({
-        variables: {
-          postId: selectedId,
-          navigatorId: profile.id,
-        },
-        onCompleted: () => {
-          setOpenPostModal.off();
-          refetchMatchedPost();
-          goToHome();
-        },
+        selectedId,
+        profileId: profile.id,
+        closeModal: setOpenPostModal.off,
       });
     }
-  }, [
-    selectedId,
-    profile,
-    matchPost,
-    setOpenPostModal,
-    refetchMatchedPost,
-    goToHome,
-  ]);
+  }, [selectedId, profile, matchPost, setOpenPostModal]);
 
   return (
     <Box sx={{ mx: "100px" }}>
