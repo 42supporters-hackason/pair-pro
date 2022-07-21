@@ -37,7 +37,8 @@ export const ChatPage = () => {
    */
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
-  const [shareScreen, setShareScreen] = useBoolean(false);
+  const [shareScreenTrack, setShareScreenTrack] =
+    useState<LocalVideoTrack | null>(null);
   const [roomData, setRoomData] = useState<Room | null>(null);
   const { goToHome } = useClientRoute();
   const ref = useRef<HTMLDivElement>(null);
@@ -46,6 +47,7 @@ export const ChatPage = () => {
   const { messages, opponentGithubLogin, opponentName } = useChatHooks(
     roomId ?? unreachable()
   );
+  const videoRef = useRef<HTMLDivElement | null>(null);
 
   const [sendMessage] = useSendMessageMutation();
 
@@ -113,13 +115,21 @@ export const ChatPage = () => {
   );
 
   const shareScreenHandler = () => {
-    navigator.mediaDevices.getDisplayMedia().then((stream) => {
-      const screenTrack = new LocalVideoTrack(stream.getTracks()[0]);
-      roomData?.localParticipant.publishTrack(screenTrack);
-      screenTrack.mediaStreamTrack.onended = () => {
-        shareScreenHandler();
-      };
-    });
+    if (shareScreenTrack === null) {
+      navigator.mediaDevices.getDisplayMedia().then((stream) => {
+        const screenTrack = new LocalVideoTrack(stream.getTracks()[0]);
+        roomData?.localParticipant.publishTrack(screenTrack);
+        screenTrack.mediaStreamTrack.onended = () => {
+          shareScreenHandler();
+        };
+        setShareScreenTrack(screenTrack);
+        videoRef.current?.appendChild(screenTrack.attach());
+      });
+    } else {
+      roomData?.localParticipant.unpublishTrack(shareScreenTrack);
+      shareScreenTrack.stop();
+      setShareScreenTrack(null);
+    }
   };
 
   useEffect(() => {
@@ -141,7 +151,7 @@ export const ChatPage = () => {
             {roomData === null ? (
               <EnterButton onClick={handleEnterRoom} />
             ) : (
-              <VideoRoom room={roomData} />
+              <VideoRoom room={roomData} ref={videoRef} />
             )}
           </Box>
           {roomData !== null && (
