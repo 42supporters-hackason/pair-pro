@@ -35,8 +35,8 @@ export const ChatPage = () => {
   /**
    * misc.
    */
-  const [volumeOn, setVolumeOn] = useBoolean(false);
-  const [videoOn, setVideoOn] = useBoolean(false);
+  const [volumeOn, setVolumeOn] = useBoolean(true);
+  const [videoOn, setVideoOn] = useBoolean(true);
   const [shareScreenTrack, setShareScreenTrack] =
     useState<LocalVideoTrack | null>(null);
   const [roomData, setRoomData] = useState<Room | null>(null);
@@ -123,7 +123,9 @@ export const ChatPage = () => {
           shareScreenHandler();
         };
         setShareScreenTrack(screenTrack);
-        videoRef.current?.appendChild(screenTrack.attach());
+        const videoChild = screenTrack.attach();
+        videoChild.width = 460;
+        videoRef.current?.appendChild(videoChild);
       });
     } else {
       roomData?.localParticipant.unpublishTrack(shareScreenTrack);
@@ -131,6 +133,13 @@ export const ChatPage = () => {
       setShareScreenTrack(null);
     }
   };
+
+  const handleToggleVideo = useCallback(() => {
+    roomData?.localParticipant.videoTracks.forEach((videoTrack) =>
+      videoOn ? videoTrack.track.disable() : videoTrack.track.enable()
+    );
+    setVideoOn.toggle();
+  }, [roomData, videoOn, setVideoOn]);
 
   useEffect(() => {
     ref.current?.scrollIntoView();
@@ -159,7 +168,7 @@ export const ChatPage = () => {
               <VideoButtons
                 volumeOn={volumeOn}
                 videoOn={videoOn}
-                onClickVideo={setVideoOn.toggle}
+                onClickVideo={handleToggleVideo}
                 onClickVolume={setVolumeOn.toggle}
                 onClickShareScreen={shareScreenHandler}
                 onExit={handleExitRoom}
