@@ -141,6 +141,13 @@ export const ChatPage = () => {
     setVideoOn.toggle();
   }, [roomData, videoOn, setVideoOn]);
 
+  const handleVolumeToggle = useCallback(() => {
+    roomData?.localParticipant.audioTracks.forEach((audioTrack) =>
+      volumeOn ? audioTrack.track.disable() : audioTrack.track.enable()
+    );
+    setVolumeOn.toggle();
+  }, [roomData, volumeOn, setVolumeOn]);
+
   useEffect(() => {
     ref.current?.scrollIntoView();
   }, [messages]);
@@ -169,7 +176,7 @@ export const ChatPage = () => {
                 volumeOn={volumeOn}
                 videoOn={videoOn}
                 onClickVideo={handleToggleVideo}
-                onClickVolume={setVolumeOn.toggle}
+                onClickVolume={handleVolumeToggle}
                 onClickShareScreen={shareScreenHandler}
                 onExit={handleExitRoom}
               />
