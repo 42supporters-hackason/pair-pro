@@ -25,6 +25,10 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
    */
   languages?: string[];
   /**
+   * 自己紹介
+   */
+  bio?: string;
+  /**
    * ボタンの有無
    */
   hasButton?: boolean;
@@ -52,6 +56,7 @@ export const ProfileCard = ({
   title,
   content,
   languages,
+  bio,
   hasButton = false,
   agreeTitle,
   onAgree,
@@ -71,6 +76,21 @@ export const ProfileCard = ({
           }}
         >
           <Typography variant="h5">{name}</Typography>
+          {bio && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography>自己紹介</Typography>
+              <Typography fontWeight="bold" variant="subtitle2">
+                {bio}
+              </Typography>
+            </Box>
+          )}
           <Typography variant="h6">Status</Typography>
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             <Box
