@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
-import { connect, Room } from "twilio-video";
+import { connect, LocalVideoTrack, Room } from "twilio-video";
 import { ChatMessage } from "../../components/ChatMessage";
 import { EnterButton } from "../../components/EnterButton";
 import { IconButton } from "../../components/IconButton";
@@ -37,6 +37,7 @@ export const ChatPage = () => {
    */
   const [volumeOn, setVolumeOn] = useBoolean(false);
   const [videoOn, setVideoOn] = useBoolean(false);
+  const [shareScreen, setShareScreen] = useBoolean(false);
   const [roomData, setRoomData] = useState<Room | null>(null);
   const { goToHome } = useClientRoute();
   const ref = useRef<HTMLDivElement>(null);
@@ -94,9 +95,6 @@ export const ChatPage = () => {
     }
   }, [accessTokenReturnValue, roomId]);
 
-  /**
-   * event-handler
-   */
   const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
     async ({ message }) => {
       if (roomId !== null) {
@@ -113,6 +111,16 @@ export const ChatPage = () => {
     },
     [sendMessage, roomId, setValue]
   );
+
+  const shareScreenHandler = () => {
+    navigator.mediaDevices.getDisplayMedia().then((stream) => {
+      const screenTrack = new LocalVideoTrack(stream.getTracks()[0]);
+      roomData?.localParticipant.publishTrack(screenTrack);
+      screenTrack.mediaStreamTrack.onended = () => {
+        shareScreenHandler();
+      };
+    });
+  };
 
   useEffect(() => {
     ref.current?.scrollIntoView();
@@ -143,6 +151,7 @@ export const ChatPage = () => {
                 videoOn={videoOn}
                 onClickVideo={setVideoOn.toggle}
                 onClickVolume={setVolumeOn.toggle}
+                onClickShareScreen={shareScreenHandler}
                 onExit={handleExitRoom}
               />
             </Box>

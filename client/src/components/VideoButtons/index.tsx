@@ -25,6 +25,10 @@ interface Props {
    */
   onClickVideo: () => void;
   /**
+   * 画面共有のtoggle
+   */
+  onClickShareScreen: () => void;
+  /**
    * 退出ボタンのアクション
    */
   onExit: () => void;
@@ -38,6 +42,7 @@ export const VideoButtons = ({
   videoOn,
   onClickVideo,
   onClickVolume,
+  onClickShareScreen,
   onExit,
 }: Props) => {
   return (
@@ -61,7 +66,7 @@ export const VideoButtons = ({
         </IconButton>
       )}
       <IconButton>
-        <PersonalVideoIcon />
+        <PersonalVideoIcon onClick={onClickShareScreen} />
       </IconButton>
       <IconButton onClick={onExit}>
         <LogoutIcon />
