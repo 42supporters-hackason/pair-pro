@@ -118,32 +118,26 @@ export const HomePage = () => {
         sx={{ overflow: "scroll" }}
       >
         <Box sx={{ my: "50px", mx: "100px" }}>
-          <ProfileCard
-            githubLogin={
-              matchedPosts &&
-              matchedPosts.find(({ id }) => id === selectedId)?.githubLogin
-            }
-            title={
-              matchedPosts &&
-              matchedPosts.find(({ id }) => id === selectedId)?.title
-            }
-            content={
-              matchedPosts &&
-              matchedPosts.find(({ id }) => id === selectedId)?.content
-            }
-            languages={
-              matchedPosts &&
-              matchedPosts.find(({ id }) => id === selectedId)?.languages
-            }
-            name={
-              matchedPosts &&
-              matchedPosts.find(({ id }) => id === selectedId)?.name
-            }
-            hasButton={true}
-            agreeTitle="チャットルームに移動する"
-            onAgree={() => goToChat(selectedId)}
-            onClose={setOpenPostModal.off}
-          />
+          {matchedPosts && (
+            <ProfileCard
+              githubLogin={
+                matchedPosts.find(({ id }) => id === selectedId)?.githubLogin
+              }
+              title={matchedPosts.find(({ id }) => id === selectedId)?.title}
+              content={
+                matchedPosts.find(({ id }) => id === selectedId)?.content
+              }
+              languages={
+                matchedPosts.find(({ id }) => id === selectedId)?.languages
+              }
+              name={matchedPosts.find(({ id }) => id === selectedId)?.name}
+              bio={matchedPosts.find(({ id }) => id === selectedId)?.bio}
+              hasButton={true}
+              agreeTitle="チャットルームに移動する"
+              onAgree={() => goToChat(selectedId)}
+              onClose={setOpenPostModal.off}
+            />
+          )}
         </Box>
       </Modal>
       <Modal

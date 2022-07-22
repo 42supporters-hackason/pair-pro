@@ -20,9 +20,7 @@ export const ClientLayout = () => {
   const code = searchParams.get("code");
   const { goToLogin } = usePublicRoute();
   const { isLogin, signIn } = useAuth();
-  const {
-    profile: { matchingPoint },
-  } = useProfile();
+  const { profile } = useProfile();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
   const menu = useClientHeaderMenu({ onLogout: setOpenLogoutModal.on });
 
@@ -49,7 +47,7 @@ export const ClientLayout = () => {
         minHeight: "100vh",
       }}
     >
-      <GeneralHeader matchingPoint={matchingPoint} menu={menu} />
+      <GeneralHeader matchingPoint={profile.matchingPoint} menu={menu} />
       <Box sx={{ flex: "1" }}>
         <Suspense fallback={null}>
           <Outlet />
