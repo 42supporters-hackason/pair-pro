@@ -99,7 +99,7 @@ export const FormDataModal = ({
             sx={{
               mx: "auto",
               mt: "auto",
-              width: "450px",
+              width: "80%",
               height: "50px",
               borderRadius: "10px",
             }}
@@ -110,7 +110,7 @@ export const FormDataModal = ({
           <Button
             sx={{
               mx: "auto",
-              width: "450px",
+              width: "80%",
               height: "50px",
               borderRadius: "10px",
             }}

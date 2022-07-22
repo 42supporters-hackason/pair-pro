@@ -17,6 +17,7 @@ const postsTranslator = (posts: FetchUnmatchedPostQuery) =>
     language: post?.requiredSkills.map(({ name }) => name),
     name: post?.driver?.name,
     githubLogin: post?.driver?.githubLogin,
+    bio: post?.driver?.bio,
   }));
 
 interface MatchPostProps {
