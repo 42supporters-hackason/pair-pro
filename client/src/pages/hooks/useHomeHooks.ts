@@ -4,7 +4,6 @@ import {
   FetchMatchedPostQuery,
   useDeletePostMutation,
   useFetchMatchedPostQuery,
-  useFetchMeLazyQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
@@ -33,6 +32,7 @@ const matchedPostsTaranslator = (
         myGithubLogin === driver?.githubLogin
           ? navigator?.githubLogin
           : driver?.githubLogin,
+      bio: myGithubLogin === driver?.githubLogin ? navigator?.bio : driver?.bio,
     })
   );
 
@@ -48,8 +48,7 @@ export const useHomeHooks = () => {
   /**
    * misc.
    */
-  const { profile, setProfile, updateMatchingPoint } = useProfile();
-  const [fetchMe] = useFetchMeLazyQuery();
+  const { profile, updateMatchingPoint } = useProfile();
   const [deletePostMutation] = useDeletePostMutation();
 
   /**

@@ -161,23 +161,22 @@ export const RecruitPage = () => {
         sx={{ overflow: "scroll" }}
       >
         <Box sx={{ my: "50px", mx: "100px" }}>
-          <ProfileCard
-            githubLogin={
-              posts && posts.find(({ id }) => id === selectedId)?.githubLogin
-            }
-            title={posts && posts.find(({ id }) => id === selectedId)?.title}
-            content={
-              posts && posts.find(({ id }) => id === selectedId)?.content
-            }
-            languages={
-              posts && posts.find(({ id }) => id === selectedId)?.language
-            }
-            name={posts && posts.find(({ id }) => id === selectedId)?.name}
-            hasButton={true}
-            agreeTitle="マッチングする"
-            onClose={setOpenPostModal.off}
-            onAgree={handleMatch}
-          />
+          {posts && (
+            <ProfileCard
+              githubLogin={
+                posts.find(({ id }) => id === selectedId)?.githubLogin
+              }
+              title={posts.find(({ id }) => id === selectedId)?.title}
+              content={posts.find(({ id }) => id === selectedId)?.content}
+              languages={posts.find(({ id }) => id === selectedId)?.language}
+              name={posts.find(({ id }) => id === selectedId)?.name}
+              bio={posts.find(({ id }) => id === selectedId)?.bio}
+              hasButton={true}
+              agreeTitle="マッチングする"
+              onClose={setOpenPostModal.off}
+              onAgree={handleMatch}
+            />
+          )}
         </Box>
       </Modal>
     </Box>
