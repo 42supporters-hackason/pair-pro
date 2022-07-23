@@ -10,17 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Community {
+  id        Int      @id @default(autoincrement())
+  name      String
+  users User[] @relation(name: "Community")
+}
+
+model Auth {
+  id        Int      @id @default(autoincrement())
+  githubId String
+  githubLogin String
+  users User[] @relation(name: "Auth")
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   name      String
   matchingPoint Int
-  githubId String
-  githubLogin String
   bio String
   driverPost Post[] @relation(name: "Driver")
   navigatorPost Post[] @relation(name: "Navigator")
   messages Message[] @relation(name: "createdBy")
+  auth Auth @relation(name: "Auth", fields: [authId], references: [id])
+  authId Int
+  community Community @relation(name: "Community", fields: [communityId], references: [id])
+  communityId Int
 }
 
 model Post {
