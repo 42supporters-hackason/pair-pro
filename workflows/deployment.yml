@@ -9,11 +9,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-diretory: api
     steps:
-      - uses: actions/checkout@v2 # 3
-      - run: npm ci # 4
+      - uses: actions/checkout@v2
+      - run: npm ci
       - name: Run production migration
-        run: cd api && npm run migrate:deploy # 5
+        run: npm run migrate:deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
       - uses: akhileshns/heroku-deploy@v3.12.12 # 6
