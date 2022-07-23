@@ -1,0 +1,26 @@
+name: p2p-matching # 1
+
+on:
+  push:
+    branches: # 2
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm ci
+      - name: Run production migration
+        run: npm run migrate:deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - uses: akhileshns/heroku-deploy@v3.12.12 # 6
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
