@@ -9,6 +9,9 @@
     "generate": "ts-node --transpile-only src/schema.ts",
     "migrate": "npx prisma migrate dev"
   },
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^4.0.0",
     "@types/jsonwebtoken": "^8.5.8",
