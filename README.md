@@ -32,4 +32,6 @@ heroku git:remote --app p2p-matching #リモートリポジトリ登録
 git subtree push --prefix api/ heroku main # apiディレクトリをdeployする、基本このコマンドで差分が反映される
 
 heroku logs --tail #デバッグ
+
+heroku open #apiのURLにアクセス
 ```
