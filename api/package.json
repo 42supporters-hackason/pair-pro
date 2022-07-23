@@ -10,7 +10,7 @@
     "migrate": "npx prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
     "build": "prisma generate && npm run generate && tsc",
-    "start": "node dist/src/index.ts"
+    "start": "node dist/src/index.js"
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
