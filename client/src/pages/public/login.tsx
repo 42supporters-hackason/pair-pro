@@ -4,12 +4,9 @@ import { GithubLoginButton } from "react-social-login-buttons";
 import sns_img from "../../assets/login_sns.jpg";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import { Card } from "../../components/Card";
-import { useClientRoute } from "../../hooks/useClientRoute";
 import { getGithubAuthUrl } from "../../utils";
 
 export const LoginPage = () => {
-  const { goToHome } = useClientRoute();
-
   return (
     <>
       <Box
