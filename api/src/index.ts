@@ -5,6 +5,7 @@ import { createServer } from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
+import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 
 import { context } from "./context";
 import { schema } from "./schema";
@@ -23,6 +24,7 @@ const server = new ApolloServer({
   schema,
   context,
   plugins: [
+    ApolloServerPluginLandingPageLocalDefault(),
     ApolloServerPluginDrainHttpServer({ httpServer }),
     {
       async serverWillStart() {
@@ -43,7 +45,9 @@ async function startServer() {
 
   httpServer.listen(process.env.PORT || 4000, () => {
     console.log(
-      `🚀Server is now running on port ${process.env.PORT || 4000}${server.graphqlPath}`
+      `🚀Server is now running on port ${process.env.PORT || 4000}${
+        server.graphqlPath
+      }`
     );
   });
 }
