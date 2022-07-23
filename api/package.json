@@ -9,7 +9,7 @@
     "generate": "ts-node --transpile-only src/schema.ts",
     "migrate": "npx prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
-    "build": "prisma generate && npm run generate && tsc",
+    "build": "prisma generate && yarn run generate && tsc",
     "start": "node dist/src/index.js"
   },
   "prisma": {
