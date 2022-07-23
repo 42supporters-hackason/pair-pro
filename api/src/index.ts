@@ -41,10 +41,9 @@ async function startServer() {
   await server.start();
   server.applyMiddleware({ app });
 
-  const port = 4000;
-  httpServer.listen(port, () => {
+  httpServer.listen(process.env.PORT || 4000, () => {
     console.log(
-      `🚀Server is now running on http://localhost:${port}${server.graphqlPath}`
+      `🚀Server is now running on http://localhost:${process.env.PORT || 4000}${server.graphqlPath}`
     );
   });
 }
