@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { usePublicRoute } from "../../hooks/usePublicRoute";
 
 const DEMO_COMMUNITY = [
   {
@@ -20,6 +21,7 @@ const DEMO_COMMUNITY = [
  * public/community
  */
 export const CommunityPage = () => {
+  const { goToCreateCommunity } = usePublicRoute();
   return (
     <Box
       sx={{
@@ -71,10 +73,13 @@ export const CommunityPage = () => {
           }}
         >
           <Typography variant="h6" fontWeight="bold">
-            新しいコミュニティを追加する
+            新しいコミュニティに入る
           </Typography>
           <TextField sx={{ width: "450px" }} label="コミュニティID" />
-          <Button variant="contained" sx={{ width: "200px", height: "40px" }}>
+          <Button
+            variant="contained"
+            sx={{ width: "200px", height: "40px", borderRadius: "25px" }}
+          >
             communityに入る
           </Button>
         </Box>
@@ -82,7 +87,11 @@ export const CommunityPage = () => {
           <Typography variant="h6" fontWeight="bold">
             communityを作成したい方へ。
           </Typography>
-          <Button variant="contained" sx={{ height: "60px" }}>
+          <Button
+            variant="contained"
+            sx={{ height: "60px", borderRadius: "30px" }}
+            onClick={() => goToCreateCommunity()}
+          >
             新しいcommunityを作る
           </Button>
         </Box>

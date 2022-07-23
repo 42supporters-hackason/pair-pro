@@ -15,5 +15,19 @@ export const usePublicRoute = () => {
     [navigate]
   );
 
-  return { goToLogin };
+  const goToCommunity = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(PUBLIC_ROUTE_PATH.COMMUNITY, options);
+    },
+    [navigate]
+  );
+
+  const goToCreateCommunity = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(PUBLIC_ROUTE_PATH.CREATE_COMMUNITY, options);
+    },
+    [navigate]
+  );
+
+  return { goToLogin, goToCommunity, goToCreateCommunity };
 };

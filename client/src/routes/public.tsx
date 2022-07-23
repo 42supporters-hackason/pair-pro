@@ -11,12 +11,19 @@ const { CommunityPage } = lazyImport(
   "CommunityPage"
 );
 
+const { CreateCommunityPage } = lazyImport(
+  () => import("../pages/public/create/community"),
+  "CreateCommunityPage"
+);
+
 const LOGIN = "/";
+const CREATE = "/create";
 const COMMUNITY = "/community";
 
 export const PUBLIC_ROUTE_PATH = {
   LOGIN: `${LOGIN}`,
   COMMUNITY: `${COMMUNITY}`,
+  CREATE_COMMUNITY: `${CREATE}${COMMUNITY}`,
 } as const;
 
 export const publicRoutes: RouteObject[] = [
@@ -27,5 +34,9 @@ export const publicRoutes: RouteObject[] = [
   {
     path: PUBLIC_ROUTE_PATH.COMMUNITY,
     element: <CommunityPage />,
+  },
+  {
+    path: PUBLIC_ROUTE_PATH.CREATE_COMMUNITY,
+    element: <CreateCommunityPage />,
   },
 ];
