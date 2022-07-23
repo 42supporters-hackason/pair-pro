@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --transpile-only --no-notify --exit-child src/index.ts",
+    "start": "yarn run dev",
     "generate": "ts-node --transpile-only src/schema.ts",
     "migrate": "npx prisma migrate dev"
   },
