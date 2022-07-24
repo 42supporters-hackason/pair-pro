@@ -1,9 +1,15 @@
 import React, { useCallback, useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
+import {
+  CommunitySchema,
+  communitySchema,
+} from "../validation/community_validation";
 
 const DEMO_COMMUNITY = [
   {
@@ -35,6 +41,17 @@ export const CommunityPage = () => {
   const code = searchParams.get("code");
 
   /**
+   * form validation
+   */
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CommunitySchema>({
+    resolver: zodResolver(communitySchema),
+  });
+
+  /**
    * event-handler
    */
   const handleEnterCommunity = useCallback(
@@ -44,6 +61,11 @@ export const CommunityPage = () => {
     },
     [goToHome]
   );
+
+  const handleEnterByCommunityId = useCallback(() => {
+    // TODO: communityを追加する処理
+    goToHome({ replace: true });
+  }, [goToHome]);
 
   /**
    * signIn処理を実行
@@ -104,14 +126,22 @@ export const CommunityPage = () => {
             alignItems: "center",
             gap: 2,
           }}
+          component="form"
+          onSubmit={handleSubmit(handleEnterByCommunityId)}
         >
           <Typography variant="h6" fontWeight="bold">
             新しいコミュニティに入る
           </Typography>
-          <TextField sx={{ width: "450px" }} label="コミュニティID" />
+          <TextField
+            sx={{ width: "450px" }}
+            label="コミュニティID"
+            {...register("communityId")}
+          />
+          <Typography color="error">{errors.communityId?.message}</Typography>
           <Button
             variant="contained"
             sx={{ width: "200px", height: "40px", borderRadius: "25px" }}
+            type="submit"
           >
             communityに入る
           </Button>
