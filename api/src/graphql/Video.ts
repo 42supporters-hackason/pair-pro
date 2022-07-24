@@ -21,8 +21,8 @@ export const VideoQuery = extendType({
         const VideoGrant = AccessToken.VideoGrant;
         const token = new AccessToken(
           process.env.TWILIO_ACCOUNT_SID,
-          process.env.TWILIO_API_KEY,
-          process.env.TWILIO_API_SECRET
+          process.env.TWILIO_API_KEY_SID,
+          process.env.TWILIO_API_KEY_SECRET
         );
         token.identity = args.identity;
         const grant = new VideoGrant();
