@@ -1,6 +1,6 @@
 import { Suspense, useCallback } from "react";
 import { Box, Modal } from "@mui/material";
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
@@ -16,7 +16,6 @@ export const ClientLayout = () => {
   /**
    * misc.
    */
-  const [searchParams] = useSearchParams();
   const { goToLogin } = usePublicRoute();
   const { profile } = useProfile();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);

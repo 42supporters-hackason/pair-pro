@@ -21,6 +21,10 @@ interface Props {
    */
   matchingPoint?: number;
   /**
+   *
+   */
+  communityName?: string;
+  /**
    * headerのmenu
    */
   menu: ClientMenu;
@@ -29,7 +33,11 @@ interface Props {
 /**
  * 全ページ共通のHeaderコンポーネント
  */
-export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
+export const GeneralHeader = ({
+  matchingPoint,
+  communityName = "42Tokyo",
+  menu,
+}: Props) => {
   /**
    * misc.
    */
@@ -126,6 +134,12 @@ export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
               </Button>
             ))}
           </Box>
+          <Typography variant="h6" sx={{ mr: 3 }}>
+            Community:{" "}
+            <Typography component="span" variant="h6" fontWeight="bold">
+              {communityName}
+            </Typography>
+          </Typography>
           <Typography variant="h6" sx={{ mr: "35px" }}>
             Matching Point:{" "}
             <Typography component="span" variant="h6" fontWeight="bold">
