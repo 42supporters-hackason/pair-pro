@@ -44,9 +44,11 @@ export const MemberPage = () => {
         gap: 2,
       }}
     >
-      <Typography variant="h6" fontWeight="bold">
-        42tokyo
-      </Typography>
+      <Box>
+        <Typography variant="h6" fontWeight="bold">
+          42tokyo
+        </Typography>
+      </Box>
       <Box
         sx={{
           width: "100%",
