@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../../context/auth";
+import { useClientRoute } from "../../hooks/useClientRoute";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 
 const DEMO_COMMUNITY = [
@@ -21,7 +24,36 @@ const DEMO_COMMUNITY = [
  * public/community
  */
 export const CommunityPage = () => {
-  const { goToCreateCommunity } = usePublicRoute();
+  /**
+   * misc.
+   */
+  const { goToCreateCommunity, goToLogin } = usePublicRoute();
+  const { goToHome } = useClientRoute();
+  const { signIn } = useAuth();
+
+  const [searchParams] = useSearchParams();
+  const code = searchParams.get("code");
+
+  /**
+   * event-handler
+   */
+  const handleEnterCommunity = useCallback(
+    (id: string) => {
+      // TODO: communityを決める処理
+      goToHome({ replace: true });
+    },
+    [goToHome]
+  );
+
+  /**
+   * signIn処理を実行
+   */
+  useEffect(() => {
+    if (code !== null) {
+      signIn(code);
+    }
+  }, [signIn, code, goToLogin]);
+
   return (
     <Box
       sx={{
@@ -58,6 +90,7 @@ export const CommunityPage = () => {
                   fontWeight: "bold",
                   fontSize: "18px",
                 }}
+                onClick={() => handleEnterCommunity(id)}
               >
                 {name}
               </Button>
