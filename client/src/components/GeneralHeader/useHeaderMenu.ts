@@ -1,4 +1,5 @@
 import { useClientRoute } from "../../hooks/useClientRoute";
+import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { ClientMenu } from "./types";
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
   const { goToApply, goToRecruit, goToEditProfile, goToMember } =
     useClientRoute();
+  const { goToCommunity } = usePublicRoute();
 
   return {
     listMenu: [
@@ -34,6 +36,10 @@ export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
       {
         label: "プロフィール",
         action: goToEditProfile,
+      },
+      {
+        label: "コミュニティを変更する",
+        action: goToCommunity,
       },
       {
         label: "ログアウト",
