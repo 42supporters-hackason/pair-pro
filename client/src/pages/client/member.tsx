@@ -1,6 +1,7 @@
 import React from "react";
 import { Pagination, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { CopyInput } from "../../components/CopyInput";
 import { UserItem } from "../../components/UserItem";
 
 const DEMO_MEMBER = [
@@ -44,10 +45,22 @@ export const MemberPage = () => {
         gap: 2,
       }}
     >
-      <Box>
-        <Typography variant="h6" fontWeight="bold">
+      <Box
+        sx={{
+          display: "flex",
+          gap: 3,
+          alignItems: "center",
+          width: "60%",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography variant="h4" fontWeight="bold">
           42tokyo
         </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography fontWeight="bold">招待コード</Typography>
+          <CopyInput value="jsalkjljgdsaljfaljfa" />
+        </Box>
       </Box>
       <Box
         sx={{

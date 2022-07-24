@@ -22,11 +22,12 @@ export const CopyInput = ({ value }: Props) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        borderColor: "primary.main",
         border: 2,
+        borderColor: "primary.main",
         px: 2,
         py: "5px",
         borderRadius: "10px",
+        gap: 3,
       }}
     >
       <Typography>{value}</Typography>
@@ -39,7 +40,7 @@ export const CopyInput = ({ value }: Props) => {
             p: "5px",
           }}
         >
-          <AssignmentIcon sx={{ cursor: "pointer" }} />
+          <AssignmentIcon color="primary" sx={{ cursor: "pointer" }} />
         </CardActionArea>
       </Box>
     </Box>
