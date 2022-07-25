@@ -114,7 +114,7 @@ export const ChatPage = () => {
     [sendMessage, roomId, setValue]
   );
 
-  const shareScreenHandler = useCallback(() => {
+  const shareScreenHandler = () => {
     if (shareScreenTrack === null) {
       navigator.mediaDevices.getDisplayMedia().then((stream) => {
         const screenTrack = new LocalVideoTrack(stream.getTracks()[0]);
@@ -130,10 +130,9 @@ export const ChatPage = () => {
     } else {
       roomData?.localParticipant.unpublishTrack(shareScreenTrack);
       shareScreenTrack.stop();
-      videoRef.current?.remove();
       setShareScreenTrack(null);
     }
-  }, [shareScreenTrack, setShareScreenTrack, roomData?.localParticipant]);
+  };
 
   const handleToggleVideo = useCallback(() => {
     roomData?.localParticipant.videoTracks.forEach((videoTrack) =>
@@ -152,14 +151,6 @@ export const ChatPage = () => {
   useEffect(() => {
     ref.current?.scrollIntoView();
   }, [messages]);
-
-  useEffect(() => {
-    if (shareScreenTrack !== null) {
-      shareScreenTrack.mediaStreamTrack.onended = () => {
-        shareScreenHandler();
-      };
-    }
-  }, [shareScreenTrack, shareScreenHandler]);
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
