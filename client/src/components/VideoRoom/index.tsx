@@ -1,6 +1,6 @@
 import React, { ForwardedRef, forwardRef, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { Room } from "twilio-video";
+import { RemoteParticipant, Room } from "twilio-video";
 import { LocalVideoParticipant } from "../LocalVideoParticipant";
 import { RemoteVideoParticipant } from "../RemoteVideoParticipant";
 
@@ -14,18 +14,29 @@ interface Props {
 export const VideoRoom = forwardRef(
   ({ room }: Props, ref: ForwardedRef<HTMLDivElement>) => {
     const [remoteParticipant, setRemoteParticipant] = useState(
-      Array.from(room.participants.values())
+      Array.from(room.participants.values() ?? [])
     );
 
     useEffect(() => {
-      room.on("participantConnected", (participant) =>
-        setRemoteParticipant((prev) => [...prev, participant])
-      );
-      room.on("participantDisconnected", (participant) =>
-        setRemoteParticipant((prev) =>
-          prev.filter(({ identity }) => identity !== participant.identity)
-        )
-      );
+      if (room) {
+        const participantConnected = (participant: RemoteParticipant) =>
+          setRemoteParticipant((prevParticipants) => [
+            ...prevParticipants,
+            participant,
+          ]);
+
+        const participantDisconnected = (participant: RemoteParticipant) =>
+          setRemoteParticipant((prevParticipants) =>
+            prevParticipants.filter((p) => p !== participant)
+          );
+
+        room.on("participantConnected", participantConnected);
+        room.on("participantDisconnected", participantDisconnected);
+        return () => {
+          room.off("participantConnected", participantConnected);
+          room.off("participantDisconnected", participantDisconnected);
+        };
+      }
     }, [room]);
 
     return (
