@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { RemoteParticipant, RemoteVideoTrack } from "twilio-video";
+import {
+  RemoteParticipant,
+  RemoteVideoTrack,
+  RemoteTrack as RemoteTrackType,
+} from "twilio-video";
 import { RemoteTrack } from "../RemoteTrack";
 
 interface Props {
@@ -11,15 +15,26 @@ interface Props {
  * twilio-video/local participant
  */
 export const RemoteVideoParticipant = ({ participant }: Props) => {
-  const initialTracks = Array.from(participant.tracks.values())
-    .map((publication) => publication.track)
-    .filter((track) => track !== null);
-  const [tracks, setTracks] = useState(initialTracks);
+  const [tracks, setTracks] = useState<RemoteTrackType[]>([]);
 
   useEffect(() => {
-    participant.on("trackSubscribed", (track) =>
-      setTracks((prev) => [...prev, track])
-    );
+    const subscribedTracks = Array.from(participant.tracks.values())
+      .filter((trackPublication) => trackPublication.track !== null)
+      .map((trackPublication) => trackPublication.track!);
+
+    setTracks(subscribedTracks);
+
+    const handleTrackSubscribed = (track: RemoteTrackType) =>
+      setTracks((prevTracks) => [...prevTracks, track]);
+    const handleTrackUnsubscribed = (track: RemoteTrackType) =>
+      setTracks((prevTracks) => prevTracks.filter((t) => t !== track));
+
+    participant.on("trackSubscribed", handleTrackSubscribed);
+    participant.on("trackUnsubscribed", handleTrackUnsubscribed);
+    return () => {
+      participant.off("trackSubscribed", handleTrackSubscribed);
+      participant.off("trackUnsubscribed", handleTrackUnsubscribed);
+    };
   }, [participant]);
 
   return (
@@ -35,3 +50,5 @@ export const RemoteVideoParticipant = ({ participant }: Props) => {
     </Box>
   );
 };
+
+// ・appendChild消しては？表示多い問題、.onのやつ.offもセットで
