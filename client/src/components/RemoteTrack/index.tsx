@@ -16,7 +16,7 @@ export const RemoteTrack = ({ track }: Props) => {
   useEffect(() => {
     ref.current?.classList.add(track.kind);
     ref.current?.appendChild(child);
-  }, [ref, track, child]);
+  }, [track]);
 
   return <div ref={ref} />;
 };
