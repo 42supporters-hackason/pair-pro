@@ -12,7 +12,8 @@ interface Props {
  * 一般ユーザ向けmenu
  */
 export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
-  const { goToApply, goToRecruit, goToEditProfile } = useClientRoute();
+  const { goToApply, goToRecruit, goToEditProfile, goToExplanation } =
+    useClientRoute();
 
   return {
     listMenu: [
@@ -29,6 +30,10 @@ export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
       {
         label: "プロフィール",
         action: goToEditProfile,
+      },
+      {
+        label: "アプリの使い方",
+        action: goToExplanation,
       },
       {
         label: "ログアウト",
