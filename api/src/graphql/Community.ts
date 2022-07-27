@@ -108,5 +108,21 @@ export const CommunityMutation = extendType({
     });
 
     // Delete community
+    t.nonNull.field("deleteCommunity", {
+      type: "Community",
+      args: {
+        communityId: nonNull(intArg()),
+      },
+      resolve(parent, args, context) {
+        const { userId } = context;
+        const  { communityId } = args;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+        return context.prisma.community.delete({
+          where: { id: communityId },
+        })
+      }
+    })
   },
 })

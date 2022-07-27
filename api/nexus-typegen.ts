@@ -114,6 +114,7 @@ export interface NexusGenFieldTypes {
     belongCommunity: NexusGenRootTypes['Community']; // Community!
     createCommunity: NexusGenRootTypes['Community']; // Community!
     createMessage: NexusGenRootTypes['Message']; // Message!
+    deleteCommunity: NexusGenRootTypes['Community']; // Community!
     deletePost: NexusGenRootTypes['Post']; // Post!
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
@@ -189,6 +190,7 @@ export interface NexusGenFieldTypeNames {
     belongCommunity: 'Community'
     createCommunity: 'Community'
     createMessage: 'Message'
+    deleteCommunity: 'Community'
     deletePost: 'Post'
     post: 'Post'
     registerNavigator: 'Post'
@@ -257,6 +259,9 @@ export interface NexusGenArgTypes {
     createMessage: { // args
       content: string; // String!
       postId: string; // String!
+    }
+    deleteCommunity: { // args
+      communityId: number; // Int!
     }
     deletePost: { // args
       id: string; // String!
