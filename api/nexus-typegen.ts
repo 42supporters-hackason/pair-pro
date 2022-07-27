@@ -48,6 +48,10 @@ export interface NexusGenObjects {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
+  Community: { // root type
+    id: number; // Int!
+    name: string; // String!
+  }
   Message: { // root type
     content: string; // String!
     id: number; // Int!
@@ -93,6 +97,11 @@ export interface NexusGenFieldTypes {
   AuthPayLoad: { // field return type
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
+  }
+  Community: { // field return type
+    id: number; // Int!
+    name: string; // String!
+    users: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   Message: { // field return type
     content: string; // String!
@@ -159,6 +168,11 @@ export interface NexusGenFieldTypeNames {
   AuthPayLoad: { // field return type name
     token: 'String'
     user: 'User'
+  }
+  Community: { // field return type name
+    id: 'Int'
+    name: 'String'
+    users: 'User'
   }
   Message: { // field return type name
     content: 'String'
