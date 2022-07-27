@@ -139,6 +139,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
+    listAllCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -210,6 +211,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     feed: 'Post'
+    listAllCommunities: 'Community'
     messagesByPostId: 'Message'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'

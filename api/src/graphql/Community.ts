@@ -18,3 +18,16 @@ export const Community = objectType({
 });
 
 
+export const CommunityQuery = extendType({
+  type: "Query",
+  definition(t) {
+    // List all communities
+    t.nonNull.list.nonNull.field("listAllCommunities", {
+      type: "Community",
+      resolve(parent, args, context) {
+        return context.prisma.community.findMany();
+      }
+    });
+
+  },
+})
