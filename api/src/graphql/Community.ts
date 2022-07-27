@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { extendType, objectType } from "nexus";
+import { extendType, nonNull, objectType, stringArg } from "nexus";
 
 export const Community = objectType({
   name: "Community",
@@ -29,5 +29,46 @@ export const CommunityQuery = extendType({
       }
     });
 
+    // List communities that user has
+    // t.nonNull.list.nonNull.field("listCommunities", {
+    //   type: "Community",
+    //   async resolve(parent, args, context) {
+    //     // auth の id を取得して特定したら、持っているUser一覧を取得
+    //     // 各UserからCommunityを取得し、一覧にまとめる
+    //   }
+    // });
+  },
+})
+
+export const CommunityMutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    // Create community
+    t.nonNull.field("createCommunity", {
+      type: "Community",
+      args: {
+        name: nonNull(stringArg())
+      },
+      resolve(parent, args, context) {
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+        return context.prisma.community.create({
+          data: {
+            name: args.name,
+            users: {
+              connect: { id: userId }
+            }
+          }
+        })
+      }
+    });
+
+    // Update community name
+
+    // Belong community
+
+    // Delete community
   },
 })
