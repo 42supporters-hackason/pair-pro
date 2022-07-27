@@ -29,7 +29,7 @@ export const LoginPage = () => {
             alignItems: "center",
             justifyContent: "ceter",
           }}
-          variant="h3"
+          variant="h2"
           fontWeight="bold"
         >
           P 2 P M a c h i n g
@@ -70,26 +70,28 @@ export const LoginPage = () => {
               3. P2Pでペアプログラミングを実践!!
             </Typography>
           </Box>
-          <Box sx={{ width: "50%", height: "50%", my: "auto" }}>
-            <Card>
+          <Box sx={{ width: "50%", height: "40%", my: "auto" }}>
+            <Card style={{ borderRadius: "999px" }}>
               <Typography
-                variant="h5"
+                variant="h4"
                 fontWeight="bold"
-                sx={{ m: "30px 0 40px", textAlign: "center" }}
+                sx={{ m: "30px 0 30px", textAlign: "center" }}
               >
                 Login or SignUp
               </Typography>
               <Typography
                 variant="subtitle1"
                 fontWeight="bold"
-                sx={{ textAlign: "center", mb: "50px" }}
+                sx={{ textAlign: "center", mb: "40px" }}
               >
                 お手持ちのGithubで認証をします
               </Typography>
-              <GithubLoginButton
-                style={{ width: "100%" }}
-                onClick={() => window.location.assign(getGithubAuthUrl())}
-              />
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <GithubLoginButton
+                  style={{ width: "60%", borderRadius: "15px" }}
+                  onClick={() => window.location.assign(getGithubAuthUrl())}
+                />
+              </Box>
             </Card>
           </Box>
         </Box>
