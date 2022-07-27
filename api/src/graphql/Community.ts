@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { extendType, nonNull, objectType, stringArg } from "nexus";
+import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 
 export const Community = objectType({
   name: "Community",
@@ -66,6 +66,25 @@ export const CommunityMutation = extendType({
     });
 
     // Update community name
+    t.nonNull.field("updateCommunity", {
+      type: "Community",
+      args: {
+        id: nonNull(intArg()),
+        name: nonNull(stringArg())
+      },
+      resolve(parent, args, context) {
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+        return context.prisma.community.update({
+          where: { id: args.id },
+          data: {
+            name: args.name,
+          }
+        })
+      }
+    });
 
     // Belong community
 
