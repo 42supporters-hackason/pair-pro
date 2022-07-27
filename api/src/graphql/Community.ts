@@ -87,6 +87,25 @@ export const CommunityMutation = extendType({
     });
 
     // Belong community
+    t.nonNull.field("belongCommunity", {
+      type: "Community",
+      args: {
+        communityId: nonNull(intArg()),
+      },
+      resolve(parent, args, context) {
+        const { userId } = context;
+        const  { communityId } = args;
+        if (!userId) {
+          throw new Error("You have to log in");
+        }
+        return context.prisma.user.update({
+          where: { id: userId },
+          data: {
+            communityId: communityId
+          }
+        })
+      }
+    });
 
     // Delete community
   },
