@@ -40,7 +40,6 @@ export const RemoteVideoParticipant = ({ participant }: Props) => {
   return (
     <Box
       sx={{
-        width: "50%",
         display: "flex",
       }}
     >
