@@ -15,7 +15,7 @@ export const LocalTrack = memo(({ track }: Props) => {
 
   useEffect(() => {
     ref.current?.appendChild(child);
-  }, [ref, track, child]);
+  }, [track]);
 
   return <div ref={ref} />;
 });
