@@ -6,15 +6,15 @@ interface Props {
 }
 
 /**
- * twilio-video/localのtrackを扱う
+ * twilio-video/remoteのtrackを扱う
  */
 export const RemoteTrack = ({ track }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const child = track.attach();
-  child.style.borderRadius = "35px";
 
   useEffect(() => {
-    ref.current?.classList.add(track.kind);
+    child.style.width = "50%";
+    child.style.borderRadius = "9px";
     ref.current?.appendChild(child);
   }, [track]);
 

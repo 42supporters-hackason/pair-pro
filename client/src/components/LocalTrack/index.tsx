@@ -11,9 +11,10 @@ interface Props {
 export const LocalTrack = memo(({ track }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const child = track.attach();
-  child.style.borderRadius = "35px";
 
   useEffect(() => {
+    child.style.width = "50%";
+    child.style.borderRadius = "9px";
     ref.current?.appendChild(child);
   }, [track]);
 
