@@ -44,9 +44,14 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Auth: { // root type
+    githubId: string; // String!
+    githubLogin: string; // String!
+    id: number; // Int!
+  }
   AuthPayLoad: { // root type
+    auth: NexusGenRootTypes['Auth']; // Auth!
     token: string; // String!
-    user: NexusGenRootTypes['User']; // User!
   }
   Message: { // root type
     content: string; // String!
@@ -68,8 +73,6 @@ export interface NexusGenObjects {
   Subscription: {};
   User: { // root type
     bio: string; // String!
-    githubId: string; // String!
-    githubLogin: string; // String!
     id: number; // Int!
     matchingPoint: number; // Int!
     name: string; // String!
@@ -87,9 +90,15 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Auth: { // field return type
+    githubId: string; // String!
+    githubLogin: string; // String!
+    id: number; // Int!
+    users: NexusGenRootTypes['User'][]; // [User!]!
+  }
   AuthPayLoad: { // field return type
+    auth: NexusGenRootTypes['Auth']; // Auth!
     token: string; // String!
-    user: NexusGenRootTypes['User']; // User!
   }
   Message: { // field return type
     content: string; // String!
@@ -139,8 +148,6 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     bio: string; // String!
     driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
-    githubId: string; // String!
-    githubLogin: string; // String!
     id: number; // Int!
     matchingPoint: number; // Int!
     name: string; // String!
@@ -149,9 +156,15 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Auth: { // field return type name
+    githubId: 'String'
+    githubLogin: 'String'
+    id: 'Int'
+    users: 'User'
+  }
   AuthPayLoad: { // field return type name
+    auth: 'Auth'
     token: 'String'
-    user: 'User'
   }
   Message: { // field return type name
     content: 'String'
@@ -201,8 +214,6 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     bio: 'String'
     driverPost: 'Post'
-    githubId: 'String'
-    githubLogin: 'String'
     id: 'Int'
     matchingPoint: 'Int'
     name: 'String'

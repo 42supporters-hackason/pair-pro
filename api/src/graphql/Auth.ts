@@ -5,8 +5,6 @@ import * as jwt from "jsonwebtoken";
 import { stringify, parse } from "querystring";
 import { jwtKey } from "../utils/auth";
 
-const defaultMatchingPoint = 3;
-
 const clientId = process.env.GH_CLIENT_ID;
 const clientSecret = process.env.GH_CLIENT_SECRET;
 
@@ -17,11 +15,28 @@ export const AuthPayLoad = objectType({
   name: "AuthPayLoad",
   definition(t) {
     t.nonNull.string("token");
-    t.nonNull.field("user", {
-      type: "User",
+    t.nonNull.field("auth", {
+      type: "Auth",
     });
   },
 });
+
+export const AuthObject = objectType({
+  name: "Auth",
+  definition(t) {
+    t.nonNull.int("id");
+    t.nonNull.string("githubId");
+    t.nonNull.string("githubLogin");
+    t.nonNull.list.nonNull.field("users", {
+      type: "User",
+      resolve(parent, _args, context) {
+        return context.prisma.auth.findUnique({
+          where: {id: parent.id },
+        }).users();
+      }
+    })
+  }
+})
 
 export const AuthMutation = extendType({
   type: "Mutation",
@@ -41,27 +56,24 @@ export const AuthMutation = extendType({
           bio,
         } = await getGithubInfo(access_token);
 
-        let user = await context.prisma.user.findFirst({
+        let auth = await context.prisma.auth.findFirst({
           where: { githubId },
         });
 
-        if (!user) {
-          user = await context.prisma.user.create({
+        if (!auth) {
+          auth = await context.prisma.auth.create({
             data: {
-              name: githubLogin,
               githubLogin,
-              matchingPoint: defaultMatchingPoint,
               githubId,
-              bio,
             },
           });
         }
 
-        const token = jwt.sign({ userId: user.id }, jwtKey);
+        const token = jwt.sign({ authId: auth.id }, jwtKey);
 
         return {
           token,
-          user,
+          auth,
         };
       },
     });

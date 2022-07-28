@@ -8,8 +8,6 @@ export const User = objectType({
     // TODO createdAt
     t.nonNull.string("name");
     t.nonNull.int("matchingPoint");
-    t.nonNull.string("githubId");
-    t.nonNull.string("githubLogin");
     t.nonNull.string("bio");
     t.nonNull.list.nonNull.field("driverPost", {
       type: "Post",

@@ -2,9 +2,16 @@
 ### Do not make changes to this file directly
 
 
+type Auth {
+  githubId: String!
+  githubLogin: String!
+  id: Int!
+  users: [User!]!
+}
+
 type AuthPayLoad {
+  auth: Auth!
   token: String!
-  user: User!
 }
 
 """
@@ -66,8 +73,6 @@ type Subscription {
 type User {
   bio: String!
   driverPost: [Post!]!
-  githubId: String!
-  githubLogin: String!
   id: Int!
   matchingPoint: Int!
   name: String!
