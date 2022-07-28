@@ -75,7 +75,7 @@ export const ChatPage = () => {
         {
           name: roomId,
           audio: true,
-          video: { width: 460 },
+          video: true,
         }
       );
       setRoomData(room);
@@ -126,7 +126,8 @@ export const ChatPage = () => {
         };
         setShareScreenTrack(screenTrack);
         const videoChild = screenTrack.attach();
-        videoChild.width = 460;
+        videoChild.style.width = "50%";
+        videoChild.style.borderRadius = "9px";
         videoRef.current?.appendChild(videoChild);
       });
     } else {
