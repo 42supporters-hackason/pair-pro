@@ -50,5 +50,3 @@ export const RemoteVideoParticipant = ({ participant }: Props) => {
     </Box>
   );
 };
-
-// ・appendChild消しては？表示多い問題、.onのやつ.offもセットで
