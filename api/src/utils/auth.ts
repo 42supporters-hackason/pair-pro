@@ -3,7 +3,9 @@ import * as jwt from "jsonwebtoken";
 export const jwtKey = process.env.JWT_KEY as string;
 
 export interface AuthTokenPayload {
+  authId: number;
   userId: number;
+  communityId: number;
 }
 
 export function decodeAuthHeader(authHeader: string): AuthTokenPayload {

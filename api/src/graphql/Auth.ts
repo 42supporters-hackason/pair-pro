@@ -18,6 +18,7 @@ export const AuthPayLoad = objectType({
   definition(t) {
     t.nonNull.string("token");
     t.nonNull.field("user", {
+      // TODO(takumi): I guess this should be 'auth'
       type: "User",
     });
   },
@@ -57,6 +58,7 @@ export const AuthMutation = extendType({
           });
         }
 
+        // todo(takumi): this `userId` is actually `authId`
         const token = jwt.sign({ userId: user.id }, jwtKey);
 
         return {
