@@ -93,6 +93,8 @@ export const ChatPage = () => {
         }
       );
       room.disconnect();
+      setVolumeOn.on();
+      setVideoOn.on();
       setRoomData(null);
     }
   }, [accessTokenReturnValue, roomId]);
