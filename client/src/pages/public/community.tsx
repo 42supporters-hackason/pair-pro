@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
+import { Card } from "../../components/Card";
 import { useAuth } from "../../context/auth";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
@@ -90,7 +91,7 @@ export const CommunityPage = () => {
           justifyContent: "center",
           alignItems: "center",
           pt: "60px",
-          gap: "35px",
+          gap: "15px",
         }}
       >
         <Box>
@@ -125,6 +126,7 @@ export const CommunityPage = () => {
             flexDirection: "column",
             alignItems: "center",
             gap: 2,
+            p: 3,
           }}
           component="form"
           onSubmit={handleSubmit(handleEnterByCommunityId)}
@@ -146,18 +148,33 @@ export const CommunityPage = () => {
             communityに入る
           </Button>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-          <Typography variant="h6" fontWeight="bold">
-            communityを作成したい方へ。
-          </Typography>
-          <Button
-            variant="contained"
-            sx={{ height: "60px", borderRadius: "30px" }}
-            onClick={() => goToCreateCommunity()}
+        <Card
+          style={{
+            width: "300px",
+            boxShadow:
+              "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+            }}
           >
-            新しいcommunityを作る
-          </Button>
-        </Box>
+            <Typography fontWeight="bold">
+              新しいcommunityを作成したい方へ。
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{ borderRadius: "30px" }}
+              onClick={() => goToCreateCommunity()}
+            >
+              community作成ページへ
+            </Button>
+          </Box>
+        </Card>
       </Box>
     </Box>
   );
