@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { Card } from "../../../components/Card";
 import { useClientRoute } from "../../../hooks/useClientRoute";
 import { usePublicRoute } from "../../../hooks/usePublicRoute";
 import {
@@ -46,50 +47,55 @@ export const CreateCommunityPage = () => {
       component="form"
       onSubmit={handleSubmit(handleCreateCommunity)}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h6" fontWeight="bold">
-          新しいcomunityの名前を入力してください
-        </Typography>
-        <TextField
-          label="community名"
-          sx={{ mt: "45px", width: "450px" }}
-          {...register("communityName")}
-        />
-        <Typography color="error">{errors.communityName?.message}</Typography>
-        <Button
-          variant="contained"
-          sx={{
-            mt: "45px",
-            width: "350px",
-            height: "50px",
-            borderRadius: "20px",
-            fontWeight: "bold",
+      <Box sx={{ width: "100%" }}>
+        <Card
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "50%",
+            margin: "0 auto",
+            boxShadow: "rgb(38, 57, 77) 0px 20px 30px -10px",
           }}
-          type="submit"
         >
-          作成する
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          sx={{
-            mt: "20px",
-            width: "350px",
-            height: "50px",
-            borderRadius: "20px",
-            fontWeight: "bold",
-            color: "black",
-          }}
-          onClick={() => goToCommunity()}
-        >
-          戻る
-        </Button>
+          <Typography variant="h6" fontWeight="bold">
+            新しいcomunityの名前を入力してください
+          </Typography>
+          <TextField
+            label="community名"
+            sx={{ mt: "45px", width: "450px" }}
+            {...register("communityName")}
+          />
+          <Typography color="error">{errors.communityName?.message}</Typography>
+          <Button
+            variant="contained"
+            sx={{
+              mt: "45px",
+              width: "350px",
+              height: "50px",
+              borderRadius: "20px",
+              fontWeight: "bold",
+            }}
+            type="submit"
+          >
+            作成する
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{
+              mt: "20px",
+              width: "350px",
+              height: "50px",
+              borderRadius: "20px",
+              fontWeight: "bold",
+              color: "black",
+            }}
+            onClick={() => goToCommunity()}
+          >
+            戻る
+          </Button>
+        </Card>
       </Box>
     </Box>
   );

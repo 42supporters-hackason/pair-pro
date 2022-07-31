@@ -94,6 +94,7 @@ export const CommunityPage = () => {
           gap: "15px",
         }}
       >
+
         <Box>
           <Typography
             variant="h5"
