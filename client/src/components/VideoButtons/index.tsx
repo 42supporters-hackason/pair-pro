@@ -65,8 +65,8 @@ export const VideoButtons = ({
           <VideocamOffIcon />
         </IconButton>
       )}
-      <IconButton>
-        <PersonalVideoIcon onClick={onClickShareScreen} />
+      <IconButton onClick={onClickShareScreen}>
+        <PersonalVideoIcon />
       </IconButton>
       <IconButton onClick={onExit}>
         <LogoutIcon />
