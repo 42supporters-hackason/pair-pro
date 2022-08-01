@@ -7,7 +7,7 @@ import {
   stringArg,
   subscriptionType,
 } from "nexus";
-import { User, Post } from "@prisma/client";
+import { Profile, Post } from "@prisma/client";
 
 export const MessageObject = objectType({
   name: "Message",
@@ -26,14 +26,14 @@ export const MessageObject = objectType({
     // TODO createdAt
     t.nonNull.string("content");
     t.nonNull.field("createdBy", {
-      type: "User",
+      type: "Profile",
       // todo: Link's postedBy is nullable in tutorial
       async resolve(parent, args, context) {
         return (await context.prisma.message
           .findUnique({
             where: { id: parent.id },
           })
-          .createdBy()) as User;
+          .createdBy()) as Profile;
       },
     });
   },
@@ -68,9 +68,9 @@ export const MessageMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { postId, content } = args;
-        const { userId } = context;
+        const { profileId } = context;
 
-        if (!userId) {
+        if (!profileId) {
           throw new Error("You have to log in.");
         }
 
@@ -81,7 +81,7 @@ export const MessageMutation = extendType({
             },
             content,
             createdBy: {
-              connect: { id: userId },
+              connect: { id: profileId },
             },
           },
         });

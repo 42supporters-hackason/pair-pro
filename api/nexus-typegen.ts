@@ -44,14 +44,9 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Auth: { // root type
-    githubId: string; // String!
-    githubLogin: string; // String!
-    id: number; // Int!
-  }
   AuthPayLoad: { // root type
-    auth: NexusGenRootTypes['Auth']; // Auth!
     token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
   Message: { // root type
     content: string; // String!
@@ -65,6 +60,12 @@ export interface NexusGenObjects {
     id: string; // String!
     title: string; // String!
   }
+  Profile: { // root type
+    bio: string; // String!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
+  }
   Query: {};
   Skill: { // root type
     id: number; // Int!
@@ -72,10 +73,9 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
-    bio: string; // String!
+    githubId: string; // String!
+    githubLogin: string; // String!
     id: number; // Int!
-    matchingPoint: number; // Int!
-    name: string; // String!
   }
 }
 
@@ -90,19 +90,13 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Auth: { // field return type
-    githubId: string; // String!
-    githubLogin: string; // String!
-    id: number; // Int!
-    users: NexusGenRootTypes['User'][]; // [User!]!
-  }
   AuthPayLoad: { // field return type
-    auth: NexusGenRootTypes['Auth']; // Auth!
     token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
   }
   Message: { // field return type
     content: string; // String!
-    createdBy: NexusGenRootTypes['User']; // User!
+    createdBy: NexusGenRootTypes['Profile']; // Profile!
     id: number; // Int!
     post: NexusGenRootTypes['Post']; // Post!
   }
@@ -112,31 +106,39 @@ export interface NexusGenFieldTypes {
     deletePost: NexusGenRootTypes['Post']; // Post!
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
-    updateMe: NexusGenRootTypes['User'] | null; // User
+    updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
   }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
-    driver: NexusGenRootTypes['User'] | null; // User
+    driver: NexusGenRootTypes['Profile'] | null; // Profile
     id: string; // String!
     messages: NexusGenRootTypes['Message'][]; // [Message!]!
-    navigator: NexusGenRootTypes['User'] | null; // User
+    navigator: NexusGenRootTypes['Profile'] | null; // Profile
     requiredSkills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     title: string; // String!
   }
+  Profile: { // field return type
+    bio: string; // String!
+    driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
+    navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
   Query: { // field return type
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
-    me: NexusGenRootTypes['User']; // User!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    myProfile: NexusGenRootTypes['Profile']; // Profile!
     post: NexusGenRootTypes['Post'] | null; // Post
+    profile: NexusGenRootTypes['Profile'] | null; // Profile
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
-    user: NexusGenRootTypes['User'] | null; // User
-    users: NexusGenRootTypes['User'][]; // [User!]!
   }
   Skill: { // field return type
     id: number; // Int!
@@ -146,29 +148,21 @@ export interface NexusGenFieldTypes {
     waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
-    bio: string; // String!
-    driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
+    githubId: string; // String!
+    githubLogin: string; // String!
     id: number; // Int!
-    matchingPoint: number; // Int!
-    name: string; // String!
-    navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Auth: { // field return type name
-    githubId: 'String'
-    githubLogin: 'String'
-    id: 'Int'
-    users: 'User'
-  }
   AuthPayLoad: { // field return type name
-    auth: 'Auth'
     token: 'String'
+    user: 'User'
   }
   Message: { // field return type name
     content: 'String'
-    createdBy: 'User'
+    createdBy: 'Profile'
     id: 'Int'
     post: 'Post'
   }
@@ -178,31 +172,39 @@ export interface NexusGenFieldTypeNames {
     deletePost: 'Post'
     post: 'Post'
     registerNavigator: 'Post'
-    updateMe: 'User'
+    updateMyProfile: 'Profile'
     updatePost: 'Post'
   }
   Post: { // field return type name
     completedAt: 'DateTime'
     createdAt: 'DateTime'
     description: 'String'
-    driver: 'User'
+    driver: 'Profile'
     id: 'String'
     messages: 'Message'
-    navigator: 'User'
+    navigator: 'Profile'
     requiredSkills: 'Skill'
     title: 'String'
   }
+  Profile: { // field return type name
+    bio: 'String'
+    driverPost: 'Post'
+    id: 'Int'
+    matchingPoint: 'Int'
+    name: 'String'
+    navigatorPost: 'Post'
+  }
   Query: { // field return type name
     feed: 'Post'
-    me: 'User'
     messagesByPostId: 'Message'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
+    myProfile: 'Profile'
     post: 'Post'
+    profile: 'Profile'
+    profiles: 'Profile'
     skills: 'Skill'
     unmatchedPosts: 'Post'
-    user: 'User'
-    users: 'User'
   }
   Skill: { // field return type name
     id: 'Int'
@@ -212,12 +214,10 @@ export interface NexusGenFieldTypeNames {
     waitForMessage: 'Message'
   }
   User: { // field return type name
-    bio: 'String'
-    driverPost: 'Post'
+    githubId: 'String'
+    githubLogin: 'String'
     id: 'Int'
-    matchingPoint: 'Int'
-    name: 'String'
-    navigatorPost: 'Post'
+    profiles: 'Profile'
   }
 }
 
@@ -242,7 +242,7 @@ export interface NexusGenArgTypes {
       navigatorId: number; // Int!
       postId: string; // String!
     }
-    updateMe: { // args
+    updateMyProfile: { // args
       bio?: string | null; // String
       name?: string | null; // String
     }
@@ -260,7 +260,7 @@ export interface NexusGenArgTypes {
     post: { // args
       id: string; // String!
     }
-    user: { // args
+    profile: { // args
       id: number; // Int!
     }
   }
