@@ -2,16 +2,9 @@
 ### Do not make changes to this file directly
 
 
-type Auth {
-  githubId: String!
-  githubLogin: String!
-  id: Int!
-  users: [User!]!
-}
-
 type AuthPayLoad {
-  auth: Auth!
   token: String!
+  user: User!
 }
 
 """
@@ -21,7 +14,7 @@ scalar DateTime
 
 type Message {
   content: String!
-  createdBy: User!
+  createdBy: Profile!
   id: Int!
   post: Post!
 }
@@ -32,7 +25,7 @@ type Mutation {
   deletePost(id: String!): Post!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
-  updateMe(bio: String, name: String): User
+  updateMyProfile(bio: String, name: String): Profile
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
@@ -40,25 +33,34 @@ type Post {
   completedAt: DateTime
   createdAt: DateTime!
   description: String!
-  driver: User
+  driver: Profile
   id: String!
   messages: [Message!]!
-  navigator: User
+  navigator: Profile
   requiredSkills: [Skill!]!
   title: String!
 }
 
+type Profile {
+  bio: String!
+  driverPost: [Post!]!
+  id: Int!
+  matchingPoint: Int!
+  name: String!
+  navigatorPost: [Post!]!
+}
+
 type Query {
   feed: [Post!]!
-  me: User!
   messagesByPostId(postId: String!): [Message!]!
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
+  myProfile: Profile!
   post(id: String!): Post
+  profile(id: Int!): Profile
+  profiles: [Profile!]!
   skills: [Skill!]!
   unmatchedPosts: [Post]!
-  user(id: Int!): User
-  users: [User!]!
 }
 
 type Skill {
@@ -71,10 +73,8 @@ type Subscription {
 }
 
 type User {
-  bio: String!
-  driverPost: [Post!]!
+  githubId: String!
+  githubLogin: String!
   id: Int!
-  matchingPoint: Int!
-  name: String!
-  navigatorPost: [Post!]!
+  profiles: [Profile!]!
 }

@@ -1,5 +1,4 @@
 import { extendType, nonNull, objectType, stringArg } from "nexus";
-import { Token } from "graphql";
 import axios, { AxiosError } from "axios";
 import * as jwt from "jsonwebtoken";
 import { stringify, parse } from "querystring";
@@ -15,28 +14,11 @@ export const AuthPayLoad = objectType({
   name: "AuthPayLoad",
   definition(t) {
     t.nonNull.string("token");
-    t.nonNull.field("auth", {
-      type: "Auth",
+    t.nonNull.field("user", {
+      type: "User",
     });
   },
 });
-
-export const AuthObject = objectType({
-  name: "Auth",
-  definition(t) {
-    t.nonNull.int("id");
-    t.nonNull.string("githubId");
-    t.nonNull.string("githubLogin");
-    t.nonNull.list.nonNull.field("users", {
-      type: "User",
-      resolve(parent, _args, context) {
-        return context.prisma.auth.findUnique({
-          where: {id: parent.id },
-        }).users();
-      }
-    })
-  }
-})
 
 export const AuthMutation = extendType({
   type: "Mutation",
@@ -50,18 +32,19 @@ export const AuthMutation = extendType({
         const { code } = args;
         const access_token = await getAccessToken(code) as string;
 
+        // todo(takumi): probably save add `githubBio` to `user`
         const {
           id: githubId,
           login: githubLogin,
           bio,
         } = await getGithubInfo(access_token);
 
-        let auth = await context.prisma.auth.findFirst({
+        let user = await context.prisma.user.findFirst({
           where: { githubId },
         });
 
-        if (!auth) {
-          auth = await context.prisma.auth.create({
+        if (!user) {
+          user = await context.prisma.user.create({
             data: {
               githubLogin,
               githubId,
@@ -69,11 +52,11 @@ export const AuthMutation = extendType({
           });
         }
 
-        const token = jwt.sign({ authId: auth.id }, jwtKey);
+        const token = jwt.sign({ userId: user.id }, jwtKey);
 
         return {
           token,
-          auth,
+          user,
         };
       },
     });
