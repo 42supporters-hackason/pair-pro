@@ -1,4 +1,5 @@
-import React, { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
+import { Box } from "@mui/material";
 import { LocalVideoTrack } from "twilio-video";
 
 interface Props {
@@ -13,12 +14,12 @@ export const LocalTrack = memo(({ track }: Props) => {
   const child = track.attach();
 
   useEffect(() => {
-    child.style.width = "50%";
+    child.style.width = "100%";
     child.style.borderRadius = "9px";
     ref.current?.appendChild(child);
   }, [track]);
 
-  return <div ref={ref} />;
+  return <Box ref={ref} />;
 });
 
 LocalTrack.displayName = "LocalTrack";

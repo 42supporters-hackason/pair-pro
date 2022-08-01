@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { Box } from "@mui/material";
 import { RemoteVideoTrack } from "twilio-video";
 
 interface Props {
@@ -13,10 +14,10 @@ export const RemoteTrack = ({ track }: Props) => {
   const child = track.attach();
 
   useEffect(() => {
-    child.style.width = "50%";
+    child.style.width = "100%";
     child.style.borderRadius = "9px";
     ref.current?.appendChild(child);
   }, [track]);
 
-  return <div ref={ref} />;
+  return <Box ref={ref} />;
 };

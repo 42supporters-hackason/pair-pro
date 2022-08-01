@@ -126,7 +126,7 @@ export const ChatPage = () => {
         };
         setShareScreenTrack(screenTrack);
         const videoChild = screenTrack.attach();
-        videoChild.style.width = "50%";
+        videoChild.style.width = "100%";
         videoChild.style.borderRadius = "9px";
         videoRef.current?.appendChild(videoChild);
       });
