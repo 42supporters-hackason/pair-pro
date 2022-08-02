@@ -20,6 +20,7 @@ model User {
   id        Int      @id @default(autoincrement())
   githubId String
   githubLogin String
+  githubBio String
   profiles Profile[] @relation(name: "User")
 }
 
