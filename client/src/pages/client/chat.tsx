@@ -133,7 +133,7 @@ export const ChatPage = () => {
     } else {
       roomData?.localParticipant.unpublishTrack(shareScreenTrack);
       shareScreenTrack.stop();
-      videoRef.current?.remove();
+      videoRef.current?.firstChild?.remove();
       setShareScreenTrack(null);
     }
   }, [shareScreenTrack, setShareScreenTrack, roomData?.localParticipant]);
