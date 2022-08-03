@@ -10,7 +10,7 @@ export interface Context {
   prisma: PrismaClient;
   userId?: number;
   profileId?: number;
-  communityId?: number;
+  communityId?: string;
   pubsub: PubSub;
 }
 

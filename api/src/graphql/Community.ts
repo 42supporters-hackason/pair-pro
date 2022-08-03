@@ -4,7 +4,7 @@ import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 export const Community = objectType({
   name: "Community",
   definition(t) {
-    t.nonNull.int("id");
+    t.nonNull.string("id");
     t.nonNull.string("name");
     t.nonNull.list.field("users", {
       type: "User",
