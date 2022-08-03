@@ -1,5 +1,6 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 import { Profile } from "@prisma/client";
+export const defaultMatchingPoint = 3;
 
 export const ProfileObject = objectType({
   name: "Profile",

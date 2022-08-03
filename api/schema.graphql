@@ -8,9 +8,9 @@ type AuthPayLoad {
 }
 
 type Community {
-  id: Int!
+  id: String!
   name: String!
-  users: [User]!
+  profiles: [Profile!]!
 }
 
 """
@@ -27,14 +27,14 @@ type Message {
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
-  belongCommunity(communityId: Int!): Community!
   createCommunity(name: String!): Community!
   createMessage(content: String!, postId: String!): Message!
-  deleteCommunity(communityId: Int!): Community!
+  deleteCommunity(communityId: String!): Community!
   deletePost(id: String!): Post!
+  joinCommunity(communityId: String!): AuthPayLoad!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
-  updateCommunity(id: Int!, name: String!): Community!
+  updateCommunity(id: String!, name: String!): Community!
   updateMyProfile(bio: String, name: String): Profile
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
@@ -61,9 +61,11 @@ type Profile {
 }
 
 type Query {
+  communities: [Community!]!
   feed: [Post!]!
-  listAllCommunities: [Community!]!
   messagesByPostId(postId: String!): [Message!]!
+  myCommunities: [Community!]!
+  myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
   myProfile: Profile!

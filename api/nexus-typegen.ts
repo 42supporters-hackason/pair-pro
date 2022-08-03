@@ -49,7 +49,7 @@ export interface NexusGenObjects {
     user: NexusGenRootTypes['User']; // User!
   }
   Community: { // root type
-    id: number; // Int!
+    id: string; // String!
     name: string; // String!
   }
   Message: { // root type
@@ -99,9 +99,9 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Community: { // field return type
-    id: number; // Int!
+    id: string; // String!
     name: string; // String!
-    users: Array<NexusGenRootTypes['User'] | null>; // [User]!
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
   }
   Message: { // field return type
     content: string; // String!
@@ -111,11 +111,11 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
-    belongCommunity: NexusGenRootTypes['Community']; // Community!
     createCommunity: NexusGenRootTypes['Community']; // Community!
     createMessage: NexusGenRootTypes['Message']; // Message!
     deleteCommunity: NexusGenRootTypes['Community']; // Community!
     deletePost: NexusGenRootTypes['Post']; // Post!
+    joinCommunity: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateCommunity: NexusGenRootTypes['Community']; // Community!
@@ -142,9 +142,11 @@ export interface NexusGenFieldTypes {
     navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
   }
   Query: { // field return type
+    communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
-    listAllCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
+    myCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
+    myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myProfile: NexusGenRootTypes['Profile']; // Profile!
@@ -175,9 +177,9 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Community: { // field return type name
-    id: 'Int'
+    id: 'String'
     name: 'String'
-    users: 'User'
+    profiles: 'Profile'
   }
   Message: { // field return type name
     content: 'String'
@@ -187,11 +189,11 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
-    belongCommunity: 'Community'
     createCommunity: 'Community'
     createMessage: 'Message'
     deleteCommunity: 'Community'
     deletePost: 'Post'
+    joinCommunity: 'AuthPayLoad'
     post: 'Post'
     registerNavigator: 'Post'
     updateCommunity: 'Community'
@@ -218,9 +220,11 @@ export interface NexusGenFieldTypeNames {
     navigatorPost: 'Post'
   }
   Query: { // field return type name
+    communities: 'Community'
     feed: 'Post'
-    listAllCommunities: 'Community'
     messagesByPostId: 'Message'
+    myCommunities: 'Community'
+    myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
     myProfile: 'Profile'
@@ -250,9 +254,6 @@ export interface NexusGenArgTypes {
     authGithub: { // args
       code: string; // String!
     }
-    belongCommunity: { // args
-      communityId: number; // Int!
-    }
     createCommunity: { // args
       name: string; // String!
     }
@@ -261,10 +262,13 @@ export interface NexusGenArgTypes {
       postId: string; // String!
     }
     deleteCommunity: { // args
-      communityId: number; // Int!
+      communityId: string; // String!
     }
     deletePost: { // args
       id: string; // String!
+    }
+    joinCommunity: { // args
+      communityId: string; // String!
     }
     post: { // args
       description: string; // String!
@@ -276,7 +280,7 @@ export interface NexusGenArgTypes {
       postId: string; // String!
     }
     updateCommunity: { // args
-      id: number; // Int!
+      id: string; // String!
       name: string; // String!
     }
     updateMyProfile: { // args
