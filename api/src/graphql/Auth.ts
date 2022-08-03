@@ -30,13 +30,13 @@ export const AuthMutation = extendType({
       },
       async resolve(_parent, args, context) {
         const { code } = args;
-        const access_token = await getAccessToken(code) as string;
+        const access_token = (await getAccessToken(code)) as string;
 
         // todo(takumi): probably save add `githubBio` to `user`
         const {
           id: githubId,
           login: githubLogin,
-          bio,
+          bio: githubBio,
         } = await getGithubInfo(access_token);
 
         let user = await context.prisma.user.findFirst({
@@ -48,6 +48,7 @@ export const AuthMutation = extendType({
             data: {
               githubLogin,
               githubId,
+              githubBio,
             },
           });
         }
