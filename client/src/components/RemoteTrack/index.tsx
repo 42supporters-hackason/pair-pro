@@ -4,12 +4,15 @@ import { RemoteVideoTrack } from "twilio-video";
 
 interface Props {
   track: RemoteVideoTrack;
+  setFocusedChild: React.Dispatch<
+    React.SetStateAction<HTMLVideoElement | null>
+  >;
 }
 
 /**
  * twilio-video/remoteのtrackを扱う
  */
-export const RemoteTrack = ({ track }: Props) => {
+export const RemoteTrack = ({ track, setFocusedChild }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const child = track.attach();
 
@@ -19,5 +22,5 @@ export const RemoteTrack = ({ track }: Props) => {
     ref.current?.appendChild(child);
   }, [track]);
 
-  return <Box ref={ref} />;
+  return <Box onClick={() => setFocusedChild(child)} ref={ref} />;
 };
