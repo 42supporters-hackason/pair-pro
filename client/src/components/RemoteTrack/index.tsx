@@ -22,5 +22,15 @@ export const RemoteTrack = ({ track, setFocusedChild }: Props) => {
     ref.current?.appendChild(child);
   }, [track]);
 
-  return <Box onClick={() => setFocusedChild(child)} ref={ref} />;
+  return (
+    <Box
+      sx={{ cursor: "pointer" }}
+      onClick={() => {
+        child.style.width = "100%";
+        child.style.borderRadius = "9px";
+        setFocusedChild(child);
+      }}
+      ref={ref}
+    />
+  );
 };
