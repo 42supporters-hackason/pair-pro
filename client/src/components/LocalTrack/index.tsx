@@ -1,15 +1,18 @@
-import { memo, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Box } from "@mui/material";
 import { LocalVideoTrack } from "twilio-video";
 
 interface Props {
   track: LocalVideoTrack;
+  setFocusedChild: React.Dispatch<
+    React.SetStateAction<HTMLVideoElement | null>
+  >;
 }
 
 /**
  * twilio-video/localのtrackを扱う
  */
-export const LocalTrack = memo(({ track }: Props) => {
+export const LocalTrack = ({ track, setFocusedChild }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const child = track.attach();
 
@@ -19,7 +22,13 @@ export const LocalTrack = memo(({ track }: Props) => {
     ref.current?.appendChild(child);
   }, [track]);
 
-  return <Box ref={ref} />;
-});
+  return (
+    <Box
+      sx={{ cursor: "pointer" }}
+      onClick={() => setFocusedChild(child)}
+      ref={ref}
+    />
+  );
+};
 
 LocalTrack.displayName = "LocalTrack";
