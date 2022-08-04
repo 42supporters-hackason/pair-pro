@@ -9,12 +9,18 @@ import { RemoteTrack } from "../RemoteTrack";
 
 interface Props {
   participant: RemoteParticipant;
+  setFocusedChild: React.Dispatch<
+    React.SetStateAction<HTMLVideoElement | null>
+  >;
 }
 
 /**
  * twilio-video/local participant
  */
-export const RemoteVideoParticipant = ({ participant }: Props) => {
+export const RemoteVideoParticipant = ({
+  participant,
+  setFocusedChild,
+}: Props) => {
   const [tracks, setTracks] = useState<RemoteTrackType[]>([]);
 
   useEffect(() => {
@@ -41,10 +47,15 @@ export const RemoteVideoParticipant = ({ participant }: Props) => {
     <Box
       sx={{
         display: "flex",
+        flexDirection: "column",
       }}
     >
       {tracks.map((track, index) => (
-        <RemoteTrack key={index} track={track as RemoteVideoTrack} />
+        <RemoteTrack
+          key={index}
+          track={track as RemoteVideoTrack}
+          setFocusedChild={setFocusedChild}
+        />
       ))}
     </Box>
   );
