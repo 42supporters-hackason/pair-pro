@@ -5,12 +5,18 @@ import { LocalTrack } from "../LocalTrack";
 
 interface Props {
   participant: LocalParticipant;
+  setFocusedChild: React.Dispatch<
+    React.SetStateAction<HTMLVideoElement | null>
+  >;
 }
 
 /**
  * twilio-video/local participant
  */
-export const LocalVideoParticipant = ({ participant }: Props) => {
+export const LocalVideoParticipant = ({
+  participant,
+  setFocusedChild,
+}: Props) => {
   const tracks = useMemo(
     () =>
       Array.from(participant.tracks.values())
@@ -23,10 +29,15 @@ export const LocalVideoParticipant = ({ participant }: Props) => {
     <Box
       sx={{
         display: "flex",
+        flexDirection: "column",
       }}
     >
       {tracks.map((track, index) => (
-        <LocalTrack key={index} track={track as LocalVideoTrack} />
+        <LocalTrack
+          key={index}
+          track={track as LocalVideoTrack}
+          setFocusedChild={setFocusedChild}
+        />
       ))}
     </Box>
   );
