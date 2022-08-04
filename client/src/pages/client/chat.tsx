@@ -175,7 +175,7 @@ export const ChatPage = () => {
             width: "100%",
           }}
         >
-          <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 3 }}>
+          <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 1 }}>
             {roomData === null ? (
               <EnterButton onClick={handleEnterRoom} />
             ) : (
