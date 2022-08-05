@@ -5,7 +5,7 @@ export const jwtKey = process.env.JWT_KEY as string;
 export interface AuthTokenPayload {
   userId: number;
   profileId: number;
-  communityId: number;
+  communityId: string;
 }
 
 export function decodeAuthHeader(authHeader: string): AuthTokenPayload {
