@@ -79,7 +79,9 @@ export const VideoRoom = forwardRef(
           ))}
           <Box
             sx={{ cursor: "pointer" }}
-            onClick={() => setFocusedChild(child)}
+            onClick={(e) => {
+              setFocusedChild(e.target as HTMLVideoElement);
+            }}
             ref={ref}
           />
         </Box>
@@ -88,7 +90,6 @@ export const VideoRoom = forwardRef(
             width: "80%",
             display: "flex",
             mx: "auto",
-            backgroundColor: "green",
           }}
           ref={focusedRef}
         ></Box>
