@@ -1,4 +1,10 @@
-import React, { ForwardedRef, forwardRef, useEffect, useState } from "react";
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Box } from "@mui/material";
 import { RemoteParticipant, Room } from "twilio-video";
 import { LocalVideoParticipant } from "../LocalVideoParticipant";
@@ -15,6 +21,10 @@ export const VideoRoom = forwardRef(
   ({ room }: Props, ref: ForwardedRef<HTMLDivElement>) => {
     const [remoteParticipant, setRemoteParticipant] = useState(
       Array.from(room.participants.values() ?? [])
+    );
+    const focusedRef = useRef<HTMLDivElement>(null);
+    const [focusedChild, setFocusedChild] = useState<HTMLVideoElement | null>(
+      null
     );
 
     useEffect(() => {
@@ -39,14 +49,50 @@ export const VideoRoom = forwardRef(
       }
     }, [room]);
 
+    useEffect(() => {
+      if (focusedRef.current && focusedChild) {
+        focusedRef.current.firstChild?.remove();
+        focusedRef.current.appendChild(focusedChild);
+      }
+    }, [focusedRef, focusedChild]);
+
     return (
-      <Box sx={{ width: "100%", display: "flex", gap: 2, mx: "auto" }}>
-        <LocalVideoParticipant participant={room.localParticipant} />
-        {remoteParticipant.map((participant, index) => (
-          <RemoteVideoParticipant key={index} participant={participant} />
-        ))}
-        <div ref={ref} />
-      </Box>
+      <>
+        <Box
+          sx={{
+            width: "20%",
+            display: "flex",
+            flexDirection: "column",
+            mx: "auto",
+          }}
+        >
+          <LocalVideoParticipant
+            participant={room.localParticipant}
+            setFocusedChild={setFocusedChild}
+          />
+          {remoteParticipant.map((participant, index) => (
+            <RemoteVideoParticipant
+              key={index}
+              participant={participant}
+              setFocusedChild={setFocusedChild}
+            />
+          ))}
+          <Box
+            sx={{ cursor: "pointer" }}
+            onClick={() => setFocusedChild(child)}
+            ref={ref}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "80%",
+            display: "flex",
+            mx: "auto",
+            backgroundColor: "green",
+          }}
+          ref={focusedRef}
+        ></Box>
+      </>
     );
   }
 );
