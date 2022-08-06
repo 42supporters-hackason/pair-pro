@@ -77,6 +77,7 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
+    githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
@@ -166,6 +167,7 @@ export interface NexusGenFieldTypes {
     waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
+    githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
@@ -246,6 +248,7 @@ export interface NexusGenFieldTypeNames {
     waitForMessage: 'Message'
   }
   User: { // field return type name
+    githubBio: 'String'
     githubId: 'String'
     githubLogin: 'String'
     id: 'Int'
