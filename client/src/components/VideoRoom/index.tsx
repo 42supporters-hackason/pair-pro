@@ -6,19 +6,20 @@ import React, {
   useState,
 } from "react";
 import { Box } from "@mui/material";
-import { RemoteParticipant, Room } from "twilio-video";
+import { LocalVideoTrack, RemoteParticipant, Room } from "twilio-video";
 import { LocalVideoParticipant } from "../LocalVideoParticipant";
 import { RemoteVideoParticipant } from "../RemoteVideoParticipant";
 
 interface Props {
   room: Room;
+  shareScreenTrack: LocalVideoTrack;
 }
 
 /**
  * twilio-video/Video Room
  */
 export const VideoRoom = forwardRef(
-  ({ room }: Props, ref: ForwardedRef<HTMLDivElement>) => {
+  ({ room, shareScreenTrack }: Props, ref: ForwardedRef<HTMLDivElement>) => {
     const [remoteParticipant, setRemoteParticipant] = useState(
       Array.from(room.participants.values() ?? [])
     );
@@ -79,8 +80,10 @@ export const VideoRoom = forwardRef(
           ))}
           <Box
             sx={{ cursor: "pointer" }}
-            onClick={(e) => {
-              setFocusedChild(e.target as HTMLVideoElement);
+            onClick={() => {
+              const newFocusedChild = shareScreenTrack.attach();
+              newFocusedChild.style.width = "100%";
+              setFocusedChild(newFocusedChild);
             }}
             ref={ref}
           />

@@ -26,8 +26,9 @@ export const LocalTrack = ({ track, setFocusedChild }: Props) => {
     <Box
       sx={{ cursor: "pointer" }}
       onClick={() => {
-        child.style.width = "100%";
-        setFocusedChild(child);
+        const newFocusedChild = track.attach();
+        newFocusedChild.style.width = "100%";
+        setFocusedChild(newFocusedChild);
       }}
       ref={ref}
     />

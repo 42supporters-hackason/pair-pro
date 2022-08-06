@@ -179,7 +179,11 @@ export const ChatPage = () => {
             {roomData === null ? (
               <EnterButton onClick={handleEnterRoom} />
             ) : (
-              <VideoRoom room={roomData} ref={videoRef} />
+              <VideoRoom
+                room={roomData}
+                shareScreenTrack={shareScreenTrack}
+                ref={videoRef}
+              />
             )}
           </Box>
           {roomData !== null && (
