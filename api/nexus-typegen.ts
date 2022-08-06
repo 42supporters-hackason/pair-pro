@@ -135,6 +135,7 @@ export interface NexusGenFieldTypes {
   }
   Profile: { // field return type
     bio: string; // String!
+    community: NexusGenRootTypes['Community']; // Community!
     driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
     id: number; // Int!
     matchingPoint: number; // Int!
@@ -214,6 +215,7 @@ export interface NexusGenFieldTypeNames {
   }
   Profile: { // field return type name
     bio: 'String'
+    community: 'Community'
     driverPost: 'Post'
     id: 'Int'
     matchingPoint: 'Int'

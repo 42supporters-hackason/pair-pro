@@ -74,15 +74,23 @@ export const PostQuery = extendType({
     });
     t.nonNull.list.field("unmatchedPosts", {
       type: "Post",
-      resolve(parent, args, context) {
-        const { profileId } = context;
-        if (!profileId) {
-          throw new Error("You have to log in");
+      async resolve(parent, args, context) {
+        const { profileId, communityId } = context;
+        if (!profileId || !communityId) {
+          throw new Error("You have to be in community");
         }
+
+        const profileIds = (
+          await context.prisma.profile.findMany({
+            where: { communityId },
+          })
+        ).map((p) => p.id);
 
         return context.prisma.post.findMany({
           where: {
-            navigatorId: null,
+            navigatorId: {
+              in: profileIds,
+            },
             driverId: {
               not: profileId,
             },

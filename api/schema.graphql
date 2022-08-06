@@ -53,6 +53,7 @@ type Post {
 
 type Profile {
   bio: String!
+  community: Community!
   driverPost: [Post!]!
   id: Int!
   matchingPoint: Int!
