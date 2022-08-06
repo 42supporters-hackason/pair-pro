@@ -88,10 +88,9 @@ export const PostQuery = extendType({
 
         return context.prisma.post.findMany({
           where: {
-            navigatorId: {
-              in: profileIds,
-            },
+            navigatorId: null,
             driverId: {
+              in: profileIds,
               not: profileId,
             },
           },
