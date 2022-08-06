@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
 
+/**
+ * skills
+ */
 export const FETCH_SKILLS = gql`
   query fetchSkills {
     skills {
@@ -9,6 +12,9 @@ export const FETCH_SKILLS = gql`
   }
 `;
 
+/**
+ * post
+ */
 export const FETCH_UNMATCHED_POST = gql`
   query fetchUnmatchedPost {
     unmatchedPosts {
@@ -100,6 +106,9 @@ export const FETCH_SPECIFIC_POST = gql`
   }
 `;
 
+/**
+ * message
+ */
 export const FETCH_MESSAGES = gql`
   query fetchMessages($postId: String!) {
     messagesByPostId(postId: $postId) {
@@ -116,14 +125,50 @@ export const FETCH_MESSAGES = gql`
   }
 `;
 
+/**
+ * user
+ */
 export const FETCH_ME = gql`
   query fetchMe {
-    me {
+    myProfile {
       id
       name
       githubLogin
       matchingPoint
       bio
+    }
+  }
+`;
+
+/**
+ * community
+ */
+export const FETCH_MY_COMMUNITIES = gql`
+  query fetchMyCommunities {
+    myCommunities {
+      id
+      name
+      profiles {
+        id
+        name
+        bio
+        githubLogin
+      }
+    }
+  }
+`;
+
+export const FETCH_CURRENT_COMMUNITY = gql`
+  query fetchCurrentCommunity {
+    myCurrentCommunity {
+      id
+      name
+      profiles {
+        id
+        name
+        bio
+        githubLogin
+      }
     }
   }
 `;

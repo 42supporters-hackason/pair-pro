@@ -1,29 +1,41 @@
 import { gql } from "@apollo/client";
 
+/**
+ * auth
+ */
 export const SIGNIN = gql`
   mutation SignIn($code: String!) {
     authGithub(code: $code) {
       token
       user {
         id
-        name
         githubLogin
-        matchingPoint
-        bio
+        profiles {
+          id
+          name
+          matchingPoint
+          bio
+        }
       }
     }
   }
 `;
 
+/**
+ * user
+ */
 export const UPDATE_PROFILE = gql`
   mutation UpdateProfile($name: String!, $bio: String!) {
-    updateMe(name: $name, bio: $bio) {
+    updateMyProfile(name: $name, bio: $bio) {
       name
       bio
     }
   }
 `;
 
+/**
+ * post
+ */
 export const CREATE_POST = gql`
   mutation createPost(
     $description: String!
@@ -48,15 +60,6 @@ export const CREATE_POST = gql`
         matchingPoint
         bio
       }
-    }
-  }
-`;
-
-export const SEND_MESSAGE = gql`
-  mutation sendMessage($postId: String!, $content: String!) {
-    createMessage(postId: $postId, content: $content) {
-      id
-      content
     }
   }
 `;
@@ -97,6 +100,38 @@ export const UPDATE_POST = gql`
       requiredSkillsIds: $requiredSkillsIds
     ) {
       id
+    }
+  }
+`;
+
+/**
+ * message
+ */
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($postId: String!, $content: String!) {
+    createMessage(postId: $postId, content: $content) {
+      id
+      content
+    }
+  }
+`;
+
+/**
+ * community
+ */
+export const CREATE_COMMUNITY = gql`
+  mutation createCommunity($name: String!) {
+    createCommunity(name: $name) {
+      id
+      name
+    }
+  }
+`;
+
+export const JOIN_COMMUNITY = gql`
+  mutation joinCommunity($communityId: String!) {
+    joinCommunity(communityId: $communityId) {
+      token
     }
   }
 `;
