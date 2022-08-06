@@ -1,5 +1,6 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 import { Profile } from "@prisma/client";
+import { context } from "../context";
 export const defaultMatchingPoint = 3;
 
 export const ProfileObject = objectType({
@@ -30,6 +31,15 @@ export const ProfileObject = objectType({
           .navigatorPost();
       },
     });
+    t.nonNull.field("user", {
+      type: "User",
+      resolve(parent, _args, context) {
+        return context.prisma.profile
+          .findUnique({
+            where: { id: parent.id },
+          }).user();
+      }
+    })
   },
 });
 

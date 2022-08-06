@@ -58,6 +58,7 @@ type Profile {
   matchingPoint: Int!
   name: String!
   navigatorPost: [Post!]!
+  user: User!
 }
 
 type Query {
