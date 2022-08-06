@@ -27,7 +27,6 @@ export const RemoteTrack = ({ track, setFocusedChild }: Props) => {
       sx={{ cursor: "pointer" }}
       onClick={() => {
         const newFocusedChild = track.attach();
-        newFocusedChild.style.width = "100%";
         setFocusedChild(newFocusedChild);
       }}
       ref={ref}

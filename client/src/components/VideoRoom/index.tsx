@@ -53,6 +53,7 @@ export const VideoRoom = forwardRef(
     useEffect(() => {
       if (focusedRef.current && focusedChild) {
         focusedRef.current.firstChild?.remove();
+        focusedChild.style.width = "100%";
         focusedRef.current.appendChild(focusedChild);
       }
     }, [focusedRef, focusedChild]);
@@ -82,7 +83,6 @@ export const VideoRoom = forwardRef(
             sx={{ cursor: "pointer" }}
             onClick={() => {
               const newFocusedChild = shareScreenTrack.attach();
-              newFocusedChild.style.width = "100%";
               setFocusedChild(newFocusedChild);
             }}
             ref={ref}
