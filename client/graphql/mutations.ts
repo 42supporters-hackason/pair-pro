@@ -56,9 +56,11 @@ export const CREATE_POST = gql`
       driver {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
     }
   }
@@ -78,9 +80,11 @@ export const MATCH_POST = gql`
       navigator {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
     }
   }
@@ -132,6 +136,16 @@ export const JOIN_COMMUNITY = gql`
   mutation joinCommunity($communityId: String!) {
     joinCommunity(communityId: $communityId) {
       token
+      user {
+        id
+        githubLogin
+        profiles {
+          id
+          name
+          matchingPoint
+          bio
+        }
+      }
     }
   }
 `;

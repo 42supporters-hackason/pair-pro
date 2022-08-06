@@ -107,9 +107,9 @@ export const HomePage = () => {
           </Box>
         </Box>
         <GithubProfile
-          githubLogin={profile.githubLogin}
-          name={profile.name}
-          bio={profile.bio}
+          githubLogin={profile?.githubLogin}
+          name={profile?.name}
+          bio={profile?.bio}
         />
       </Box>
       <Modal

@@ -24,9 +24,11 @@ export const FETCH_UNMATCHED_POST = gql`
       driver {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       requiredSkills {
         id
@@ -59,16 +61,20 @@ export const FETCH_MATCHED_POST = gql`
       navigator {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       driver {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       requiredSkills {
         id
@@ -87,16 +93,20 @@ export const FETCH_SPECIFIC_POST = gql`
       navigator {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       driver {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       requiredSkills {
         id
@@ -117,9 +127,11 @@ export const FETCH_MESSAGES = gql`
       createdBy {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
     }
   }
@@ -133,9 +145,11 @@ export const FETCH_ME = gql`
     myProfile {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
   }
 `;
@@ -152,7 +166,9 @@ export const FETCH_MY_COMMUNITIES = gql`
         id
         name
         bio
-        githubLogin
+        user {
+          githubLogin
+        }
       }
     }
   }
@@ -167,7 +183,9 @@ export const FETCH_CURRENT_COMMUNITY = gql`
         id
         name
         bio
-        githubLogin
+        user {
+          githubLogin
+        }
       }
     }
   }

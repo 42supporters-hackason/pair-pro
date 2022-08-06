@@ -4,28 +4,13 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Card } from "../../components/Card";
-import { useAuth } from "../../context/auth";
-import { useClientRoute } from "../../hooks/useClientRoute";
+import { useAuth, useCommunity, useProfile } from "../../context/auth";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
+import { useCommunityHooks } from "../hooks/useCommunityHooks";
 import {
   CommunitySchema,
   communitySchema,
 } from "../validation/community_validation";
-
-const DEMO_COMMUNITY = [
-  {
-    id: "flajljfdlkasjl",
-    name: "42tokyo",
-  },
-  {
-    id: "jjflajld",
-    name: "community",
-  },
-  {
-    id: "ljldfakjkhfo",
-    name: "hogehoge",
-  },
-];
 
 /**
  * public/community
@@ -35,11 +20,17 @@ export const CommunityPage = () => {
    * misc.
    */
   const { goToCreateCommunity, goToLogin } = usePublicRoute();
-  const { goToHome } = useClientRoute();
   const { signIn } = useAuth();
 
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
+
+  /**
+   * custom hooks
+   */
+  const { myCommunities, refecthMyCommunities } = useCommunityHooks();
+  const { joinCommunity } = useCommunity();
+  const { fetchMyProfile } = useProfile();
 
   /**
    * form validation
@@ -48,6 +39,7 @@ export const CommunityPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<CommunitySchema>({
     resolver: zodResolver(communitySchema),
   });
@@ -57,16 +49,15 @@ export const CommunityPage = () => {
    */
   const handleEnterCommunity = useCallback(
     (id: string) => {
-      // TODO: communityを決める処理
-      goToHome({ replace: true });
+      joinCommunity(id);
     },
-    [goToHome]
+    [joinCommunity]
   );
 
   const handleEnterByCommunityId = useCallback(() => {
-    // TODO: communityを追加する処理
-    goToHome({ replace: true });
-  }, [goToHome]);
+    const id = getValues("communityId");
+    joinCommunity(id);
+  }, [joinCommunity, getValues]);
 
   /**
    * signIn処理を実行
@@ -75,7 +66,8 @@ export const CommunityPage = () => {
     if (code !== null) {
       signIn(code);
     }
-  }, [signIn, code, goToLogin]);
+    refecthMyCommunities();
+  }, [signIn, code, goToLogin, searchParams, refecthMyCommunities]);
 
   return (
     <Box
@@ -103,21 +95,22 @@ export const CommunityPage = () => {
             コミュニティを選択してください
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-            {DEMO_COMMUNITY.map(({ id, name }) => (
-              <Button
-                key={id}
-                variant="outlined"
-                sx={{
-                  width: "450px",
-                  height: "50px",
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                }}
-                onClick={() => handleEnterCommunity(id)}
-              >
-                {name}
-              </Button>
-            ))}
+            {myCommunities &&
+              myCommunities.myCommunities.map(({ id, name }) => (
+                <Button
+                  key={id}
+                  variant="outlined"
+                  sx={{
+                    width: "450px",
+                    height: "50px",
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                  }}
+                  onClick={() => handleEnterCommunity(id)}
+                >
+                  {name}
+                </Button>
+              ))}
           </Box>
         </Box>
         <Box

@@ -27,12 +27,17 @@ const matchedPostsTaranslator = (
       content: description,
       languages: requiredSkills.map(({ name }) => name),
       name:
-        myGithubLogin === driver?.githubLogin ? navigator?.name : driver?.name,
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.name
+          : driver?.name,
       githubLogin:
-        myGithubLogin === driver?.githubLogin
-          ? navigator?.githubLogin
-          : driver?.githubLogin,
-      bio: myGithubLogin === driver?.githubLogin ? navigator?.bio : driver?.bio,
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.user.githubLogin
+          : driver?.user.githubLogin,
+      bio:
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.bio
+          : driver?.bio,
     })
   );
 

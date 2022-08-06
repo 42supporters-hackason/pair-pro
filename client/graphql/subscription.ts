@@ -8,9 +8,11 @@ export const FETCH_MESSAGE = gql`
       createdBy {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
     }
   }

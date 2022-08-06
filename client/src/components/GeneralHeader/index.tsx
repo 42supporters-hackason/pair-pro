@@ -21,7 +21,7 @@ interface Props {
    */
   matchingPoint?: number;
   /**
-   *
+   * community名
    */
   communityName?: string;
   /**
@@ -35,7 +35,7 @@ interface Props {
  */
 export const GeneralHeader = ({
   matchingPoint,
-  communityName = "42Tokyo",
+  communityName,
   menu,
 }: Props) => {
   /**
