@@ -11,19 +11,20 @@ datasource db {
 }
 
 model Community {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   name      String
-  users User[] @relation(name: "Community")
-}
-
-model Auth {
-  id        Int      @id @default(autoincrement())
-  githubId String
-  githubLogin String
-  users User[] @relation(name: "Auth")
+  profiles Profile[] @relation(name: "Community")
 }
 
 model User {
+  id        Int      @id @default(autoincrement())
+  githubId String
+  githubLogin String
+  githubBio String
+  profiles Profile[] @relation(name: "User")
+}
+
+model Profile {
   id        Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   name      String
@@ -32,10 +33,10 @@ model User {
   driverPost Post[] @relation(name: "Driver")
   navigatorPost Post[] @relation(name: "Navigator")
   messages Message[] @relation(name: "createdBy")
-  auth Auth @relation(name: "Auth", fields: [authId], references: [id])
-  authId Int
+  user User @relation(name: "User", fields: [userId], references: [id])
+  userId Int
   community Community @relation(name: "Community", fields: [communityId], references: [id])
-  communityId Int
+  communityId String
 }
 
 model Post {
@@ -43,9 +44,9 @@ model Post {
   createdAt   DateTime @default(now())
   description String
   title       String
-  driver      User? @relation(name: "Driver", fields: [driverId], references: [id])
+  driver      Profile? @relation(name: "Driver", fields: [driverId], references: [id])
   driverId    Int?
-  navigator   User? @relation(name: "Navigator", fields: [navigatorId], references: [id])
+  navigator   Profile? @relation(name: "Navigator", fields: [navigatorId], references: [id])
   navigatorId Int?
   completedAt DateTime?
   messages        Message[] @relation(name: "Message")
@@ -58,7 +59,7 @@ model Message {
   postId      String
   content     String
   createdAt DateTime @default(now())
-  createdBy User @relation(name: "createdBy", fields: [createdById], references: [id])
+  createdBy Profile @relation(name: "createdBy", fields: [createdById], references: [id])
   createdById Int
 }
 

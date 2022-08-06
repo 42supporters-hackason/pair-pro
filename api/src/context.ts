@@ -9,6 +9,8 @@ export const pubsub = new PubSub();
 export interface Context {
   prisma: PrismaClient;
   userId?: number;
+  profileId?: number;
+  communityId?: string;
   pubsub: PubSub;
 }
 
@@ -21,6 +23,8 @@ export const context = ({ req }: { req: Request }): Context => {
   return {
     prisma,
     userId: token?.userId,
+    profileId: token?.profileId,
+    communityId: token?.communityId,
     pubsub,
   };
 };

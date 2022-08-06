@@ -7,6 +7,12 @@ type AuthPayLoad {
   user: User!
 }
 
+type Community {
+  id: String!
+  name: String!
+  profiles: [Profile!]!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -14,18 +20,22 @@ scalar DateTime
 
 type Message {
   content: String!
-  createdBy: User!
+  createdBy: Profile!
   id: Int!
   post: Post!
 }
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
+  createCommunity(name: String!): Community!
   createMessage(content: String!, postId: String!): Message!
+  deleteCommunity(communityId: String!): Community!
   deletePost(id: String!): Post!
+  joinCommunity(communityId: String!): AuthPayLoad!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
-  updateMe(bio: String, name: String): User
+  updateCommunity(id: String!, name: String!): Community!
+  updateMyProfile(bio: String, name: String): Profile
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
@@ -33,25 +43,37 @@ type Post {
   completedAt: DateTime
   createdAt: DateTime!
   description: String!
-  driver: User
+  driver: Profile
   id: String!
   messages: [Message!]!
-  navigator: User
+  navigator: Profile
   requiredSkills: [Skill!]!
   title: String!
 }
 
+type Profile {
+  bio: String!
+  driverPost: [Post!]!
+  id: Int!
+  matchingPoint: Int!
+  name: String!
+  navigatorPost: [Post!]!
+}
+
 type Query {
+  communities: [Community!]!
   feed: [Post!]!
-  me: User!
   messagesByPostId(postId: String!): [Message!]!
+  myCommunities: [Community!]!
+  myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
+  myProfile: Profile!
   post(id: String!): Post
+  profile(id: Int!): Profile
+  profiles: [Profile!]!
   skills: [Skill!]!
   unmatchedPosts: [Post]!
-  user(id: Int!): User
-  users: [User!]!
 }
 
 type Skill {
@@ -64,12 +86,8 @@ type Subscription {
 }
 
 type User {
-  bio: String!
-  driverPost: [Post!]!
   githubId: String!
   githubLogin: String!
   id: Int!
-  matchingPoint: Int!
-  name: String!
-  navigatorPost: [Post!]!
+  profiles: [Profile!]!
 }

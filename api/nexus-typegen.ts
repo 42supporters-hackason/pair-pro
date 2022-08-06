@@ -48,6 +48,10 @@ export interface NexusGenObjects {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
+  Community: { // root type
+    id: string; // String!
+    name: string; // String!
+  }
   Message: { // root type
     content: string; // String!
     id: number; // Int!
@@ -60,6 +64,12 @@ export interface NexusGenObjects {
     id: string; // String!
     title: string; // String!
   }
+  Profile: { // root type
+    bio: string; // String!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
+  }
   Query: {};
   Skill: { // root type
     id: number; // Int!
@@ -67,12 +77,9 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
-    bio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
-    matchingPoint: number; // Int!
-    name: string; // String!
   }
 }
 
@@ -91,43 +98,63 @@ export interface NexusGenFieldTypes {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
+  Community: { // field return type
+    id: string; // String!
+    name: string; // String!
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
+  }
   Message: { // field return type
     content: string; // String!
-    createdBy: NexusGenRootTypes['User']; // User!
+    createdBy: NexusGenRootTypes['Profile']; // Profile!
     id: number; // Int!
     post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    createCommunity: NexusGenRootTypes['Community']; // Community!
     createMessage: NexusGenRootTypes['Message']; // Message!
+    deleteCommunity: NexusGenRootTypes['Community']; // Community!
     deletePost: NexusGenRootTypes['Post']; // Post!
+    joinCommunity: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
-    updateMe: NexusGenRootTypes['User'] | null; // User
+    updateCommunity: NexusGenRootTypes['Community']; // Community!
+    updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
   }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
-    driver: NexusGenRootTypes['User'] | null; // User
+    driver: NexusGenRootTypes['Profile'] | null; // Profile
     id: string; // String!
     messages: NexusGenRootTypes['Message'][]; // [Message!]!
-    navigator: NexusGenRootTypes['User'] | null; // User
+    navigator: NexusGenRootTypes['Profile'] | null; // Profile
     requiredSkills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     title: string; // String!
   }
+  Profile: { // field return type
+    bio: string; // String!
+    driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
+    id: number; // Int!
+    matchingPoint: number; // Int!
+    name: string; // String!
+    navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
   Query: { // field return type
+    communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
-    me: NexusGenRootTypes['User']; // User!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
+    myCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
+    myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    myProfile: NexusGenRootTypes['Profile']; // Profile!
     post: NexusGenRootTypes['Post'] | null; // Post
+    profile: NexusGenRootTypes['Profile'] | null; // Profile
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
-    user: NexusGenRootTypes['User'] | null; // User
-    users: NexusGenRootTypes['User'][]; // [User!]!
   }
   Skill: { // field return type
     id: number; // Int!
@@ -137,14 +164,10 @@ export interface NexusGenFieldTypes {
     waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
-    bio: string; // String!
-    driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
-    matchingPoint: number; // Int!
-    name: string; // String!
-    navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
   }
 }
 
@@ -153,43 +176,63 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
     user: 'User'
   }
+  Community: { // field return type name
+    id: 'String'
+    name: 'String'
+    profiles: 'Profile'
+  }
   Message: { // field return type name
     content: 'String'
-    createdBy: 'User'
+    createdBy: 'Profile'
     id: 'Int'
     post: 'Post'
   }
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
+    createCommunity: 'Community'
     createMessage: 'Message'
+    deleteCommunity: 'Community'
     deletePost: 'Post'
+    joinCommunity: 'AuthPayLoad'
     post: 'Post'
     registerNavigator: 'Post'
-    updateMe: 'User'
+    updateCommunity: 'Community'
+    updateMyProfile: 'Profile'
     updatePost: 'Post'
   }
   Post: { // field return type name
     completedAt: 'DateTime'
     createdAt: 'DateTime'
     description: 'String'
-    driver: 'User'
+    driver: 'Profile'
     id: 'String'
     messages: 'Message'
-    navigator: 'User'
+    navigator: 'Profile'
     requiredSkills: 'Skill'
     title: 'String'
   }
+  Profile: { // field return type name
+    bio: 'String'
+    driverPost: 'Post'
+    id: 'Int'
+    matchingPoint: 'Int'
+    name: 'String'
+    navigatorPost: 'Post'
+  }
   Query: { // field return type name
+    communities: 'Community'
     feed: 'Post'
-    me: 'User'
     messagesByPostId: 'Message'
+    myCommunities: 'Community'
+    myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
+    myProfile: 'Profile'
     post: 'Post'
+    profile: 'Profile'
+    profiles: 'Profile'
     skills: 'Skill'
     unmatchedPosts: 'Post'
-    user: 'User'
-    users: 'User'
   }
   Skill: { // field return type name
     id: 'Int'
@@ -199,14 +242,10 @@ export interface NexusGenFieldTypeNames {
     waitForMessage: 'Message'
   }
   User: { // field return type name
-    bio: 'String'
-    driverPost: 'Post'
     githubId: 'String'
     githubLogin: 'String'
     id: 'Int'
-    matchingPoint: 'Int'
-    name: 'String'
-    navigatorPost: 'Post'
+    profiles: 'Profile'
   }
 }
 
@@ -215,12 +254,21 @@ export interface NexusGenArgTypes {
     authGithub: { // args
       code: string; // String!
     }
+    createCommunity: { // args
+      name: string; // String!
+    }
     createMessage: { // args
       content: string; // String!
       postId: string; // String!
     }
+    deleteCommunity: { // args
+      communityId: string; // String!
+    }
     deletePost: { // args
       id: string; // String!
+    }
+    joinCommunity: { // args
+      communityId: string; // String!
     }
     post: { // args
       description: string; // String!
@@ -231,7 +279,11 @@ export interface NexusGenArgTypes {
       navigatorId: number; // Int!
       postId: string; // String!
     }
-    updateMe: { // args
+    updateCommunity: { // args
+      id: string; // String!
+      name: string; // String!
+    }
+    updateMyProfile: { // args
       bio?: string | null; // String
       name?: string | null; // String
     }
@@ -249,7 +301,7 @@ export interface NexusGenArgTypes {
     post: { // args
       id: string; // String!
     }
-    user: { // args
+    profile: { // args
       id: number; // Int!
     }
   }
