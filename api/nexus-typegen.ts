@@ -140,6 +140,7 @@ export interface NexusGenFieldTypes {
     matchingPoint: number; // Int!
     name: string; // String!
     navigatorPost: NexusGenRootTypes['Post'][]; // [Post!]!
+    user: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
@@ -218,6 +219,7 @@ export interface NexusGenFieldTypeNames {
     matchingPoint: 'Int'
     name: 'String'
     navigatorPost: 'Post'
+    user: 'User'
   }
   Query: { // field return type name
     communities: 'Community'
