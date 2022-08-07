@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GithubProfile } from "../../components/GithubProfile";
@@ -25,7 +25,7 @@ export const HomePage = () => {
     "matchedList"
   );
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
-  const { profile } = useProfile();
+  const { profile, fetchMyProfile } = useProfile();
 
   /**
    * page hooks
@@ -43,6 +43,10 @@ export const HomePage = () => {
       });
     }
   }, [deletePost, selectedId, setOpenDeleteModal]);
+
+  useEffect(() => {
+    fetchMyProfile();
+  }, [fetchMyProfile]);
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>

@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useLayoutEffect } from "react";
+import { Suspense, useCallback } from "react";
 import { Box, Modal } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
@@ -19,7 +19,7 @@ export const ClientLayout = () => {
   const { goToLogin } = usePublicRoute();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
   const menu = useClientHeaderMenu({ onLogout: setOpenLogoutModal.on });
-  const { communityName, matchingPoint, fetchMyProfile } = useProfile();
+  const { communityName, matchingPoint } = useProfile();
 
   /**
    * event-handler
@@ -28,10 +28,6 @@ export const ClientLayout = () => {
     tokenStorage.clear();
     goToLogin();
   }, [goToLogin]);
-
-  useLayoutEffect(() => {
-    fetchMyProfile();
-  }, [fetchMyProfile]);
 
   return (
     <Box
