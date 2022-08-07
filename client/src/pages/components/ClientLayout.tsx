@@ -1,10 +1,10 @@
-import { Suspense, useCallback, useEffect } from "react";
+import { Suspense, useCallback } from "react";
 import { Box, Modal } from "@mui/material";
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
-import { useAuth, useProfile } from "../../context/auth";
+import { useProfile } from "../../context/auth";
 import { useBoolean } from "../../hooks/useBoolean";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { tokenStorage } from "../../utils/local-storage/token";
@@ -16,13 +16,10 @@ export const ClientLayout = () => {
   /**
    * misc.
    */
-  const [searchParams] = useSearchParams();
-  const code = searchParams.get("code");
   const { goToLogin } = usePublicRoute();
-  const { isLogin, signIn } = useAuth();
-  const { profile } = useProfile();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
   const menu = useClientHeaderMenu({ onLogout: setOpenLogoutModal.on });
+  const { communityName, matchingPoint } = useProfile();
 
   /**
    * event-handler
@@ -31,12 +28,6 @@ export const ClientLayout = () => {
     tokenStorage.clear();
     goToLogin();
   }, [goToLogin]);
-
-  useEffect(() => {
-    if (!isLogin && code !== null) {
-      signIn(code);
-    }
-  }, [code, signIn, isLogin]);
 
   return (
     <Box
@@ -47,7 +38,11 @@ export const ClientLayout = () => {
         minHeight: "100vh",
       }}
     >
-      <GeneralHeader matchingPoint={profile.matchingPoint} menu={menu} />
+      <GeneralHeader
+        matchingPoint={matchingPoint}
+        communityName={communityName}
+        menu={menu}
+      />
       <Box sx={{ flex: "1" }}>
         <Suspense fallback={null}>
           <Outlet />

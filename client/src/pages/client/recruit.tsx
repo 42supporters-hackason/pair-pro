@@ -52,10 +52,10 @@ export const RecruitPage = () => {
   }, []);
 
   const handleMatch = useCallback(() => {
-    if (selectedId !== undefined && profile.id !== undefined) {
+    if (selectedId !== undefined && profile?.id !== undefined) {
       matchPost({
         selectedId,
-        profileId: profile.id,
+        profileId: profile?.id,
         closeModal: setOpenPostModal.off,
       });
     }

@@ -15,7 +15,8 @@ export const Card = ({ children, ...props }: Props) => {
         bgcolor: "#fff",
         widht: "100%",
         height: "100%",
-        p: 4,
+        px: 4,
+        py: 3,
         borderRadius: 4,
         boxShadow: 3,
       }}
