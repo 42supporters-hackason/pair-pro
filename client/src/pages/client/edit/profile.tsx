@@ -12,8 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { useProfile } from "../../../context/auth";
 import { useUpdateProfileMutation } from "../../../gen/graphql-client";
 import { useClientRoute } from "../../../hooks/useClientRoute";
-import { unreachable } from "../../../utils";
-import { profileStorage } from "../../../utils/local-storage/profile";
 import {
   editProfileSchema,
   EditProfileSchema,
@@ -38,8 +36,8 @@ export const EditProfilePage = () => {
   } = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      name: profile.name,
-      bio: profile.bio,
+      name: profile?.name ?? "",
+      bio: profile?.bio ?? "",
     },
   });
 
@@ -48,18 +46,11 @@ export const EditProfilePage = () => {
       await updateProfile({
         variables: { name, bio },
         onCompleted: (data) => {
-          profileStorage.save({
-            id: profile.id ?? unreachable(),
-            githubLogin: profile.githubLogin ?? unreachable(),
-            name: data.updateMe?.name
-              ? data.updateMe.name
-              : profile.name
-              ? profile.name
-              : unreachable(),
-            bio: data.updateMe?.bio ?? "",
-            matchingPoint: profile.matchingPoint ?? unreachable(),
+          setProfile({
+            ...profile,
+            name: data.updateMyProfile?.name ?? "",
+            bio: data.updateMyProfile?.bio ?? "",
           });
-          setProfile(profileStorage.load() ?? {});
           goToHome();
         },
       });

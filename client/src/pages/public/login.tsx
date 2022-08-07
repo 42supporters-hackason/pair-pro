@@ -3,12 +3,9 @@ import { Box, Typography } from "@mui/material";
 import { GithubLoginButton } from "react-social-login-buttons";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import { Card } from "../../components/Card";
-import { useClientRoute } from "../../hooks/useClientRoute";
 import { getGithubAuthUrl } from "../../utils";
 
 export const LoginPage = () => {
-  const { goToHome } = useClientRoute();
-
   return (
     <>
       <Box

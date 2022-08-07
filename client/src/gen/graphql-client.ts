@@ -23,10 +23,17 @@ export type AuthPayLoad = {
   user: User;
 };
 
+export type Community = {
+  __typename?: 'Community';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  profiles: Array<Profile>;
+};
+
 export type Message = {
   __typename?: 'Message';
   content: Scalars['String'];
-  createdBy: User;
+  createdBy: Profile;
   id: Scalars['Int'];
   post: Post;
 };
@@ -34,11 +41,15 @@ export type Message = {
 export type Mutation = {
   __typename?: 'Mutation';
   authGithub: AuthPayLoad;
+  createCommunity: Community;
   createMessage: Message;
+  deleteCommunity: Community;
   deletePost: Post;
+  joinCommunity: AuthPayLoad;
   post: Post;
   registerNavigator: Post;
-  updateMe?: Maybe<User>;
+  updateCommunity: Community;
+  updateMyProfile?: Maybe<Profile>;
   updatePost: Post;
 };
 
@@ -48,14 +59,29 @@ export type MutationAuthGithubArgs = {
 };
 
 
+export type MutationCreateCommunityArgs = {
+  name: Scalars['String'];
+};
+
+
 export type MutationCreateMessageArgs = {
   content: Scalars['String'];
   postId: Scalars['String'];
 };
 
 
+export type MutationDeleteCommunityArgs = {
+  communityId: Scalars['String'];
+};
+
+
 export type MutationDeletePostArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationJoinCommunityArgs = {
+  communityId: Scalars['String'];
 };
 
 
@@ -72,7 +98,13 @@ export type MutationRegisterNavigatorArgs = {
 };
 
 
-export type MutationUpdateMeArgs = {
+export type MutationUpdateCommunityArgs = {
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
+export type MutationUpdateMyProfileArgs = {
   bio?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
 };
@@ -90,26 +122,40 @@ export type Post = {
   completedAt?: Maybe<Scalars['DateTime']>;
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
-  driver?: Maybe<User>;
+  driver?: Maybe<Profile>;
   id: Scalars['String'];
   messages: Array<Message>;
-  navigator?: Maybe<User>;
+  navigator?: Maybe<Profile>;
   requiredSkills: Array<Skill>;
   title: Scalars['String'];
 };
 
+export type Profile = {
+  __typename?: 'Profile';
+  bio: Scalars['String'];
+  driverPost: Array<Post>;
+  id: Scalars['Int'];
+  matchingPoint: Scalars['Int'];
+  name: Scalars['String'];
+  navigatorPost: Array<Post>;
+  user: User;
+};
+
 export type Query = {
   __typename?: 'Query';
+  communities: Array<Community>;
   feed: Array<Post>;
-  me: User;
   messagesByPostId: Array<Message>;
+  myCommunities: Array<Community>;
+  myCurrentCommunity?: Maybe<Community>;
   myDrivingPosts: Array<Post>;
   myMatchedPosts: Array<Post>;
+  myProfile: Profile;
   post?: Maybe<Post>;
+  profile?: Maybe<Profile>;
+  profiles: Array<Profile>;
   skills: Array<Skill>;
   unmatchedPosts: Array<Maybe<Post>>;
-  user?: Maybe<User>;
-  users: Array<User>;
 };
 
 
@@ -123,7 +169,7 @@ export type QueryPostArgs = {
 };
 
 
-export type QueryUserArgs = {
+export type QueryProfileArgs = {
   id: Scalars['Int'];
 };
 
@@ -145,14 +191,10 @@ export type SubscriptionWaitForMessageArgs = {
 
 export type User = {
   __typename?: 'User';
-  bio: Scalars['String'];
-  driverPost: Array<Post>;
   githubId: Scalars['String'];
   githubLogin: Scalars['String'];
   id: Scalars['Int'];
-  matchingPoint: Scalars['Int'];
-  name: Scalars['String'];
-  navigatorPost: Array<Post>;
+  profiles: Array<Profile>;
 };
 
 export type SignInMutationVariables = Exact<{
@@ -160,7 +202,7 @@ export type SignInMutationVariables = Exact<{
 }>;
 
 
-export type SignInMutation = { __typename?: 'Mutation', authGithub: { __typename?: 'AuthPayLoad', token: string, user: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } } };
+export type SignInMutation = { __typename?: 'Mutation', authGithub: { __typename?: 'AuthPayLoad', token: string, user: { __typename?: 'User', id: number, githubLogin: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string }> } } };
 
 export type UpdateProfileMutationVariables = Exact<{
   name: Scalars['String'];
@@ -168,7 +210,7 @@ export type UpdateProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', updateMe?: { __typename?: 'User', name: string, bio: string } | null };
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateMyProfile?: { __typename?: 'Profile', name: string, bio: string } | null };
 
 export type CreatePostMutationVariables = Exact<{
   description: Scalars['String'];
@@ -177,15 +219,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }>, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
-
-export type SendMessageMutationVariables = Exact<{
-  postId: Scalars['String'];
-  content: Scalars['String'];
-}>;
-
-
-export type SendMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }>, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null } };
 
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['String'];
@@ -200,7 +234,7 @@ export type MatchPostMutationVariables = Exact<{
 }>;
 
 
-export type MatchPostMutation = { __typename?: 'Mutation', registerNavigator: { __typename?: 'Post', navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null } };
+export type MatchPostMutation = { __typename?: 'Mutation', registerNavigator: { __typename?: 'Post', navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null } };
 
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['String'];
@@ -212,6 +246,28 @@ export type UpdatePostMutationVariables = Exact<{
 
 export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string } };
 
+export type SendMessageMutationVariables = Exact<{
+  postId: Scalars['String'];
+  content: Scalars['String'];
+}>;
+
+
+export type SendMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string } };
+
+export type CreateCommunityMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type CreateCommunityMutation = { __typename?: 'Mutation', createCommunity: { __typename?: 'Community', id: string, name: string } };
+
+export type JoinCommunityMutationVariables = Exact<{
+  communityId: Scalars['String'];
+}>;
+
+
+export type JoinCommunityMutation = { __typename?: 'Mutation', joinCommunity: { __typename?: 'AuthPayLoad', token: string, user: { __typename?: 'User', id: number, githubLogin: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string }> } } };
+
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -220,7 +276,7 @@ export type FetchSkillsQuery = { __typename?: 'Query', skills: Array<{ __typenam
 export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
 
 export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -230,33 +286,43 @@ export type FetchMyPostQuery = { __typename?: 'Query', myDrivingPosts: Array<{ _
 export type FetchMatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchSpecificPostQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, driver?: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
+export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
 
 export type FetchMessagesQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } }> };
+export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } }> };
 
 export type FetchMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchMeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } };
+export type FetchMeQuery = { __typename?: 'Query', myProfile: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } };
+
+export type FetchMyCommunitiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchMyCommunitiesQuery = { __typename?: 'Query', myCommunities: Array<{ __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> }> };
+
+export type FetchCurrentCommunityQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null };
 
 export type FetchMessageSubscriptionVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type FetchMessageSubscription = { __typename?: 'Subscription', waitForMessage?: { __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'User', id: number, name: string, githubLogin: string, matchingPoint: number, bio: string } } | null };
+export type FetchMessageSubscription = { __typename?: 'Subscription', waitForMessage?: { __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } } | null };
 
 
 export const SignInDocument = gql`
@@ -265,10 +331,13 @@ export const SignInDocument = gql`
     token
     user {
       id
-      name
       githubLogin
-      matchingPoint
-      bio
+      profiles {
+        id
+        name
+        matchingPoint
+        bio
+      }
     }
   }
 }
@@ -301,7 +370,7 @@ export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
 export const UpdateProfileDocument = gql`
     mutation UpdateProfile($name: String!, $bio: String!) {
-  updateMe(name: $name, bio: $bio) {
+  updateMyProfile(name: $name, bio: $bio) {
     name
     bio
   }
@@ -350,9 +419,11 @@ export const CreatePostDocument = gql`
     driver {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
   }
 }
@@ -385,41 +456,6 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
-export const SendMessageDocument = gql`
-    mutation sendMessage($postId: String!, $content: String!) {
-  createMessage(postId: $postId, content: $content) {
-    id
-    content
-  }
-}
-    `;
-export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation, SendMessageMutationVariables>;
-
-/**
- * __useSendMessageMutation__
- *
- * To run a mutation, you first call `useSendMessageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSendMessageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [sendMessageMutation, { data, loading, error }] = useSendMessageMutation({
- *   variables: {
- *      postId: // value for 'postId'
- *      content: // value for 'content'
- *   },
- * });
- */
-export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(SendMessageDocument, options);
-      }
-export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
-export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
-export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
 export const DeletePostDocument = gql`
     mutation deletePost($id: String!) {
   deletePost(id: $id) {
@@ -459,9 +495,11 @@ export const MatchPostDocument = gql`
     navigator {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
   }
 }
@@ -534,6 +572,118 @@ export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const SendMessageDocument = gql`
+    mutation sendMessage($postId: String!, $content: String!) {
+  createMessage(postId: $postId, content: $content) {
+    id
+    content
+  }
+}
+    `;
+export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation, SendMessageMutationVariables>;
+
+/**
+ * __useSendMessageMutation__
+ *
+ * To run a mutation, you first call `useSendMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendMessageMutation, { data, loading, error }] = useSendMessageMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(SendMessageDocument, options);
+      }
+export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
+export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
+export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const CreateCommunityDocument = gql`
+    mutation createCommunity($name: String!) {
+  createCommunity(name: $name) {
+    id
+    name
+  }
+}
+    `;
+export type CreateCommunityMutationFn = Apollo.MutationFunction<CreateCommunityMutation, CreateCommunityMutationVariables>;
+
+/**
+ * __useCreateCommunityMutation__
+ *
+ * To run a mutation, you first call `useCreateCommunityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommunityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommunityMutation, { data, loading, error }] = useCreateCommunityMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateCommunityMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommunityMutation, CreateCommunityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommunityMutation, CreateCommunityMutationVariables>(CreateCommunityDocument, options);
+      }
+export type CreateCommunityMutationHookResult = ReturnType<typeof useCreateCommunityMutation>;
+export type CreateCommunityMutationResult = Apollo.MutationResult<CreateCommunityMutation>;
+export type CreateCommunityMutationOptions = Apollo.BaseMutationOptions<CreateCommunityMutation, CreateCommunityMutationVariables>;
+export const JoinCommunityDocument = gql`
+    mutation joinCommunity($communityId: String!) {
+  joinCommunity(communityId: $communityId) {
+    token
+    user {
+      id
+      githubLogin
+      profiles {
+        id
+        name
+        matchingPoint
+        bio
+      }
+    }
+  }
+}
+    `;
+export type JoinCommunityMutationFn = Apollo.MutationFunction<JoinCommunityMutation, JoinCommunityMutationVariables>;
+
+/**
+ * __useJoinCommunityMutation__
+ *
+ * To run a mutation, you first call `useJoinCommunityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinCommunityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinCommunityMutation, { data, loading, error }] = useJoinCommunityMutation({
+ *   variables: {
+ *      communityId: // value for 'communityId'
+ *   },
+ * });
+ */
+export function useJoinCommunityMutation(baseOptions?: Apollo.MutationHookOptions<JoinCommunityMutation, JoinCommunityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinCommunityMutation, JoinCommunityMutationVariables>(JoinCommunityDocument, options);
+      }
+export type JoinCommunityMutationHookResult = ReturnType<typeof useJoinCommunityMutation>;
+export type JoinCommunityMutationResult = Apollo.MutationResult<JoinCommunityMutation>;
+export type JoinCommunityMutationOptions = Apollo.BaseMutationOptions<JoinCommunityMutation, JoinCommunityMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {
@@ -578,9 +728,11 @@ export const FetchUnmatchedPostDocument = gql`
     driver {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
     requiredSkills {
       id
@@ -665,16 +817,20 @@ export const FetchMatchedPostDocument = gql`
     navigator {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
     driver {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
     requiredSkills {
       id
@@ -719,16 +875,20 @@ export const FetchSpecificPostDocument = gql`
     navigator {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
     driver {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
     requiredSkills {
       id
@@ -773,9 +933,11 @@ export const FetchMessagesDocument = gql`
     createdBy {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
   }
 }
@@ -810,12 +972,14 @@ export type FetchMessagesLazyQueryHookResult = ReturnType<typeof useFetchMessage
 export type FetchMessagesQueryResult = Apollo.QueryResult<FetchMessagesQuery, FetchMessagesQueryVariables>;
 export const FetchMeDocument = gql`
     query fetchMe {
-  me {
+  myProfile {
     id
     name
-    githubLogin
     matchingPoint
     bio
+    user {
+      githubLogin
+    }
   }
 }
     `;
@@ -846,6 +1010,92 @@ export function useFetchMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Fe
 export type FetchMeQueryHookResult = ReturnType<typeof useFetchMeQuery>;
 export type FetchMeLazyQueryHookResult = ReturnType<typeof useFetchMeLazyQuery>;
 export type FetchMeQueryResult = Apollo.QueryResult<FetchMeQuery, FetchMeQueryVariables>;
+export const FetchMyCommunitiesDocument = gql`
+    query fetchMyCommunities {
+  myCommunities {
+    id
+    name
+    profiles {
+      id
+      name
+      bio
+      user {
+        githubLogin
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchMyCommunitiesQuery__
+ *
+ * To run a query within a React component, call `useFetchMyCommunitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMyCommunitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMyCommunitiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchMyCommunitiesQuery(baseOptions?: Apollo.QueryHookOptions<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>(FetchMyCommunitiesDocument, options);
+      }
+export function useFetchMyCommunitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>(FetchMyCommunitiesDocument, options);
+        }
+export type FetchMyCommunitiesQueryHookResult = ReturnType<typeof useFetchMyCommunitiesQuery>;
+export type FetchMyCommunitiesLazyQueryHookResult = ReturnType<typeof useFetchMyCommunitiesLazyQuery>;
+export type FetchMyCommunitiesQueryResult = Apollo.QueryResult<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>;
+export const FetchCurrentCommunityDocument = gql`
+    query fetchCurrentCommunity {
+  myCurrentCommunity {
+    id
+    name
+    profiles {
+      id
+      name
+      bio
+      user {
+        githubLogin
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchCurrentCommunityQuery__
+ *
+ * To run a query within a React component, call `useFetchCurrentCommunityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchCurrentCommunityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchCurrentCommunityQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchCurrentCommunityQuery(baseOptions?: Apollo.QueryHookOptions<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>(FetchCurrentCommunityDocument, options);
+      }
+export function useFetchCurrentCommunityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>(FetchCurrentCommunityDocument, options);
+        }
+export type FetchCurrentCommunityQueryHookResult = ReturnType<typeof useFetchCurrentCommunityQuery>;
+export type FetchCurrentCommunityLazyQueryHookResult = ReturnType<typeof useFetchCurrentCommunityLazyQuery>;
+export type FetchCurrentCommunityQueryResult = Apollo.QueryResult<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>;
 export const FetchMessageDocument = gql`
     subscription fetchMessage($postId: String!) {
   waitForMessage(postId: $postId) {
@@ -854,9 +1104,11 @@ export const FetchMessageDocument = gql`
     createdBy {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
     }
   }
 }
