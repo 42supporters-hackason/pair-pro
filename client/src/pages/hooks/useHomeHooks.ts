@@ -1,11 +1,9 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
   useDeletePostMutation,
-  useFetchCurrentCommunityQuery,
   useFetchMatchedPostQuery,
-  useFetchMeQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
@@ -72,13 +70,6 @@ export const useHomeHooks = () => {
   const matchedPosts =
     fetchMatchedPosts &&
     matchedPostsTaranslator(fetchMatchedPosts, profile?.githubLogin ?? "");
-  const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
-  const { refetch: refetchMe } = useFetchMeQuery();
-
-  useEffect(() => {
-    refetchCurrentCommunity();
-    refetchMe();
-  }, [refetchCurrentCommunity, refetchMe]);
 
   /**
    * POSTを削除するhandler

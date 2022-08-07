@@ -7,6 +7,10 @@ import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useProfile } from "../../context/auth";
+import {
+  useFetchCurrentCommunityQuery,
+  useFetchMeQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useHomeHooks } from "../hooks/useHomeHooks";
@@ -26,6 +30,8 @@ export const HomePage = () => {
   );
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
   const { profile, fetchMyProfile } = useProfile();
+  const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
+  const { refetch: refetchMe } = useFetchMeQuery();
 
   /**
    * page hooks
@@ -43,6 +49,11 @@ export const HomePage = () => {
       });
     }
   }, [deletePost, selectedId, setOpenDeleteModal]);
+
+  useEffect(() => {
+    refetchCurrentCommunity();
+    refetchMe();
+  }, [refetchCurrentCommunity, refetchMe]);
 
   useEffect(() => {
     fetchMyProfile();
