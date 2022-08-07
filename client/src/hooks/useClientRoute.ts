@@ -43,6 +43,13 @@ export const useClientRoute = () => {
     [navigate]
   );
 
+  const goToMember = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(CLIENT_ROUTE_PATH.MEMBER, options);
+    },
+    [navigate]
+  );
+
   const goToEditPost = useCallback(
     (id?: string, options?: NavigateOptions) => {
       if (id === undefined) {
@@ -82,6 +89,7 @@ export const useClientRoute = () => {
     goToEditProfile,
     goToEditPost,
     goToExplanation,
+    goToMember,
     goToChat,
   };
 };

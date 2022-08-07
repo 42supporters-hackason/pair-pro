@@ -1,9 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
   useDeletePostMutation,
+  useFetchCurrentCommunityQuery,
   useFetchMatchedPostQuery,
+  useFetchMeQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
@@ -27,12 +29,17 @@ const matchedPostsTaranslator = (
       content: description,
       languages: requiredSkills.map(({ name }) => name),
       name:
-        myGithubLogin === driver?.githubLogin ? navigator?.name : driver?.name,
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.name
+          : driver?.name,
       githubLogin:
-        myGithubLogin === driver?.githubLogin
-          ? navigator?.githubLogin
-          : driver?.githubLogin,
-      bio: myGithubLogin === driver?.githubLogin ? navigator?.bio : driver?.bio,
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.user.githubLogin
+          : driver?.user.githubLogin,
+      bio:
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.bio
+          : driver?.bio,
     })
   );
 
@@ -65,6 +72,13 @@ export const useHomeHooks = () => {
   const matchedPosts =
     fetchMatchedPosts &&
     matchedPostsTaranslator(fetchMatchedPosts, profile?.githubLogin ?? "");
+  const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
+  const { refetch: refetchMe } = useFetchMeQuery();
+
+  useEffect(() => {
+    refetchCurrentCommunity();
+    refetchMe();
+  }, [refetchCurrentCommunity, refetchMe]);
 
   /**
    * POSTを削除するhandler

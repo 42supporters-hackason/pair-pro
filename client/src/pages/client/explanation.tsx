@@ -1,14 +1,16 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import development from "../../assets/development.png";
 import driver from "../../assets/driver.jpeg";
 import navigator from "../../assets/navigator.png";
 import { Card } from "../../components/Card";
+import { useClientRoute } from "../../hooks/useClientRoute";
 
 /**
  * client/explanation
  */
 export const ExplanationPage = () => {
+  const { goToHome } = useClientRoute();
   return (
     <Box
       sx={{
@@ -92,6 +94,22 @@ export const ExplanationPage = () => {
           <Box component="img" src={development} sx={{ width: "20%" }} />
         </Box>
       </Card>
+      <Button
+        sx={{
+          mb: "35px",
+          mt: "10px",
+          mx: "auto",
+          width: "450px",
+          height: "50px",
+          borderRadius: "10px",
+        }}
+        variant="contained"
+        type="button"
+        color="secondary"
+        onClick={() => goToHome()}
+      >
+        戻る
+      </Button>
     </Box>
   );
 };

@@ -1,11 +1,10 @@
-import { Profile } from "../../context/auth";
 import { localStorageFactory } from "./factory";
 
-const TOKEN_KEY = "profile";
+const TOKEN_KEY = "point";
 
 /**
- * profileを格納するlocalstorage
+ * matchingPointを格納するlocalstorage
  */
-export const profileStorage = localStorageFactory<Profile>({
+export const pointStorage = localStorageFactory<number>({
   key: TOKEN_KEY,
 });
