@@ -13,15 +13,15 @@ import { useClientRoute } from "./../hooks/useClientRoute";
 import { useHomeHooks } from "./../pages/hooks/useHomeHooks";
 
 export interface Profile {
-  id: number;
+  id?: number;
   /**
    * github login名
    */
-  githubLogin: string;
+  githubLogin?: string;
   /**
    * プロフィール名
    */
-  name: string;
+  name?: string;
   /**
    * プロフィール
    */

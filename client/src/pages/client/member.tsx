@@ -3,38 +3,13 @@ import { Pagination, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { CopyInput } from "../../components/CopyInput";
 import { UserItem } from "../../components/UserItem";
-
-const DEMO_MEMBER = [
-  {
-    id: 1,
-    name: "taisei",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-  {
-    id: 2,
-    name: "taisei",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-  {
-    id: 3,
-    name: "taisei",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-  {
-    id: 4,
-    name: "taisei",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-];
+import { useMemberHooks } from "../hooks/useMemberHooks";
 
 /**
  * client/member
  */
 export const MemberPage = () => {
+  const { communityMember, communityName, communityId } = useMemberHooks();
   return (
     <Box
       sx={{
@@ -55,11 +30,11 @@ export const MemberPage = () => {
         }}
       >
         <Typography variant="h4" fontWeight="bold">
-          42tokyo
+          {communityName}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Typography fontWeight="bold">招待コード</Typography>
-          <CopyInput value="jsalkjljgdsaljfaljfa" />
+          <CopyInput value={communityId ?? ""} />
         </Box>
       </Box>
       <Box
@@ -78,14 +53,15 @@ export const MemberPage = () => {
             gap: 2,
           }}
         >
-          {DEMO_MEMBER.map(({ id, name, githubLogin, bio }) => (
-            <UserItem
-              key={id}
-              name={name}
-              githubLogin={githubLogin}
-              bio={bio}
-            />
-          ))}
+          {communityMember &&
+            communityMember.map(({ id, name, user, bio }) => (
+              <UserItem
+                key={id}
+                name={name}
+                githubLogin={user.githubLogin}
+                bio={bio}
+              />
+            ))}
         </Box>
         <Box
           sx={{
@@ -95,14 +71,15 @@ export const MemberPage = () => {
             gap: 2,
           }}
         >
-          {DEMO_MEMBER.map(({ id, name, githubLogin, bio }) => (
-            <UserItem
-              key={id}
-              name={name}
-              githubLogin={githubLogin}
-              bio={bio}
-            />
-          ))}
+          {communityMember &&
+            communityMember.map(({ id, name, user, bio }) => (
+              <UserItem
+                key={id}
+                name={name}
+                githubLogin={user.githubLogin}
+                bio={bio}
+              />
+            ))}
         </Box>
       </Box>
       <Pagination />
