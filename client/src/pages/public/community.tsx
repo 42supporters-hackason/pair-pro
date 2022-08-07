@@ -72,7 +72,8 @@ export const CommunityPage = () => {
     <Box
       sx={{
         bgcolor: "primary.light",
-        height: "100vh",
+        height: "100%",
+        pb: 3,
       }}
     >
       <Box

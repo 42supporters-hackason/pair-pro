@@ -6,5 +6,6 @@ import { useFetchMyCommunitiesQuery } from "../../gen/graphql-client";
 export const useCommunityHooks = () => {
   const { data: myCommunities, refetch: refecthMyCommunities } =
     useFetchMyCommunitiesQuery();
+
   return { myCommunities, refecthMyCommunities };
 };
