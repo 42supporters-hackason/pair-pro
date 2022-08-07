@@ -13,8 +13,13 @@ interface Props {
  * 一般ユーザ向けmenu
  */
 export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
-  const { goToApply, goToRecruit, goToEditProfile, goToMember } =
-    useClientRoute();
+  const {
+    goToApply,
+    goToRecruit,
+    goToEditProfile,
+    goToMember,
+    goToExplanation,
+  } = useClientRoute();
   const { goToCommunity } = usePublicRoute();
 
   return {
@@ -34,12 +39,16 @@ export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
     ],
     userMenu: [
       {
-        label: "プロフィール",
+        label: "プロフィール編集",
         action: goToEditProfile,
       },
       {
         label: "コミュニティを変更する",
         action: goToCommunity,
+      },
+      {
+        label: "アプリの使い方",
+        action: goToExplanation,
       },
       {
         label: "ログアウト",
