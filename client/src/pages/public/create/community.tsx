@@ -7,6 +7,7 @@ import { Card } from "../../../components/Card";
 import { useBoolean } from "../../../hooks/useBoolean";
 import { useClientRoute } from "../../../hooks/useClientRoute";
 import { usePublicRoute } from "../../../hooks/usePublicRoute";
+import { useCreateCommunityHooks } from "../../hooks/useCreateCommunityHooks";
 import {
   CreateCommunitySchema,
   createCommunitySchema,
@@ -21,11 +22,17 @@ export const CreateCommunityPage = () => {
   const [openModal, setOpenModal] = useBoolean(false);
 
   /**
+   * custom hooks
+   */
+  const { createCommunity } = useCreateCommunityHooks();
+
+  /**
    * form validation
    */
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<CreateCommunitySchema>({
     resolver: zodResolver(createCommunitySchema),
@@ -35,8 +42,9 @@ export const CreateCommunityPage = () => {
    * event-handler
    */
   const handleCreateCommunity = useCallback(() => {
-    goToHome({ replace: true });
-  }, [goToHome]);
+    const communityName = getValues("communityName");
+    createCommunity(communityName);
+  }, [createCommunity, getValues]);
 
   return (
     <>

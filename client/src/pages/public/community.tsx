@@ -4,7 +4,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Card } from "../../components/Card";
-import { useAuth, useCommunity, useProfile } from "../../context/auth";
+import { useAuth, useCommunity } from "../../context/auth";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { useCommunityHooks } from "../hooks/useCommunityHooks";
 import {
@@ -30,7 +30,6 @@ export const CommunityPage = () => {
    */
   const { myCommunities, refecthMyCommunities } = useCommunityHooks();
   const { joinCommunity } = useCommunity();
-  const { fetchMyProfile } = useProfile();
 
   /**
    * form validation
