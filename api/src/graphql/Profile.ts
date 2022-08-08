@@ -1,6 +1,5 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
-import { Profile, User } from "@prisma/client";
-import { context } from "../context";
+import { Community, Profile, User } from "@prisma/client";
 export const defaultMatchingPoint = 3;
 
 export const ProfileObject = objectType({
@@ -34,12 +33,23 @@ export const ProfileObject = objectType({
     t.nonNull.field("user", {
       type: "User",
       async resolve(parent, _args, context) {
-        return await (context.prisma.profile
+        return (await context.prisma.profile
           .findUnique({
             where: { id: parent.id },
-          }).user()) as User;
-      }
-    })
+          })
+          .user()) as User;
+      },
+    });
+    t.nonNull.field("community", {
+      type: "Community",
+      async resolve(parent, args, context) {
+        return (await context.prisma.profile
+          .findUnique({
+            where: { id: parent.id },
+          })
+          .community()) as Community;
+      },
+    });
   },
 });
 
