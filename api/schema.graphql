@@ -53,6 +53,7 @@ type Post {
 
 type Profile {
   bio: String!
+  community: Community!
   driverPost: [Post!]!
   id: Int!
   matchingPoint: Int!
@@ -87,6 +88,7 @@ type Subscription {
 }
 
 type User {
+  githubBio: String!
   githubId: String!
   githubLogin: String!
   id: Int!

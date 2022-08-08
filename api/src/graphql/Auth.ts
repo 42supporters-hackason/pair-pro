@@ -31,8 +31,10 @@ export const AuthMutation = extendType({
       async resolve(_parent, args, context) {
         const { code } = args;
         const access_token = (await getAccessToken(code)) as string;
-
-        // todo(takumi): probably save add `githubBio` to `user`
+        
+        if (!access_token) {
+          throw new Error("Failed at getting access token")
+        }
         const {
           id: githubId,
           login: githubLogin,

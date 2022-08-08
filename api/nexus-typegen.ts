@@ -77,6 +77,7 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
+    githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
@@ -135,6 +136,7 @@ export interface NexusGenFieldTypes {
   }
   Profile: { // field return type
     bio: string; // String!
+    community: NexusGenRootTypes['Community']; // Community!
     driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
     id: number; // Int!
     matchingPoint: number; // Int!
@@ -165,6 +167,7 @@ export interface NexusGenFieldTypes {
     waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
+    githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
@@ -214,6 +217,7 @@ export interface NexusGenFieldTypeNames {
   }
   Profile: { // field return type name
     bio: 'String'
+    community: 'Community'
     driverPost: 'Post'
     id: 'Int'
     matchingPoint: 'Int'
@@ -244,6 +248,7 @@ export interface NexusGenFieldTypeNames {
     waitForMessage: 'Message'
   }
   User: { // field return type name
+    githubBio: 'String'
     githubId: 'String'
     githubLogin: 'String'
     id: 'Int'
