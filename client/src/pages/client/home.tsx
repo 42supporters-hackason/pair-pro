@@ -29,14 +29,14 @@ export const HomePage = () => {
     "matchedList"
   );
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
-  const { profile, fetchMyProfile } = useProfile();
+  const { fetchMyProfile } = useProfile();
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
   const { refetch: refetchMe } = useFetchMeQuery();
 
   /**
    * page hooks
    */
-  const { myPosts, matchedPosts, deletePost } = useHomeHooks();
+  const { profile, myPosts, matchedPosts, deletePost } = useHomeHooks();
 
   /**
    * event-handler

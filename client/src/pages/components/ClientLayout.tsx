@@ -1,10 +1,13 @@
-import { Suspense, useCallback } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { Box, Modal } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
-import { useProfile } from "../../context/auth";
+import {
+  useFetchCurrentCommunityLazyQuery,
+  useFetchMeLazyQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { tokenStorage } from "../../utils/local-storage/token";
@@ -19,7 +22,11 @@ export const ClientLayout = () => {
   const { goToLogin } = usePublicRoute();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
   const menu = useClientHeaderMenu({ onLogout: setOpenLogoutModal.on });
-  const { communityName, matchingPoint } = useProfile();
+  const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
+  const [fetchMe] = useFetchMeLazyQuery();
+  const [communityName, setCommunityName] = useState<string>();
+  const [matchingPoint, setMatchingPoint] = useState<number>();
+  const [githubLogin, setGithubLogin] = useState<string>();
 
   /**
    * event-handler
@@ -28,6 +35,29 @@ export const ClientLayout = () => {
     tokenStorage.clear();
     goToLogin();
   }, [goToLogin]);
+
+  useEffect(() => {
+    if (communityName === undefined) {
+      fetchCurrentCommunity({
+        onCompleted: (data) => setCommunityName(data.myCurrentCommunity?.name),
+      });
+    }
+    if (matchingPoint === undefined) {
+      fetchMe({
+        onCompleted: (data) => {
+          setMatchingPoint(data.myProfile.matchingPoint),
+            setGithubLogin(data.myProfile.user.githubLogin);
+        },
+      });
+    }
+  }, [
+    fetchMe,
+    fetchCurrentCommunity,
+    setCommunityName,
+    setMatchingPoint,
+    communityName,
+    matchingPoint,
+  ]);
 
   return (
     <Box
@@ -41,6 +71,7 @@ export const ClientLayout = () => {
       <GeneralHeader
         matchingPoint={matchingPoint}
         communityName={communityName}
+        githubLogin={githubLogin}
         menu={menu}
       />
       <Box sx={{ flex: "1" }}>

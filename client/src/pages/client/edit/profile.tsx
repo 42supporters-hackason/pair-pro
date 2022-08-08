@@ -10,7 +10,10 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../../../context/auth";
-import { useUpdateProfileMutation } from "../../../gen/graphql-client";
+import {
+  useFetchMeQuery,
+  useUpdateProfileMutation,
+} from "../../../gen/graphql-client";
 import { useClientRoute } from "../../../hooks/useClientRoute";
 import {
   editProfileSchema,
@@ -25,6 +28,7 @@ export const EditProfilePage = () => {
   const [updateProfile] = useUpdateProfileMutation();
   const { profile, setProfile } = useProfile();
   const { goToHome } = useClientRoute();
+  const { data: meData } = useFetchMeQuery();
 
   /**
    * form validation
@@ -36,8 +40,8 @@ export const EditProfilePage = () => {
   } = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      name: profile?.name ?? "",
-      bio: profile?.bio ?? "",
+      name: meData?.myProfile.name ?? "",
+      bio: meData?.myProfile.bio ?? "",
     },
   });
 
@@ -55,7 +59,7 @@ export const EditProfilePage = () => {
         },
       });
     },
-    [updateProfile, profile, setProfile, goToHome]
+    [updateProfile, setProfile, goToHome, profile]
   );
 
   return (

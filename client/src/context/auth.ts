@@ -58,7 +58,7 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     };
 
     const joinCommunity = async (id: string) => {
-      joinCommunityMutation({
+      await joinCommunityMutation({
         variables: { communityId: id },
         onCompleted: (data) => {
           tokenStorage.save(data.joinCommunity.token);
