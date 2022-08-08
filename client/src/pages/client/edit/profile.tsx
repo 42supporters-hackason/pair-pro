@@ -90,23 +90,16 @@ export const EditProfilePage = () => {
         <Typography variant="subtitle2" sx={{ mb: "5px", ml: "5px" }}>
           自己紹介
         </Typography>
-        <Box>
-          <TextareaAutosize
-            minRows={7}
-            style={{
-              width: "470px",
-              borderRadius: "15px",
-              resize: "none",
-              padding: "15px",
-            }}
-            {...register("bio")}
-          />
-          {errors.bio && (
-            <Typography sx={{ mt: "5px", color: "error.main" }}>
-              {errors.bio.message}
-            </Typography>
-          )}
-        </Box>
+        <TextareaAutosize
+          minRows={7}
+          style={{
+            width: "470px",
+            borderRadius: "15px",
+            resize: "none",
+            padding: "15px",
+          }}
+          {...register("bio")}
+        />
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Button
