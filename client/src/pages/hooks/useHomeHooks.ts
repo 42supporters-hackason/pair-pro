@@ -1,9 +1,10 @@
 import { useCallback } from "react";
-import { useProfile } from "../../context/auth";
+import { Profile, useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
   useDeletePostMutation,
   useFetchMatchedPostQuery,
+  useFetchMeQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
@@ -53,8 +54,19 @@ export const useHomeHooks = () => {
   /**
    * misc.
    */
-  const { profile, updateMatchingPoint } = useProfile();
+  const { updateMatchingPoint } = useProfile();
   const [deletePostMutation] = useDeletePostMutation();
+
+  /**
+   * 自分自身のプロフィールを取得
+   */
+  const { data: meData } = useFetchMeQuery();
+  const profile: Profile = {
+    id: meData?.myProfile.id,
+    githubLogin: meData?.myProfile.user.githubLogin,
+    name: meData?.myProfile.name,
+    bio: meData?.myProfile.bio,
+  };
 
   /**
    * 自分が投稿したPOSTを取得
@@ -98,5 +110,6 @@ export const useHomeHooks = () => {
     refetchMatchedPosts,
     refetchMyPosts,
     deletePost,
+    profile,
   };
 };

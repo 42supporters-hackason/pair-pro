@@ -11,7 +11,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { useProfile } from "../../context/auth";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { ClientMenu } from "./types";
 
@@ -25,6 +24,10 @@ interface Props {
    */
   communityName?: string;
   /**
+   * githubLogin
+   */
+  githubLogin?: string;
+  /**
    * headerのmenu
    */
   menu: ClientMenu;
@@ -36,6 +39,7 @@ interface Props {
 export const GeneralHeader = ({
   matchingPoint,
   communityName,
+  githubLogin,
   menu,
 }: Props) => {
   /**
@@ -44,7 +48,6 @@ export const GeneralHeader = ({
   const { goToHome } = useClientRoute();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { profile } = useProfile();
 
   return (
     <AppBar position="static">
@@ -152,9 +155,7 @@ export const GeneralHeader = ({
                 onClick={(event) => setAnchorElUser(event.currentTarget)}
                 sx={{ p: 0 }}
               >
-                <Avatar
-                  src={`https://github.com/${profile?.githubLogin}.png`}
-                />
+                <Avatar src={`https://github.com/${githubLogin}.png`} />
               </IconButton>
             </Tooltip>
             <Menu
