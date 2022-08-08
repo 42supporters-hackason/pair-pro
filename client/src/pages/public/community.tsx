@@ -39,6 +39,7 @@ export const CommunityPage = () => {
     handleSubmit,
     formState: { errors },
     getValues,
+    setError,
   } = useForm<CommunitySchema>({
     resolver: zodResolver(communitySchema),
   });
@@ -53,10 +54,16 @@ export const CommunityPage = () => {
     [joinCommunity]
   );
 
-  const handleEnterByCommunityId = useCallback(() => {
+  const handleEnterByCommunityId = useCallback(async () => {
     const id = getValues("communityId");
-    joinCommunity(id);
-  }, [joinCommunity, getValues]);
+    try {
+      await joinCommunity(id);
+    } catch (error) {
+      setError("communityId", {
+        message: "存在しないIDです",
+      });
+    }
+  }, [joinCommunity, getValues, setError]);
 
   /**
    * signIn処理を実行
