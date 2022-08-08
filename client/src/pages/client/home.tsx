@@ -6,7 +6,6 @@ import { HomeTitleToggle } from "../../components/HomeTitleToggle";
 import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
-import { useProfile } from "../../context/auth";
 import {
   useFetchCurrentCommunityQuery,
   useFetchMeQuery,
@@ -29,7 +28,6 @@ export const HomePage = () => {
     "matchedList"
   );
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
-  const { fetchMyProfile } = useProfile();
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
   const { refetch: refetchMe } = useFetchMeQuery();
 
@@ -54,10 +52,6 @@ export const HomePage = () => {
     refetchCurrentCommunity();
     refetchMe();
   }, [refetchCurrentCommunity, refetchMe]);
-
-  useEffect(() => {
-    fetchMyProfile();
-  }, [fetchMyProfile]);
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
