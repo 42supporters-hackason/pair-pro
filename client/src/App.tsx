@@ -5,6 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
 import { apolloClient } from "./lib/apollo-client";
+import { LoadingPage } from "./pages/public/loading";
 import { AppRoutes } from "./routes";
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
       <ApolloProvider client={apolloClient}>
         <AuthProvider>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Suspense fallback={null}>
+            <Suspense fallback={<LoadingPage />}>
               <AppRoutes />
             </Suspense>
           </LocalizationProvider>
