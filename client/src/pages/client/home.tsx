@@ -6,7 +6,6 @@ import { HomeTitleToggle } from "../../components/HomeTitleToggle";
 import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
-import { useProfile } from "../../context/auth";
 import {
   useFetchCurrentCommunityQuery,
   useFetchMeQuery,
@@ -29,7 +28,6 @@ export const HomePage = () => {
     "matchedList"
   );
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
-  const { fetchMyProfile } = useProfile();
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
   const { refetch: refetchMe } = useFetchMeQuery();
 
@@ -55,10 +53,6 @@ export const HomePage = () => {
     refetchMe();
   }, [refetchCurrentCommunity, refetchMe]);
 
-  useEffect(() => {
-    fetchMyProfile();
-  }, [fetchMyProfile]);
-
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
@@ -66,19 +60,22 @@ export const HomePage = () => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {showList === "matchedList"
             ? matchedPosts &&
-              matchedPosts.map(({ id, title, content, languages, name }) => (
-                <PostCard
-                  key={id}
-                  title={title}
-                  content={content}
-                  languages={languages}
-                  name={name}
-                  onClick={() => {
-                    setOpenPostModal.on();
-                    setSelectedId(id);
-                  }}
-                />
-              ))
+              matchedPosts.map(
+                ({ id, title, content, languages, name, githubLogin }) => (
+                  <PostCard
+                    key={id}
+                    title={title}
+                    content={content}
+                    languages={languages}
+                    name={name}
+                    githubLogin={githubLogin}
+                    onClick={() => {
+                      setOpenPostModal.on();
+                      setSelectedId(id);
+                    }}
+                  />
+                )
+              )
             : myPosts &&
               myPosts.map(({ id, title, content, languages }) => (
                 <MyPostCard

@@ -126,12 +126,13 @@ export const RecruitPage = () => {
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {posts &&
-            posts.map(({ id, title, content, language, name }) => (
+            posts.map(({ id, title, content, language, name, githubLogin }) => (
               <PostCard
                 key={id}
                 title={title}
                 content={content}
                 languages={language}
+                githubLogin={githubLogin}
                 name={name}
                 onClick={() => {
                   setOpenPostModal.on();

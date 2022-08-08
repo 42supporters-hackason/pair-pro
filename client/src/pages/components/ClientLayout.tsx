@@ -19,22 +19,32 @@ export const ClientLayout = () => {
   /**
    * misc.
    */
-  const { goToLogin } = usePublicRoute();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
-  const menu = useClientHeaderMenu({ onLogout: setOpenLogoutModal.on });
-  const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
-  const [fetchMe] = useFetchMeLazyQuery();
+  const [openChangeCommunityModal, setOpenChangeCommunityModal] =
+    useBoolean(false);
   const [communityName, setCommunityName] = useState<string>();
   const [matchingPoint, setMatchingPoint] = useState<number>();
   const [githubLogin, setGithubLogin] = useState<string>();
+
+  const { goToLogin, goToCommunity } = usePublicRoute();
+  const menu = useClientHeaderMenu({
+    onLogout: setOpenLogoutModal.on,
+    onChangeCommunity: setOpenChangeCommunityModal.on,
+  });
+  const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
+  const [fetchMe] = useFetchMeLazyQuery();
 
   /**
    * event-handler
    */
   const handleLogout = useCallback(() => {
     tokenStorage.clear();
-    goToLogin();
+    goToLogin({ replace: true });
   }, [goToLogin]);
+
+  const handleChangeCommunity = useCallback(() => {
+    goToCommunity({ replace: true });
+  }, [goToCommunity]);
 
   useEffect(() => {
     if (communityName === undefined) {
@@ -89,6 +99,19 @@ export const ClientLayout = () => {
             content="ログアウトしますか？"
             onAgree={handleLogout}
             onCancel={setOpenLogoutModal.off}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={openChangeCommunityModal}
+        onClose={setOpenChangeCommunityModal.off}
+        sx={{ top: "40%", mx: "auto", width: "600px" }}
+      >
+        <Box>
+          <AgreeModal
+            content="コミュニティを変更しますか？"
+            onAgree={handleChangeCommunity}
+            onCancel={setOpenChangeCommunityModal.off}
           />
         </Box>
       </Modal>
