@@ -35,3 +35,12 @@ heroku logs --tail #デバッグ
 
 heroku open #apiのURLにアクセス
 ```
+
+## テスト環境でのgithubログインの省略
+```
+# user1 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1OTc3MDY1OX0.lpGGDVJ0y-IfAViLy5D8m8GY965ZqTxQ-TZgikrQ5ME
+
+# user2
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY1OTc3MDY1OX0.tzLuKarW0wCOz-hI4xTQ5Q6S08NMZx3VWeKb4-9Cq4U
+```
