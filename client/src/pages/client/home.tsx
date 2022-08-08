@@ -66,19 +66,22 @@ export const HomePage = () => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {showList === "matchedList"
             ? matchedPosts &&
-              matchedPosts.map(({ id, title, content, languages, name }) => (
-                <PostCard
-                  key={id}
-                  title={title}
-                  content={content}
-                  languages={languages}
-                  name={name}
-                  onClick={() => {
-                    setOpenPostModal.on();
-                    setSelectedId(id);
-                  }}
-                />
-              ))
+              matchedPosts.map(
+                ({ id, title, content, languages, name, githubLogin }) => (
+                  <PostCard
+                    key={id}
+                    title={title}
+                    content={content}
+                    languages={languages}
+                    name={name}
+                    githubLogin={githubLogin}
+                    onClick={() => {
+                      setOpenPostModal.on();
+                      setSelectedId(id);
+                    }}
+                  />
+                )
+              )
             : myPosts &&
               myPosts.map(({ id, title, content, languages }) => (
                 <MyPostCard
