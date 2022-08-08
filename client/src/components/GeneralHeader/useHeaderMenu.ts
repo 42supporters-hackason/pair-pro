@@ -7,12 +7,19 @@ interface Props {
    * ログアウトハンドラ
    */
   onLogout: () => void;
+  /**
+   * コミュニティ変更ハンドラ
+   */
+  onChangeCommunity: () => void;
 }
 
 /**
  * 一般ユーザ向けmenu
  */
-export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
+export const useClientHeaderMenu = ({
+  onLogout,
+  onChangeCommunity,
+}: Props): ClientMenu => {
   const {
     goToApply,
     goToRecruit,
@@ -44,7 +51,7 @@ export const useClientHeaderMenu = ({ onLogout }: Props): ClientMenu => {
       },
       {
         label: "コミュニティを変更する",
-        action: goToCommunity,
+        action: onChangeCommunity,
       },
       {
         label: "アプリの使い方",
