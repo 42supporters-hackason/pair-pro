@@ -143,7 +143,11 @@ export const LoginPage = () => {
                 sx={{ display: "flex", justifyContent: "center", mb: "15px" }}
               >
                 <GithubLoginButton
-                  style={{ width: "60%", borderRadius: "15px" }}
+                  style={{
+                    width: "60%",
+                    borderRadius: "999px",
+                    paddingLeft: "30px",
+                  }}
                   onClick={() => window.location.assign(getGithubAuthUrl())}
                 />
               </Box>
