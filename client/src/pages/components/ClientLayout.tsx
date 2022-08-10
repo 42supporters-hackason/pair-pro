@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
+import { useProfile } from "../../context/auth";
 import {
   useFetchCurrentCommunityLazyQuery,
   useFetchMeLazyQuery,
@@ -26,6 +27,7 @@ export const ClientLayout = () => {
   const [matchingPoint, setMatchingPoint] = useState<number>();
   const [githubLogin, setGithubLogin] = useState<string>();
 
+  const { setProfile } = useProfile();
   const { goToLogin, goToCommunity } = usePublicRoute();
   const menu = useClientHeaderMenu({
     onLogout: setOpenLogoutModal.on,
@@ -55,8 +57,14 @@ export const ClientLayout = () => {
     if (matchingPoint === undefined) {
       fetchMe({
         onCompleted: (data) => {
-          setMatchingPoint(data.myProfile.matchingPoint),
-            setGithubLogin(data.myProfile.user.githubLogin);
+          setMatchingPoint(data.myProfile.matchingPoint);
+          setGithubLogin(data.myProfile.user.githubLogin);
+          setProfile({
+            id: data.myProfile.id,
+            githubLogin: data.myProfile.user.githubLogin,
+            name: data.myProfile.name,
+            bio: data.myProfile.bio,
+          });
         },
       });
     }
@@ -67,6 +75,7 @@ export const ClientLayout = () => {
     setMatchingPoint,
     communityName,
     matchingPoint,
+    setProfile,
   ]);
 
   return (
