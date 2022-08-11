@@ -80,29 +80,48 @@ export const CommunityPage = () => {
       sx={{
         bgcolor: "primary.light",
         minHeight: "100vh",
-        pb: 3,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between",
       }}
     >
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          pt: "60px",
-          gap: "15px",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          gap: 3,
+          pt: "70px",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+            p: 3,
+            borderRadius: 3,
+          }}
+        >
           <Typography
             variant="h5"
             fontWeight="bold"
             sx={{ textAlign: "center" }}
           >
-            コミュニティを選択してください
+            コミュニティ一覧
           </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-            {myCommunities &&
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              height: "300px",
+              gap: 3,
+              mt: 2,
+              overflow: "scroll",
+              px: 2,
+              py: 2,
+            }}
+          >
+            {myCommunities ? (
               myCommunities.myCommunities.map(({ id, name }) => (
                 <Button
                   key={id}
@@ -112,12 +131,38 @@ export const CommunityPage = () => {
                     height: "50px",
                     fontWeight: "bold",
                     fontSize: "18px",
+                    textTransform: "none",
+                    borderRadius: "999px",
+                    boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
                   }}
                   onClick={() => handleEnterCommunity(id)}
                 >
                   {name}
                 </Button>
-              ))}
+              ))
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 3,
+                  alignItems: "center",
+                }}
+              >
+                <Typography sx={{ textAlign: "center" }}>
+                  新規にコミュニティを作成するか、
+                  <br />
+                  IDを入力してコミュニティに加入してください。
+                </Typography>
+                <Typography
+                  fontWeight="bold"
+                  variant="h4"
+                  sx={{ fontFamily: "Hannotate TC" }}
+                >
+                  楽しいペアプロライフを!
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
         <Box
@@ -126,7 +171,9 @@ export const CommunityPage = () => {
             flexDirection: "column",
             alignItems: "center",
             gap: 2,
+            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
             p: 3,
+            borderRadius: 3,
           }}
           component="form"
           onSubmit={handleSubmit(handleEnterByCommunityId)}
@@ -135,47 +182,61 @@ export const CommunityPage = () => {
             新しいコミュニティに入る
           </Typography>
           <TextField
-            sx={{ width: "450px" }}
+            sx={{
+              width: "450px",
+              boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+              borderRadius: "999px",
+              bgcolor: "#fff",
+              [`& fieldset`]: {
+                borderRadius: "50px",
+              },
+            }}
             label="コミュニティID"
             {...register("communityId")}
           />
           <Typography color="error">{errors.communityId?.message}</Typography>
           <Button
             variant="contained"
-            sx={{ width: "200px", height: "40px", borderRadius: "25px" }}
+            sx={{
+              width: "200px",
+              height: "40px",
+              borderRadius: "25px",
+              textTransform: "none",
+            }}
             type="submit"
           >
-            communityに入る
+            Enter
           </Button>
         </Box>
-        <Card
-          style={{
-            width: "300px",
-            boxShadow:
-              "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+      </Box>
+      <Card
+        style={{
+          width: "300px",
+          boxShadow:
+            "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+          marginBottom: "30px",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 2,
-            }}
+          <Typography fontWeight="bold">
+            新しいコミュニティを作成する
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ borderRadius: "30px" }}
+            onClick={() => goToCreateCommunity()}
           >
-            <Typography fontWeight="bold">
-              新しいcommunityを作成したい方へ。
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{ borderRadius: "30px" }}
-              onClick={() => goToCreateCommunity()}
-            >
-              community作成ページへ
-            </Button>
-          </Box>
-        </Card>
-      </Box>
+            コミュニティ作成ページへ
+          </Button>
+        </Box>
+      </Card>
     </Box>
   );
 };

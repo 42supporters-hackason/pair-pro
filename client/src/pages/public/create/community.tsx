@@ -67,14 +67,15 @@ export const CreateCommunityPage = () => {
               alignItems: "center",
               width: "50%",
               margin: "0 auto",
-              boxShadow: "rgb(38, 57, 77) 0px 20px 30px -10px",
+              boxShadow:
+                "rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px",
             }}
           >
             <Typography variant="h6" fontWeight="bold">
-              新しいcomunityの名前を入力してください
+              新しいコミュニティの名前を入力してください
             </Typography>
             <TextField
-              label="community名"
+              label="コミュニティ名"
               sx={{ mt: "45px", width: "450px" }}
               {...register("communityName")}
             />
@@ -103,7 +104,10 @@ export const CreateCommunityPage = () => {
                 height: "50px",
                 borderRadius: "20px",
                 fontWeight: "bold",
-                color: "black",
+                color: "secondary.dark",
+                ["&:hover"]: {
+                  bgcolor: "secondary.main",
+                },
               }}
               onClick={() => goToCommunity()}
             >
