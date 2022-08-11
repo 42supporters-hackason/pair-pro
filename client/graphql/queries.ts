@@ -12,6 +12,14 @@ export const FETCH_SKILLS = gql`
   }
 `;
 
+export const GET_VIDEO_ACCESS_TOKEN = gql`
+  query getVideoAccessToken($identity: String!, $room: String!) {
+    accessToken(identity: $identity, room: $room) {
+      accessToken
+    }
+  }
+`;
+
 /**
  * post
  */

@@ -24,6 +24,14 @@ interface Props {
    * videoのtoggle
    */
   onClickVideo: () => void;
+  /**
+   * 画面共有のtoggle
+   */
+  onClickShareScreen: () => void;
+  /**
+   * 退出ボタンのアクション
+   */
+  onExit: () => void;
 }
 
 /**
@@ -34,6 +42,8 @@ export const VideoButtons = ({
   videoOn,
   onClickVideo,
   onClickVolume,
+  onClickShareScreen,
+  onExit,
 }: Props) => {
   return (
     <>
@@ -55,10 +65,10 @@ export const VideoButtons = ({
           <VideocamOffIcon />
         </IconButton>
       )}
-      <IconButton>
+      <IconButton onClick={onClickShareScreen}>
         <PersonalVideoIcon />
       </IconButton>
-      <IconButton>
+      <IconButton onClick={onExit}>
         <LogoutIcon />
       </IconButton>
     </>

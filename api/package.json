@@ -28,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "nexus": "^1.1.0",
     "ts-node-dev": "^1.1.8",
+    "twilio": "^3.78.0",
     "ws": "^8.8.0"
   },
   "devDependencies": {

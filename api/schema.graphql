@@ -63,6 +63,7 @@ type Profile {
 }
 
 type Query {
+  accessToken(identity: String, room: String): Video!
   communities: [Community!]!
   feed: [Post!]!
   messagesByPostId(postId: String!): [Message!]!
@@ -93,4 +94,8 @@ type User {
   githubLogin: String!
   id: Int!
   profiles: [Profile!]!
+}
+
+type Video {
+  accessToken: String!
 }
