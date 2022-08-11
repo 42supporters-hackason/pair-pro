@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import headerLogo from "../../assets/header_logo_transparent.png";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { ClientMenu } from "./types";
 
@@ -53,24 +54,18 @@ export const GeneralHeader = ({
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
+          <Box
+            component="img"
+            src={headerLogo}
             onClick={() => goToHome()}
             sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+              height: "40px",
+              py: "10px",
               cursor: "pointer",
+              mr: 3,
+              display: { xs: "none", md: "flex" },
             }}
-          >
-            P2P Matching
-          </Typography>
+          />
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -107,25 +102,18 @@ export const GeneralHeader = ({
               ))}
             </Menu>
           </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
+          <Box
+            component="img"
+            src={headerLogo}
             onClick={() => goToHome()}
             sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+              height: "40px",
+              py: "10px",
               cursor: "pointer",
+              mr: 3,
+              display: { xs: "flex", md: "none" },
             }}
-          >
-            P2P Matching
-          </Typography>
+          />
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {menu.listMenu.map(({ label, action }) => (
               <Button

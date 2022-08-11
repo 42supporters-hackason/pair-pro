@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { GithubLoginButton } from "react-social-login-buttons";
+import logo from "../../assets/logo_transparent.png";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import { Card } from "../../components/Card";
 import { getGithubAuthUrl } from "../../utils";
@@ -19,22 +20,21 @@ export const LoginPage = () => {
         }}
       />
       <Box sx={{ display: "flex", flexDirection: "column", m: "0 100px 0" }}>
-        <Typography
+        <Box
+          component="img"
+          src={logo}
           sx={{
-            m: "115px auto 0",
-            alignItems: "center",
-            justifyContent: "ceter",
+            height: "150px",
+            textAlign: "center",
+            mt: "100px",
+            mb: "50px",
+            mx: "auto",
           }}
-          variant="h2"
-          fontWeight="bold"
-        >
-          P 2 P M a c h i n g
-        </Typography>
+        />
         <Box
           sx={{
             display: "flex",
             width: "100%",
-            mt: "70px",
             justifyContent: "space-between",
             gap: 2,
           }}
