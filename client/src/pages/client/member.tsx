@@ -92,6 +92,7 @@ export const MemberPage = () => {
           flexDirection: "column",
           alignItems: "center",
           mt: "auto",
+          mb: 2,
           gap: 3,
         }}
       >

@@ -142,7 +142,7 @@ export const ApplyPage = () => {
           sx={{
             mb: "35px",
             mt: "15px",
-            width: "450px",
+            width: "500px",
             height: "50px",
             borderRadius: "20px",
           }}
@@ -152,7 +152,7 @@ export const ApplyPage = () => {
           上記の内容で募集をする
         </Button>
       </Box>
-      <BackButton style={{ width: "450px" }} onClick={() => goToHome()}>
+      <BackButton style={{ width: "500px" }} onClick={() => goToHome()}>
         戻る
       </BackButton>
       <Modal open={openModal} onClose={setOpenModal.off}>

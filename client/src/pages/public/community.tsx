@@ -4,7 +4,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Card } from "../../components/Card";
-import { useAuth, useCommunity } from "../../context/auth";
+import { useAuth } from "../../context/auth";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { useCommunityHooks } from "../hooks/useCommunityHooks";
 import {
@@ -28,8 +28,8 @@ export const CommunityPage = () => {
   /**
    * custom hooks
    */
-  const { myCommunities, refecthMyCommunities } = useCommunityHooks();
-  const { joinCommunity } = useCommunity();
+  const { myCommunities, refecthMyCommunities, joinCommunity } =
+    useCommunityHooks();
 
   /**
    * form validation
@@ -128,12 +128,13 @@ export const CommunityPage = () => {
                   variant="outlined"
                   sx={{
                     width: "450px",
-                    height: "50px",
                     fontWeight: "bold",
                     fontSize: "18px",
                     textTransform: "none",
                     borderRadius: "999px",
                     boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+                    borderWidth: "3px",
+                    minHeight: "60px",
                   }}
                   onClick={() => handleEnterCommunity(id)}
                 >
