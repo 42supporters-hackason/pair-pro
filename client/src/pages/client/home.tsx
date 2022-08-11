@@ -106,12 +106,18 @@ export const HomePage = () => {
               gap: 3,
             }}
           >
-            <Button size="large" variant="outlined" onClick={() => goToApply()}>
+            <Button
+              sx={{ borderRadius: "20px" }}
+              size="large"
+              variant="outlined"
+              onClick={() => goToApply()}
+            >
               自分の好きなテーマで募集する
             </Button>
             <Button
               size="large"
               variant="outlined"
+              sx={{ borderRadius: "20px" }}
               onClick={() => goToRecruit()}
             >
               募集一覧から気になるマッチング相手を探す

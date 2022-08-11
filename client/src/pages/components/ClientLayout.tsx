@@ -87,17 +87,17 @@ export const ClientLayout = () => {
         minHeight: "100vh",
       }}
     >
-      <GeneralHeader
-        matchingPoint={matchingPoint}
-        communityName={communityName}
-        githubLogin={githubLogin}
-        menu={menu}
-      />
-      <Box sx={{ flex: "1" }}>
-        <Suspense fallback={null}>
+      <Suspense fallback={null}>
+        <GeneralHeader
+          matchingPoint={matchingPoint}
+          communityName={communityName}
+          githubLogin={githubLogin}
+          menu={menu}
+        />
+        <Box sx={{ flex: "1" }}>
           <Outlet />
-        </Suspense>
-      </Box>
+        </Box>
+      </Suspense>
       <Modal
         open={openLogoutModal}
         onClose={setOpenLogoutModal.off}
