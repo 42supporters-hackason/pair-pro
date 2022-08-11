@@ -8,9 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { BackButton } from "../../../components/BackButton";
-import { useProfile } from "../../../context/auth";
 import {
   useFetchMeQuery,
   useUpdateProfileMutation,
@@ -25,9 +23,7 @@ export const EditProfilePage = () => {
   /**
    * misc.
    */
-  const navigate = useNavigate();
   const [updateProfile] = useUpdateProfileMutation();
-  const { profile, setProfile } = useProfile();
   const { goToHome } = useClientRoute();
   const { data: meData } = useFetchMeQuery();
 
@@ -50,17 +46,12 @@ export const EditProfilePage = () => {
     async ({ name, bio }) => {
       await updateProfile({
         variables: { name, bio },
-        onCompleted: (data) => {
-          setProfile({
-            ...profile,
-            name: data.updateMyProfile?.name ?? "",
-            bio: data.updateMyProfile?.bio ?? "",
-          });
+        onCompleted: () => {
           goToHome();
         },
       });
     },
-    [updateProfile, setProfile, goToHome, profile]
+    [updateProfile, goToHome]
   );
 
   return (

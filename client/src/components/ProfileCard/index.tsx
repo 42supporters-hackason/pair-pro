@@ -96,7 +96,7 @@ export const ProfileCard = ({
               </Box>
             )}
             <Box>
-              <Typography variant="h6">Status</Typography>
+              <Typography>Status</Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -109,11 +109,6 @@ export const ProfileCard = ({
                   component="img"
                   sx={{ width: "350px" }}
                   src={`https://github-readme-stats.vercel.app/api?username=${githubLogin}&theme=onedark&show_icons=true`}
-                />
-                <Box
-                  component="img"
-                  sx={{ width: "350px" }}
-                  src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${githubLogin}&layout=compact`}
                 />
               </Box>
             </Box>

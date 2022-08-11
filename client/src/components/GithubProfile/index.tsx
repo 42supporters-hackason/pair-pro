@@ -26,22 +26,13 @@ export const GithubProfile = ({ githubLogin, name, bio }: Props) => {
         Profile
       </Typography>
       <Card>
-        <Typography
-          sx={{ textAlign: "center", textDecoration: "underline" }}
-          fontWeight="bold"
-          variant="h6"
-        >
+        <Typography sx={{ textAlign: "center" }} fontWeight="bold" variant="h5">
           {name}
         </Typography>
         <Box
           component="img"
-          sx={{ width: "100%", my: 2 }}
+          sx={{ width: "100%", my: 2, borderRadius: "10px" }}
           src={`https://github-readme-stats.vercel.app/api?username=${githubLogin}&theme=onedark&show_icons=true`}
-        />
-        <Box
-          component="img"
-          sx={{ width: "100%" }}
-          src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${githubLogin}&layout=compact`}
         />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
           <Typography fontWeight="bold" sx={{ textAlign: "center", mt: 2 }}>

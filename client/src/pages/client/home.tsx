@@ -135,7 +135,7 @@ export const HomePage = () => {
         onClose={setOpenPostModal.off}
         sx={{ overflow: "scroll" }}
       >
-        <Box sx={{ my: "50px", mx: "100px" }}>
+        <Box sx={{ my: "100px", mx: "100px" }}>
           {matchedPosts && (
             <ProfileCard
               githubLogin={
