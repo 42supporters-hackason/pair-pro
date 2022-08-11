@@ -134,6 +134,8 @@ export const CommunityPage = () => {
                     textTransform: "none",
                     borderRadius: "999px",
                     boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+                    minHeight: "60px",
+                    borderWidth: "3px",
                   }}
                   onClick={() => handleEnterCommunity(id)}
                 >
