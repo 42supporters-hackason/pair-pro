@@ -4,7 +4,6 @@ import {
   Autocomplete,
   Box,
   Button,
-  CircularProgress,
   TextareaAutosize,
   TextField,
   Typography,
@@ -15,6 +14,7 @@ import { BackButton } from "../../../components/BackButton";
 import { useClientRoute } from "../../../hooks/useClientRoute";
 import { unreachable } from "../../../utils";
 import { useEditPostHooks } from "../../hooks/useEditPostHooks";
+import { LoadingPage } from "../../public/loading";
 import {
   editPostSchema,
   EditPostSchema,
@@ -76,7 +76,7 @@ export const EditPostPage = () => {
    * RHFのdefault valueに値をsetするためにfetchが完了するまで待つ
    */
   if (postLoading || editFormData.language === undefined) {
-    return <CircularProgress />;
+    return <LoadingPage />;
   }
 
   return (

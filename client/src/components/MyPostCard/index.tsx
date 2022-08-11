@@ -1,4 +1,6 @@
 import React, { HTMLAttributes } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
   Button,
@@ -76,10 +78,12 @@ export const MyPostCard = ({
               </Box>
               <Box sx={{ display: "flex", gap: 5, alignItems: "center" }}>
                 <Button variant="outlined" onClick={onEdit}>
-                  内容を修正する
+                  修正
+                  <EditIcon />
                 </Button>
                 <Button variant="outlined" onClick={onDelete}>
-                  削除する
+                  削除
+                  <DeleteIcon />
                 </Button>
               </Box>
             </Box>
