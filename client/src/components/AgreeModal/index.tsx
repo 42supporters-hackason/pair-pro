@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
+import { BackButton } from "../BackButton";
 import { Card } from "../Card";
 
 interface Props {
@@ -31,27 +32,19 @@ export const AgreeModal = ({ content, onAgree, onCancel }: Props) => {
               mt: "15px",
               width: "200px",
               height: "40px",
-              borderRadius: "10px",
+              borderRadius: "20px",
             }}
             variant="contained"
             onClick={onAgree}
           >
             はい
           </Button>
-          <Button
-            sx={{
-              mt: "auto",
-              width: "200px",
-              height: "40px",
-              borderRadius: "10px",
-            }}
-            variant="contained"
-            type="button"
-            color="secondary"
+          <BackButton
+            style={{ width: "200px", height: "40px", marginTop: "auto" }}
             onClick={onCancel}
           >
             いいえ
-          </Button>
+          </BackButton>
         </Box>
       </Box>
     </Card>

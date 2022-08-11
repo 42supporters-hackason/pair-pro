@@ -1,8 +1,10 @@
 import React from "react";
 import { Pagination, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { BackButton } from "../../components/BackButton";
 import { CopyInput } from "../../components/CopyInput";
 import { UserItem } from "../../components/UserItem";
+import { useClientRoute } from "../../hooks/useClientRoute";
 import { useMemberHooks } from "../hooks/useMemberHooks";
 
 /**
@@ -10,6 +12,7 @@ import { useMemberHooks } from "../hooks/useMemberHooks";
  */
 export const MemberPage = () => {
   const { communityMember, communityName, communityId } = useMemberHooks();
+  const { goToHome } = useClientRoute();
   return (
     <Box
       sx={{
@@ -18,6 +21,7 @@ export const MemberPage = () => {
         alignItems: "center",
         mt: "30px",
         gap: 2,
+        minHeight: "calc(100vh - 150px)",
       }}
     >
       <Box
@@ -82,7 +86,20 @@ export const MemberPage = () => {
             ))}
         </Box>
       </Box>
-      <Pagination />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: "auto",
+          gap: 3,
+        }}
+      >
+        <Pagination />
+        <BackButton style={{ width: "350px" }} onClick={() => goToHome()}>
+          ホームに戻る
+        </BackButton>
+      </Box>
     </Box>
   );
 };

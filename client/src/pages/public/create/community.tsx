@@ -3,9 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { AgreeModal } from "../../../components/AgreeModal";
+import { BackButton } from "../../../components/BackButton";
 import { Card } from "../../../components/Card";
 import { useBoolean } from "../../../hooks/useBoolean";
-import { useClientRoute } from "../../../hooks/useClientRoute";
 import { usePublicRoute } from "../../../hooks/usePublicRoute";
 import { useCreateCommunityHooks } from "../../hooks/useCreateCommunityHooks";
 import {
@@ -18,7 +18,6 @@ export const CreateCommunityPage = () => {
    * misc.
    */
   const { goToCommunity } = usePublicRoute();
-  const { goToHome } = useClientRoute();
   const [openModal, setOpenModal] = useBoolean(false);
 
   /**
@@ -95,24 +94,12 @@ export const CreateCommunityPage = () => {
             >
               作成する
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                mt: "20px",
-                width: "350px",
-                height: "50px",
-                borderRadius: "20px",
-                fontWeight: "bold",
-                color: "secondary.dark",
-                ["&:hover"]: {
-                  bgcolor: "secondary.main",
-                },
-              }}
+            <BackButton
+              style={{ width: "350px", marginTop: "20px" }}
               onClick={() => goToCommunity()}
             >
               戻る
-            </Button>
+            </BackButton>
           </Card>
         </Box>
       </Box>

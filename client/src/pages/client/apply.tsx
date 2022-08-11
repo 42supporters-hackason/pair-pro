@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { BackButton } from "../../components/BackButton";
 import { FormDataModal } from "../../components/FormDataModal";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
@@ -143,7 +144,7 @@ export const ApplyPage = () => {
             mt: "15px",
             width: "450px",
             height: "50px",
-            borderRadius: "10px",
+            borderRadius: "20px",
           }}
           variant="contained"
           type="submit"
@@ -151,21 +152,9 @@ export const ApplyPage = () => {
           上記の内容で募集をする
         </Button>
       </Box>
-      <Button
-        sx={{
-          mb: "35px",
-          mt: "auto",
-          width: "450px",
-          height: "50px",
-          borderRadius: "10px",
-        }}
-        variant="contained"
-        type="button"
-        color="secondary"
-        onClick={() => goToHome()}
-      >
+      <BackButton style={{ width: "450px" }} onClick={() => goToHome()}>
         戻る
-      </Button>
+      </BackButton>
       <Modal open={openModal} onClose={setOpenModal.off}>
         <Box
           sx={{
