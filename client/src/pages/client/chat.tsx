@@ -2,13 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import {
-  Avatar,
-  Box,
-  Button,
-  TextareaAutosize,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { connect, LocalVideoTrack, Room } from "twilio-video";
@@ -44,9 +38,8 @@ export const ChatPage = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("room_id");
-  const { messages, opponentGithubLogin, opponentName } = useChatHooks(
-    roomId ?? unreachable()
-  );
+  const { messages, opponentGithubLogin, opponentName, myGithubLogin } =
+    useChatHooks(roomId ?? unreachable());
   const videoRef = useRef<HTMLDivElement | null>(null);
 
   const [sendMessage] = useSendMessageMutation();
@@ -97,7 +90,7 @@ export const ChatPage = () => {
       setVideoOn.on();
       setRoomData(null);
     }
-  }, [accessTokenReturnValue, roomId]);
+  }, [accessTokenReturnValue, roomId, setVideoOn, setVolumeOn]);
 
   const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
     async ({ message }) => {
@@ -166,27 +159,27 @@ export const ChatPage = () => {
 
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
-      <Box sx={{ width: "70%", mx: 3, mt: 3 }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-            width: "100%",
-          }}
-        >
-          <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 1 }}>
-            {roomData === null ? (
-              <EnterButton onClick={handleEnterRoom} />
-            ) : (
-              <VideoRoom
-                room={roomData}
-                shareScreenTrack={shareScreenTrack}
-                ref={videoRef}
-              />
-            )}
-          </Box>
-          {roomData !== null && (
+      {roomData !== null && (
+        <Box sx={{ width: "70%", mx: 3, mt: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              width: "100%",
+            }}
+          >
+            <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 1 }}>
+              {roomData === null ? (
+                <EnterButton onClick={handleEnterRoom} />
+              ) : (
+                <VideoRoom
+                  room={roomData}
+                  shareScreenTrack={shareScreenTrack}
+                  ref={videoRef}
+                />
+              )}
+            </Box>
             <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
               <VideoButtons
                 volumeOn={volumeOn}
@@ -197,15 +190,16 @@ export const ChatPage = () => {
                 onExit={handleExitRoom}
               />
             </Box>
-          )}
+          </Box>
         </Box>
-      </Box>
+      )}
       <Box
         sx={{
-          width: "30%",
+          width: "50%",
           display: "flex",
           flexDirection: "column",
           height: "calc(100vh - 68.5px)",
+          mx: "auto",
         }}
       >
         <Box
@@ -245,7 +239,7 @@ export const ChatPage = () => {
                 <ChatMessage
                   key={id}
                   content={content}
-                  side={createdBy === "taisei-13046" ? "right" : "left"}
+                  side={createdBy === myGithubLogin ? "right" : "left"}
                 />
               </Box>
             ))}
@@ -262,20 +256,22 @@ export const ChatPage = () => {
           component="form"
           onSubmit={handleSubmit(handleMessageSubmit)}
         >
-          <TextareaAutosize
-            minRows={3}
-            maxRows={3}
+          <TextField
             style={{
-              width: "80%",
+              width: "100%",
               borderRadius: "15px",
               resize: "none",
               padding: "15px",
             }}
+            InputProps={{
+              endAdornment: (
+                <Button type="submit">
+                  <SendRoundedIcon sx={{ cursor: "pointer", m: "auto" }} />
+                </Button>
+              ),
+            }}
             {...register("message")}
           />
-          <Button type="submit">
-            <SendRoundedIcon sx={{ cursor: "pointer", m: "auto" }} />
-          </Button>
         </Box>
       </Box>
     </Box>
