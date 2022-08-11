@@ -82,6 +82,9 @@ export interface NexusGenObjects {
     githubLogin: string; // String!
     id: number; // Int!
   }
+  Video: { // root type
+    accessToken: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -145,6 +148,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
+    accessToken: NexusGenRootTypes['Video']; // Video!
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
@@ -172,6 +176,9 @@ export interface NexusGenFieldTypes {
     githubLogin: string; // String!
     id: number; // Int!
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
+  }
+  Video: { // field return type
+    accessToken: string; // String!
   }
 }
 
@@ -226,6 +233,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Query: { // field return type name
+    accessToken: 'Video'
     communities: 'Community'
     feed: 'Post'
     messagesByPostId: 'Message'
@@ -253,6 +261,9 @@ export interface NexusGenFieldTypeNames {
     githubLogin: 'String'
     id: 'Int'
     profiles: 'Profile'
+  }
+  Video: { // field return type name
+    accessToken: 'String'
   }
 }
 
@@ -302,6 +313,10 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    accessToken: { // args
+      identity?: string | null; // String
+      room?: string | null; // String
+    }
     messagesByPostId: { // args
       postId: string; // String!
     }
