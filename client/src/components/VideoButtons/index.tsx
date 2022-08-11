@@ -1,10 +1,10 @@
 import React from "react";
-import LogoutIcon from "@mui/icons-material/Logout";
+import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
 import PersonalVideoIcon from "@mui/icons-material/PersonalVideo";
+import PhoneDisabledIcon from "@mui/icons-material/PhoneDisabled";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { IconButton } from "../IconButton";
 
 interface Props {
@@ -49,11 +49,11 @@ export const VideoButtons = ({
     <>
       {volumeOn ? (
         <IconButton onClick={onClickVolume}>
-          <VolumeUpIcon />
+          <MicIcon />
         </IconButton>
       ) : (
         <IconButton onClick={onClickVolume}>
-          <VolumeOffIcon />
+          <MicOffIcon />
         </IconButton>
       )}
       {videoOn ? (
@@ -69,7 +69,7 @@ export const VideoButtons = ({
         <PersonalVideoIcon />
       </IconButton>
       <IconButton onClick={onExit}>
-        <LogoutIcon />
+        <PhoneDisabledIcon />
       </IconButton>
     </>
   );

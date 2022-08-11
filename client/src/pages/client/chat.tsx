@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import CallIcon from "@mui/icons-material/Call";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
@@ -7,7 +8,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { connect, LocalVideoTrack, Room } from "twilio-video";
 import { ChatMessage } from "../../components/ChatMessage";
-import { EnterButton } from "../../components/EnterButton";
 import { IconButton } from "../../components/IconButton";
 import { VideoButtons } from "../../components/VideoButtons";
 import { VideoRoom } from "../../components/VideoRoom";
@@ -160,7 +160,7 @@ export const ChatPage = () => {
   return (
     <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
       {roomData !== null && (
-        <Box sx={{ width: "70%", mx: 3, mt: 3 }}>
+        <Box sx={{ width: "100%", mx: 3, mt: 3 }}>
           <Box
             sx={{
               display: "flex",
@@ -170,15 +170,11 @@ export const ChatPage = () => {
             }}
           >
             <Box sx={{ display: "flex", height: "85%", width: "100%", gap: 1 }}>
-              {roomData === null ? (
-                <EnterButton onClick={handleEnterRoom} />
-              ) : (
-                <VideoRoom
-                  room={roomData}
-                  shareScreenTrack={shareScreenTrack}
-                  ref={videoRef}
-                />
-              )}
+              <VideoRoom
+                room={roomData}
+                shareScreenTrack={shareScreenTrack}
+                ref={videoRef}
+              />
             </Box>
             <Box sx={{ m: "auto", display: "flex", gap: 2 }}>
               <VideoButtons
@@ -195,7 +191,7 @@ export const ChatPage = () => {
       )}
       <Box
         sx={{
-          width: "50%",
+          width: "40%",
           display: "flex",
           flexDirection: "column",
           height: "calc(100vh - 68.5px)",
@@ -216,12 +212,19 @@ export const ChatPage = () => {
             <Avatar src={`https://github.com/${opponentGithubLogin}.png`} />
             <Typography fontWeight="bold">{opponentName}</Typography>
           </Box>
-          <IconButton sx={{ mr: 2 }} onClick={() => goToHome()}>
-            <Typography fontWeight="bold" sx={{ mr: 1 }}>
-              退出する
-            </Typography>
-            <LogoutIcon />
-          </IconButton>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            {roomData === null && (
+              <IconButton sx={{ mr: 2 }} onClick={handleEnterRoom}>
+                <Typography fontWeight="bold" sx={{ mr: 1 }}>
+                  通話する
+                </Typography>
+                <CallIcon />
+              </IconButton>
+            )}
+            <IconButton sx={{ mr: 2 }} onClick={() => goToHome()}>
+              <LogoutIcon />
+            </IconButton>
+          </Box>
         </Box>
         <Box
           sx={{
