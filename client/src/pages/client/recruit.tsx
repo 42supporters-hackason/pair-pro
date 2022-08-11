@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { BackButton } from "../../components/BackButton";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useProfile } from "../../context/auth";
@@ -141,20 +142,7 @@ export const RecruitPage = () => {
               />
             ))}
         </Box>
-        <Button
-          sx={{
-            mx: "auto",
-            width: "450px",
-            my: 3,
-            height: "50px",
-            borderRadius: "10px",
-          }}
-          variant="contained"
-          color="secondary"
-          onClick={() => goToHome()}
-        >
-          戻る
-        </Button>
+        <BackButton style={{ margin: "0 auto", width: "350px" }} onClick={() => goToHome()}>戻る</BackButton>
       </Box>
       <Modal
         open={openPostModal}

@@ -1,8 +1,9 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import development from "../../assets/development.png";
 import driver from "../../assets/driver.jpeg";
 import navigator from "../../assets/navigator.png";
+import { BackButton } from "../../components/BackButton";
 import { Card } from "../../components/Card";
 import { useClientRoute } from "../../hooks/useClientRoute";
 
@@ -94,22 +95,12 @@ export const ExplanationPage = () => {
           <Box component="img" src={development} sx={{ width: "20%" }} />
         </Box>
       </Card>
-      <Button
-        sx={{
-          mb: "35px",
-          mt: "10px",
-          mx: "auto",
-          width: "450px",
-          height: "50px",
-          borderRadius: "10px",
-        }}
-        variant="contained"
-        type="button"
-        color="secondary"
+      <BackButton
+        style={{ width: "450px", margin: "20px auto 35px" }}
         onClick={() => goToHome()}
       >
         戻る
-      </Button>
+      </BackButton>
     </Box>
   );
 };

@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { BackButton } from "../../../components/BackButton";
 import { useProfile } from "../../../context/auth";
 import {
   useFetchMeQuery,
@@ -108,28 +109,16 @@ export const EditProfilePage = () => {
             mt: "15px",
             width: "450px",
             height: "50px",
-            borderRadius: "10px",
+            borderRadius: "20px",
           }}
           variant="contained"
           type="submit"
         >
           更新する
         </Button>
-        <Button
-          sx={{
-            mb: "35px",
-            mt: "auto",
-            width: "450px",
-            height: "50px",
-            borderRadius: "10px",
-          }}
-          variant="contained"
-          type="button"
-          color="secondary"
-          onClick={() => navigate(-1)}
-        >
+        <BackButton style={{ width: "450px" }} onClick={() => goToHome()}>
           戻る
-        </Button>
+        </BackButton>
       </Box>
     </Box>
   );

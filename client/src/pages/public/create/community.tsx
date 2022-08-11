@@ -3,9 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { AgreeModal } from "../../../components/AgreeModal";
+import { BackButton } from "../../../components/BackButton";
 import { Card } from "../../../components/Card";
 import { useBoolean } from "../../../hooks/useBoolean";
-import { useClientRoute } from "../../../hooks/useClientRoute";
 import { usePublicRoute } from "../../../hooks/usePublicRoute";
 import { useCreateCommunityHooks } from "../../hooks/useCreateCommunityHooks";
 import {
@@ -18,7 +18,6 @@ export const CreateCommunityPage = () => {
    * misc.
    */
   const { goToCommunity } = usePublicRoute();
-  const { goToHome } = useClientRoute();
   const [openModal, setOpenModal] = useBoolean(false);
 
   /**
@@ -67,14 +66,15 @@ export const CreateCommunityPage = () => {
               alignItems: "center",
               width: "50%",
               margin: "0 auto",
-              boxShadow: "rgb(38, 57, 77) 0px 20px 30px -10px",
+              boxShadow:
+                "rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px",
             }}
           >
             <Typography variant="h6" fontWeight="bold">
-              新しいcomunityの名前を入力してください
+              新しいコミュニティの名前を入力してください
             </Typography>
             <TextField
-              label="community名"
+              label="コミュニティ名"
               sx={{ mt: "45px", width: "450px" }}
               {...register("communityName")}
             />
@@ -94,21 +94,12 @@ export const CreateCommunityPage = () => {
             >
               作成する
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                mt: "20px",
-                width: "350px",
-                height: "50px",
-                borderRadius: "20px",
-                fontWeight: "bold",
-                color: "black",
-              }}
+            <BackButton
+              style={{ width: "350px", marginTop: "20px" }}
               onClick={() => goToCommunity()}
             >
               戻る
-            </Button>
+            </BackButton>
           </Card>
         </Box>
       </Box>
