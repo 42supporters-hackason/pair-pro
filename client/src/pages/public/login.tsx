@@ -1,15 +1,11 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { GithubLoginButton } from "react-social-login-buttons";
-import sns_img from "../../assets/login_sns.jpg";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import { Card } from "../../components/Card";
-import { useClientRoute } from "../../hooks/useClientRoute";
 import { getGithubAuthUrl } from "../../utils";
 
 export const LoginPage = () => {
-  const { goToHome } = useClientRoute();
-
   return (
     <>
       <Box
@@ -29,7 +25,7 @@ export const LoginPage = () => {
             alignItems: "center",
             justifyContent: "ceter",
           }}
-          variant="h3"
+          variant="h2"
           fontWeight="bold"
         >
           P 2 P M a c h i n g
@@ -38,58 +34,123 @@ export const LoginPage = () => {
           sx={{
             display: "flex",
             width: "100%",
-            mt: "100px",
+            mt: "70px",
             justifyContent: "space-between",
+            gap: 2,
           }}
         >
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 3,
-              mt: "auto",
+              overflow: "scroll",
+              height: "300px",
+              width: "40%",
+              gap: 1,
             }}
           >
-            <Box
-              component="img"
-              src={sns_img}
-              sx={{
-                width: "200px",
-                height: "200px",
-                mx: "auto",
-                borderRadius: "15px",
-              }}
-            />
-            <Typography variant="h6" fontWeight="bold">
-              1. 自分からペアを募集する or 募集一覧からペアを見つける
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              sx={{ textAlign: "center" }}
+            >
+              アプリの使い方
             </Typography>
-            <Typography variant="h6" fontWeight="bold">
-              2. マッチングが成立したらチャットで相手と連絡をとる
-            </Typography>
-            <Typography variant="h6" fontWeight="bold">
-              3. P2Pでペアプログラミングを実践!!
-            </Typography>
+            <Box component="ol" sx={{ p: 1 }}>
+              <Card style={{ height: "auto" }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ mb: "10px" }}>
+                  ペアプロ相手とマッチングする方法は2つ
+                </Typography>
+                <Typography
+                  component="li"
+                  fontWeight="bold"
+                  sx={{ mb: "5px", ml: "10px" }}
+                >
+                  自分が興味のある内容で募集をかけ、
+                  <br />
+                  マッチングが成立するのを待つ
+                </Typography>
+                <Typography
+                  component="li"
+                  fontWeight="bold"
+                  sx={{ ml: "10px" }}
+                >
+                  公開されている募集一覧から好きな相手を見つける
+                </Typography>
+              </Card>
+            </Box>
+            <Box sx={{ p: 1 }}>
+              <Card style={{ height: "auto" }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ mb: "10px" }}>
+                  マッチングポイント(MP)について
+                </Typography>
+                <Typography component="li" fontWeight="bold" sx={{ mb: "5px" }}>
+                  自分の好きな内容で募集をかけると、
+                  <br />
+                  マッチングポイントが1つ減ります。
+                </Typography>
+                <Typography component="li" fontWeight="bold" sx={{ mb: "5px" }}>
+                  公開されている募集一覧からマッチングするとポイントが1つ増えます。
+                </Typography>
+                <Typography component="li" fontWeight="bold">
+                  積極的にマッチングをし、
+                  <br />
+                  ポイントを貯めて自分の好きなテーマでペアプロをしましょう！
+                </Typography>
+              </Card>
+            </Box>
+            <Box sx={{ p: 1 }}>
+              <Card style={{ height: "auto" }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ mb: "10px" }}>
+                  マッチングした後の流れ
+                </Typography>
+                <Typography component="li" fontWeight="bold">
+                  マッチング相手とチャットでペアプロ日時を決めましょう
+                </Typography>
+                <Typography component="li" fontWeight="bold">
+                  日時が決まったらペアプロルームで通話をしてペアプロを実践！
+                </Typography>
+              </Card>
+            </Box>
           </Box>
-          <Box sx={{ width: "50%", height: "50%", my: "auto" }}>
-            <Card>
+          <Box sx={{ width: "50%", my: "auto" }}>
+            <Card
+              style={{
+                borderRadius: "999px",
+                backgroundColor: "#f0f0fc",
+                boxShadow:
+                  "rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px",
+              }}
+            >
               <Typography
-                variant="h5"
+                variant="h4"
                 fontWeight="bold"
-                sx={{ m: "30px 0 40px", textAlign: "center" }}
+                sx={{
+                  m: "30px 0 30px",
+                  textAlign: "center",
+                }}
               >
                 Login or SignUp
               </Typography>
               <Typography
                 variant="subtitle1"
                 fontWeight="bold"
-                sx={{ textAlign: "center", mb: "50px" }}
+                sx={{ textAlign: "center", mb: "40px" }}
               >
                 お手持ちのGithubで認証をします
               </Typography>
-              <GithubLoginButton
-                style={{ width: "100%" }}
-                onClick={() => window.location.assign(getGithubAuthUrl())}
-              />
+              <Box
+                sx={{ display: "flex", justifyContent: "center", mb: "15px" }}
+              >
+                <GithubLoginButton
+                  style={{
+                    width: "60%",
+                    borderRadius: "999px",
+                    paddingLeft: "30px",
+                  }}
+                  onClick={() => window.location.assign(getGithubAuthUrl())}
+                />
+              </Box>
             </Card>
           </Box>
         </Box>

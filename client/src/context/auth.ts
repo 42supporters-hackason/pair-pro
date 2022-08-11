@@ -1,43 +1,46 @@
 import { useCallback, useState } from "react";
 import constate from "constate";
-import { useFetchMeLazyQuery, useSignInMutation } from "../gen/graphql-client";
+import {
+  useFetchCurrentCommunityLazyQuery,
+  useFetchMeLazyQuery,
+  useJoinCommunityMutation,
+  useSignInMutation,
+} from "../gen/graphql-client";
 import { useBoolean } from "../hooks/useBoolean";
 import { usePublicRoute } from "../hooks/usePublicRoute";
-import { unreachable } from "../utils";
-import { profileStorage } from "../utils/local-storage/profile";
 import { tokenStorage } from "../utils/local-storage/token";
+import { useClientRoute } from "./../hooks/useClientRoute";
 import { useHomeHooks } from "./../pages/hooks/useHomeHooks";
 
 export interface Profile {
-  id: number;
+  id?: number;
   /**
    * github login名
    */
-  githubLogin: string;
+  githubLogin?: string;
   /**
    * プロフィール名
    */
-  name: string;
-  /**
-   * MP
-   */
-  matchingPoint: number;
+  name?: string;
   /**
    * プロフィール
    */
   bio?: string;
 }
 
-export const [AuthProvider, useAuth, useProfile] = constate(
+export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
   () => {
     const [isLogin, setIsLogin] = useBoolean(tokenStorage.load() !== null);
-    const [profile, setProfile] = useState<Partial<Profile>>(
-      profileStorage.load() ?? {}
-    );
+    const [profile, setProfile] = useState<Profile>();
+    const [matchingPoint, setMatchingPoint] = useState<number>();
+    const [communityName, setCommunityName] = useState<string>();
     const [signInMutation] = useSignInMutation();
-    const { goToLogin } = usePublicRoute();
+    const { goToLogin, goToCommunity } = usePublicRoute();
+    const { goToHome } = useClientRoute();
     const { refetchMatchedPosts, refetchMyPosts } = useHomeHooks();
     const [fetchMe] = useFetchMeLazyQuery();
+    const [joinCommunityMutation] = useJoinCommunityMutation();
+    const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
 
     const signIn = async (code: string) => {
       if (tokenStorage.load() === null) {
@@ -45,23 +48,7 @@ export const [AuthProvider, useAuth, useProfile] = constate(
           variables: { code },
           onCompleted: (data) => {
             tokenStorage.save(data?.authGithub.token ?? "");
-            profileStorage.save({
-              id: data.authGithub.user.id,
-              githubLogin: data?.authGithub.user.githubLogin,
-              name: data?.authGithub.user.name,
-              matchingPoint: data?.authGithub.user.matchingPoint,
-              bio: data?.authGithub.user.bio,
-            });
-            setIsLogin.on();
-            setProfile({
-              id: data.authGithub.user.id,
-              githubLogin: data?.authGithub.user.githubLogin,
-              name: data?.authGithub.user.name,
-              matchingPoint: data?.authGithub.user.matchingPoint,
-              bio: data?.authGithub.user.bio,
-            });
-            refetchMatchedPosts();
-            refetchMyPosts();
+            goToCommunity({ replace: true });
           },
         });
         if (tokenStorage.load() === null) {
@@ -70,20 +57,44 @@ export const [AuthProvider, useAuth, useProfile] = constate(
       }
     };
 
+    const joinCommunity = async (id: string) => {
+      await joinCommunityMutation({
+        variables: { communityId: id },
+        onCompleted: (data) => {
+          tokenStorage.save(data.joinCommunity.token);
+          refetchMatchedPosts();
+          refetchMyPosts();
+          goToHome({ replace: true });
+        },
+      });
+    };
+
     const updateMatchingPoint = useCallback(async () => {
       await fetchMe({
         onCompleted: (data) => {
-          profileStorage.save({
-            id: profile.id ?? unreachable(),
-            name: profile.name ?? unreachable(),
-            githubLogin: profile.githubLogin ?? unreachable(),
-            matchingPoint: data.me.matchingPoint,
-            bio: profile.bio,
-          });
-          setProfile(profileStorage.load() ?? unreachable());
+          setMatchingPoint(data.myProfile.matchingPoint);
         },
       });
-    }, [fetchMe, profile]);
+    }, [fetchMe]);
+
+    const fetchMyProfile = useCallback(() => {
+      fetchMe({
+        onCompleted: (data) => {
+          setProfile({
+            id: data.myProfile.id,
+            githubLogin: data.myProfile.user.githubLogin,
+            name: data.myProfile.name,
+            bio: data.myProfile.bio,
+          });
+          setMatchingPoint(data.myProfile.matchingPoint);
+        },
+      });
+      fetchCurrentCommunity({
+        onCompleted: (data) => {
+          setCommunityName(data.myCurrentCommunity?.name);
+        },
+      });
+    }, [fetchMe, fetchCurrentCommunity]);
 
     return {
       isLogin,
@@ -92,12 +103,30 @@ export const [AuthProvider, useAuth, useProfile] = constate(
       setProfile,
       signIn,
       updateMatchingPoint,
+      joinCommunity,
+      fetchMyProfile,
+      setCommunityName,
+      matchingPoint,
+      communityName,
     };
   },
   ({ signIn, isLogin, setIsLogin }) => ({ signIn, isLogin, setIsLogin }),
-  ({ profile, setProfile, updateMatchingPoint }) => ({
+  ({
     profile,
     setProfile,
     updateMatchingPoint,
-  })
+    fetchMyProfile,
+    matchingPoint,
+    communityName,
+    setCommunityName,
+  }) => ({
+    profile,
+    setProfile,
+    updateMatchingPoint,
+    fetchMyProfile,
+    matchingPoint,
+    communityName,
+    setCommunityName,
+  }),
+  ({ joinCommunity }) => ({ joinCommunity })
 );

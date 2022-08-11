@@ -11,7 +11,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { useProfile } from "../../context/auth";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { ClientMenu } from "./types";
 
@@ -21,6 +20,14 @@ interface Props {
    */
   matchingPoint?: number;
   /**
+   * community名
+   */
+  communityName?: string;
+  /**
+   * githubLogin
+   */
+  githubLogin?: string;
+  /**
    * headerのmenu
    */
   menu: ClientMenu;
@@ -29,14 +36,18 @@ interface Props {
 /**
  * 全ページ共通のHeaderコンポーネント
  */
-export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
+export const GeneralHeader = ({
+  matchingPoint,
+  communityName,
+  githubLogin,
+  menu,
+}: Props) => {
   /**
    * misc.
    */
   const { goToHome } = useClientRoute();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { profile } = useProfile();
 
   return (
     <AppBar position="static">
@@ -126,6 +137,12 @@ export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
               </Button>
             ))}
           </Box>
+          <Typography variant="h6" sx={{ mr: 3 }}>
+            Community:{" "}
+            <Typography component="span" variant="h6" fontWeight="bold">
+              {communityName}
+            </Typography>
+          </Typography>
           <Typography variant="h6" sx={{ mr: "35px" }}>
             Matching Point:{" "}
             <Typography component="span" variant="h6" fontWeight="bold">
@@ -138,9 +155,7 @@ export const GeneralHeader = ({ matchingPoint, menu }: Props) => {
                 onClick={(event) => setAnchorElUser(event.currentTarget)}
                 sx={{ p: 0 }}
               >
-                <Avatar
-                  src={`https://github.com/${profile?.githubLogin}.png`}
-                />
+                <Avatar src={`https://github.com/${githubLogin}.png`} />
               </IconButton>
             </Tooltip>
             <Menu

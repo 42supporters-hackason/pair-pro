@@ -27,6 +27,10 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
    * 名前
    */
   name?: string;
+  /**
+   * githubLogin
+   */
+  githubLogin?: string;
   sx?: SxProps<Theme>;
 }
 
@@ -38,6 +42,7 @@ export const PostCard = ({
   content,
   languages,
   name,
+  githubLogin,
   ...props
 }: Props) => {
   return (
@@ -47,7 +52,7 @@ export const PostCard = ({
           <CardContent sx={{ m: 1 }}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-                <Avatar src={`https://github.com/${name}.png`} />
+                <Avatar src={`https://github.com/${githubLogin}.png`} />
                 <Typography variant="h6">{title}</Typography>
               </Box>
               <Box sx={{ borderRadius: 2, bgcolor: "primary.light", p: 2 }}>

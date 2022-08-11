@@ -1,10 +1,14 @@
-import { Suspense, useCallback, useEffect } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { Box, Modal } from "@mui/material";
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
-import { useAuth, useProfile } from "../../context/auth";
+import { useProfile } from "../../context/auth";
+import {
+  useFetchCurrentCommunityLazyQuery,
+  useFetchMeLazyQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { tokenStorage } from "../../utils/local-storage/token";
@@ -16,27 +20,63 @@ export const ClientLayout = () => {
   /**
    * misc.
    */
-  const [searchParams] = useSearchParams();
-  const code = searchParams.get("code");
-  const { goToLogin } = usePublicRoute();
-  const { isLogin, signIn } = useAuth();
-  const { profile } = useProfile();
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
-  const menu = useClientHeaderMenu({ onLogout: setOpenLogoutModal.on });
+  const [openChangeCommunityModal, setOpenChangeCommunityModal] =
+    useBoolean(false);
+  const [communityName, setCommunityName] = useState<string>();
+  const [matchingPoint, setMatchingPoint] = useState<number>();
+  const [githubLogin, setGithubLogin] = useState<string>();
+
+  const { setProfile } = useProfile();
+  const { goToLogin, goToCommunity } = usePublicRoute();
+  const menu = useClientHeaderMenu({
+    onLogout: setOpenLogoutModal.on,
+    onChangeCommunity: setOpenChangeCommunityModal.on,
+  });
+  const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
+  const [fetchMe] = useFetchMeLazyQuery();
 
   /**
    * event-handler
    */
   const handleLogout = useCallback(() => {
     tokenStorage.clear();
-    goToLogin();
+    goToLogin({ replace: true });
   }, [goToLogin]);
 
+  const handleChangeCommunity = useCallback(() => {
+    goToCommunity({ replace: true });
+  }, [goToCommunity]);
+
   useEffect(() => {
-    if (!isLogin && code !== null) {
-      signIn(code);
+    if (communityName === undefined) {
+      fetchCurrentCommunity({
+        onCompleted: (data) => setCommunityName(data.myCurrentCommunity?.name),
+      });
     }
-  }, [code, signIn, isLogin]);
+    if (matchingPoint === undefined) {
+      fetchMe({
+        onCompleted: (data) => {
+          setMatchingPoint(data.myProfile.matchingPoint);
+          setGithubLogin(data.myProfile.user.githubLogin);
+          setProfile({
+            id: data.myProfile.id,
+            githubLogin: data.myProfile.user.githubLogin,
+            name: data.myProfile.name,
+            bio: data.myProfile.bio,
+          });
+        },
+      });
+    }
+  }, [
+    fetchMe,
+    fetchCurrentCommunity,
+    setCommunityName,
+    setMatchingPoint,
+    communityName,
+    matchingPoint,
+    setProfile,
+  ]);
 
   return (
     <Box
@@ -47,12 +87,17 @@ export const ClientLayout = () => {
         minHeight: "100vh",
       }}
     >
-      <GeneralHeader matchingPoint={profile.matchingPoint} menu={menu} />
-      <Box sx={{ flex: "1" }}>
-        <Suspense fallback={null}>
+      <Suspense fallback={null}>
+        <GeneralHeader
+          matchingPoint={matchingPoint}
+          communityName={communityName}
+          githubLogin={githubLogin}
+          menu={menu}
+        />
+        <Box sx={{ flex: "1" }}>
           <Outlet />
-        </Suspense>
-      </Box>
+        </Box>
+      </Suspense>
       <Modal
         open={openLogoutModal}
         onClose={setOpenLogoutModal.off}
@@ -63,6 +108,19 @@ export const ClientLayout = () => {
             content="ログアウトしますか？"
             onAgree={handleLogout}
             onCancel={setOpenLogoutModal.off}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={openChangeCommunityModal}
+        onClose={setOpenChangeCommunityModal.off}
+        sx={{ top: "40%", mx: "auto", width: "600px" }}
+      >
+        <Box>
+          <AgreeModal
+            content="コミュニティを変更しますか？"
+            onAgree={handleChangeCommunity}
+            onCancel={setOpenChangeCommunityModal.off}
           />
         </Box>
       </Modal>

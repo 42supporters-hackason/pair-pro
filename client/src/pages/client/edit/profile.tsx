@@ -8,12 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useProfile } from "../../../context/auth";
-import { useUpdateProfileMutation } from "../../../gen/graphql-client";
+import { BackButton } from "../../../components/BackButton";
+import {
+  useFetchMeQuery,
+  useUpdateProfileMutation,
+} from "../../../gen/graphql-client";
 import { useClientRoute } from "../../../hooks/useClientRoute";
-import { unreachable } from "../../../utils";
-import { profileStorage } from "../../../utils/local-storage/profile";
 import {
   editProfileSchema,
   EditProfileSchema,
@@ -23,10 +23,9 @@ export const EditProfilePage = () => {
   /**
    * misc.
    */
-  const navigate = useNavigate();
   const [updateProfile] = useUpdateProfileMutation();
-  const { profile, setProfile } = useProfile();
   const { goToHome } = useClientRoute();
+  const { data: meData } = useFetchMeQuery();
 
   /**
    * form validation
@@ -38,8 +37,8 @@ export const EditProfilePage = () => {
   } = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      name: profile.name,
-      bio: profile.bio,
+      name: meData?.myProfile.name ?? "",
+      bio: meData?.myProfile.bio ?? "",
     },
   });
 
@@ -47,24 +46,12 @@ export const EditProfilePage = () => {
     async ({ name, bio }) => {
       await updateProfile({
         variables: { name, bio },
-        onCompleted: (data) => {
-          profileStorage.save({
-            id: profile.id ?? unreachable(),
-            githubLogin: profile.githubLogin ?? unreachable(),
-            name: data.updateMe?.name
-              ? data.updateMe.name
-              : profile.name
-              ? profile.name
-              : unreachable(),
-            bio: data.updateMe?.bio ?? "",
-            matchingPoint: profile.matchingPoint ?? unreachable(),
-          });
-          setProfile(profileStorage.load() ?? {});
+        onCompleted: () => {
           goToHome();
         },
       });
     },
-    [updateProfile, profile, setProfile, goToHome]
+    [updateProfile, goToHome]
   );
 
   return (
@@ -95,23 +82,16 @@ export const EditProfilePage = () => {
         <Typography variant="subtitle2" sx={{ mb: "5px", ml: "5px" }}>
           自己紹介
         </Typography>
-        <Box>
-          <TextareaAutosize
-            minRows={7}
-            style={{
-              width: "470px",
-              borderRadius: "15px",
-              resize: "none",
-              padding: "15px",
-            }}
-            {...register("bio")}
-          />
-          {errors.bio && (
-            <Typography sx={{ mt: "5px", color: "error.main" }}>
-              {errors.bio.message}
-            </Typography>
-          )}
-        </Box>
+        <TextareaAutosize
+          minRows={7}
+          style={{
+            width: "470px",
+            borderRadius: "15px",
+            resize: "none",
+            padding: "15px",
+          }}
+          {...register("bio")}
+        />
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Button
@@ -120,28 +100,16 @@ export const EditProfilePage = () => {
             mt: "15px",
             width: "450px",
             height: "50px",
-            borderRadius: "10px",
+            borderRadius: "20px",
           }}
           variant="contained"
           type="submit"
         >
           更新する
         </Button>
-        <Button
-          sx={{
-            mb: "35px",
-            mt: "auto",
-            width: "450px",
-            height: "50px",
-            borderRadius: "10px",
-          }}
-          variant="contained"
-          type="button"
-          color="secondary"
-          onClick={() => navigate(-1)}
-        >
+        <BackButton style={{ width: "450px" }} onClick={() => goToHome()}>
           戻る
-        </Button>
+        </BackButton>
       </Box>
     </Box>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GithubProfile } from "../../components/GithubProfile";
@@ -6,7 +6,10 @@ import { HomeTitleToggle } from "../../components/HomeTitleToggle";
 import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
-import { useProfile } from "../../context/auth";
+import {
+  useFetchCurrentCommunityQuery,
+  useFetchMeQuery,
+} from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useHomeHooks } from "../hooks/useHomeHooks";
@@ -25,12 +28,13 @@ export const HomePage = () => {
     "matchedList"
   );
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
-  const { profile } = useProfile();
+  const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
+  const { refetch: refetchMe } = useFetchMeQuery();
 
   /**
    * page hooks
    */
-  const { myPosts, matchedPosts, deletePost } = useHomeHooks();
+  const { profile, myPosts, matchedPosts, deletePost } = useHomeHooks();
 
   /**
    * event-handler
@@ -44,6 +48,11 @@ export const HomePage = () => {
     }
   }, [deletePost, selectedId, setOpenDeleteModal]);
 
+  useEffect(() => {
+    refetchCurrentCommunity();
+    refetchMe();
+  }, [refetchCurrentCommunity, refetchMe]);
+
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
       <Box sx={{ width: "60%" }}>
@@ -51,19 +60,22 @@ export const HomePage = () => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {showList === "matchedList"
             ? matchedPosts &&
-              matchedPosts.map(({ id, title, content, languages, name }) => (
-                <PostCard
-                  key={id}
-                  title={title}
-                  content={content}
-                  languages={languages}
-                  name={name}
-                  onClick={() => {
-                    setOpenPostModal.on();
-                    setSelectedId(id);
-                  }}
-                />
-              ))
+              matchedPosts.map(
+                ({ id, title, content, languages, name, githubLogin }) => (
+                  <PostCard
+                    key={id}
+                    title={title}
+                    content={content}
+                    languages={languages}
+                    name={name}
+                    githubLogin={githubLogin}
+                    onClick={() => {
+                      setOpenPostModal.on();
+                      setSelectedId(id);
+                    }}
+                  />
+                )
+              )
             : myPosts &&
               myPosts.map(({ id, title, content, languages }) => (
                 <MyPostCard
@@ -94,12 +106,18 @@ export const HomePage = () => {
               gap: 3,
             }}
           >
-            <Button size="large" variant="outlined" onClick={() => goToApply()}>
+            <Button
+              sx={{ borderRadius: "20px" }}
+              size="large"
+              variant="outlined"
+              onClick={() => goToApply()}
+            >
               自分の好きなテーマで募集する
             </Button>
             <Button
               size="large"
               variant="outlined"
+              sx={{ borderRadius: "20px" }}
               onClick={() => goToRecruit()}
             >
               募集一覧から気になるマッチング相手を探す
@@ -107,9 +125,9 @@ export const HomePage = () => {
           </Box>
         </Box>
         <GithubProfile
-          githubLogin={profile.githubLogin}
-          name={profile.name}
-          bio={profile.bio}
+          githubLogin={profile?.githubLogin}
+          name={profile?.name}
+          bio={profile?.bio}
         />
       </Box>
       <Modal
@@ -117,7 +135,7 @@ export const HomePage = () => {
         onClose={setOpenPostModal.off}
         sx={{ overflow: "scroll" }}
       >
-        <Box sx={{ my: "50px", mx: "100px" }}>
+        <Box sx={{ my: "100px", mx: "100px" }}>
           {matchedPosts && (
             <ProfileCard
               githubLogin={

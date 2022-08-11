@@ -26,12 +26,12 @@ export const useChatHooks = (roomId: string) => {
   });
 
   const opponentGithubLogin =
-    profile.githubLogin === post?.post?.driver?.githubLogin
-      ? post?.post?.navigator?.githubLogin
-      : post?.post?.driver?.githubLogin;
+    profile?.githubLogin === post?.post?.driver?.user.githubLogin
+      ? post?.post?.navigator?.user.githubLogin
+      : post?.post?.driver?.user.githubLogin;
 
   const opponentName =
-    profile.name === post?.post?.driver?.name
+    profile?.name === post?.post?.driver?.name
       ? post?.post?.navigator?.name
       : post?.post?.driver?.name;
 
@@ -44,7 +44,7 @@ export const useChatHooks = (roomId: string) => {
         ({ content, createdBy, id }) => ({
           id,
           content,
-          createdBy: createdBy.githubLogin,
+          createdBy: createdBy.user.githubLogin,
         })
       );
       setMessages(messages);
@@ -61,7 +61,7 @@ export const useChatHooks = (roomId: string) => {
         id: data.subscriptionData.data.waitForMessage.id,
         content: data.subscriptionData.data.waitForMessage.content,
         createdBy:
-          data.subscriptionData.data.waitForMessage.createdBy.githubLogin,
+          data.subscriptionData.data.waitForMessage.createdBy.user.githubLogin,
       };
       if (message !== undefined && message !== null) {
         setMessages((prevMessage) => {

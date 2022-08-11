@@ -1,9 +1,10 @@
 import { useCallback } from "react";
-import { useProfile } from "../../context/auth";
+import { Profile, useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
   useDeletePostMutation,
   useFetchMatchedPostQuery,
+  useFetchMeQuery,
   useFetchMyPostQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
@@ -27,12 +28,17 @@ const matchedPostsTaranslator = (
       content: description,
       languages: requiredSkills.map(({ name }) => name),
       name:
-        myGithubLogin === driver?.githubLogin ? navigator?.name : driver?.name,
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.name
+          : driver?.name,
       githubLogin:
-        myGithubLogin === driver?.githubLogin
-          ? navigator?.githubLogin
-          : driver?.githubLogin,
-      bio: myGithubLogin === driver?.githubLogin ? navigator?.bio : driver?.bio,
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.user.githubLogin
+          : driver?.user.githubLogin,
+      bio:
+        myGithubLogin === driver?.user.githubLogin
+          ? navigator?.bio
+          : driver?.bio,
     })
   );
 
@@ -48,8 +54,19 @@ export const useHomeHooks = () => {
   /**
    * misc.
    */
-  const { profile, updateMatchingPoint } = useProfile();
+  const { updateMatchingPoint } = useProfile();
   const [deletePostMutation] = useDeletePostMutation();
+
+  /**
+   * 自分自身のプロフィールを取得
+   */
+  const { data: meData } = useFetchMeQuery();
+  const profile: Profile = {
+    id: meData?.myProfile.id,
+    githubLogin: meData?.myProfile.user.githubLogin,
+    name: meData?.myProfile.name,
+    bio: meData?.myProfile.bio,
+  };
 
   /**
    * 自分が投稿したPOSTを取得
@@ -93,5 +110,6 @@ export const useHomeHooks = () => {
     refetchMatchedPosts,
     refetchMyPosts,
     deletePost,
+    profile,
   };
 };

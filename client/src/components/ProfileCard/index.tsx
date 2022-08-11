@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from "react";
 import { Box, Button, SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/system";
+import { BackButton } from "../BackButton";
 import { Card } from "../Card";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -66,6 +67,89 @@ export const ProfileCard = ({
   return (
     <Box {...props}>
       <Card>
+        <Box sx={{ display: "flex", gap: 3, p: 3, width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+              p: 3,
+              width: "40%",
+              borderRadius: "20px",
+            }}
+          >
+            <Box>
+              <Typography>名前</Typography>
+              <Typography fontWeight="bold">{name}</Typography>
+            </Box>
+            {bio && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography>自己紹介</Typography>
+                <Typography fontWeight="bold">{bio}</Typography>
+              </Box>
+            )}
+            <Box>
+              <Typography>Status</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  flexWrap: "wrap",
+                }}
+              >
+                <Box
+                  component="img"
+                  sx={{ width: "350px" }}
+                  src={`https://github-readme-stats.vercel.app/api?username=${githubLogin}&theme=onedark&show_icons=true`}
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              boxShadow: "rgba(55, 49, 49, 0.2) 0px 2px 8px 0px",
+              p: 3,
+              mr: 3,
+              gap: 3,
+              width: "100%",
+              borderRadius: "20px",
+            }}
+          >
+            <Box>
+              <Typography>募集タイトル</Typography>
+              <Typography fontWeight="bold" variant="h6">
+                {title}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography>募集詳細</Typography>
+              <Typography fontWeight="bold" variant="h6">
+                {content}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography>使用言語</Typography>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {languages &&
+                  languages.map((language) => (
+                    <Typography fontWeight="bold" variant="h6" key={language}>
+                      {language}
+                    </Typography>
+                  ))}
+              </Box>
+            </Box>
+          </Box>
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -75,108 +159,26 @@ export const ProfileCard = ({
             gap: "10px",
           }}
         >
-          <Typography variant="h5">{name}</Typography>
-          {bio && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography>自己紹介</Typography>
-              <Typography fontWeight="bold" variant="subtitle2">
-                {bio}
-              </Typography>
-            </Box>
-          )}
-          <Typography variant="h6">Status</Typography>
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            <Box
-              component="img"
-              sx={{ height: "150px" }}
-              src={`https://github-readme-stats.vercel.app/api?username=${githubLogin}&theme=onedark&show_icons=true`}
-            />
-            <Box
-              component="img"
-              sx={{ height: "150px" }}
-              src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${githubLogin}&layout=compact`}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography>募集タイトル</Typography>
-            <Typography fontWeight="bold" variant="subtitle2">
-              {title}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography>募集詳細</Typography>
-            <Typography fontWeight="bold" variant="subtitle2">
-              {content}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography>使用言語</Typography>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              {languages &&
-                languages.map((language) => (
-                  <Typography
-                    fontWeight="bold"
-                    variant="subtitle2"
-                    key={language}
-                  >
-                    {language}
-                  </Typography>
-                ))}
-            </Box>
-          </Box>
           {hasButton && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+            <Box sx={{ display: "flex", gap: "25px" }}>
               <Button
                 sx={{
-                  mt: "15px",
-                  width: "450px",
-                  height: "40px",
-                  borderRadius: "10px",
+                  mt: "auto",
+                  height: "50px",
+                  borderRadius: "20px",
+                  width: "250px",
                 }}
                 variant="contained"
                 onClick={onAgree}
               >
                 {agreeTitle}
               </Button>
-              <Button
-                sx={{
-                  mt: "auto",
-                  width: "450px",
-                  height: "40px",
-                  borderRadius: "10px",
-                }}
-                variant="contained"
-                type="button"
-                color="secondary"
+              <BackButton
+                style={{ width: "250px", marginTop: "auto" }}
                 onClick={onClose}
               >
                 閉じる
-              </Button>
+              </BackButton>
             </Box>
           )}
         </Box>

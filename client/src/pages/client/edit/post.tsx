@@ -4,16 +4,17 @@ import {
   Autocomplete,
   Box,
   Button,
-  CircularProgress,
   TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
+import { BackButton } from "../../../components/BackButton";
 import { useClientRoute } from "../../../hooks/useClientRoute";
 import { unreachable } from "../../../utils";
 import { useEditPostHooks } from "../../hooks/useEditPostHooks";
+import { LoadingPage } from "../../public/loading";
 import {
   editPostSchema,
   EditPostSchema,
@@ -75,7 +76,7 @@ export const EditPostPage = () => {
    * RHFのdefault valueに値をsetするためにfetchが完了するまで待つ
    */
   if (postLoading || editFormData.language === undefined) {
-    return <CircularProgress />;
+    return <LoadingPage />;
   }
 
   return (
@@ -167,7 +168,7 @@ export const EditPostPage = () => {
             mt: "15px",
             width: "450px",
             height: "50px",
-            borderRadius: "10px",
+            borderRadius: "20px",
           }}
           variant="contained"
           type="submit"
@@ -175,21 +176,9 @@ export const EditPostPage = () => {
           更新する
         </Button>
       </Box>
-      <Button
-        sx={{
-          mb: "35px",
-          mt: "auto",
-          width: "450px",
-          height: "50px",
-          borderRadius: "10px",
-        }}
-        variant="contained"
-        type="button"
-        color="secondary"
-        onClick={() => goToHome()}
-      >
+      <BackButton style={{ width: "450px" }} onClick={() => goToHome()}>
         戻る
-      </Button>
+      </BackButton>
     </Box>
   );
 };

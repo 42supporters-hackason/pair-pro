@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Profile } from "@prisma/client";
 import {
   extendType,
   intArg,
@@ -17,7 +17,7 @@ export const Post = objectType({
     t.nonNull.string("title");
     t.dateTime("completedAt");
     t.field("navigator", {
-      type: "User",
+      type: "Profile",
       resolve(parent, args, context) {
         return context.prisma.post
           .findUnique({ where: { id: parent.id } })
@@ -25,7 +25,7 @@ export const Post = objectType({
       },
     });
     t.field("driver", {
-      type: "User",
+      type: "Profile",
       resolve(parent, args, context) {
         return context.prisma.post
           .findUnique({ where: { id: parent.id } })
@@ -74,17 +74,24 @@ export const PostQuery = extendType({
     });
     t.nonNull.list.field("unmatchedPosts", {
       type: "Post",
-      resolve(parent, args, context) {
-        const { userId } = context;
-        if (!userId) {
-          throw new Error("You have to log in");
+      async resolve(parent, args, context) {
+        const { profileId, communityId } = context;
+        if (!profileId || !communityId) {
+          throw new Error("You have to be in community");
         }
+
+        const profileIds = (
+          await context.prisma.profile.findMany({
+            where: { communityId },
+          })
+        ).map((p) => p.id);
 
         return context.prisma.post.findMany({
           where: {
             navigatorId: null,
             driverId: {
-              not: userId,
+              in: profileIds,
+              not: profileId,
             },
           },
         });
@@ -93,15 +100,15 @@ export const PostQuery = extendType({
     t.nonNull.list.nonNull.field("myDrivingPosts", {
       type: "Post",
       resolve(parent, args, context) {
-        const { userId } = context;
-        if (!userId) {
+        const { profileId } = context;
+        if (!profileId) {
           throw new Error("You have to log in");
         }
 
         return context.prisma.post.findMany({
           where: {
             navigatorId: null,
-            driverId: userId,
+            driverId: profileId,
           },
         });
       },
@@ -109,14 +116,14 @@ export const PostQuery = extendType({
     t.nonNull.list.nonNull.field("myMatchedPosts", {
       type: "Post",
       resolve(parent, args, context) {
-        const { userId } = context;
-        if (!userId) {
+        const { profileId } = context;
+        if (!profileId) {
           throw new Error("You have to log in");
         }
 
         return context.prisma.post.findMany({
           where: {
-            OR: [{ navigatorId: userId }, { driverId: userId }],
+            OR: [{ navigatorId: profileId }, { driverId: profileId }],
             navigatorId: { not: null },
             driverId: { not: null },
           },
@@ -138,25 +145,25 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { description, title, requiredSkillsId } = args;
-        const { userId } = context;
+        const { profileId } = context;
 
-        if (!userId) {
+        if (!profileId) {
           throw new Error("You have to log in");
         }
 
-        const user = (await context.prisma.user.findUnique({
-          where: { id: userId },
-        })) as User;
-        if (user.matchingPoint < 1) {
+        const profile = (await context.prisma.profile.findUnique({
+          where: { id: profileId },
+        })) as Profile;
+        if (profile.matchingPoint < 1) {
           throw new Error(
             "You have to have at least 1 matching point to create a new post"
           );
         }
 
-        // todo: when there is no 'await', update does not occur
-        await context.prisma.user.update({
-          where: { id: userId },
-          data: { matchingPoint: user.matchingPoint - 1 },
+        // todo(takumi): use transaction
+        await context.prisma.profile.update({
+          where: { id: profileId },
+          data: { matchingPoint: profile.matchingPoint - 1 },
         });
 
         return context.prisma.post.create({
@@ -166,7 +173,7 @@ export const PostMutation = extendType({
             requiredSkills: {
               connect: requiredSkillsId.map((id) => ({ id })),
             },
-            driver: { connect: { id: userId } },
+            driver: { connect: { id: profileId } },
           },
         });
       },
@@ -179,9 +186,9 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const postId = args.id;
-        const { userId } = context;
+        const { profileId } = context;
 
-        if (!userId) {
+        if (!profileId) {
           throw new Error("You have to log in");
         }
 
@@ -194,17 +201,17 @@ export const PostMutation = extendType({
         }
 
         // check if the post is createdBy the user
-        if (postToDelete.driverId !== userId) {
+        if (postToDelete.driverId !== profileId) {
           throw new Error("You do not have rights to update this post");
         }
 
         // return matching point
-        const user = (await context.prisma.user.findUnique({
-          where: { id: userId },
-        })) as User;
-        await context.prisma.user.update({
-          where: { id: userId },
-          data: { matchingPoint: user.matchingPoint + 1 },
+        const profile = (await context.prisma.profile.findUnique({
+          where: { id: profileId },
+        })) as Profile;
+        await context.prisma.profile.update({
+          where: { id: profileId },
+          data: { matchingPoint: profile.matchingPoint + 1 },
         });
 
         return context.prisma.post.delete({
@@ -223,8 +230,8 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { id, title, description, requiredSkillsIds } = args;
-        const { userId } = context;
-        if (!userId) {
+        const { profileId } = context;
+        if (!profileId) {
           throw new Error("You have to log in");
         }
 
@@ -237,7 +244,7 @@ export const PostMutation = extendType({
         }
 
         // check if the post is createdBy the user
-        if (post.driverId !== userId) {
+        if (post.driverId !== profileId) {
           throw new Error("You do not have rights to update this post");
         }
 
@@ -262,9 +269,9 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { postId, navigatorId } = args;
-        const { userId } = context;
+        const { profileId } = context;
 
-        if (!userId) {
+        if (!profileId) {
           throw new Error("You have to log in");
         }
 
@@ -282,7 +289,7 @@ export const PostMutation = extendType({
         }
 
         // check if the navigator exists
-        const navigator = await context.prisma.user.findUnique({
+        const navigator = await context.prisma.profile.findUnique({
           where: { id: navigatorId },
         });
         if (!navigator) {
@@ -290,7 +297,7 @@ export const PostMutation = extendType({
         }
 
         // increment navigator's matching point
-        await context.prisma.user.update({
+        await context.prisma.profile.update({
           where: { id: navigatorId },
           data: { matchingPoint: navigator.matchingPoint + 1 },
         });

@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
 
+/**
+ * skills
+ */
 export const FETCH_SKILLS = gql`
   query fetchSkills {
     skills {
@@ -17,6 +20,9 @@ export const GET_VIDEO_ACCESS_TOKEN = gql`
   }
 `;
 
+/**
+ * post
+ */
 export const FETCH_UNMATCHED_POST = gql`
   query fetchUnmatchedPost {
     unmatchedPosts {
@@ -26,9 +32,11 @@ export const FETCH_UNMATCHED_POST = gql`
       driver {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       requiredSkills {
         id
@@ -61,16 +69,20 @@ export const FETCH_MATCHED_POST = gql`
       navigator {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       driver {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       requiredSkills {
         id
@@ -89,16 +101,20 @@ export const FETCH_SPECIFIC_POST = gql`
       navigator {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       driver {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
       requiredSkills {
         id
@@ -108,6 +124,9 @@ export const FETCH_SPECIFIC_POST = gql`
   }
 `;
 
+/**
+ * message
+ */
 export const FETCH_MESSAGES = gql`
   query fetchMessages($postId: String!) {
     messagesByPostId(postId: $postId) {
@@ -116,22 +135,66 @@ export const FETCH_MESSAGES = gql`
       createdBy {
         id
         name
-        githubLogin
         matchingPoint
         bio
+        user {
+          githubLogin
+        }
       }
     }
   }
 `;
 
+/**
+ * user
+ */
 export const FETCH_ME = gql`
   query fetchMe {
-    me {
+    myProfile {
       id
       name
-      githubLogin
       matchingPoint
       bio
+      user {
+        githubLogin
+      }
+    }
+  }
+`;
+
+/**
+ * community
+ */
+export const FETCH_MY_COMMUNITIES = gql`
+  query fetchMyCommunities {
+    myCommunities {
+      id
+      name
+      profiles {
+        id
+        name
+        bio
+        user {
+          githubLogin
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_CURRENT_COMMUNITY = gql`
+  query fetchCurrentCommunity {
+    myCurrentCommunity {
+      id
+      name
+      profiles {
+        id
+        name
+        bio
+        user {
+          githubLogin
+        }
+      }
     }
   }
 `;

@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { BackButton } from "../../components/BackButton";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import { useProfile } from "../../context/auth";
@@ -52,10 +53,10 @@ export const RecruitPage = () => {
   }, []);
 
   const handleMatch = useCallback(() => {
-    if (selectedId !== undefined && profile.id !== undefined) {
+    if (selectedId !== undefined && profile?.id !== undefined) {
       matchPost({
         selectedId,
-        profileId: profile.id,
+        profileId: profile?.id,
         closeModal: setOpenPostModal.off,
       });
     }
@@ -126,12 +127,13 @@ export const RecruitPage = () => {
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {posts &&
-            posts.map(({ id, title, content, language, name }) => (
+            posts.map(({ id, title, content, language, name, githubLogin }) => (
               <PostCard
                 key={id}
                 title={title}
                 content={content}
                 languages={language}
+                githubLogin={githubLogin}
                 name={name}
                 onClick={() => {
                   setOpenPostModal.on();
@@ -140,20 +142,7 @@ export const RecruitPage = () => {
               />
             ))}
         </Box>
-        <Button
-          sx={{
-            mx: "auto",
-            width: "450px",
-            my: 3,
-            height: "50px",
-            borderRadius: "10px",
-          }}
-          variant="contained"
-          color="secondary"
-          onClick={() => goToHome()}
-        >
-          戻る
-        </Button>
+        <BackButton style={{ margin: "0 auto", width: "350px" }} onClick={() => goToHome()}>戻る</BackButton>
       </Box>
       <Modal
         open={openPostModal}
