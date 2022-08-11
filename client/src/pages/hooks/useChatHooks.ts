@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useProfile } from "../../context/auth";
 import {
+  useFetchMeQuery,
   useFetchMessagesQuery,
   useFetchMessageSubscription,
   useFetchSpecificPostQuery,
@@ -24,6 +25,9 @@ export const useChatHooks = (roomId: string) => {
       id: roomId,
     },
   });
+
+  const { data: meData } = useFetchMeQuery();
+  const myGithubLogin = meData?.myProfile.user.githubLogin;
 
   const opponentGithubLogin =
     profile?.githubLogin === post?.post?.driver?.user.githubLogin
@@ -73,5 +77,5 @@ export const useChatHooks = (roomId: string) => {
       }
     },
   });
-  return { messages, opponentGithubLogin, opponentName };
+  return { messages, opponentGithubLogin, opponentName, myGithubLogin };
 };
