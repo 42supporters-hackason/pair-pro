@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
+import { BackButton } from "../BackButton";
 import { Card } from "../Card";
 
 interface Props {
@@ -42,7 +43,7 @@ export const FormDataModal = ({
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: "35px",
+            gap: 2,
             justifyContent: "center",
             mx: 3,
           }}
@@ -54,26 +55,43 @@ export const FormDataModal = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 2,
-              alignItems: "center",
+              gap: 1,
+              alignItems: "flex-start",
+              p: 2,
+              boxShadow: "rgba(55, 49, 49, 0.2) 0px 2px 8px 0px",
+              borderRadius: 3,
             }}
           >
-            <Typography>タイトル</Typography>
-            <Typography variant="h5">{title}</Typography>
+            <Typography variant="subtitle2">タイトル</Typography>
+            <Typography
+              fontWeight="bold"
+              sx={{
+                textAlign: "left",
+              }}
+            >
+              {title}
+            </Typography>
           </Box>
           <Box
             sx={{
               display: "flex",
-              gap: 2,
+              gap: 1,
               flexDirection: "column",
-              alignItems: "center",
               flexWrap: "wrap",
+              alignItems: "flex-start",
+              p: 2,
+              boxShadow: "rgba(55, 49, 49, 0.2) 0px 2px 8px 0px",
+              borderRadius: 3,
             }}
           >
-            <Typography>内容</Typography>
+            <Typography variant="subtitle2">内容</Typography>
             <Typography
-              variant="h5"
-              sx={{ overflowWrap: "break-word", wordBreak: "break-all" }}
+              sx={{
+                overflowWrap: "break-word",
+                wordBreak: "break-all",
+                textAlign: "left",
+              }}
+              fontWeight="bold"
             >
               {content}
             </Typography>
@@ -81,46 +99,43 @@ export const FormDataModal = ({
           <Box
             sx={{
               display: "flex",
-              gap: 2,
-              alignItems: "center",
+              gap: 1,
               flexDirection: "column",
+              alignItems: "flex-start",
+              p: 2,
+              boxShadow: "rgba(55, 49, 49, 0.2) 0px 2px 8px 0px",
+              borderRadius: 3,
             }}
           >
-            <Typography>使用言語</Typography>
+            <Typography variant="subtitle2">使用言語</Typography>
             {languages &&
               languages.map((language) => (
-                <Typography key={language} variant="h5">
+                <Typography key={language} fontWeight="bold">
                   {language}
                 </Typography>
               ))}
           </Box>
-          <Button
-            variant="contained"
-            sx={{
-              mx: "auto",
-              mt: "auto",
-              width: "80%",
-              height: "50px",
-              borderRadius: "10px",
-            }}
-            onClick={onAgree}
-          >
-            上記の内容で募集する
-          </Button>
-          <Button
-            sx={{
-              mx: "auto",
-              width: "80%",
-              height: "50px",
-              borderRadius: "10px",
-            }}
-            variant="contained"
-            type="button"
-            color="secondary"
-            onClick={onCancel}
-          >
-            戻る
-          </Button>
+          <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+            <Button
+              variant="contained"
+              sx={{
+                mx: "auto",
+                mt: "auto",
+                width: "50%",
+                height: "50px",
+                borderRadius: "20px",
+              }}
+              onClick={onAgree}
+            >
+              上記の内容で募集する
+            </Button>
+            <BackButton
+              style={{ width: "50%", margin: "0 auto" }}
+              onClick={onCancel}
+            >
+              戻る
+            </BackButton>
+          </Box>
         </Box>
       </Card>
     </Box>
