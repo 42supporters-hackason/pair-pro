@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { RefObject, useState } from "react";
 import { useProfile } from "../../context/auth";
 import {
   useFetchMeQuery,
@@ -16,7 +16,10 @@ interface Message {
 /**
  * client/chatで使用されるhooks
  */
-export const useChatHooks = (roomId: string) => {
+export const useChatHooks = (
+  roomId: string,
+  ref: RefObject<HTMLDivElement>
+) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { profile } = useProfile();
 
@@ -75,6 +78,7 @@ export const useChatHooks = (roomId: string) => {
           return prevMessage;
         });
       }
+      setTimeout(() => ref.current?.scrollIntoView(), 10);
     },
   });
   return { messages, opponentGithubLogin, opponentName, myGithubLogin };

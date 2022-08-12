@@ -39,7 +39,7 @@ export const ChatPage = () => {
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("room_id");
   const { messages, opponentGithubLogin, opponentName, myGithubLogin } =
-    useChatHooks(roomId ?? unreachable());
+    useChatHooks(roomId ?? unreachable(), ref);
   const videoRef = useRef<HTMLDivElement | null>(null);
 
   const [sendMessage] = useSendMessageMutation();
@@ -53,7 +53,7 @@ export const ChatPage = () => {
   const { profile } = useProfile();
   const { data: accessTokenReturnValue } = useGetVideoAccessTokenQuery({
     variables: {
-      identity: profile.githubLogin ?? "",
+      identity: profile?.githubLogin ?? "",
       room: roomId ?? unreachable(),
     },
   });

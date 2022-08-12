@@ -12,7 +12,7 @@ import { RemoteVideoParticipant } from "../RemoteVideoParticipant";
 
 interface Props {
   room: Room;
-  shareScreenTrack: LocalVideoTrack;
+  shareScreenTrack: LocalVideoTrack | null;
 }
 
 /**
@@ -82,8 +82,10 @@ export const VideoRoom = forwardRef(
           <Box
             sx={{ cursor: "pointer" }}
             onClick={() => {
-              const newFocusedChild = shareScreenTrack.attach();
-              setFocusedChild(newFocusedChild);
+              if (shareScreenTrack) {
+                const newFocusedChild = shareScreenTrack.attach();
+                setFocusedChild(newFocusedChild);
+              }
             }}
             ref={ref}
           />
