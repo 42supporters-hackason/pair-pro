@@ -18,6 +18,11 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type LearnedSkill {
+  count: Int!
+  skill: Skill!
+}
+
 type Message {
   content: String!
   createdBy: Profile!
@@ -63,6 +68,8 @@ type Profile {
 }
 
 type Query {
+  ListDrivenSkills: [LearnedSkill!]!
+  ListNavigatedSkills: [LearnedSkill!]!
   accessToken(identity: String, room: String): Video!
   communities: [Community!]!
   feed: [Post!]!
