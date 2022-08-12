@@ -53,7 +53,7 @@ export const ChatPage = () => {
   const { profile } = useProfile();
   const { data: accessTokenReturnValue } = useGetVideoAccessTokenQuery({
     variables: {
-      identity: profile.githubLogin ?? "",
+      identity: profile?.githubLogin ?? "",
       room: roomId ?? unreachable(),
     },
   });
