@@ -163,7 +163,7 @@ export const ChatPage = () => {
         event.preventDefault();
       }
       if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
-        if (roomId !== null) {
+        if (roomId !== null && watchMessage) {
           await sendMessage({
             variables: {
               postId: roomId,
