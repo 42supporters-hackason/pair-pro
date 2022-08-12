@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CallIcon from "@mui/icons-material/Call";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -47,9 +47,10 @@ export const ChatPage = () => {
   /**
    * form validation
    */
-  const { register, handleSubmit, setValue } = useForm<ChatSchema>({
+  const { register, handleSubmit, setValue, watch } = useForm<ChatSchema>({
     resolver: zodResolver(chatSchema),
   });
+  const watchMessage = watch("message");
   const { profile } = useProfile();
   const { data: accessTokenReturnValue } = useGetVideoAccessTokenQuery({
     variables: {
@@ -60,6 +61,9 @@ export const ChatPage = () => {
 
   /**
    * event-handler
+   */
+  /**
+   * video
    */
   const handleEnterRoom = useCallback(async () => {
     if (accessTokenReturnValue?.accessToken.accessToken) {
@@ -91,23 +95,6 @@ export const ChatPage = () => {
       setRoomData(null);
     }
   }, [accessTokenReturnValue, roomId, setVideoOn, setVolumeOn]);
-
-  const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
-    async ({ message }) => {
-      if (roomId !== null) {
-        await sendMessage({
-          variables: {
-            postId: roomId,
-            content: message,
-          },
-          onCompleted: () => {
-            setValue("message", "");
-          },
-        });
-      }
-    },
-    [sendMessage, roomId, setValue]
-  );
 
   const shareScreenHandler = useCallback(() => {
     if (shareScreenTrack === null) {
@@ -144,6 +131,48 @@ export const ChatPage = () => {
     );
     setVolumeOn.toggle();
   }, [roomData, volumeOn, setVolumeOn]);
+
+  /**
+   * chat
+   */
+  const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
+    async ({ message }) => {
+      if (roomId !== null) {
+        await sendMessage({
+          variables: {
+            postId: roomId,
+            content: message,
+          },
+          onCompleted: () => {
+            setValue("message", "");
+          },
+        });
+      }
+    },
+    [sendMessage, roomId, setValue]
+  );
+
+  const enterSubmitMessage = useCallback(
+    async (event: KeyboardEvent) => {
+      if (event.key === "Enter" && (!event.ctrlKey || !event.metaKey)) {
+        event.preventDefault();
+      }
+      if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+        if (roomId !== null) {
+          await sendMessage({
+            variables: {
+              postId: roomId,
+              content: watchMessage,
+            },
+            onCompleted: () => {
+              setValue("message", "");
+            },
+          });
+        }
+      }
+    },
+    [roomId, sendMessage, watchMessage, setValue]
+  );
 
   useEffect(() => {
     ref.current?.scrollIntoView();
@@ -273,6 +302,7 @@ export const ChatPage = () => {
                 </Button>
               ),
             }}
+            onKeyDown={enterSubmitMessage}
             {...register("message")}
           />
         </Box>
