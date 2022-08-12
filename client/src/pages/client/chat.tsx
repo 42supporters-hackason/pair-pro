@@ -240,6 +240,7 @@ export const ChatPage = () => {
           bgcolor: "white",
           px: 3,
           borderRadius: "30px",
+          boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
         }}
       >
         <Box
