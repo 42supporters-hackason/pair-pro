@@ -193,7 +193,13 @@ export const ChatPage = () => {
   }, [shareScreenTrack, shareScreenHandler]);
 
   return (
-    <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
+    <Box
+      sx={{
+        display: "flex",
+        height: "calc(100vh - 68.5px)",
+        bgcolor: "primary.light",
+      }}
+    >
       {roomData !== null && (
         <Box sx={{ width: "100%", mx: 3, mt: 3 }}>
           <Box
@@ -231,6 +237,9 @@ export const ChatPage = () => {
           flexDirection: "column",
           height: "calc(100vh - 68.5px)",
           mx: "auto",
+          bgcolor: "white",
+          px: 3,
+          borderRadius: "30px",
         }}
       >
         <Box
@@ -256,7 +265,13 @@ export const ChatPage = () => {
                 <CallIcon />
               </IconButton>
             )}
-            <IconButton sx={{ mr: 2 }} onClick={() => goToHome()}>
+            <IconButton
+              sx={{ mr: 2 }}
+              onClick={() => {
+                handleExitRoom();
+                goToHome();
+              }}
+            >
               <LogoutIcon />
             </IconButton>
           </Box>
@@ -289,7 +304,7 @@ export const ChatPage = () => {
             display: "flex",
             alignItems: "center",
             mt: "auto",
-            mb: "30px",
+            mb: "20px",
           }}
           component="form"
           onSubmit={handleSubmit(handleMessageSubmit)}
@@ -303,9 +318,18 @@ export const ChatPage = () => {
             }}
             InputProps={{
               endAdornment: (
-                <Button type="submit">
-                  <SendRoundedIcon sx={{ cursor: "pointer", m: "auto" }} />
-                </Button>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button type="submit">
+                    <SendRoundedIcon sx={{ cursor: "pointer", m: "auto" }} />
+                  </Button>
+                  <Typography sx={{ fontSize: "3px" }}>ctl + enter</Typography>
+                </Box>
               ),
             }}
             onKeyDown={enterSubmitMessage}
