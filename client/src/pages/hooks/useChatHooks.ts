@@ -42,7 +42,7 @@ export const useChatHooks = (
       ? post?.post?.navigator?.name
       : post?.post?.driver?.name;
 
-  useFetchMessagesQuery({
+  const { refetch: refetchMessages } = useFetchMessagesQuery({
     variables: {
       postId: roomId,
     },
@@ -81,5 +81,11 @@ export const useChatHooks = (
       setTimeout(() => ref.current?.scrollIntoView(), 10);
     },
   });
-  return { messages, opponentGithubLogin, opponentName, myGithubLogin };
+  return {
+    messages,
+    opponentGithubLogin,
+    opponentName,
+    myGithubLogin,
+    refetchMessages,
+  };
 };

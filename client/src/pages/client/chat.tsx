@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CallIcon from "@mui/icons-material/Call";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -38,8 +38,13 @@ export const ChatPage = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("room_id");
-  const { messages, opponentGithubLogin, opponentName, myGithubLogin } =
-    useChatHooks(roomId ?? unreachable(), ref);
+  const {
+    messages,
+    opponentGithubLogin,
+    opponentName,
+    myGithubLogin,
+    refetchMessages,
+  } = useChatHooks(roomId ?? unreachable(), ref);
   const videoRef = useRef<HTMLDivElement | null>(null);
 
   const [sendMessage] = useSendMessageMutation();
@@ -47,9 +52,10 @@ export const ChatPage = () => {
   /**
    * form validation
    */
-  const { register, handleSubmit, setValue } = useForm<ChatSchema>({
+  const { register, handleSubmit, setValue, watch } = useForm<ChatSchema>({
     resolver: zodResolver(chatSchema),
   });
+  const watchMessage = watch("message");
   const { profile } = useProfile();
   const { data: accessTokenReturnValue } = useGetVideoAccessTokenQuery({
     variables: {
@@ -60,6 +66,9 @@ export const ChatPage = () => {
 
   /**
    * event-handler
+   */
+  /**
+   * video
    */
   const handleEnterRoom = useCallback(async () => {
     if (accessTokenReturnValue?.accessToken.accessToken) {
@@ -91,23 +100,6 @@ export const ChatPage = () => {
       setRoomData(null);
     }
   }, [accessTokenReturnValue, roomId, setVideoOn, setVolumeOn]);
-
-  const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
-    async ({ message }) => {
-      if (roomId !== null) {
-        await sendMessage({
-          variables: {
-            postId: roomId,
-            content: message,
-          },
-          onCompleted: () => {
-            setValue("message", "");
-          },
-        });
-      }
-    },
-    [sendMessage, roomId, setValue]
-  );
 
   const shareScreenHandler = useCallback(() => {
     if (shareScreenTrack === null) {
@@ -145,9 +137,52 @@ export const ChatPage = () => {
     setVolumeOn.toggle();
   }, [roomData, volumeOn, setVolumeOn]);
 
+  /**
+   * chat
+   */
+  const handleMessageSubmit: SubmitHandler<ChatSchema> = useCallback(
+    async ({ message }) => {
+      if (roomId !== null) {
+        await sendMessage({
+          variables: {
+            postId: roomId,
+            content: message,
+          },
+          onCompleted: () => {
+            setValue("message", "");
+          },
+        });
+      }
+    },
+    [sendMessage, roomId, setValue]
+  );
+
+  const enterSubmitMessage = useCallback(
+    async (event: KeyboardEvent) => {
+      if (event.key === "Enter" && (!event.ctrlKey || !event.metaKey)) {
+        event.preventDefault();
+      }
+      if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+        if (roomId !== null && watchMessage) {
+          await sendMessage({
+            variables: {
+              postId: roomId,
+              content: watchMessage,
+            },
+            onCompleted: () => {
+              setValue("message", "");
+            },
+          });
+        }
+      }
+    },
+    [roomId, sendMessage, watchMessage, setValue]
+  );
+
   useEffect(() => {
+    refetchMessages();
     ref.current?.scrollIntoView();
-  }, [messages]);
+  }, [messages, refetchMessages]);
 
   useEffect(() => {
     if (shareScreenTrack !== null) {
@@ -158,7 +193,13 @@ export const ChatPage = () => {
   }, [shareScreenTrack, shareScreenHandler]);
 
   return (
-    <Box sx={{ display: "flex", height: "calc(100vh - 68.5px)" }}>
+    <Box
+      sx={{
+        display: "flex",
+        height: "calc(100vh - 68.5px)",
+        bgcolor: "primary.light",
+      }}
+    >
       {roomData !== null && (
         <Box sx={{ width: "100%", mx: 3, mt: 3 }}>
           <Box
@@ -196,6 +237,10 @@ export const ChatPage = () => {
           flexDirection: "column",
           height: "calc(100vh - 68.5px)",
           mx: "auto",
+          bgcolor: "white",
+          px: 3,
+          borderRadius: "30px",
+          boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
         }}
       >
         <Box
@@ -221,7 +266,13 @@ export const ChatPage = () => {
                 <CallIcon />
               </IconButton>
             )}
-            <IconButton sx={{ mr: 2 }} onClick={() => goToHome()}>
+            <IconButton
+              sx={{ mr: 2 }}
+              onClick={() => {
+                handleExitRoom();
+                goToHome();
+              }}
+            >
               <LogoutIcon />
             </IconButton>
           </Box>
@@ -254,7 +305,7 @@ export const ChatPage = () => {
             display: "flex",
             alignItems: "center",
             mt: "auto",
-            mb: "30px",
+            mb: "20px",
           }}
           component="form"
           onSubmit={handleSubmit(handleMessageSubmit)}
@@ -268,11 +319,21 @@ export const ChatPage = () => {
             }}
             InputProps={{
               endAdornment: (
-                <Button type="submit">
-                  <SendRoundedIcon sx={{ cursor: "pointer", m: "auto" }} />
-                </Button>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button type="submit">
+                    <SendRoundedIcon sx={{ cursor: "pointer", m: "auto" }} />
+                  </Button>
+                  <Typography sx={{ fontSize: "3px" }}>ctl + enter</Typography>
+                </Box>
               ),
             }}
+            onKeyDown={enterSubmitMessage}
             {...register("message")}
           />
         </Box>
