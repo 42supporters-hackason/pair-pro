@@ -45,7 +45,6 @@ export const UserItem = ({ name, githubLogin, bio }: Props) => {
           }}
         >
           <OpenInNewIcon sx={{ width: "20px", height: "20px" }} />
-          <Typography sx={{ fontSize: "1px" }}>open github</Typography>
         </Box>
       </Box>
     </Card>
