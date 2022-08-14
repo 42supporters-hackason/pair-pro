@@ -104,11 +104,9 @@ export const ClientLayout = () => {
         sx={{ top: "40%", mx: "auto", width: "600px" }}
       >
         <Box>
-          <AgreeModal
-            content="ログアウトしますか？"
-            onAgree={handleLogout}
-            onCancel={setOpenLogoutModal.off}
-          />
+          <AgreeModal onAgree={handleLogout} onCancel={setOpenLogoutModal.off}>
+            ログアウトしますか？
+          </AgreeModal>
         </Box>
       </Modal>
       <Modal
@@ -118,10 +116,11 @@ export const ClientLayout = () => {
       >
         <Box>
           <AgreeModal
-            content="コミュニティを変更しますか？"
             onAgree={handleChangeCommunity}
             onCancel={setOpenChangeCommunityModal.off}
-          />
+          >
+            コミュニティを変更しますか？
+          </AgreeModal>
         </Box>
       </Modal>
     </Box>
