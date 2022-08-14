@@ -80,7 +80,9 @@ type Query {
 }
 
 type Skill {
+  category: String
   id: Int!
+  imageUrl: String
   name: String!
 }
 

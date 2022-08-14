@@ -72,7 +72,9 @@ export interface NexusGenObjects {
   }
   Query: {};
   Skill: { // root type
+    category?: string | null; // String
     id: number; // Int!
+    imageUrl?: string | null; // String
     name: string; // String!
   }
   Subscription: {};
@@ -164,7 +166,9 @@ export interface NexusGenFieldTypes {
     unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
   }
   Skill: { // field return type
+    category: string | null; // String
     id: number; // Int!
+    imageUrl: string | null; // String
     name: string; // String!
   }
   Subscription: { // field return type
@@ -249,7 +253,9 @@ export interface NexusGenFieldTypeNames {
     unmatchedPosts: 'Post'
   }
   Skill: { // field return type name
+    category: 'String'
     id: 'Int'
+    imageUrl: 'String'
     name: 'String'
   }
   Subscription: { // field return type name

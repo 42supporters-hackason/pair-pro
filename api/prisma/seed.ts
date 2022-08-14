@@ -1,12 +1,13 @@
-import { languagesObject } from "../src/utils";
+import { skillsData } from "../src/utils";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 (async () => {
   await prisma.skill.createMany({
-    data: languagesObject,
+    data: skillsData
   });
+
   await prisma.user.createMany({
     data: [
       {
@@ -21,6 +22,7 @@ const prisma = new PrismaClient();
       },
     ],
   });
+
   await prisma.community.createMany({
     data: [
       {
@@ -33,6 +35,7 @@ const prisma = new PrismaClient();
       },
     ],
   });
+
   await prisma.profile.createMany({
     data: [
       {
@@ -65,6 +68,7 @@ const prisma = new PrismaClient();
       },
     ],
   });
+
   await prisma.post.createMany({
     data: [
       {
