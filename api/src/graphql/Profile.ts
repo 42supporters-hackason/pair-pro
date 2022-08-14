@@ -137,7 +137,7 @@ export const ProfileMutation = extendType({
           throw new Error("You have to be in a community.");
         }
 
-        context.prisma.profile.delete({
+        await context.prisma.profile.delete({
           where: { id: profileId },
         });
 
