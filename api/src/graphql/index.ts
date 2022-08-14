@@ -6,4 +6,5 @@ export * from "./Auth";
 export * from "./Video";
 export * from "./Profile";
 export * from "./Community";
+export * from "./LearnedSkill";
 export * from "./scalars/Date";

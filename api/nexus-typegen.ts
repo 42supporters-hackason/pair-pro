@@ -52,6 +52,10 @@ export interface NexusGenObjects {
     id: string; // String!
     name: string; // String!
   }
+  LearnedSkill: { // root type
+    count: number; // Int!
+    skill: NexusGenRootTypes['Skill']; // Skill!
+  }
   Message: { // root type
     content: string; // String!
     id: number; // Int!
@@ -109,6 +113,10 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
   }
+  LearnedSkill: { // field return type
+    count: number; // Int!
+    skill: NexusGenRootTypes['Skill']; // Skill!
+  }
   Message: { // field return type
     content: string; // String!
     createdBy: NexusGenRootTypes['Profile']; // Profile!
@@ -150,6 +158,8 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
+    ListDrivenSkills: NexusGenRootTypes['LearnedSkill'][]; // [LearnedSkill!]!
+    ListNavigatedSkills: NexusGenRootTypes['LearnedSkill'][]; // [LearnedSkill!]!
     accessToken: NexusGenRootTypes['Video']; // Video!
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -196,6 +206,10 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     profiles: 'Profile'
   }
+  LearnedSkill: { // field return type name
+    count: 'Int'
+    skill: 'Skill'
+  }
   Message: { // field return type name
     content: 'String'
     createdBy: 'Profile'
@@ -237,6 +251,8 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Query: { // field return type name
+    ListDrivenSkills: 'LearnedSkill'
+    ListNavigatedSkills: 'LearnedSkill'
     accessToken: 'Video'
     communities: 'Community'
     feed: 'Post'
