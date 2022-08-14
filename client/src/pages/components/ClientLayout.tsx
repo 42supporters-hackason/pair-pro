@@ -6,6 +6,7 @@ import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
 import { useProfile } from "../../context/auth";
 import {
+  useExitCommunityMutation,
   useFetchCurrentCommunityLazyQuery,
   useFetchMeLazyQuery,
 } from "../../gen/graphql-client";
@@ -23,6 +24,7 @@ export const ClientLayout = () => {
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
   const [openChangeCommunityModal, setOpenChangeCommunityModal] =
     useBoolean(false);
+  const [openExitCommunityModal, setOpenExitCommunityModal] = useBoolean(false);
   const [communityName, setCommunityName] = useState<string>();
   const [matchingPoint, setMatchingPoint] = useState<number>();
   const [githubLogin, setGithubLogin] = useState<string>();
@@ -32,9 +34,11 @@ export const ClientLayout = () => {
   const menu = useClientHeaderMenu({
     onLogout: setOpenLogoutModal.on,
     onChangeCommunity: setOpenChangeCommunityModal.on,
+    onExitCommunity: setOpenExitCommunityModal.on,
   });
   const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
   const [fetchMe] = useFetchMeLazyQuery();
+  const [exitCommunity] = useExitCommunityMutation();
 
   /**
    * event-handler
@@ -47,6 +51,17 @@ export const ClientLayout = () => {
   const handleChangeCommunity = useCallback(() => {
     goToCommunity({ replace: true });
   }, [goToCommunity]);
+
+  const handleExitCommunity = useCallback(() => {
+    exitCommunity({
+      onCompleted: (data) => {
+        if (data.deleteMyProfile?.token) {
+          tokenStorage.save(data.deleteMyProfile.token);
+        }
+        goToCommunity({ replace: true });
+      },
+    });
+  }, [exitCommunity, goToCommunity]);
 
   useEffect(() => {
     if (communityName === undefined) {
@@ -120,6 +135,22 @@ export const ClientLayout = () => {
             onCancel={setOpenChangeCommunityModal.off}
           >
             コミュニティを変更しますか？
+          </AgreeModal>
+        </Box>
+      </Modal>
+      <Modal
+        open={openExitCommunityModal}
+        onClose={setOpenExitCommunityModal.off}
+        sx={{ top: "40%", mx: "auto", width: "600px" }}
+      >
+        <Box>
+          <AgreeModal
+            onAgree={handleExitCommunity}
+            onCancel={setOpenExitCommunityModal.off}
+          >
+            このコミュニティから退会しますか？
+            <br />
+            再度加入する場合は、コミュニティIDを入力してください
           </AgreeModal>
         </Box>
       </Modal>

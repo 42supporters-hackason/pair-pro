@@ -149,3 +149,11 @@ export const JOIN_COMMUNITY = gql`
     }
   }
 `;
+
+export const EXIT_COMMUNITY = gql`
+  mutation exitCommunity {
+    deleteMyProfile {
+      token
+    }
+  }
+`;

@@ -44,6 +44,7 @@ export type Mutation = {
   createCommunity: Community;
   createMessage: Message;
   deleteCommunity: Community;
+  deleteMyProfile?: Maybe<AuthPayLoad>;
   deletePost: Post;
   joinCommunity: AuthPayLoad;
   post: Post;
@@ -281,6 +282,11 @@ export type JoinCommunityMutationVariables = Exact<{
 
 
 export type JoinCommunityMutation = { __typename?: 'Mutation', joinCommunity: { __typename?: 'AuthPayLoad', token: string, user: { __typename?: 'User', id: number, githubLogin: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string }> } } };
+
+export type ExitCommunityMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ExitCommunityMutation = { __typename?: 'Mutation', deleteMyProfile?: { __typename?: 'AuthPayLoad', token: string } | null };
 
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -706,6 +712,38 @@ export function useJoinCommunityMutation(baseOptions?: Apollo.MutationHookOption
 export type JoinCommunityMutationHookResult = ReturnType<typeof useJoinCommunityMutation>;
 export type JoinCommunityMutationResult = Apollo.MutationResult<JoinCommunityMutation>;
 export type JoinCommunityMutationOptions = Apollo.BaseMutationOptions<JoinCommunityMutation, JoinCommunityMutationVariables>;
+export const ExitCommunityDocument = gql`
+    mutation exitCommunity {
+  deleteMyProfile {
+    token
+  }
+}
+    `;
+export type ExitCommunityMutationFn = Apollo.MutationFunction<ExitCommunityMutation, ExitCommunityMutationVariables>;
+
+/**
+ * __useExitCommunityMutation__
+ *
+ * To run a mutation, you first call `useExitCommunityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useExitCommunityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [exitCommunityMutation, { data, loading, error }] = useExitCommunityMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useExitCommunityMutation(baseOptions?: Apollo.MutationHookOptions<ExitCommunityMutation, ExitCommunityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ExitCommunityMutation, ExitCommunityMutationVariables>(ExitCommunityDocument, options);
+      }
+export type ExitCommunityMutationHookResult = ReturnType<typeof useExitCommunityMutation>;
+export type ExitCommunityMutationResult = Apollo.MutationResult<ExitCommunityMutation>;
+export type ExitCommunityMutationOptions = Apollo.BaseMutationOptions<ExitCommunityMutation, ExitCommunityMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {
