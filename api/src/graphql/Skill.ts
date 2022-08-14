@@ -1,7 +1,6 @@
 import { extendType, objectType } from "nexus";
-import { languagesObject } from "../utils";
 
-export const Skill = objectType({
+export const SkillObject = objectType({
   name: "Skill",
   definition(t) {
     t.nonNull.int("id");
@@ -15,7 +14,7 @@ export const SkillQuery = extendType({
     t.nonNull.list.nonNull.field("skills", {
       type: "Skill",
       resolve(parent, args, context, info) {
-        return languagesObject;
+        return context.prisma.skill.findMany();
       },
     });
   },
