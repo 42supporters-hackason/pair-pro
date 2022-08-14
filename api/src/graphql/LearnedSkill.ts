@@ -6,12 +6,12 @@ export const LearnedSkill = objectType({
   name: "LearnedSkill",
   definition(t) {
     t.nonNull.int("count");
-    t.nonNull.field("skill", { type: "Skill" })
+    t.nonNull.field("skill", { type: "Skill" });
   },
 });
 
 interface countObject {
-  [key: number]: number
+  [key: number]: number;
 }
 
 interface learnedSkillsCountObject {
@@ -21,15 +21,15 @@ interface learnedSkillsCountObject {
 
 // 集計処理
 // skill idをkey, intをvalueとして走査し、incrementする
-function countSkillsUsedOnPosts(skillsOfAllPosts: Skill[][]):countObject {
+function countSkillsUsedOnPosts(skillsOfAllPosts: Skill[][]): countObject {
   const counts: countObject = {};
   for (let i = 0; i < skillsOfAllPosts.length; ++i) {
     const skillsOfEachPost = skillsOfAllPosts[i];
     for (let j = 0; j < skillsOfEachPost.length; ++j) {
       const skill = skillsOfEachPost[j];
-      const id: number = skill['id'];
+      const id: number = skill["id"];
       if (counts[id]) {
-        console.log()
+        console.log();
         counts[id]++;
       } else {
         counts[id] = 1;
@@ -40,17 +40,18 @@ function countSkillsUsedOnPosts(skillsOfAllPosts: Skill[][]):countObject {
 }
 
 // TODO N + 1 問題
-async function formatForLearnedSkillObject(context:Context, counts:countObject) {
-  let learnedSkills: learnedSkillsCountObject[] = []
+async function formatForLearnedSkillObject(
+  context: Context,
+  counts: countObject
+) {
+  let learnedSkills: learnedSkillsCountObject[] = [];
   for (let skillId in counts) {
-    learnedSkills.push(
-      {
-        count: counts[skillId],
-        skill: (await context.prisma.skill.findUnique({
-          where: { id: Number(skillId) }
-        })) as Skill
-      }
-    )
+    learnedSkills.push({
+      count: counts[skillId],
+      skill: (await context.prisma.skill.findUnique({
+        where: { id: Number(skillId) },
+      })) as Skill,
+    });
   }
   return learnedSkills;
 }
@@ -67,45 +68,43 @@ export const LearnedSkillQuery = extendType({
         }
         const posts = await context.prisma.post.findMany({
           where: { navigatorId: profileId },
-          include: { requiredSkills: true }
+          include: { requiredSkills: true },
         });
 
-        const skillsOfAllPosts = posts.map(post => post.requiredSkills);
-        const counts:countObject = countSkillsUsedOnPosts(skillsOfAllPosts);
+        const skillsOfAllPosts = posts.map((post) => post.requiredSkills);
+        const counts: countObject = countSkillsUsedOnPosts(skillsOfAllPosts);
 
         // 集計結果を適切な形式に直す
         // とりあえず形式をreturn objectTypeに揃えて配列に突っ込む
-        let learnedSkills:learnedSkillsCountObject[] =
+        let learnedSkills: learnedSkillsCountObject[] =
           await formatForLearnedSkillObject(context, counts);
 
         // count順でsortする
         learnedSkills.sort((a, b) => b.count - a.count);
         return learnedSkills;
-      }
+      },
     }),
+      t.nonNull.list.nonNull.field("ListDrivenSkills", {
+        type: "LearnedSkill",
+        async resolve(parent, args, context) {
+          const { profileId, userId } = context;
+          if (!userId) {
+            throw new Error("You have to log in");
+          }
+          const posts = await context.prisma.post.findMany({
+            where: { driverId: profileId },
+            include: { requiredSkills: true },
+          });
 
-    t.nonNull.list.nonNull.field("ListDrivenSkills", {
-      type: "LearnedSkill",
-      async resolve(parent, args, context) {
-        const { profileId, userId } = context;
-        if (!userId) {
-          throw new Error("You have to log in");
-        }
-        const posts = await context.prisma.post.findMany({
-          where: { driverId: profileId },
-          include: { requiredSkills: true }
-        });
+          const skillsOfAllPosts = posts.map((post) => post.requiredSkills);
+          const counts: countObject = countSkillsUsedOnPosts(skillsOfAllPosts);
 
-        const skillsOfAllPosts = posts.map(post => post.requiredSkills);
-        const counts:countObject = countSkillsUsedOnPosts(skillsOfAllPosts);
+          let learnedSkills: learnedSkillsCountObject[] =
+            await formatForLearnedSkillObject(context, counts);
 
-        let learnedSkills:learnedSkillsCountObject[] =
-          await formatForLearnedSkillObject(context, counts);
-
-        learnedSkills.sort((a, b) => b.count - a.count);
-        return learnedSkills;
-      }
-    })
-
+          learnedSkills.sort((a, b) => b.count - a.count);
+          return learnedSkills;
+        },
+      });
   },
 });
