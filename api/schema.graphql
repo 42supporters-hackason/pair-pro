@@ -30,6 +30,7 @@ type Mutation {
   createCommunity(name: String!): Community!
   createMessage(content: String!, postId: String!): Message!
   deleteCommunity(communityId: String!): Community!
+  deleteMyProfile: AuthPayLoad
   deletePost(id: String!): Post!
   joinCommunity(communityId: String!): AuthPayLoad!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!

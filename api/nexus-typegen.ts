@@ -118,6 +118,7 @@ export interface NexusGenFieldTypes {
     createCommunity: NexusGenRootTypes['Community']; // Community!
     createMessage: NexusGenRootTypes['Message']; // Message!
     deleteCommunity: NexusGenRootTypes['Community']; // Community!
+    deleteMyProfile: NexusGenRootTypes['AuthPayLoad'] | null; // AuthPayLoad
     deletePost: NexusGenRootTypes['Post']; // Post!
     joinCommunity: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     post: NexusGenRootTypes['Post']; // Post!
@@ -203,6 +204,7 @@ export interface NexusGenFieldTypeNames {
     createCommunity: 'Community'
     createMessage: 'Message'
     deleteCommunity: 'Community'
+    deleteMyProfile: 'AuthPayLoad'
     deletePost: 'Post'
     joinCommunity: 'AuthPayLoad'
     post: 'Post'
