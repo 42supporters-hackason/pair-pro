@@ -161,7 +161,7 @@ export interface NexusGenFieldTypes {
     profile: NexusGenRootTypes['Profile'] | null; // Profile
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
-    unmatchedPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
+    unmatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
   }
   Skill: { // field return type
     id: number; // Int!
@@ -320,11 +320,21 @@ export interface NexusGenArgTypes {
     messagesByPostId: { // args
       postId: string; // String!
     }
+    myCommunities: { // args
+      skip?: number | null; // Int
+      take?: number | null; // Int
+    }
     post: { // args
       id: string; // String!
     }
     profile: { // args
       id: number; // Int!
+    }
+    unmatchedPosts: { // args
+      driverNameFilter?: string | null; // String
+      requiredSkillsFilter?: number | null; // Int
+      skip?: number | null; // Int
+      take?: number | null; // Int
     }
   }
   Subscription: {
