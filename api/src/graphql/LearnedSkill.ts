@@ -21,19 +21,15 @@ interface learnedSkillsCountObject {
 
 // 集計処理
 // skill idをkey, intをvalueとして走査し、incrementする
-function countSkillsUsedOnPosts(skillsOfAllPosts: Skill[][]): countObject {
+function countSkillsUsedOnPosts(skillsOfAllPosts: Skill[]): countObject {
   const counts: countObject = {};
   for (let i = 0; i < skillsOfAllPosts.length; ++i) {
-    const skillsOfEachPost = skillsOfAllPosts[i];
-    for (let j = 0; j < skillsOfEachPost.length; ++j) {
-      const skill = skillsOfEachPost[j];
-      const id: number = skill["id"];
-      if (counts[id]) {
-        console.log();
-        counts[id]++;
-      } else {
-        counts[id] = 1;
-      }
+    const skill = skillsOfAllPosts[i];
+    const id: number = skill.id;
+    if (counts[id]) {
+      counts[id]++;
+    } else {
+      counts[id] = 1;
     }
   }
   return counts;
@@ -66,13 +62,18 @@ export const LearnedSkillQuery = extendType({
         if (!userId) {
           throw new Error("You have to log in");
         }
+        if (!profileId) {
+          throw new Error("You have to be in the community");
+        }
         const posts = await context.prisma.post.findMany({
           where: { navigatorId: profileId },
           include: { requiredSkills: true },
         });
 
         const skillsOfAllPosts = posts.map((post) => post.requiredSkills);
-        const counts: countObject = countSkillsUsedOnPosts(skillsOfAllPosts);
+        const counts: countObject = countSkillsUsedOnPosts(
+          skillsOfAllPosts.flat(1)
+        );
 
         // 集計結果を適切な形式に直す
         // とりあえず形式をreturn objectTypeに揃えて配列に突っ込む
@@ -91,13 +92,18 @@ export const LearnedSkillQuery = extendType({
           if (!userId) {
             throw new Error("You have to log in");
           }
+          if (!profileId) {
+            throw new Error("You have to be in the community");
+          }
           const posts = await context.prisma.post.findMany({
             where: { driverId: profileId },
             include: { requiredSkills: true },
           });
 
           const skillsOfAllPosts = posts.map((post) => post.requiredSkills);
-          const counts: countObject = countSkillsUsedOnPosts(skillsOfAllPosts);
+          const counts: countObject = countSkillsUsedOnPosts(
+            skillsOfAllPosts.flat(1)
+          );
 
           let learnedSkills: learnedSkillsCountObject[] =
             await formatForLearnedSkillObject(context, counts);
