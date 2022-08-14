@@ -1,6 +1,8 @@
 import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 import { Community, Profile, User } from "@prisma/client";
 export const defaultMatchingPoint = 3;
+import { jwtKey } from "../utils/auth";
+import * as jwt from "jsonwebtoken";
 
 export const ProfileObject = objectType({
   name: "Profile",
@@ -122,6 +124,30 @@ export const ProfileMutation = extendType({
         });
 
         return updatedMyProfile;
+      },
+    });
+    t.field("deleteMyProfile", {
+      type: "AuthPayLoad",
+      async resolve(parent, args, context) {
+        const { userId, profileId } = context;
+        if (!userId) {
+          throw new Error("You have to log in.");
+        }
+        if (!profileId) {
+          throw new Error("You have to be in a community.");
+        }
+
+        context.prisma.profile.delete({
+          where: { id: profileId },
+        });
+
+        const me = (await context.prisma.user.findUnique({
+          where: { id: userId },
+        })) as User;
+
+        const token = jwt.sign({ userId }, jwtKey);
+
+        return { token, user: me };
       },
     });
   },
