@@ -75,7 +75,7 @@ type Query {
   communities: [Community!]!
   feed: [Post!]!
   messagesByPostId(postId: String!): [Message!]!
-  myCommunities: [Community!]!
+  myCommunities(skip: Int, take: Int): [Community!]!
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
@@ -84,7 +84,7 @@ type Query {
   profile(id: Int!): Profile
   profiles: [Profile!]!
   skills: [Skill!]!
-  unmatchedPosts: [Post]!
+  unmatchedPosts(driverNameFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): [Post!]!
 }
 
 type Skill {
