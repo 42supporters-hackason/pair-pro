@@ -110,10 +110,13 @@ export const CreateCommunityPage = () => {
       >
         <Box>
           <AgreeModal
-            content={`確定後にコミュニティ名を変更することはできません。本当によろしいですか？`}
             onAgree={handleCreateCommunity}
             onCancel={setOpenModal.off}
-          />
+          >
+            確定後にコミュニティ名を変更することはできません。
+            <br />
+            本当によろしいですか？
+          </AgreeModal>
         </Box>
       </Modal>
     </>

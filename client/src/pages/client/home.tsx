@@ -165,10 +165,11 @@ export const HomePage = () => {
       >
         <Box>
           <AgreeModal
-            content="本当にこの募集を削除してよろしいですか？"
             onAgree={handleDeletePost}
             onCancel={setOpenDeleteModal.off}
-          />
+          >
+            本当にこの募集を削除してよろしいですか？
+          </AgreeModal>
         </Box>
       </Modal>
     </Box>
