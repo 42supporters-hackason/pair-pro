@@ -16,12 +16,21 @@ interface Props {
    * 「いいえ」を押した際のアクション
    */
   onCancel: () => void;
+  /**
+   * disabled
+   */
+  disabled?: boolean;
 }
 
 /**
  * 「はい」「いいえ」を答えるModalコンポーネント
  */
-export const AgreeModal = ({ children, onAgree, onCancel }: Props) => {
+export const AgreeModal = ({
+  children,
+  onAgree,
+  onCancel,
+  disabled = false,
+}: Props) => {
   return (
     <Card>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -36,6 +45,7 @@ export const AgreeModal = ({ children, onAgree, onCancel }: Props) => {
             }}
             variant="contained"
             onClick={onAgree}
+            disabled={disabled}
           >
             はい
           </Button>

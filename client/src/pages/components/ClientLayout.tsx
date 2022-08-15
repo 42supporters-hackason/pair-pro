@@ -1,5 +1,5 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { Box, Modal } from "@mui/material";
+import { Box, Checkbox, Modal, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
@@ -22,6 +22,7 @@ export const ClientLayout = () => {
    * misc.
    */
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
+  const [confirmExit, setConfirmExit] = useBoolean(true);
   const [openChangeCommunityModal, setOpenChangeCommunityModal] =
     useBoolean(false);
   const [openExitCommunityModal, setOpenExitCommunityModal] = useBoolean(false);
@@ -147,10 +148,20 @@ export const ClientLayout = () => {
           <AgreeModal
             onAgree={handleExitCommunity}
             onCancel={setOpenExitCommunityModal.off}
+            disabled={confirmExit}
           >
+            <Typography color="red" variant="h6" fontWeight="bold">
+              *注意
+            </Typography>
             このコミュニティから退会しますか？
             <br />
+            退会した場合、過去の履歴は全て削除されます。
+            <br />
             再度加入する場合は、コミュニティIDを入力してください
+            <br />
+            <br />
+            チェックをしてください
+            <Checkbox onChange={setConfirmExit.toggle} />
           </AgreeModal>
         </Box>
       </Modal>
