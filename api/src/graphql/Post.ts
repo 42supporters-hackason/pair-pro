@@ -72,10 +72,17 @@ export const PostQuery = extendType({
         });
       },
     });
-    t.nonNull.list.field("unmatchedPosts", {
+    t.nonNull.list.nonNull.field("unmatchedPosts", {
       type: "Post",
+      args: {
+        driverNameFilter: stringArg(),
+        requiredSkillsFilter: intArg(),
+        skip: intArg(),
+        take: intArg(),
+      },
       async resolve(parent, args, context) {
         const { profileId, communityId } = context;
+        const { driverNameFilter, requiredSkillsFilter, skip, take } = args;
         if (!profileId || !communityId) {
           throw new Error("You have to be in community");
         }
@@ -86,14 +93,39 @@ export const PostQuery = extendType({
           })
         ).map((p) => p.id);
 
-        return context.prisma.post.findMany({
-          where: {
-            navigatorId: null,
-            driverId: {
-              in: profileIds,
-              not: profileId,
-            },
+        let where: {
+          [prop: string]: any;
+        } = {
+          navigatorId: null,
+          driverId: {
+            in: profileIds,
+            not: profileId,
           },
+        };
+
+        if (driverNameFilter) {
+          where.driver = {
+            is: {
+              name: {
+                contains: driverNameFilter,
+              },
+            },
+          };
+        }
+        if (requiredSkillsFilter) {
+          where.requiredSkills = {
+            some: {
+              id: {
+                in: requiredSkillsFilter,
+              },
+            },
+          };
+        }
+
+        return context.prisma.post.findMany({
+          where,
+          skip: skip as number | undefined,
+          take: take as number | undefined,
         });
       },
     });

@@ -34,8 +34,13 @@ export const CommunityQuery = extendType({
     // List communities that user has
     t.nonNull.list.nonNull.field("myCommunities", {
       type: "Community",
+      args: {
+        skip: intArg(),
+        take: intArg(),
+      },
       async resolve(parent, args, context) {
         const { userId } = context;
+        const { skip, take } = args;
         if (!userId) {
           throw new Error("You have to log in");
         }
@@ -43,6 +48,8 @@ export const CommunityQuery = extendType({
         const profiles = await context.prisma.profile.findMany({
           where: { userId },
           include: { community: true },
+          skip: skip as number | undefined,
+          take: take as number | undefined,
         });
 
         return profiles.map((profile) => profile.community);
