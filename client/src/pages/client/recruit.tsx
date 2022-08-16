@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Autocomplete,
   Box,
@@ -108,7 +109,7 @@ export const RecruitPage = () => {
             justifyContent: "center",
           }}
         >
-          <Box sx={{ width: "25%" }}>
+          <Box sx={{ width: "20%" }}>
             <Controller
               name="language"
               control={control}
@@ -146,15 +147,12 @@ export const RecruitPage = () => {
           </Box>
           <Button
             sx={{
-              mb: "35px",
-              mt: "15px",
-              width: "15%",
-              borderRadius: "10px",
+              borderRadius: "999px",
             }}
             variant="contained"
             onClick={handleFilter}
           >
-            絞り込む
+            <SearchIcon />
           </Button>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
