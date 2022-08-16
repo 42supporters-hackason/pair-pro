@@ -3,15 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
-import { Card } from "../../components/Card";
-import { useAuth, useCommunity } from "../../context/auth";
-import { useCommunityRoute } from "../../hooks/useCommunityRoute";
-import { usePublicRoute } from "../../hooks/usePublicRoute";
-import { useCommunityHooks } from "../hooks/useCommunityHooks";
+import { Card } from "../../../components/Card";
+import { useAuth, useCommunity } from "../../../context/auth";
+import { useCommunityRoute } from "../../../hooks/useCommunityRoute";
+import { usePublicRoute } from "../../../hooks/usePublicRoute";
+import { useCommunityHooks } from "../../hooks/useCommunityHooks";
 import {
   CommunitySchema,
   communitySchema,
-} from "../validation/community_validation";
+} from "../../validation/community_validation";
 
 /**
  * public/community

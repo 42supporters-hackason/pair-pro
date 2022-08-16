@@ -2,12 +2,12 @@ import { RouteObject } from "react-router-dom";
 import { lazyImport } from "../utils";
 
 const { CommunityPage } = lazyImport(
-  () => import("../pages/public/community"),
+  () => import("../pages/client/community/community"),
   "CommunityPage"
 );
 
 const { CreateCommunityPage } = lazyImport(
-  () => import("../pages/public/create/community"),
+  () => import("../pages/client/community/create/community"),
   "CreateCommunityPage"
 );
 
