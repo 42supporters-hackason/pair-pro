@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { GithubLoginButton } from "react-social-login-buttons";
 import logo from "../../assets/logo_transparent.png";
 import backgroundImg from "../../assets/p2p_background.jpg";
 import { Card } from "../../components/Card";
+import { useAuth } from "../../context/auth";
+import { useClientRoute } from "../../hooks/useClientRoute";
+import { useCommunityRoute } from "../../hooks/useCommunityRoute";
 import { getGithubAuthUrl } from "../../utils";
 
 export const LoginPage = () => {
+  const { loginStatus } = useAuth();
+  const { goToCommunity } = useCommunityRoute();
+  const { goToHome } = useClientRoute();
+
+  useEffect(() => {
+    if (loginStatus === "authFinished") {
+      goToCommunity({ replace: true });
+    }
+    if (loginStatus === "logined") {
+      goToHome({ replace: true });
+    }
+  }, [loginStatus, goToCommunity, goToHome]);
   return (
     <>
       <Box

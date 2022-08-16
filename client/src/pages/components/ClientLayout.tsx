@@ -13,6 +13,7 @@ import {
 import { useBoolean } from "../../hooks/useBoolean";
 import { useCommunityRoute } from "../../hooks/useCommunityRoute";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
+import { loginStatusStorage } from "../../utils/local-storage/login_status";
 import { tokenStorage } from "../../utils/local-storage/token";
 
 /**
@@ -49,12 +50,14 @@ export const ClientLayout = () => {
    */
   const handleLogout = useCallback(() => {
     tokenStorage.clear();
+    loginStatusStorage.save("unLogin");
     setLoginStatus("unLogin");
     goToLogin({ replace: true });
   }, [goToLogin, setLoginStatus]);
 
   const handleChangeCommunity = useCallback(() => {
     setLoginStatus("authFinished");
+    loginStatusStorage.save("authFinished");
     goToCommunity({ replace: true });
   }, [goToCommunity, setLoginStatus]);
 

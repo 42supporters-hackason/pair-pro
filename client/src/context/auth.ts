@@ -8,6 +8,7 @@ import {
 } from "../gen/graphql-client";
 import { useCommunityRoute } from "../hooks/useCommunityRoute";
 import { usePublicRoute } from "../hooks/usePublicRoute";
+import { loginStatusStorage } from "../utils/local-storage/login_status";
 import { tokenStorage } from "../utils/local-storage/token";
 import { useClientRoute } from "./../hooks/useClientRoute";
 import { useHomeHooks } from "./../pages/hooks/useHomeHooks";
@@ -28,11 +29,13 @@ export interface Profile {
   bio?: string;
 }
 
-type LoginStatus = "unLogin" | "authFinished" | "logined";
+export type LoginStatus = "unLogin" | "authFinished" | "logined";
 
 export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
   () => {
-    const [loginStatus, setLoginStatus] = useState<LoginStatus>("unLogin");
+    const [loginStatus, setLoginStatus] = useState<LoginStatus>(
+      () => loginStatusStorage.load() ?? "unLogin"
+    );
     const [profile, setProfile] = useState<Profile>();
     const [matchingPoint, setMatchingPoint] = useState<number>();
     const [communityName, setCommunityName] = useState<string>();
@@ -52,6 +55,7 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
           onCompleted: (data) => {
             tokenStorage.save(data?.authGithub.token ?? "");
             goToCommunity({ replace: true });
+            loginStatusStorage.save("authFinished");
             setLoginStatus("authFinished");
           },
         });
@@ -69,6 +73,7 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
           refetchMatchedPosts();
           refetchMyPosts();
           goToHome({ replace: true });
+          loginStatusStorage.save("logined");
           setLoginStatus("logined");
         },
       });
