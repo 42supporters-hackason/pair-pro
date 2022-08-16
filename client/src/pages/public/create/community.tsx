@@ -6,7 +6,7 @@ import { AgreeModal } from "../../../components/AgreeModal";
 import { BackButton } from "../../../components/BackButton";
 import { Card } from "../../../components/Card";
 import { useBoolean } from "../../../hooks/useBoolean";
-import { usePublicRoute } from "../../../hooks/usePublicRoute";
+import { useCommunityRoute } from "../../../hooks/useCommunityRoute";
 import { useCreateCommunityHooks } from "../../hooks/useCreateCommunityHooks";
 import {
   CreateCommunitySchema,
@@ -17,7 +17,7 @@ export const CreateCommunityPage = () => {
   /**
    * misc.
    */
-  const { goToCommunity } = usePublicRoute();
+  const { goToCommunity } = useCommunityRoute();
   const [openModal, setOpenModal] = useBoolean(false);
 
   /**

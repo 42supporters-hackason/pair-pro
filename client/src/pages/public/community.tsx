@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Card } from "../../components/Card";
 import { useAuth, useCommunity } from "../../context/auth";
+import { useCommunityRoute } from "../../hooks/useCommunityRoute";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { useCommunityHooks } from "../hooks/useCommunityHooks";
 import {
@@ -19,7 +20,8 @@ export const CommunityPage = () => {
   /**
    * misc.
    */
-  const { goToCreateCommunity, goToLogin } = usePublicRoute();
+  const { goToLogin } = usePublicRoute();
+  const { goToCreateCommunity } = useCommunityRoute();
   const { signIn } = useAuth();
 
   const [searchParams] = useSearchParams();

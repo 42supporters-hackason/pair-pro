@@ -6,7 +6,7 @@ import {
   useJoinCommunityMutation,
   useSignInMutation,
 } from "../gen/graphql-client";
-import { useBoolean } from "../hooks/useBoolean";
+import { useCommunityRoute } from "../hooks/useCommunityRoute";
 import { usePublicRoute } from "../hooks/usePublicRoute";
 import { tokenStorage } from "../utils/local-storage/token";
 import { useClientRoute } from "./../hooks/useClientRoute";
@@ -28,14 +28,17 @@ export interface Profile {
   bio?: string;
 }
 
+type LoginStatus = "unLogin" | "authFinished" | "logined";
+
 export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
   () => {
-    const [isLogin, setIsLogin] = useBoolean(tokenStorage.load() !== null);
+    const [loginStatus, setLoginStatus] = useState<LoginStatus>("unLogin");
     const [profile, setProfile] = useState<Profile>();
     const [matchingPoint, setMatchingPoint] = useState<number>();
     const [communityName, setCommunityName] = useState<string>();
     const [signInMutation] = useSignInMutation();
-    const { goToLogin, goToCommunity } = usePublicRoute();
+    const { goToLogin } = usePublicRoute();
+    const { goToCommunity } = useCommunityRoute();
     const { goToHome } = useClientRoute();
     const { refetchMatchedPosts, refetchMyPosts } = useHomeHooks();
     const [fetchMe] = useFetchMeLazyQuery();
@@ -49,6 +52,7 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
           onCompleted: (data) => {
             tokenStorage.save(data?.authGithub.token ?? "");
             goToCommunity({ replace: true });
+            setLoginStatus("authFinished");
           },
         });
         if (tokenStorage.load() === null) {
@@ -65,6 +69,7 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
           refetchMatchedPosts();
           refetchMyPosts();
           goToHome({ replace: true });
+          setLoginStatus("logined");
         },
       });
     };
@@ -97,8 +102,8 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     }, [fetchMe, fetchCurrentCommunity]);
 
     return {
-      isLogin,
-      setIsLogin,
+      loginStatus,
+      setLoginStatus,
       profile,
       setProfile,
       signIn,
@@ -110,7 +115,11 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
       communityName,
     };
   },
-  ({ signIn, isLogin, setIsLogin }) => ({ signIn, isLogin, setIsLogin }),
+  ({ signIn, loginStatus, setLoginStatus }) => ({
+    signIn,
+    loginStatus,
+    setLoginStatus,
+  }),
   ({
     profile,
     setProfile,
