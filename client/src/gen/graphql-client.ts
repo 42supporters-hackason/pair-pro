@@ -30,6 +30,12 @@ export type Community = {
   profiles: Array<Profile>;
 };
 
+export type LearnedSkill = {
+  __typename?: 'LearnedSkill';
+  count: Scalars['Int'];
+  skill: Skill;
+};
+
 export type Message = {
   __typename?: 'Message';
   content: Scalars['String'];
@@ -145,6 +151,8 @@ export type Profile = {
 
 export type Query = {
   __typename?: 'Query';
+  ListDrivenSkills: Array<LearnedSkill>;
+  ListNavigatedSkills: Array<LearnedSkill>;
   accessToken: Video;
   communities: Array<Community>;
   feed: Array<Post>;
@@ -158,7 +166,7 @@ export type Query = {
   profile?: Maybe<Profile>;
   profiles: Array<Profile>;
   skills: Array<Skill>;
-  unmatchedPosts: Array<Maybe<Post>>;
+  unmatchedPosts: Array<Post>;
 };
 
 
@@ -173,6 +181,12 @@ export type QueryMessagesByPostIdArgs = {
 };
 
 
+export type QueryMyCommunitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryPostArgs = {
   id: Scalars['String'];
 };
@@ -182,9 +196,19 @@ export type QueryProfileArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryUnmatchedPostsArgs = {
+  driverNameFilter?: InputMaybe<Scalars['String']>;
+  requiredSkillsFilter?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
 export type Skill = {
   __typename?: 'Skill';
+  category?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
+  imageUrl?: Maybe<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -301,10 +325,15 @@ export type GetVideoAccessTokenQueryVariables = Exact<{
 
 export type GetVideoAccessTokenQuery = { __typename?: 'Query', accessToken: { __typename?: 'Video', accessToken: string } };
 
-export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchUnmatchedPostQueryVariables = Exact<{
+  driverNameFilter?: InputMaybe<Scalars['String']>;
+  requiredSkillsFilter?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null> };
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -816,8 +845,13 @@ export type GetVideoAccessTokenQueryHookResult = ReturnType<typeof useGetVideoAc
 export type GetVideoAccessTokenLazyQueryHookResult = ReturnType<typeof useGetVideoAccessTokenLazyQuery>;
 export type GetVideoAccessTokenQueryResult = Apollo.QueryResult<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>;
 export const FetchUnmatchedPostDocument = gql`
-    query fetchUnmatchedPost {
-  unmatchedPosts {
+    query fetchUnmatchedPost($driverNameFilter: String, $requiredSkillsFilter: Int, $skip: Int, $take: Int) {
+  unmatchedPosts(
+    driverNameFilter: $driverNameFilter
+    requiredSkillsFilter: $requiredSkillsFilter
+    skip: $skip
+    take: $take
+  ) {
     id
     description
     title
@@ -850,6 +884,10 @@ export const FetchUnmatchedPostDocument = gql`
  * @example
  * const { data, loading, error } = useFetchUnmatchedPostQuery({
  *   variables: {
+ *      driverNameFilter: // value for 'driverNameFilter'
+ *      requiredSkillsFilter: // value for 'requiredSkillsFilter'
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */

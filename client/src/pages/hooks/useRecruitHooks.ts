@@ -26,10 +26,24 @@ interface MatchPostProps {
   closeModal: () => void;
 }
 
+interface Props {
+  /**
+   * ユーザ名の絞り込み
+   */
+  driverNameFilter?: string;
+  /**
+   * 使用言語の絞り込み
+   */
+  requiredSkillsFilter?: number;
+}
+
 /**
  * pages/client/recruitで使用されるHooks
  */
-export const useRecruitHooks = () => {
+export const useRecruitHooks = ({
+  driverNameFilter,
+  requiredSkillsFilter,
+}: Props) => {
   /**
    * misc.
    */
@@ -48,7 +62,12 @@ export const useRecruitHooks = () => {
    * マッチングしていないPOST一覧
    */
   const { data: fetchPosts, refetch: refetchPosts } =
-    useFetchUnmatchedPostQuery();
+    useFetchUnmatchedPostQuery({
+      variables: {
+        driverNameFilter,
+        requiredSkillsFilter,
+      },
+    });
   const posts = fetchPosts && postsTranslator(fetchPosts);
 
   /**
@@ -79,5 +98,5 @@ export const useRecruitHooks = () => {
     ]
   );
 
-  return { posts, languages, matchPost };
+  return { posts, languages, matchPost, skillsData, refetchPosts };
 };

@@ -21,6 +21,17 @@ import {
   recruitFilterSchema,
 } from "../validation/recruit_filter_validation";
 
+interface FilterProps {
+  /**
+   * ユーザ名の絞り込み
+   */
+  driverNameFilter?: string;
+  /**
+   * 使用言語の絞り込み
+   */
+  requiredSkillsFilter?: number;
+}
+
 /**
  * 募集一覧ページ
  */
@@ -32,16 +43,21 @@ export const RecruitPage = () => {
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const { goToHome } = useClientRoute();
   const { profile } = useProfile();
+  const [filterState, setFilterState] = useState<FilterProps>();
 
   /**
    * page hooks
    */
-  const { posts, languages, matchPost } = useRecruitHooks();
+  const { posts, languages, matchPost, skillsData, refetchPosts } =
+    useRecruitHooks({
+      driverNameFilter: filterState?.driverNameFilter,
+      requiredSkillsFilter: filterState?.requiredSkillsFilter,
+    });
 
   /**
    * form validation
    */
-  const { register, control, handleSubmit } = useForm<RecruitFilterSchema>({
+  const { register, control, getValues } = useForm<RecruitFilterSchema>({
     resolver: zodResolver(recruitFilterSchema),
   });
 
@@ -49,8 +65,15 @@ export const RecruitPage = () => {
    * event-handler
    */
   const handleFilter = useCallback(() => {
-    console.log();
-  }, []);
+    const formValue = getValues();
+    setFilterState({
+      driverNameFilter: formValue.name,
+      requiredSkillsFilter: skillsData?.skills.find(
+        ({ name }) => name === formValue.language
+      )?.id as number,
+    });
+    setTimeout(() => refetchPosts(), 10);
+  }, [setFilterState, getValues, skillsData, refetchPosts]);
 
   const handleMatch = useCallback(() => {
     if (selectedId !== undefined && profile?.id !== undefined) {
@@ -78,12 +101,10 @@ export const RecruitPage = () => {
             gap: 2,
             justifyContent: "center",
           }}
-          component="form"
-          onSubmit={handleSubmit(handleFilter)}
         >
           <Box sx={{ width: "25%" }}>
             <Controller
-              name="languages"
+              name="language"
               control={control}
               render={({ field: { onChange } }) => (
                 <Autocomplete
@@ -106,12 +127,6 @@ export const RecruitPage = () => {
             sx={{ width: "25%" }}
             {...register("name")}
           />
-          <TextField
-            variant="outlined"
-            label="キーワード"
-            sx={{ width: "25%" }}
-            {...register("keyword")}
-          />
           <Button
             sx={{
               mb: "35px",
@@ -120,7 +135,7 @@ export const RecruitPage = () => {
               borderRadius: "10px",
             }}
             variant="contained"
-            type="submit"
+            onClick={handleFilter}
           >
             絞り込む
           </Button>
@@ -142,7 +157,12 @@ export const RecruitPage = () => {
               />
             ))}
         </Box>
-        <BackButton style={{ margin: "0 auto", width: "350px" }} onClick={() => goToHome()}>戻る</BackButton>
+        <BackButton
+          style={{ margin: "0 auto", width: "350px" }}
+          onClick={() => goToHome()}
+        >
+          戻る
+        </BackButton>
       </Box>
       <Modal
         open={openPostModal}
