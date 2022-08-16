@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useProfile } from "../../context/auth";
 import {
   FetchUnmatchedPostQuery,
+  useFetchCurrentCommunityQuery,
   useFetchMatchedPostQuery,
   useFetchSkillsQuery,
   useFetchUnmatchedPostQuery,
@@ -51,6 +52,9 @@ export const useRecruitHooks = ({
   const { refetch: refetchMatchedPost } = useFetchMatchedPostQuery();
   const { goToHome } = useClientRoute();
   const { updateMatchingPoint } = useProfile();
+  const { data: currentCommunityData } = useFetchCurrentCommunityQuery();
+  const communityMember =
+    currentCommunityData?.myCurrentCommunity?.profiles.map(({ name }) => name);
 
   /**
    * requiredSkillsのデータ
@@ -98,5 +102,12 @@ export const useRecruitHooks = ({
     ]
   );
 
-  return { posts, languages, matchPost, skillsData, refetchPosts };
+  return {
+    posts,
+    languages,
+    matchPost,
+    skillsData,
+    refetchPosts,
+    communityMember,
+  };
 };

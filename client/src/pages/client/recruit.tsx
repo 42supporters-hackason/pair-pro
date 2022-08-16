@@ -48,16 +48,22 @@ export const RecruitPage = () => {
   /**
    * page hooks
    */
-  const { posts, languages, matchPost, skillsData, refetchPosts } =
-    useRecruitHooks({
-      driverNameFilter: filterState?.driverNameFilter,
-      requiredSkillsFilter: filterState?.requiredSkillsFilter,
-    });
+  const {
+    posts,
+    languages,
+    matchPost,
+    skillsData,
+    refetchPosts,
+    communityMember,
+  } = useRecruitHooks({
+    driverNameFilter: filterState?.driverNameFilter,
+    requiredSkillsFilter: filterState?.requiredSkillsFilter,
+  });
 
   /**
    * form validation
    */
-  const { register, control, getValues } = useForm<RecruitFilterSchema>({
+  const { control, getValues } = useForm<RecruitFilterSchema>({
     resolver: zodResolver(recruitFilterSchema),
   });
 
@@ -109,7 +115,6 @@ export const RecruitPage = () => {
               render={({ field: { onChange } }) => (
                 <Autocomplete
                   options={languages ?? []}
-                  multiple
                   renderInput={(params) => (
                     <TextField {...params} label="使用言語" />
                   )}
@@ -121,12 +126,24 @@ export const RecruitPage = () => {
               )}
             />
           </Box>
-          <TextField
-            variant="outlined"
-            label="ユーザ名"
-            sx={{ width: "25%" }}
-            {...register("name")}
-          />
+          <Box sx={{ width: "20%" }}>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Autocomplete
+                  options={communityMember ?? []}
+                  renderInput={(params) => (
+                    <TextField {...params} label="ユーザ名" />
+                  )}
+                  onChange={(_, data) => {
+                    onChange(data);
+                    return data;
+                  }}
+                />
+              )}
+            />
+          </Box>
           <Button
             sx={{
               mb: "35px",
