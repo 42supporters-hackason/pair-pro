@@ -6,7 +6,6 @@ import {
   useJoinCommunityMutation,
   useSignInMutation,
 } from "../gen/graphql-client";
-import { useCommunityRoute } from "../hooks/useCommunityRoute";
 import { usePublicRoute } from "../hooks/usePublicRoute";
 import { loginStatusStorage } from "../utils/local-storage/login_status";
 import { tokenStorage } from "../utils/local-storage/token";
@@ -40,8 +39,7 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     const [matchingPoint, setMatchingPoint] = useState<number>();
     const [communityName, setCommunityName] = useState<string>();
     const [signInMutation] = useSignInMutation();
-    const { goToLogin } = usePublicRoute();
-    const { goToCommunity } = useCommunityRoute();
+    const { goToLogin, goToCommunity } = usePublicRoute();
     const { goToHome } = useClientRoute();
     const { refetchMatchedPosts, refetchMyPosts } = useHomeHooks();
     const [fetchMe] = useFetchMeLazyQuery();

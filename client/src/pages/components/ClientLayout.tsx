@@ -11,7 +11,6 @@ import {
   useFetchMeLazyQuery,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
-import { useCommunityRoute } from "../../hooks/useCommunityRoute";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { loginStatusStorage } from "../../utils/local-storage/login_status";
 import { tokenStorage } from "../../utils/local-storage/token";
@@ -34,8 +33,7 @@ export const ClientLayout = () => {
   const { setLoginStatus } = useAuth();
 
   const { setProfile } = useProfile();
-  const { goToLogin } = usePublicRoute();
-  const { goToCommunity } = useCommunityRoute();
+  const { goToLogin, goToCommunity } = usePublicRoute();
   const menu = useClientHeaderMenu({
     onLogout: setOpenLogoutModal.on,
     onChangeCommunity: setOpenChangeCommunityModal.on,

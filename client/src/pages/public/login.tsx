@@ -6,13 +6,13 @@ import backgroundImg from "../../assets/p2p_background.jpg";
 import { Card } from "../../components/Card";
 import { useAuth } from "../../context/auth";
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { useCommunityRoute } from "../../hooks/useCommunityRoute";
+import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { getGithubAuthUrl } from "../../utils";
 
 export const LoginPage = () => {
   const { loginStatus } = useAuth();
-  const { goToCommunity } = useCommunityRoute();
   const { goToHome } = useClientRoute();
+  const { goToCommunity } = usePublicRoute();
 
   useEffect(() => {
     if (loginStatus === "authFinished") {

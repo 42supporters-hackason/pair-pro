@@ -8,6 +8,13 @@ import { PUBLIC_ROUTE_PATH } from "./../routes/public";
 export const usePublicRoute = () => {
   const navigate = useNavigate();
 
+  const goToCommunity = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(PUBLIC_ROUTE_PATH.COMMUNITY, options);
+    },
+    [navigate]
+  );
+
   const goToLogin = useCallback(
     (options?: NavigateOptions) => {
       navigate(PUBLIC_ROUTE_PATH.LOGIN, options);
@@ -15,5 +22,5 @@ export const usePublicRoute = () => {
     [navigate]
   );
 
-  return { goToLogin };
+  return { goToLogin, goToCommunity };
 };

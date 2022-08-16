@@ -8,13 +8,6 @@ import { COMMUNITY_ROUTE_PATH } from "./../routes/community";
 export const useCommunityRoute = () => {
   const navigate = useNavigate();
 
-  const goToCommunity = useCallback(
-    (options?: NavigateOptions) => {
-      navigate(COMMUNITY_ROUTE_PATH.COMMUNITY, options);
-    },
-    [navigate]
-  );
-
   const goToCreateCommunity = useCallback(
     (options?: NavigateOptions) => {
       navigate(COMMUNITY_ROUTE_PATH.CREATE_COMMUNITY, options);
@@ -22,5 +15,5 @@ export const useCommunityRoute = () => {
     [navigate]
   );
 
-  return { goToCommunity, goToCreateCommunity };
+  return { goToCreateCommunity };
 };
