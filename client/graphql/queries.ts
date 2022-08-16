@@ -24,8 +24,18 @@ export const GET_VIDEO_ACCESS_TOKEN = gql`
  * post
  */
 export const FETCH_UNMATCHED_POST = gql`
-  query fetchUnmatchedPost {
-    unmatchedPosts {
+  query fetchUnmatchedPost(
+    $driverNameFilter: String
+    $requiredSkillsFilter: Int
+    $skip: Int
+    $take: Int
+  ) {
+    unmatchedPosts(
+      driverNameFilter: $driverNameFilter
+      requiredSkillsFilter: $requiredSkillsFilter
+      skip: $skip
+      take: $take
+    ) {
       id
       description
       title
