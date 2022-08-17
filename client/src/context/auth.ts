@@ -6,8 +6,8 @@ import {
   useJoinCommunityMutation,
   useSignInMutation,
 } from "../gen/graphql-client";
-import { useBoolean } from "../hooks/useBoolean";
 import { usePublicRoute } from "../hooks/usePublicRoute";
+import { loginStatusStorage } from "../utils/local-storage/login_status";
 import { tokenStorage } from "../utils/local-storage/token";
 import { useClientRoute } from "./../hooks/useClientRoute";
 import { useHomeHooks } from "./../pages/hooks/useHomeHooks";
@@ -28,9 +28,13 @@ export interface Profile {
   bio?: string;
 }
 
+export type LoginStatus = "unLogin" | "authFinished" | "logined";
+
 export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
   () => {
-    const [isLogin, setIsLogin] = useBoolean(tokenStorage.load() !== null);
+    const [loginStatus, setLoginStatus] = useState<LoginStatus>(
+      () => loginStatusStorage.load() ?? "unLogin"
+    );
     const [profile, setProfile] = useState<Profile>();
     const [matchingPoint, setMatchingPoint] = useState<number>();
     const [communityName, setCommunityName] = useState<string>();
@@ -42,18 +46,20 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     const [joinCommunityMutation] = useJoinCommunityMutation();
     const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
 
-    const signIn = async (code: string) => {
-      if (tokenStorage.load() === null) {
+    const signIn = async (code?: string | null) => {
+      if (code === null || code === undefined) {
+        goToLogin();
+      }
+      if (tokenStorage.load() === null && code) {
         await signInMutation({
           variables: { code },
           onCompleted: (data) => {
             tokenStorage.save(data?.authGithub.token ?? "");
+            loginStatusStorage.save("authFinished");
+            setLoginStatus("authFinished");
             goToCommunity({ replace: true });
           },
         });
-        if (tokenStorage.load() === null) {
-          goToLogin();
-        }
       }
     };
 
@@ -64,6 +70,8 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
           tokenStorage.save(data.joinCommunity.token);
           refetchMatchedPosts();
           refetchMyPosts();
+          loginStatusStorage.save("logined");
+          setLoginStatus("logined");
           goToHome({ replace: true });
         },
       });
@@ -97,8 +105,8 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     }, [fetchMe, fetchCurrentCommunity]);
 
     return {
-      isLogin,
-      setIsLogin,
+      loginStatus,
+      setLoginStatus,
       profile,
       setProfile,
       signIn,
@@ -110,7 +118,11 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
       communityName,
     };
   },
-  ({ signIn, isLogin, setIsLogin }) => ({ signIn, isLogin, setIsLogin }),
+  ({ signIn, loginStatus, setLoginStatus }) => ({
+    signIn,
+    loginStatus,
+    setLoginStatus,
+  }),
   ({
     profile,
     setProfile,
