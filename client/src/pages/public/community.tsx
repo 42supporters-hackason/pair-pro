@@ -71,6 +71,10 @@ export const CommunityPage = () => {
    * signIn処理を実行
    */
   useEffect(() => {
+    if (code === null) {
+      goToLogin({ replace: true });
+    }
+
     if (code !== null) {
       signIn(code);
     }
