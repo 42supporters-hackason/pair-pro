@@ -22,7 +22,7 @@ export const CommunityPage = () => {
    */
   const { goToLogin } = usePublicRoute();
   const { goToCreateCommunity } = useCommunityRoute();
-  const { signIn } = useAuth();
+  const { signIn, loginStatus } = useAuth();
 
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
@@ -71,15 +71,18 @@ export const CommunityPage = () => {
    * signIn処理を実行
    */
   useEffect(() => {
-    if (code === null) {
-      goToLogin({ replace: true });
-    }
-
-    if (code !== null) {
+    if (loginStatus !== "authFinished") {
       signIn(code);
     }
     refecthMyCommunities();
-  }, [signIn, code, goToLogin, searchParams, refecthMyCommunities]);
+  }, [
+    signIn,
+    code,
+    goToLogin,
+    searchParams,
+    refecthMyCommunities,
+    loginStatus,
+  ]);
 
   return (
     <Box

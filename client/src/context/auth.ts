@@ -46,20 +46,20 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     const [joinCommunityMutation] = useJoinCommunityMutation();
     const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
 
-    const signIn = async (code: string) => {
-      if (tokenStorage.load() === null) {
+    const signIn = async (code?: string | null) => {
+      if (code === null || code === undefined) {
+        goToLogin();
+      }
+      if (tokenStorage.load() === null && code) {
         await signInMutation({
           variables: { code },
           onCompleted: (data) => {
             tokenStorage.save(data?.authGithub.token ?? "");
-            goToCommunity({ replace: true });
             loginStatusStorage.save("authFinished");
             setLoginStatus("authFinished");
+            goToCommunity({ replace: true });
           },
         });
-        if (tokenStorage.load() === null) {
-          goToLogin();
-        }
       }
     };
 
