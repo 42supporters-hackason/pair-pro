@@ -65,10 +65,12 @@ export const ClientLayout = () => {
         if (data.deleteMyProfile?.token) {
           tokenStorage.save(data.deleteMyProfile.token);
         }
+        setLoginStatus("authFinished");
+        loginStatusStorage.save("authFinished");
         goToCommunity({ replace: true });
       },
     });
-  }, [exitCommunity, goToCommunity]);
+  }, [exitCommunity, goToCommunity, setLoginStatus]);
 
   useEffect(() => {
     if (communityName === undefined) {
