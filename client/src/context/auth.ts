@@ -70,9 +70,9 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
           tokenStorage.save(data.joinCommunity.token);
           refetchMatchedPosts();
           refetchMyPosts();
-          goToHome({ replace: true });
           loginStatusStorage.save("logined");
           setLoginStatus("logined");
+          goToHome({ replace: true });
         },
       });
     };
