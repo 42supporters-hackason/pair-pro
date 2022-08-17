@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
-import { useProfile } from "../../context/auth";
+import { useAuth, useProfile } from "../../context/auth";
 import {
   useExitCommunityMutation,
   useFetchCurrentCommunityLazyQuery,
@@ -12,6 +12,7 @@ import {
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
+import { loginStatusStorage } from "../../utils/local-storage/login_status";
 import { tokenStorage } from "../../utils/local-storage/token";
 
 /**
@@ -29,6 +30,7 @@ export const ClientLayout = () => {
   const [communityName, setCommunityName] = useState<string>();
   const [matchingPoint, setMatchingPoint] = useState<number>();
   const [githubLogin, setGithubLogin] = useState<string>();
+  const { setLoginStatus } = useAuth();
 
   const { setProfile } = useProfile();
   const { goToLogin, goToCommunity } = usePublicRoute();
@@ -46,12 +48,16 @@ export const ClientLayout = () => {
    */
   const handleLogout = useCallback(() => {
     tokenStorage.clear();
+    loginStatusStorage.save("unLogin");
+    setLoginStatus("unLogin");
     goToLogin({ replace: true });
-  }, [goToLogin]);
+  }, [goToLogin, setLoginStatus]);
 
   const handleChangeCommunity = useCallback(() => {
+    setLoginStatus("authFinished");
+    loginStatusStorage.save("authFinished");
     goToCommunity({ replace: true });
-  }, [goToCommunity]);
+  }, [goToCommunity, setLoginStatus]);
 
   const handleExitCommunity = useCallback(() => {
     exitCommunity({
