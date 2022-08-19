@@ -60,6 +60,7 @@ export const PostQuery = extendType({
         return context.prisma.post.findMany();
       },
     });
+
     t.field("post", {
       type: "Post",
       args: {
@@ -72,6 +73,7 @@ export const PostQuery = extendType({
         });
       },
     });
+
     t.nonNull.list.nonNull.field("unmatchedPosts", {
       type: "Post",
       args: {
@@ -129,6 +131,7 @@ export const PostQuery = extendType({
         });
       },
     });
+
     t.nonNull.list.nonNull.field("myDrivingPosts", {
       type: "Post",
       resolve(parent, args, context) {
@@ -145,6 +148,7 @@ export const PostQuery = extendType({
         });
       },
     });
+
     t.nonNull.list.nonNull.field("myMatchedPosts", {
       type: "Post",
       resolve(parent, args, context) {
@@ -158,7 +162,7 @@ export const PostQuery = extendType({
             OR: [{ navigatorId: profileId }, { driverId: profileId }],
             navigatorId: { not: null },
             driverId: { not: null },
-            completedAt: null
+            completedAt: null,
           },
         });
       },
@@ -345,10 +349,10 @@ export const PostMutation = extendType({
       },
     });
 
-    t.nonNull.field('completePairProgramming', {
-      type: 'Post',
+    t.nonNull.field("completePairProgramming", {
+      type: "Post",
       args: {
-        postId: nonNull(stringArg())
+        postId: nonNull(stringArg()),
       },
       async resolve(parent, args, context) {
         const { postId } = args;
@@ -361,12 +365,14 @@ export const PostMutation = extendType({
         }
 
         const post = await context.prisma.post.findUnique({
-          where: { id: postId }
+          where: { id: postId },
         });
 
         if (!post) {
           throw new Error("There is no such Post");
-        } else if (!(profileId == post.driverId || profileId == post.navigatorId)) {
+        } else if (
+          !(profileId == post.driverId || profileId == post.navigatorId)
+        ) {
           throw new Error("You do not have rights to complete this post.");
         } else if (post.navigatorId == null) {
           throw new Error("This post is not matched yet.");
@@ -377,10 +383,10 @@ export const PostMutation = extendType({
         return context.prisma.post.update({
           where: { id: postId },
           data: {
-            completedAt: new Date()
+            completedAt: new Date(),
           },
         });
-      }
-    })
+      },
+    });
   },
 });
