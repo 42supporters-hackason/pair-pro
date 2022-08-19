@@ -7,6 +7,7 @@ import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import {
+  useCompletePostMutation,
   useFetchCurrentCommunityQuery,
   useFetchMeQuery,
 } from "../../gen/graphql-client";
@@ -42,12 +43,14 @@ export const HomePage = () => {
    */
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
+  const [completePostMutation] = useCompletePostMutation();
   const { refetch: refetchMe } = useFetchMeQuery();
 
   /**
    * page hooks
    */
-  const { profile, myPosts, matchedPosts, deletePost } = useHomeHooks();
+  const { profile, myPosts, matchedPosts, deletePost, completePost } =
+    useHomeHooks();
 
   /**
    * event-handler
@@ -62,8 +65,14 @@ export const HomePage = () => {
   }, [deletePost, selectedId, setOpenDeleteModal]);
 
   const handleCompletePost = useCallback(() => {
-    console.log(completedId);
-  }, [completedId]);
+    if (completedId !== undefined) {
+      completePostMutation({
+        variables: {
+          postId: completedId,
+        },
+      });
+    }
+  }, [completedId, completePostMutation]);
 
   useEffect(() => {
     refetchCurrentCommunity();
@@ -200,7 +209,12 @@ export const HomePage = () => {
       >
         <Box>
           <AgreeModal
-            onAgree={handleCompletePost}
+            onAgree={() => {
+              if (completedId !== undefined) {
+                completePost(completedId);
+                setOpenCompleteModal.off()
+              }
+            }}
             onCancel={setOpenCompleteModal.off}
           >
             マッチング相手とのペアプロが終了しましたか？

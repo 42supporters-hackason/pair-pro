@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { Profile, useProfile } from "../../context/auth";
 import {
   FetchMatchedPostQuery,
+  useCompletePostMutation,
   useDeletePostMutation,
   useFetchMatchedPostQuery,
   useFetchMeQuery,
@@ -56,6 +57,7 @@ export const useHomeHooks = () => {
    */
   const { updateMatchingPoint } = useProfile();
   const [deletePostMutation] = useDeletePostMutation();
+  const [completePostMutation] = useCompletePostMutation();
 
   /**
    * 自分自身のプロフィールを取得
@@ -104,12 +106,27 @@ export const useHomeHooks = () => {
     [deletePostMutation, refetchMyPosts, updateMatchingPoint]
   );
 
+  const completePost = useCallback(
+    (completedId: string) => {
+      completePostMutation({
+        variables: {
+          postId: completedId,
+        },
+        onCompleted: () => {
+          refetchMatchedPosts();
+        },
+      });
+    },
+    [completePostMutation, refetchMatchedPosts]
+  );
+
   return {
     myPosts,
     matchedPosts,
     refetchMatchedPosts,
     refetchMyPosts,
     deletePost,
+    completePost,
     profile,
   };
 };
