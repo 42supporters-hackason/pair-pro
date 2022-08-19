@@ -21,12 +21,25 @@ export const HomePage = () => {
   /**
    * misc.
    */
+  /**
+   * modal state
+   */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [openDeleteModal, setOpenDeleteModal] = useBoolean(false);
+  const [openCompleteModal, setOpenCompleteModal] = useBoolean(false);
+
+  /**
+   * use state
+   */
   const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [completedId, setCompletedId] = useState<string | undefined>();
   const [showList, setShowList] = useState<"myPostList" | "matchedList">(
     "matchedList"
   );
+
+  /**
+   * graphql hooks .etc
+   */
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
   const { refetch: refetchMe } = useFetchMeQuery();
@@ -47,6 +60,10 @@ export const HomePage = () => {
       });
     }
   }, [deletePost, selectedId, setOpenDeleteModal]);
+
+  const handleCompletePost = useCallback(() => {
+    console.log(completedId);
+  }, [completedId]);
 
   useEffect(() => {
     refetchCurrentCommunity();
@@ -69,6 +86,10 @@ export const HomePage = () => {
                     languages={languages}
                     name={name}
                     githubLogin={githubLogin}
+                    onComplete={() => {
+                      setOpenCompleteModal.on();
+                      setCompletedId(id);
+                    }}
                     onClick={() => {
                       setOpenPostModal.on();
                       setSelectedId(id);
@@ -169,6 +190,20 @@ export const HomePage = () => {
             onCancel={setOpenDeleteModal.off}
           >
             本当にこの募集を削除してよろしいですか？
+          </AgreeModal>
+        </Box>
+      </Modal>
+      <Modal
+        open={openCompleteModal}
+        onClose={setOpenCompleteModal.off}
+        sx={{ top: "40%", mx: "auto", width: "600px" }}
+      >
+        <Box>
+          <AgreeModal
+            onAgree={handleCompletePost}
+            onCancel={setOpenCompleteModal.off}
+          >
+            マッチング相手とのペアプロが終了しましたか？
           </AgreeModal>
         </Box>
       </Modal>
