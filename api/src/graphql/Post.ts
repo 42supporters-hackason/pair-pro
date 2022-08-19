@@ -293,6 +293,7 @@ export const PostMutation = extendType({
         // check if the post exists
         const post = await context.prisma.post.findUnique({
           where: { id: id },
+          include: { requiredSkills: true },
         });
         if (!post) {
           throw new Error("There is no such post");
@@ -303,15 +304,23 @@ export const PostMutation = extendType({
           throw new Error("You do not have rights to update this post");
         }
 
+        const data: { [key: string]: any } = {
+          title: title,
+          description: description,
+        };
+
+        // dataのupdateがあるときは、既存で持っているデータをdisconnectしてから
+        // connectで新しいdataに更新する。requiredSkillsIdsがnullのときは変化なし
+        if (requiredSkillsIds) {
+          data.requiredSkills = {
+            disconnect: post.requiredSkills?.map((skill) => ({ id: skill.id })),
+            connect: requiredSkillsIds?.map((id) => ({ id })),
+          };
+        }
+
         return context.prisma.post.update({
-          where: { id: id },
-          data: {
-            title: title as string,
-            description: description as string,
-            // requiredSkills: {
-            //   connect: requiredSkillsIds.map(id => ({ id })),
-            // }
-          },
+          where: { id },
+          data,
         });
       },
     });
@@ -357,7 +366,7 @@ export const PostMutation = extendType({
           data: { matchingPoint: navigator.matchingPoint + 1 },
         });
 
-        // update navigator and completedAt
+        // update navigator
         return context.prisma.post.update({
           where: { id: postId },
           data: {
