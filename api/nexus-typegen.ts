@@ -125,6 +125,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    completePairProgramming: NexusGenRootTypes['Post']; // Post!
     createCommunity: NexusGenRootTypes['Community']; // Community!
     createMessage: NexusGenRootTypes['Message']; // Message!
     deleteCommunity: NexusGenRootTypes['Community']; // Community!
@@ -219,6 +220,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
+    completePairProgramming: 'Post'
     createCommunity: 'Community'
     createMessage: 'Message'
     deleteCommunity: 'Community'
@@ -295,6 +297,9 @@ export interface NexusGenArgTypes {
   Mutation: {
     authGithub: { // args
       code: string; // String!
+    }
+    completePairProgramming: { // args
+      postId: string; // String!
     }
     createCommunity: { // args
       name: string; // String!

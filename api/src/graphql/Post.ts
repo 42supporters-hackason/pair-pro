@@ -158,6 +158,7 @@ export const PostQuery = extendType({
             OR: [{ navigatorId: profileId }, { driverId: profileId }],
             navigatorId: { not: null },
             driverId: { not: null },
+            completedAt: null
           },
         });
       },
@@ -339,10 +340,47 @@ export const PostMutation = extendType({
           where: { id: postId },
           data: {
             navigator: { connect: { id: navigatorId } },
-            completedAt: new Date(),
           },
         });
       },
     });
+
+    t.nonNull.field('completePairProgramming', {
+      type: 'Post',
+      args: {
+        postId: nonNull(stringArg())
+      },
+      async resolve(parent, args, context) {
+        const { postId } = args;
+        const { userId, profileId } = context;
+
+        if (!userId) {
+          throw new Error("You have to log in");
+        } else if (!profileId) {
+          throw new Error("You have to be in the community");
+        }
+
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId }
+        });
+
+        if (!post) {
+          throw new Error("There is no such Post");
+        } else if (!(profileId == post.driverId || profileId == post.navigatorId)) {
+          throw new Error("You do not have rights to complete this post.");
+        } else if (post.navigatorId == null) {
+          throw new Error("This post is not matched yet.");
+        } else if (post.completedAt != null) {
+          throw new Error("This post is already completed.");
+        }
+
+        return context.prisma.post.update({
+          where: { id: postId },
+          data: {
+            completedAt: new Date()
+          },
+        });
+      }
+    })
   },
 });

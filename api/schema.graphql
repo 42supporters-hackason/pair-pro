@@ -32,6 +32,7 @@ type Message {
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
+  completePairProgramming(postId: String!): Post!
   createCommunity(name: String!): Community!
   createMessage(content: String!, postId: String!): Message!
   deleteCommunity(communityId: String!): Community!
