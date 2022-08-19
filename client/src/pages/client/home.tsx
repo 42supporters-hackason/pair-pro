@@ -27,12 +27,14 @@ export const HomePage = () => {
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [openDeleteModal, setOpenDeleteModal] = useBoolean(false);
   const [openCompleteModal, setOpenCompleteModal] = useBoolean(false);
+  const [openFinishedPostModal, setOpenFinishedPostModal] = useBoolean(false);
 
   /**
    * use state
    */
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [completedId, setCompletedId] = useState<string | undefined>();
+  const [finishedPostId, setFinishedPostId] = useState<string | undefined>();
   const [showList, setShowList] = useState<
     "myPostList" | "matchedList" | "finishedPost"
   >("matchedList");
@@ -47,8 +49,14 @@ export const HomePage = () => {
   /**
    * page hooks
    */
-  const { profile, myPosts, matchedPosts, deletePost, completePost } =
-    useHomeHooks();
+  const {
+    profile,
+    myPosts,
+    matchedPosts,
+    deletePost,
+    completePost,
+    completedPosts,
+  } = useHomeHooks();
 
   /**
    * event-handler
@@ -109,6 +117,24 @@ export const HomePage = () => {
                 }}
               />
             ))}
+          {showList === "finishedPost" &&
+            completedPosts &&
+            completedPosts.map(
+              ({ id, title, content, languages, name, githubLogin }) => (
+                <PostCard
+                  key={id}
+                  title={title}
+                  content={content}
+                  languages={languages}
+                  name={name}
+                  githubLogin={githubLogin}
+                  onClick={() => {
+                    setOpenFinishedPostModal.on();
+                    setFinishedPostId(id);
+                  }}
+                />
+              )
+            )}
         </Box>
       </Box>
       <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>
@@ -173,6 +199,37 @@ export const HomePage = () => {
               agreeTitle="チャットルームに移動する"
               onAgree={() => goToChat(selectedId)}
               onClose={setOpenPostModal.off}
+            />
+          )}
+        </Box>
+      </Modal>
+      <Modal
+        open={openFinishedPostModal}
+        onClose={setOpenFinishedPostModal.off}
+        sx={{ overflow: "scroll" }}
+      >
+        <Box sx={{ my: "100px", mx: "100px" }}>
+          {completedPosts && (
+            <ProfileCard
+              githubLogin={
+                completedPosts.find(({ id }) => id === finishedPostId)
+                  ?.githubLogin
+              }
+              title={
+                completedPosts.find(({ id }) => id === finishedPostId)?.title
+              }
+              content={
+                completedPosts.find(({ id }) => id === finishedPostId)?.content
+              }
+              languages={
+                completedPosts.find(({ id }) => id === finishedPostId)
+                  ?.languages
+              }
+              name={
+                completedPosts.find(({ id }) => id === finishedPostId)?.name
+              }
+              bio={completedPosts.find(({ id }) => id === finishedPostId)?.bio}
+              hasButton={false}
             />
           )}
         </Box>

@@ -361,6 +361,11 @@ export type FetchSpecificPostQueryVariables = Exact<{
 
 export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
 
+export type FetchCompletedPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchCompletedPostQuery = { __typename?: 'Query', myCompletedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+
 export type FetchMessagesQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
@@ -1092,6 +1097,64 @@ export function useFetchSpecificPostLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type FetchSpecificPostQueryHookResult = ReturnType<typeof useFetchSpecificPostQuery>;
 export type FetchSpecificPostLazyQueryHookResult = ReturnType<typeof useFetchSpecificPostLazyQuery>;
 export type FetchSpecificPostQueryResult = Apollo.QueryResult<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>;
+export const FetchCompletedPostDocument = gql`
+    query fetchCompletedPost {
+  myCompletedPosts {
+    id
+    description
+    title
+    navigator {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    driver {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    requiredSkills {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchCompletedPostQuery__
+ *
+ * To run a query within a React component, call `useFetchCompletedPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchCompletedPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchCompletedPostQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchCompletedPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>(FetchCompletedPostDocument, options);
+      }
+export function useFetchCompletedPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>(FetchCompletedPostDocument, options);
+        }
+export type FetchCompletedPostQueryHookResult = ReturnType<typeof useFetchCompletedPostQuery>;
+export type FetchCompletedPostLazyQueryHookResult = ReturnType<typeof useFetchCompletedPostLazyQuery>;
+export type FetchCompletedPostQueryResult = Apollo.QueryResult<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>;
 export const FetchMessagesDocument = gql`
     query fetchMessages($postId: String!) {
   messagesByPostId(postId: $postId) {
