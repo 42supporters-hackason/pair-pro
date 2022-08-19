@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Modal, Typography } from "@mui/material";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GithubProfile } from "../../components/GithubProfile";
 import { HomeTitleToggle } from "../../components/HomeTitleToggle";
@@ -35,6 +35,7 @@ export const HomePage = () => {
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [completedId, setCompletedId] = useState<string | undefined>();
   const [finishedPostId, setFinishedPostId] = useState<string | undefined>();
+  const [completePostCheck, setCompletePostCheck] = useBoolean(false);
   const [showList, setShowList] = useState<
     "myPostList" | "matchedList" | "finishedPost"
   >("matchedList");
@@ -262,8 +263,24 @@ export const HomePage = () => {
               }
             }}
             onCancel={setOpenCompleteModal.off}
+            disabled={!completePostCheck}
           >
-            マッチング相手とのペアプロが終了しましたか？
+            {completePostCheck && (
+              <>
+                <Typography fontWeight="bold" variant="h6">
+                  お疲れ様でした！！🎉🎉🎉
+                </Typography>
+                <br />
+              </>
+            )}
+            <b>マッチング相手とのペアプロが終了しましたか？</b>
+            <br />
+            <br />
+            確認チェック
+            <Checkbox
+              onClick={setCompletePostCheck.toggle}
+              checked={completePostCheck}
+            />
           </AgreeModal>
         </Box>
       </Modal>

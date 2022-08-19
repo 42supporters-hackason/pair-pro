@@ -89,10 +89,14 @@ export const PostCard = ({
           <Box sx={{ position: "absolute", bottom: "15px", right: "40px" }}>
             <Button
               variant="contained"
-              sx={{ borderRadius: "999px", height: "40px" }}
+              sx={{
+                borderRadius: "999px",
+                height: "40px",
+                px: 3,
+              }}
               onClick={onComplete}
             >
-              ぺあぷろ完了!
+              ぺあぷろ完了！
             </Button>
           </Box>
         )}

@@ -114,7 +114,8 @@ export const useHomeHooks = () => {
   /**
    * 終了したPOSTを取得
    */
-  const { data: completedPostData } = useFetchCompletedPostQuery();
+  const { data: completedPostData, refetch: refetchCompletedPost } =
+    useFetchCompletedPostQuery();
   const completedPosts =
     completedPostData &&
     completedPostsTaranslator(completedPostData, profile.githubLogin ?? "");
@@ -148,10 +149,11 @@ export const useHomeHooks = () => {
         },
         onCompleted: () => {
           refetchMatchedPosts();
+          refetchCompletedPost();
         },
       });
     },
-    [completePostMutation, refetchMatchedPosts]
+    [completePostMutation, refetchMatchedPosts, refetchCompletedPost]
   );
 
   return {
