@@ -301,7 +301,7 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { postId, navigatorId } = args;
-        const { profileId } = context;
+        const { profileId, communityId } = context;
 
         if (!profileId) {
           throw new Error("You have to log in");
@@ -326,6 +326,11 @@ export const PostMutation = extendType({
         });
         if (!navigator) {
           throw new Error("There is no such navigator");
+        }
+
+        // check if the navigator belongs to the same community
+        if (navigator.communityId != communityId) {
+          throw new Error("Navigator does not belong to the same community");
         }
 
         // increment navigator's matching point
