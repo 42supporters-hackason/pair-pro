@@ -7,7 +7,6 @@ import { MyPostCard } from "../../components/MyPostCard";
 import { PostCard } from "../../components/PostCard";
 import { ProfileCard } from "../../components/ProfileCard";
 import {
-  useCompletePostMutation,
   useFetchCurrentCommunityQuery,
   useFetchMeQuery,
 } from "../../gen/graphql-client";
@@ -34,16 +33,15 @@ export const HomePage = () => {
    */
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [completedId, setCompletedId] = useState<string | undefined>();
-  const [showList, setShowList] = useState<"myPostList" | "matchedList">(
-    "matchedList"
-  );
+  const [showList, setShowList] = useState<
+    "myPostList" | "matchedList" | "finishedPost"
+  >("matchedList");
 
   /**
    * graphql hooks .etc
    */
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
-  const [completePostMutation] = useCompletePostMutation();
   const { refetch: refetchMe } = useFetchMeQuery();
 
   /**
@@ -64,16 +62,6 @@ export const HomePage = () => {
     }
   }, [deletePost, selectedId, setOpenDeleteModal]);
 
-  const handleCompletePost = useCallback(() => {
-    if (completedId !== undefined) {
-      completePostMutation({
-        variables: {
-          postId: completedId,
-        },
-      });
-    }
-  }, [completedId, completePostMutation]);
-
   useEffect(() => {
     refetchCurrentCommunity();
     refetchMe();
@@ -84,42 +72,43 @@ export const HomePage = () => {
       <Box sx={{ width: "60%" }}>
         <HomeTitleToggle showList={showList} setShowList={setShowList} />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {showList === "matchedList"
-            ? matchedPosts &&
-              matchedPosts.map(
-                ({ id, title, content, languages, name, githubLogin }) => (
-                  <PostCard
-                    key={id}
-                    title={title}
-                    content={content}
-                    languages={languages}
-                    name={name}
-                    githubLogin={githubLogin}
-                    onComplete={() => {
-                      setOpenCompleteModal.on();
-                      setCompletedId(id);
-                    }}
-                    onClick={() => {
-                      setOpenPostModal.on();
-                      setSelectedId(id);
-                    }}
-                  />
-                )
-              )
-            : myPosts &&
-              myPosts.map(({ id, title, content, languages }) => (
-                <MyPostCard
+          {showList === "matchedList" &&
+            matchedPosts &&
+            matchedPosts.map(
+              ({ id, title, content, languages, name, githubLogin }) => (
+                <PostCard
                   key={id}
                   title={title}
                   content={content}
                   languages={languages}
-                  onEdit={() => goToEditPost(id)}
-                  onDelete={() => {
+                  name={name}
+                  githubLogin={githubLogin}
+                  onComplete={() => {
+                    setOpenCompleteModal.on();
+                    setCompletedId(id);
+                  }}
+                  onClick={() => {
+                    setOpenPostModal.on();
                     setSelectedId(id);
-                    setOpenDeleteModal.on();
                   }}
                 />
-              ))}
+              )
+            )}
+          {showList === "myPostList" &&
+            myPosts &&
+            myPosts.map(({ id, title, content, languages }) => (
+              <MyPostCard
+                key={id}
+                title={title}
+                content={content}
+                languages={languages}
+                onEdit={() => goToEditPost(id)}
+                onDelete={() => {
+                  setSelectedId(id);
+                  setOpenDeleteModal.on();
+                }}
+              />
+            ))}
         </Box>
       </Box>
       <Box sx={{ width: "40%", ml: "60px", height: "100%" }}>
@@ -212,7 +201,7 @@ export const HomePage = () => {
             onAgree={() => {
               if (completedId !== undefined) {
                 completePost(completedId);
-                setOpenCompleteModal.off()
+                setOpenCompleteModal.off();
               }
             }}
             onCancel={setOpenCompleteModal.off}
