@@ -167,6 +167,7 @@ export interface NexusGenFieldTypes {
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     myCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
+    myCompletedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -262,6 +263,7 @@ export interface NexusGenFieldTypeNames {
     feed: 'Post'
     messagesByPostId: 'Message'
     myCommunities: 'Community'
+    myCompletedPosts: 'Post'
     myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'

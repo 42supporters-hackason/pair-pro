@@ -167,6 +167,24 @@ export const PostQuery = extendType({
         });
       },
     });
+
+    t.nonNull.list.nonNull.field("myCompletedPosts", {
+      type: "Post",
+      resolve(parent, args, context) {
+        const { profileId } = context;
+        if (!profileId) {
+          throw new Error("You have to log in");
+        }
+        return context.prisma.post.findMany({
+          where: {
+            OR: [{ navigatorId: profileId }, { driverId: profileId }],
+            navigatorId: { not: null },
+            driverId: { not: null },
+            completedAt: { not: null },
+          },
+        });
+      },
+    });
   },
 });
 
