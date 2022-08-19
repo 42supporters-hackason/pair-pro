@@ -61,6 +61,10 @@ export interface NexusGenObjects {
     id: number; // Int!
   }
   Mutation: {};
+  PairProgrammingCount: { // root type
+    count: number; // Int!
+    profile: NexusGenRootTypes['Profile']; // Profile!
+  }
   Post: { // root type
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -137,6 +141,10 @@ export interface NexusGenFieldTypes {
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
   }
+  PairProgrammingCount: { // field return type
+    count: number; // Int!
+    profile: NexusGenRootTypes['Profile']; // Profile!
+  }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -160,7 +168,9 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     ListDrivenSkills: NexusGenRootTypes['LearnedSkill'][]; // [LearnedSkill!]!
+    ListDriverPostsRanking: NexusGenRootTypes['PairProgrammingCount'][]; // [PairProgrammingCount!]!
     ListNavigatedSkills: NexusGenRootTypes['LearnedSkill'][]; // [LearnedSkill!]!
+    ListNavigatorPostsRanking: NexusGenRootTypes['PairProgrammingCount'][]; // [PairProgrammingCount!]!
     accessToken: NexusGenRootTypes['Video']; // Video!
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -231,6 +241,10 @@ export interface NexusGenFieldTypeNames {
     updateMyProfile: 'Profile'
     updatePost: 'Post'
   }
+  PairProgrammingCount: { // field return type name
+    count: 'Int'
+    profile: 'Profile'
+  }
   Post: { // field return type name
     completedAt: 'DateTime'
     createdAt: 'DateTime'
@@ -254,7 +268,9 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     ListDrivenSkills: 'LearnedSkill'
+    ListDriverPostsRanking: 'PairProgrammingCount'
     ListNavigatedSkills: 'LearnedSkill'
+    ListNavigatorPostsRanking: 'PairProgrammingCount'
     accessToken: 'Video'
     communities: 'Community'
     feed: 'Post'
