@@ -32,6 +32,7 @@ type Message {
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
+  completePairProgramming(postId: String!): Post!
   createCommunity(name: String!): Community!
   createMessage(content: String!, postId: String!): Message!
   deleteCommunity(communityId: String!): Community!
@@ -76,6 +77,7 @@ type Query {
   feed: [Post!]!
   messagesByPostId(postId: String!): [Message!]!
   myCommunities(skip: Int, take: Int): [Community!]!
+  myCompletedPosts: [Post!]!
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
