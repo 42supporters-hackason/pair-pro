@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import constate from "constate";
 import {
+  useExitCommunityMutation,
   useFetchCurrentCommunityLazyQuery,
   useFetchMeLazyQuery,
   useJoinCommunityMutation,
@@ -45,6 +46,7 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     const [fetchMe] = useFetchMeLazyQuery();
     const [joinCommunityMutation] = useJoinCommunityMutation();
     const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
+    const [exitCommunityMutation] = useExitCommunityMutation();
 
     const signIn = async (code?: string | null) => {
       if (code === null || code === undefined) {
@@ -63,6 +65,13 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
       }
     };
 
+    const logout = useCallback(() => {
+      tokenStorage.clear();
+      loginStatusStorage.save("unLogin");
+      setLoginStatus("unLogin");
+      goToLogin({ replace: true });
+    }, [goToLogin, setLoginStatus]);
+
     const joinCommunity = async (id: string) => {
       await joinCommunityMutation({
         variables: { communityId: id },
@@ -76,6 +85,25 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
         },
       });
     };
+
+    const changeCommunity = useCallback(() => {
+      setLoginStatus("authFinished");
+      loginStatusStorage.save("authFinished");
+      goToCommunity({ replace: true });
+    }, [goToCommunity, setLoginStatus]);
+
+    const exitCommunity = useCallback(() => {
+      exitCommunityMutation({
+        onCompleted: (data) => {
+          if (data.deleteMyProfile?.token) {
+            tokenStorage.save(data.deleteMyProfile.token);
+          }
+          setLoginStatus("authFinished");
+          loginStatusStorage.save("authFinished");
+          goToCommunity({ replace: true });
+        },
+      });
+    }, [exitCommunityMutation, goToCommunity, setLoginStatus]);
 
     const updateMatchingPoint = useCallback(async () => {
       await fetchMe({
@@ -114,14 +142,27 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
       joinCommunity,
       fetchMyProfile,
       setCommunityName,
+      logout,
+      exitCommunity,
+      changeCommunity,
       matchingPoint,
       communityName,
     };
   },
-  ({ signIn, loginStatus, setLoginStatus }) => ({
+  ({
     signIn,
     loginStatus,
     setLoginStatus,
+    logout,
+    exitCommunity,
+    changeCommunity,
+  }) => ({
+    signIn,
+    loginStatus,
+    setLoginStatus,
+    logout,
+    exitCommunity,
+    changeCommunity,
   }),
   ({
     profile,

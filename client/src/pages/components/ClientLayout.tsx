@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Box, Checkbox, Modal, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
@@ -6,14 +6,10 @@ import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
 import { useAuth, useProfile } from "../../context/auth";
 import {
-  useExitCommunityMutation,
   useFetchCurrentCommunityLazyQuery,
   useFetchMeLazyQuery,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
-import { usePublicRoute } from "../../hooks/usePublicRoute";
-import { loginStatusStorage } from "../../utils/local-storage/login_status";
-import { tokenStorage } from "../../utils/local-storage/token";
 
 /**
  * Client画面共通のLayout
@@ -22,55 +18,39 @@ export const ClientLayout = () => {
   /**
    * misc.
    */
+  /**
+   * modal state
+   */
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
   const [confirmExit, setConfirmExit] = useBoolean(true);
   const [openChangeCommunityModal, setOpenChangeCommunityModal] =
     useBoolean(false);
   const [openExitCommunityModal, setOpenExitCommunityModal] = useBoolean(false);
+
+  /**
+   * state
+   */
   const [communityName, setCommunityName] = useState<string>();
   const [matchingPoint, setMatchingPoint] = useState<number>();
   const [githubLogin, setGithubLogin] = useState<string>();
-  const { setLoginStatus } = useAuth();
 
+  /**
+   * hooks
+   */
+  const { logout, changeCommunity, exitCommunity } = useAuth();
   const { setProfile } = useProfile();
-  const { goToLogin, goToCommunity } = usePublicRoute();
+
+  /**
+   * graphql hooks
+   */
+  const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
+  const [fetchMe] = useFetchMeLazyQuery();
+
   const menu = useClientHeaderMenu({
     onLogout: setOpenLogoutModal.on,
     onChangeCommunity: setOpenChangeCommunityModal.on,
     onExitCommunity: setOpenExitCommunityModal.on,
   });
-  const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
-  const [fetchMe] = useFetchMeLazyQuery();
-  const [exitCommunity] = useExitCommunityMutation();
-
-  /**
-   * event-handler
-   */
-  const handleLogout = useCallback(() => {
-    tokenStorage.clear();
-    loginStatusStorage.save("unLogin");
-    setLoginStatus("unLogin");
-    goToLogin({ replace: true });
-  }, [goToLogin, setLoginStatus]);
-
-  const handleChangeCommunity = useCallback(() => {
-    setLoginStatus("authFinished");
-    loginStatusStorage.save("authFinished");
-    goToCommunity({ replace: true });
-  }, [goToCommunity, setLoginStatus]);
-
-  const handleExitCommunity = useCallback(() => {
-    exitCommunity({
-      onCompleted: (data) => {
-        if (data.deleteMyProfile?.token) {
-          tokenStorage.save(data.deleteMyProfile.token);
-        }
-        setLoginStatus("authFinished");
-        loginStatusStorage.save("authFinished");
-        goToCommunity({ replace: true });
-      },
-    });
-  }, [exitCommunity, goToCommunity, setLoginStatus]);
 
   useEffect(() => {
     if (communityName === undefined) {
@@ -128,7 +108,7 @@ export const ClientLayout = () => {
         sx={{ top: "40%", mx: "auto", width: "600px" }}
       >
         <Box>
-          <AgreeModal onAgree={handleLogout} onCancel={setOpenLogoutModal.off}>
+          <AgreeModal onAgree={logout} onCancel={setOpenLogoutModal.off}>
             ログアウトしますか？
           </AgreeModal>
         </Box>
@@ -140,7 +120,7 @@ export const ClientLayout = () => {
       >
         <Box>
           <AgreeModal
-            onAgree={handleChangeCommunity}
+            onAgree={changeCommunity}
             onCancel={setOpenChangeCommunityModal.off}
           >
             コミュニティを変更しますか？
@@ -154,7 +134,7 @@ export const ClientLayout = () => {
       >
         <Box>
           <AgreeModal
-            onAgree={handleExitCommunity}
+            onAgree={exitCommunity}
             onCancel={setOpenExitCommunityModal.off}
             disabled={confirmExit}
           >
