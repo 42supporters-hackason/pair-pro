@@ -310,6 +310,7 @@ export const PostMutation = extendType({
         // check if the post exists
         const post = await context.prisma.post.findUnique({
           where: { id: postId },
+          include: { driver: true }
         });
         if (!post) {
           throw new Error("There is no such post");
@@ -329,7 +330,7 @@ export const PostMutation = extendType({
         }
 
         // check if the navigator belongs to the same community
-        if (navigator.communityId != communityId) {
+        if (post.driver?.communityId != communityId) {
           throw new Error("Navigator does not belong to the same community");
         }
 
