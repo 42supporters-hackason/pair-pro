@@ -380,6 +380,7 @@ export interface NexusGenArgTypes {
     }
     unmatchedPosts: { // args
       driverNameFilter?: string | null; // String
+      keywordFilter?: string | null; // String
       requiredSkillsFilter?: number | null; // Int
       skip?: number | null; // Int
       take?: number | null; // Int

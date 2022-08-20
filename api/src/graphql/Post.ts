@@ -85,12 +85,19 @@ export const PostQuery = extendType({
       args: {
         driverNameFilter: stringArg(),
         requiredSkillsFilter: intArg(),
+        keywordFilter: stringArg(),
         skip: intArg(),
         take: intArg(),
       },
       async resolve(parent, args, context) {
         const { profileId, communityId } = context;
-        const { driverNameFilter, requiredSkillsFilter, skip, take } = args;
+        const {
+          driverNameFilter,
+          requiredSkillsFilter,
+          keywordFilter,
+          skip,
+          take,
+        } = args;
         if (!profileId || !communityId) {
           throw new Error("You have to be in community");
         }
@@ -128,6 +135,12 @@ export const PostQuery = extendType({
               },
             },
           };
+        }
+        if (keywordFilter) {
+          where.OR = [
+            { title: { contains: keywordFilter } },
+            { description: { contains: keywordFilter } },
+          ];
         }
 
         const posts = await context.prisma.post.findMany({

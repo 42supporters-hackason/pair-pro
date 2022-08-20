@@ -94,7 +94,7 @@ type Query {
   profile(id: Int!): Profile
   profiles: [Profile!]!
   skills: [Skill!]!
-  unmatchedPosts(driverNameFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): PaginatedPosts!
+  unmatchedPosts(driverNameFilter: String, keywordFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): PaginatedPosts!
 }
 
 type Skill {
