@@ -24,6 +24,7 @@ import {
 } from "../validation/recruit_filter_validation";
 
 const TAKE_PAGINATION = 10;
+const DEFAULT_PAGE_NUMBER = 0;
 
 interface FilterProps {
   /**
@@ -49,7 +50,7 @@ export const RecruitPage = () => {
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<string | undefined>();
-  const [pagination, setPagination] = useState<number>(0);
+  const [pagination, setPagination] = useState<number>(DEFAULT_PAGE_NUMBER);
   const { goToHome } = useClientRoute();
   const { profile } = useProfile();
   const [filterState, setFilterState] = useState<FilterProps>();
@@ -71,7 +72,7 @@ export const RecruitPage = () => {
     requiredSkillsFilter: filterState?.requiredSkillsFilter,
     keywordFilter: filterState?.keywordFilter,
     take: TAKE_PAGINATION,
-    skip: pagination,
+    skip: pagination !== 0 ? (pagination - 1) * TAKE_PAGINATION : 0,
   });
 
   /**
