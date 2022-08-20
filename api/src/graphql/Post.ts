@@ -51,6 +51,14 @@ export const Post = objectType({
   },
 });
 
+export const PaginatedPosts = objectType({
+  name: "PaginatedPosts",
+  definition(t) {
+    t.nonNull.list.nonNull.field("posts", { type: Post });
+    t.nonNull.int("count");
+  },
+});
+
 export const PostQuery = extendType({
   type: "Query",
   definition(t) {
@@ -72,8 +80,8 @@ export const PostQuery = extendType({
         });
       },
     });
-    t.nonNull.list.nonNull.field("unmatchedPosts", {
-      type: "Post",
+    t.nonNull.field("unmatchedPosts", {
+      type: "PaginatedPosts",
       args: {
         driverNameFilter: stringArg(),
         requiredSkillsFilter: intArg(),
@@ -122,11 +130,14 @@ export const PostQuery = extendType({
           };
         }
 
-        return context.prisma.post.findMany({
+        const posts = await context.prisma.post.findMany({
           where,
           skip: skip as number | undefined,
           take: take as number | undefined,
         });
+        const count = await context.prisma.post.count({ where });
+
+        return { posts, count };
       },
     });
     t.nonNull.list.nonNull.field("myDrivingPosts", {

@@ -65,6 +65,10 @@ export interface NexusGenObjects {
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     count: number; // Int!
   }
+  PaginatedPosts: { // root type
+    count: number; // Int!
+    posts: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
   Post: { // root type
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -145,6 +149,10 @@ export interface NexusGenFieldTypes {
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     count: number; // Int!
   }
+  PaginatedPosts: { // field return type
+    count: number; // Int!
+    posts: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -182,7 +190,7 @@ export interface NexusGenFieldTypes {
     profile: NexusGenRootTypes['Profile'] | null; // Profile
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
-    unmatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    unmatchedPosts: NexusGenRootTypes['PaginatedPosts']; // PaginatedPosts!
   }
   Skill: { // field return type
     category: string | null; // String
@@ -243,6 +251,10 @@ export interface NexusGenFieldTypeNames {
     communities: 'Community'
     count: 'Int'
   }
+  PaginatedPosts: { // field return type name
+    count: 'Int'
+    posts: 'Post'
+  }
   Post: { // field return type name
     completedAt: 'DateTime'
     createdAt: 'DateTime'
@@ -280,7 +292,7 @@ export interface NexusGenFieldTypeNames {
     profile: 'Profile'
     profiles: 'Profile'
     skills: 'Skill'
-    unmatchedPosts: 'Post'
+    unmatchedPosts: 'PaginatedPosts'
   }
   Skill: { // field return type name
     category: 'String'

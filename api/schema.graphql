@@ -50,6 +50,11 @@ type PaginatedCommunities {
   count: Int!
 }
 
+type PaginatedPosts {
+  count: Int!
+  posts: [Post!]!
+}
+
 type Post {
   completedAt: DateTime
   createdAt: DateTime!
@@ -89,7 +94,7 @@ type Query {
   profile(id: Int!): Profile
   profiles: [Profile!]!
   skills: [Skill!]!
-  unmatchedPosts(driverNameFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): [Post!]!
+  unmatchedPosts(driverNameFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): PaginatedPosts!
 }
 
 type Skill {
