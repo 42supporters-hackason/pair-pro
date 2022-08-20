@@ -45,14 +45,14 @@ type Mutation {
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
-type PaginatedCommunities {
-  communities: [Community!]!
-  count: Int!
-}
-
 type PaginatedPosts {
   count: Int!
   posts: [Post!]!
+}
+
+type PaginatedProfiles {
+  count: Int!
+  profiles: [Profile!]!
 }
 
 type Post {
@@ -85,7 +85,7 @@ type Query {
   communities: [Community!]!
   feed: [Post!]!
   messagesByPostId(postId: String!): [Message!]!
-  myCommunities(skip: Int, take: Int): PaginatedCommunities!
+  myCommunities: [Community!]!
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
@@ -93,6 +93,7 @@ type Query {
   post(id: String!): Post
   profile(id: Int!): Profile
   profiles: [Profile!]!
+  profilesInMyCommunity(skip: Int, take: Int): PaginatedProfiles!
   skills: [Skill!]!
   unmatchedPosts(driverNameFilter: String, keywordFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): PaginatedPosts!
 }

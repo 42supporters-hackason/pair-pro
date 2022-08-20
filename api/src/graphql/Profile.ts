@@ -55,6 +55,14 @@ export const ProfileObject = objectType({
   },
 });
 
+export const PaginatedProfilesObject = objectType({
+  name: "PaginatedProfiles",
+  definition(t) {
+    t.nonNull.list.nonNull.field("profiles", { type: ProfileObject });
+    t.nonNull.int("count");
+  },
+});
+
 export const ProfileQuery = extendType({
   type: "Query",
   definition(t) {
@@ -89,6 +97,30 @@ export const ProfileQuery = extendType({
           where: { id: profileId },
         });
         return profile as Profile;
+      },
+    });
+    t.nonNull.field("profilesInMyCommunity", {
+      type: "PaginatedProfiles",
+      args: {
+        skip: intArg(),
+        take: intArg(),
+      },
+      async resolve(parent, args, context) {
+        const { communityId } = context;
+        const { skip, take } = args;
+        if (!communityId) {
+          throw new Error("You have to log in");
+        }
+        const profiles = await context.prisma.profile.findMany({
+          where: { communityId },
+          skip: skip as number | undefined,
+          take: take as number | undefined,
+        });
+        const count = await context.prisma.profile.count({
+          where: { communityId },
+        });
+
+        return {profiles, count}
       },
     });
   },
