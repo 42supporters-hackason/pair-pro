@@ -74,6 +74,7 @@ export const HomePage = () => {
                       setOpenPostModal.on();
                       setSelectedId(id);
                     }}
+                    languagesData={languagesData ?? []}
                   />
                 )
               )

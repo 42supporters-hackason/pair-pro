@@ -139,6 +139,7 @@ export const RecruitPage = () => {
                   setOpenPostModal.on();
                   setSelectedId(id);
                 }}
+                languagesData={languagesData ?? []}
               />
             ))}
         </Box>

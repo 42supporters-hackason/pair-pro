@@ -157,17 +157,27 @@ export const ProfileCard = ({
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
                         key={language}
                       >
-                        <Typography fontWeight="bold" variant="h6">
-                          {language}
-                        </Typography>
-                        <Box
-                          component="img"
-                          src={
-                            languagesData.find(({ name }) => name === language)
-                              ?.imageUrl ?? ""
-                          }
-                          sx={{ width: "40px", height: "40px" }}
-                        />
+                        {languagesData.find(({ name }) => name === language)
+                          ?.imageUrl ? (
+                          <>
+                            <Box
+                              component="img"
+                              src={
+                                languagesData.find(
+                                  ({ name }) => name === language
+                                )?.imageUrl ?? ""
+                              }
+                              sx={{ width: "50px", height: "50px" }}
+                            />
+                            <Typography
+                              sx={{ fontSize: "6px", mt: "auto", mb: "10px" }}
+                            >
+                              {language}
+                            </Typography>
+                          </>
+                        ) : (
+                          <Typography variant="h6">{language}</Typography>
+                        )}
                       </Box>
                     );
                   })}

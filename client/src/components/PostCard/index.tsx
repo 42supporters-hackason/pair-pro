@@ -10,6 +10,11 @@ import {
 } from "@mui/material";
 import Card from "@mui/material/Card";
 
+interface LanguagesDataType {
+  name: string;
+  imageUrl?: string | null;
+}
+
 export interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
    * タイトル
@@ -31,6 +36,10 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
    * githubLogin
    */
   githubLogin?: string;
+  /**
+   * 言語のデータ
+   */
+  languagesData: LanguagesDataType[];
   sx?: SxProps<Theme>;
 }
 
@@ -43,6 +52,7 @@ export const PostCard = ({
   languages,
   name,
   githubLogin,
+  languagesData,
   ...props
 }: Props) => {
   return (
@@ -65,9 +75,36 @@ export const PostCard = ({
                   <Typography variant="subtitle1">使用言語</Typography>
                   {languages &&
                     languages.map((language) => (
-                      <Typography variant="h6" key={language}>
-                        {language}
-                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1px",
+                        }}
+                        key={language}
+                      >
+                        {languagesData.find(({ name }) => name === language)
+                          ?.imageUrl ? (
+                          <>
+                            <Box
+                              component="img"
+                              src={
+                                languagesData.find(
+                                  ({ name }) => name === language
+                                )?.imageUrl ?? ""
+                              }
+                              sx={{ width: "50px", height: "50px" }}
+                            />
+                            <Typography
+                              sx={{ fontSize: "6px", mt: "auto", mb: "10px" }}
+                            >
+                              {language}
+                            </Typography>
+                          </>
+                        ) : (
+                          <Typography variant="h6">{language}</Typography>
+                        )}
+                      </Box>
                     ))}
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
