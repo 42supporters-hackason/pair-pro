@@ -11,7 +11,7 @@ import {
 import { useClientRoute } from "../../hooks/useClientRoute";
 
 const postsTranslator = (posts: FetchUnmatchedPostQuery) =>
-  posts.unmatchedPosts.map((post) => ({
+  posts.unmatchedPosts.posts.map((post) => ({
     id: post?.id,
     title: post?.title,
     content: post?.description,

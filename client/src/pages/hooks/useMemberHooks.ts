@@ -6,8 +6,9 @@ import { useFetchCurrentCommunityQuery } from "../../gen/graphql-client";
 export const useMemberHooks = () => {
   const { data: currentCommunityData } = useFetchCurrentCommunityQuery();
   const communityName = currentCommunityData?.myCurrentCommunity?.name;
-  const communityMember = currentCommunityData?.myCurrentCommunity?.profiles;
   const communityId = currentCommunityData?.myCurrentCommunity?.id;
+  const communityMember = currentCommunityData?.profilesInMyCommunity.profiles;
+  const paginationCount = currentCommunityData?.profilesInMyCommunity.count;
 
-  return { communityName, communityMember, communityId };
+  return { communityName, communityMember, communityId, paginationCount };
 };

@@ -27,31 +27,36 @@ export const FETCH_UNMATCHED_POST = gql`
   query fetchUnmatchedPost(
     $driverNameFilter: String
     $requiredSkillsFilter: Int
+    $keywordFilter: String
     $skip: Int
     $take: Int
   ) {
     unmatchedPosts(
       driverNameFilter: $driverNameFilter
       requiredSkillsFilter: $requiredSkillsFilter
+      keywordFilter: $keywordFilter
       skip: $skip
       take: $take
     ) {
-      id
-      description
-      title
-      driver {
+      posts {
         id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
+        description
+        title
+        driver {
+          id
+          name
+          matchingPoint
+          bio
+          user {
+            githubLogin
+          }
+        }
+        requiredSkills {
+          id
+          name
         }
       }
-      requiredSkills {
-        id
-        name
-      }
+      count
     }
   }
 `;
@@ -193,10 +198,21 @@ export const FETCH_MY_COMMUNITIES = gql`
 `;
 
 export const FETCH_CURRENT_COMMUNITY = gql`
-  query fetchCurrentCommunity {
+  query fetchCurrentCommunity($skip: Int, $take: Int) {
     myCurrentCommunity {
       id
       name
+      profiles {
+        id
+        name
+        bio
+        user {
+          githubLogin
+        }
+      }
+    }
+    profilesInMyCommunity(skip: $skip, take: $take) {
+      count
       profiles {
         id
         name

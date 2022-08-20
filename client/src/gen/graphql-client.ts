@@ -124,6 +124,18 @@ export type MutationUpdatePostArgs = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export type PaginatedPosts = {
+  __typename?: 'PaginatedPosts';
+  count: Scalars['Int'];
+  posts: Array<Post>;
+};
+
+export type PaginatedProfiles = {
+  __typename?: 'PaginatedProfiles';
+  count: Scalars['Int'];
+  profiles: Array<Profile>;
+};
+
 export type Post = {
   __typename?: 'Post';
   completedAt?: Maybe<Scalars['DateTime']>;
@@ -165,8 +177,9 @@ export type Query = {
   post?: Maybe<Post>;
   profile?: Maybe<Profile>;
   profiles: Array<Profile>;
+  profilesInMyCommunity: PaginatedProfiles;
   skills: Array<Skill>;
-  unmatchedPosts: Array<Post>;
+  unmatchedPosts: PaginatedPosts;
 };
 
 
@@ -181,12 +194,6 @@ export type QueryMessagesByPostIdArgs = {
 };
 
 
-export type QueryMyCommunitiesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-};
-
-
 export type QueryPostArgs = {
   id: Scalars['String'];
 };
@@ -197,8 +204,15 @@ export type QueryProfileArgs = {
 };
 
 
+export type QueryProfilesInMyCommunityArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryUnmatchedPostsArgs = {
   driverNameFilter?: InputMaybe<Scalars['String']>;
+  keywordFilter?: InputMaybe<Scalars['String']>;
   requiredSkillsFilter?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -328,12 +342,13 @@ export type GetVideoAccessTokenQuery = { __typename?: 'Query', accessToken: { __
 export type FetchUnmatchedPostQueryVariables = Exact<{
   driverNameFilter?: InputMaybe<Scalars['String']>;
   requiredSkillsFilter?: InputMaybe<Scalars['Int']>;
+  keywordFilter?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: { __typename?: 'PaginatedPosts', count: number, posts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> } };
 
 export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -369,10 +384,13 @@ export type FetchMyCommunitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchMyCommunitiesQuery = { __typename?: 'Query', myCommunities: Array<{ __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> }> };
 
-export type FetchCurrentCommunityQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchCurrentCommunityQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null };
+export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null, profilesInMyCommunity: { __typename?: 'PaginatedProfiles', count: number, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } };
 
 export type FetchMessageSubscriptionVariables = Exact<{
   postId: Scalars['String'];
@@ -845,29 +863,33 @@ export type GetVideoAccessTokenQueryHookResult = ReturnType<typeof useGetVideoAc
 export type GetVideoAccessTokenLazyQueryHookResult = ReturnType<typeof useGetVideoAccessTokenLazyQuery>;
 export type GetVideoAccessTokenQueryResult = Apollo.QueryResult<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>;
 export const FetchUnmatchedPostDocument = gql`
-    query fetchUnmatchedPost($driverNameFilter: String, $requiredSkillsFilter: Int, $skip: Int, $take: Int) {
+    query fetchUnmatchedPost($driverNameFilter: String, $requiredSkillsFilter: Int, $keywordFilter: String, $skip: Int, $take: Int) {
   unmatchedPosts(
     driverNameFilter: $driverNameFilter
     requiredSkillsFilter: $requiredSkillsFilter
+    keywordFilter: $keywordFilter
     skip: $skip
     take: $take
   ) {
-    id
-    description
-    title
-    driver {
+    posts {
       id
-      name
-      matchingPoint
-      bio
-      user {
-        githubLogin
+      description
+      title
+      driver {
+        id
+        name
+        matchingPoint
+        bio
+        user {
+          githubLogin
+        }
+      }
+      requiredSkills {
+        id
+        name
       }
     }
-    requiredSkills {
-      id
-      name
-    }
+    count
   }
 }
     `;
@@ -886,6 +908,7 @@ export const FetchUnmatchedPostDocument = gql`
  *   variables: {
  *      driverNameFilter: // value for 'driverNameFilter'
  *      requiredSkillsFilter: // value for 'requiredSkillsFilter'
+ *      keywordFilter: // value for 'keywordFilter'
  *      skip: // value for 'skip'
  *      take: // value for 'take'
  *   },
@@ -1188,10 +1211,21 @@ export type FetchMyCommunitiesQueryHookResult = ReturnType<typeof useFetchMyComm
 export type FetchMyCommunitiesLazyQueryHookResult = ReturnType<typeof useFetchMyCommunitiesLazyQuery>;
 export type FetchMyCommunitiesQueryResult = Apollo.QueryResult<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>;
 export const FetchCurrentCommunityDocument = gql`
-    query fetchCurrentCommunity {
+    query fetchCurrentCommunity($skip: Int, $take: Int) {
   myCurrentCommunity {
     id
     name
+    profiles {
+      id
+      name
+      bio
+      user {
+        githubLogin
+      }
+    }
+  }
+  profilesInMyCommunity(skip: $skip, take: $take) {
+    count
     profiles {
       id
       name
@@ -1216,6 +1250,8 @@ export const FetchCurrentCommunityDocument = gql`
  * @example
  * const { data, loading, error } = useFetchCurrentCommunityQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */
