@@ -20,6 +20,14 @@ export const Community = objectType({
   },
 });
 
+export const PaginatedCommunities = objectType({
+  name: "PaginatedCommunities",
+  definition(t) {
+    t.nonNull.list.nonNull.field("communities", { type: Community });
+    t.nonNull.int("count");
+  },
+});
+
 export const CommunityQuery = extendType({
   type: "Query",
   definition(t) {
@@ -32,8 +40,8 @@ export const CommunityQuery = extendType({
     });
 
     // List communities that user has
-    t.nonNull.list.nonNull.field("myCommunities", {
-      type: "Community",
+    t.nonNull.field("myCommunities", {
+      type: "PaginatedCommunities",
       args: {
         skip: intArg(),
         take: intArg(),
@@ -51,8 +59,13 @@ export const CommunityQuery = extendType({
           skip: skip as number | undefined,
           take: take as number | undefined,
         });
+        const communities = profiles.map((profile) => profile.community);
+        const count = await context.prisma.profile.count({ where: { userId } });
 
-        return profiles.map((profile) => profile.community);
+        return {
+          communities,
+          count,
+        };
       },
     });
 

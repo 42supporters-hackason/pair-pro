@@ -61,6 +61,10 @@ export interface NexusGenObjects {
     id: number; // Int!
   }
   Mutation: {};
+  PaginatedCommunities: { // root type
+    communities: NexusGenRootTypes['Community'][]; // [Community!]!
+    count: number; // Int!
+  }
   Post: { // root type
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -137,6 +141,10 @@ export interface NexusGenFieldTypes {
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
   }
+  PaginatedCommunities: { // field return type
+    communities: NexusGenRootTypes['Community'][]; // [Community!]!
+    count: number; // Int!
+  }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -165,7 +173,7 @@ export interface NexusGenFieldTypes {
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
-    myCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
+    myCommunities: NexusGenRootTypes['PaginatedCommunities']; // PaginatedCommunities!
     myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -231,6 +239,10 @@ export interface NexusGenFieldTypeNames {
     updateMyProfile: 'Profile'
     updatePost: 'Post'
   }
+  PaginatedCommunities: { // field return type name
+    communities: 'Community'
+    count: 'Int'
+  }
   Post: { // field return type name
     completedAt: 'DateTime'
     createdAt: 'DateTime'
@@ -259,7 +271,7 @@ export interface NexusGenFieldTypeNames {
     communities: 'Community'
     feed: 'Post'
     messagesByPostId: 'Message'
-    myCommunities: 'Community'
+    myCommunities: 'PaginatedCommunities'
     myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'

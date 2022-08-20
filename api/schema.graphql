@@ -45,6 +45,11 @@ type Mutation {
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
+type PaginatedCommunities {
+  communities: [Community!]!
+  count: Int!
+}
+
 type Post {
   completedAt: DateTime
   createdAt: DateTime!
@@ -75,7 +80,7 @@ type Query {
   communities: [Community!]!
   feed: [Post!]!
   messagesByPostId(postId: String!): [Message!]!
-  myCommunities(skip: Int, take: Int): [Community!]!
+  myCommunities(skip: Int, take: Int): PaginatedCommunities!
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
