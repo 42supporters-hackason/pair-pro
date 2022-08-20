@@ -6,6 +6,7 @@ import {
   useFetchMatchedPostQuery,
   useFetchMeQuery,
   useFetchMyPostQuery,
+  useFetchSkillsQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
 
@@ -56,6 +57,13 @@ export const useHomeHooks = () => {
    */
   const { updateMatchingPoint } = useProfile();
   const [deletePostMutation] = useDeletePostMutation();
+  const { data: fetchLanguagesData } = useFetchSkillsQuery();
+  const languagesData = fetchLanguagesData?.skills.map(
+    ({ name, imageUrl }) => ({
+      name,
+      imageUrl,
+    })
+  );
 
   /**
    * 自分自身のプロフィールを取得
@@ -111,5 +119,6 @@ export const useHomeHooks = () => {
     refetchMyPosts,
     deletePost,
     profile,
+    languagesData,
   };
 };

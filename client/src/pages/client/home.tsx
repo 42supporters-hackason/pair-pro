@@ -34,7 +34,8 @@ export const HomePage = () => {
   /**
    * page hooks
    */
-  const { profile, myPosts, matchedPosts, deletePost } = useHomeHooks();
+  const { profile, myPosts, matchedPosts, deletePost, languagesData } =
+    useHomeHooks();
 
   /**
    * event-handler
@@ -154,6 +155,7 @@ export const HomePage = () => {
               agreeTitle="チャットルームに移動する"
               onAgree={() => goToChat(selectedId)}
               onClose={setOpenPostModal.off}
+              languagesData={languagesData ?? []}
             />
           )}
         </Box>

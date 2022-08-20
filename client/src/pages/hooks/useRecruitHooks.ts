@@ -43,6 +43,10 @@ export const useRecruitHooks = () => {
    */
   const { data: skillsData } = useFetchSkillsQuery();
   const languages = skillsData?.skills.map(({ name }) => name);
+  const languagesData = skillsData?.skills.map(({ name, imageUrl }) => ({
+    name,
+    imageUrl,
+  }));
 
   /**
    * マッチングしていないPOST一覧
@@ -79,5 +83,5 @@ export const useRecruitHooks = () => {
     ]
   );
 
-  return { posts, languages, matchPost };
+  return { posts, languages, matchPost, languagesData };
 };

@@ -1,16 +1,10 @@
-import { gql } from "@apollo/client";
-import * as Apollo from "@apollo/client";
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -24,28 +18,34 @@ export type Scalars = {
 };
 
 export type AuthPayLoad = {
-  __typename?: "AuthPayLoad";
-  token: Scalars["String"];
+  __typename?: 'AuthPayLoad';
+  token: Scalars['String'];
   user: User;
 };
 
 export type Community = {
-  __typename?: "Community";
-  id: Scalars["String"];
-  name: Scalars["String"];
+  __typename?: 'Community';
+  id: Scalars['String'];
+  name: Scalars['String'];
   profiles: Array<Profile>;
 };
 
+export type LearnedSkill = {
+  __typename?: 'LearnedSkill';
+  count: Scalars['Int'];
+  skill: Skill;
+};
+
 export type Message = {
-  __typename?: "Message";
-  content: Scalars["String"];
+  __typename?: 'Message';
+  content: Scalars['String'];
   createdBy: Profile;
-  id: Scalars["Int"];
+  id: Scalars['Int'];
   post: Post;
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   authGithub: AuthPayLoad;
   createCommunity: Community;
   createMessage: Message;
@@ -60,86 +60,99 @@ export type Mutation = {
   updatePost: Post;
 };
 
+
 export type MutationAuthGithubArgs = {
-  code: Scalars["String"];
+  code: Scalars['String'];
 };
+
 
 export type MutationCreateCommunityArgs = {
-  name: Scalars["String"];
+  name: Scalars['String'];
 };
+
 
 export type MutationCreateMessageArgs = {
-  content: Scalars["String"];
-  postId: Scalars["String"];
+  content: Scalars['String'];
+  postId: Scalars['String'];
 };
+
 
 export type MutationDeleteCommunityArgs = {
-  communityId: Scalars["String"];
+  communityId: Scalars['String'];
 };
+
 
 export type MutationDeletePostArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type MutationJoinCommunityArgs = {
-  communityId: Scalars["String"];
+  communityId: Scalars['String'];
 };
+
 
 export type MutationPostArgs = {
-  description: Scalars["String"];
-  requiredSkillsId: Array<Scalars["Int"]>;
-  title: Scalars["String"];
+  description: Scalars['String'];
+  requiredSkillsId: Array<Scalars['Int']>;
+  title: Scalars['String'];
 };
+
 
 export type MutationRegisterNavigatorArgs = {
-  navigatorId: Scalars["Int"];
-  postId: Scalars["String"];
+  navigatorId: Scalars['Int'];
+  postId: Scalars['String'];
 };
+
 
 export type MutationUpdateCommunityArgs = {
-  id: Scalars["String"];
-  name: Scalars["String"];
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
+
 
 export type MutationUpdateMyProfileArgs = {
-  bio?: InputMaybe<Scalars["String"]>;
-  name?: InputMaybe<Scalars["String"]>;
+  bio?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
+
 export type MutationUpdatePostArgs = {
-  description?: InputMaybe<Scalars["String"]>;
-  id: Scalars["String"];
-  requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
-  title?: InputMaybe<Scalars["String"]>;
+  description?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type Post = {
-  __typename?: "Post";
-  completedAt?: Maybe<Scalars["DateTime"]>;
-  createdAt: Scalars["DateTime"];
-  description: Scalars["String"];
+  __typename?: 'Post';
+  completedAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
   driver?: Maybe<Profile>;
-  id: Scalars["String"];
+  id: Scalars['String'];
   messages: Array<Message>;
   navigator?: Maybe<Profile>;
   requiredSkills: Array<Skill>;
-  title: Scalars["String"];
+  title: Scalars['String'];
 };
 
 export type Profile = {
-  __typename?: "Profile";
-  bio: Scalars["String"];
+  __typename?: 'Profile';
+  bio: Scalars['String'];
   community: Community;
   driverPost: Array<Post>;
-  id: Scalars["Int"];
-  matchingPoint: Scalars["Int"];
-  name: Scalars["String"];
+  id: Scalars['Int'];
+  matchingPoint: Scalars['Int'];
+  name: Scalars['String'];
   navigatorPost: Array<Post>;
   user: User;
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
+  ListDrivenSkills: Array<LearnedSkill>;
+  ListNavigatedSkills: Array<LearnedSkill>;
   accessToken: Video;
   communities: Array<Community>;
   feed: Array<Post>;
@@ -153,436 +166,235 @@ export type Query = {
   profile?: Maybe<Profile>;
   profiles: Array<Profile>;
   skills: Array<Skill>;
-  unmatchedPosts: Array<Maybe<Post>>;
+  unmatchedPosts: Array<Post>;
 };
+
 
 export type QueryAccessTokenArgs = {
-  identity?: InputMaybe<Scalars["String"]>;
-  room?: InputMaybe<Scalars["String"]>;
+  identity?: InputMaybe<Scalars['String']>;
+  room?: InputMaybe<Scalars['String']>;
 };
+
 
 export type QueryMessagesByPostIdArgs = {
-  postId: Scalars["String"];
+  postId: Scalars['String'];
 };
+
+
+export type QueryMyCommunitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
 
 export type QueryPostArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
+
 export type QueryProfileArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
+};
+
+
+export type QueryUnmatchedPostsArgs = {
+  driverNameFilter?: InputMaybe<Scalars['String']>;
+  requiredSkillsFilter?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 export type Skill = {
-  __typename?: "Skill";
-  id: Scalars["Int"];
-  name: Scalars["String"];
+  __typename?: 'Skill';
+  category?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  imageUrl?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type Subscription = {
-  __typename?: "Subscription";
+  __typename?: 'Subscription';
   waitForMessage?: Maybe<Message>;
 };
 
+
 export type SubscriptionWaitForMessageArgs = {
-  postId: Scalars["String"];
+  postId: Scalars['String'];
 };
 
 export type User = {
-  __typename?: "User";
-  githubBio: Scalars["String"];
-  githubId: Scalars["String"];
-  githubLogin: Scalars["String"];
-  id: Scalars["Int"];
+  __typename?: 'User';
+  githubBio: Scalars['String'];
+  githubId: Scalars['String'];
+  githubLogin: Scalars['String'];
+  id: Scalars['Int'];
   profiles: Array<Profile>;
 };
 
 export type Video = {
-  __typename?: "Video";
-  accessToken: Scalars["String"];
+  __typename?: 'Video';
+  accessToken: Scalars['String'];
 };
 
 export type SignInMutationVariables = Exact<{
-  code: Scalars["String"];
+  code: Scalars['String'];
 }>;
 
-export type SignInMutation = {
-  __typename?: "Mutation";
-  authGithub: {
-    __typename?: "AuthPayLoad";
-    token: string;
-    user: {
-      __typename?: "User";
-      id: number;
-      githubLogin: string;
-      profiles: Array<{
-        __typename?: "Profile";
-        id: number;
-        name: string;
-        matchingPoint: number;
-        bio: string;
-      }>;
-    };
-  };
-};
+
+export type SignInMutation = { __typename?: 'Mutation', authGithub: { __typename?: 'AuthPayLoad', token: string, user: { __typename?: 'User', id: number, githubLogin: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string }> } } };
 
 export type UpdateProfileMutationVariables = Exact<{
-  name: Scalars["String"];
-  bio: Scalars["String"];
+  name: Scalars['String'];
+  bio: Scalars['String'];
 }>;
 
-export type UpdateProfileMutation = {
-  __typename?: "Mutation";
-  updateMyProfile?: {
-    __typename?: "Profile";
-    name: string;
-    bio: string;
-  } | null;
-};
+
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateMyProfile?: { __typename?: 'Profile', name: string, bio: string } | null };
 
 export type CreatePostMutationVariables = Exact<{
-  description: Scalars["String"];
-  title: Scalars["String"];
-  requiredSkillsId: Array<Scalars["Int"]> | Scalars["Int"];
+  description: Scalars['String'];
+  title: Scalars['String'];
+  requiredSkillsId: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
-export type CreatePostMutation = {
-  __typename?: "Mutation";
-  post: {
-    __typename?: "Post";
-    description: string;
-    title: string;
-    requiredSkills: Array<{ __typename?: "Skill"; id: number; name: string }>;
-    driver?: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    } | null;
-  };
-};
+
+export type CreatePostMutation = { __typename?: 'Mutation', post: { __typename?: 'Post', description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }>, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null } };
 
 export type DeletePostMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type DeletePostMutation = {
-  __typename?: "Mutation";
-  deletePost: { __typename?: "Post"; id: string };
-};
+
+export type DeletePostMutation = { __typename?: 'Mutation', deletePost: { __typename?: 'Post', id: string } };
 
 export type MatchPostMutationVariables = Exact<{
-  postId: Scalars["String"];
-  navigatorId: Scalars["Int"];
+  postId: Scalars['String'];
+  navigatorId: Scalars['Int'];
 }>;
 
-export type MatchPostMutation = {
-  __typename?: "Mutation";
-  registerNavigator: {
-    __typename?: "Post";
-    navigator?: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    } | null;
-  };
-};
+
+export type MatchPostMutation = { __typename?: 'Mutation', registerNavigator: { __typename?: 'Post', navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null } };
 
 export type UpdatePostMutationVariables = Exact<{
-  id: Scalars["String"];
-  title?: InputMaybe<Scalars["String"]>;
-  description?: InputMaybe<Scalars["String"]>;
-  requiredSkillsIds?: InputMaybe<
-    Array<InputMaybe<Scalars["Int"]>> | InputMaybe<Scalars["Int"]>
-  >;
+  id: Scalars['String'];
+  title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
 }>;
 
-export type UpdatePostMutation = {
-  __typename?: "Mutation";
-  updatePost: { __typename?: "Post"; id: string };
-};
+
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string } };
 
 export type SendMessageMutationVariables = Exact<{
-  postId: Scalars["String"];
-  content: Scalars["String"];
+  postId: Scalars['String'];
+  content: Scalars['String'];
 }>;
 
-export type SendMessageMutation = {
-  __typename?: "Mutation";
-  createMessage: { __typename?: "Message"; id: number; content: string };
-};
+
+export type SendMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string } };
 
 export type CreateCommunityMutationVariables = Exact<{
-  name: Scalars["String"];
+  name: Scalars['String'];
 }>;
 
-export type CreateCommunityMutation = {
-  __typename?: "Mutation";
-  createCommunity: { __typename?: "Community"; id: string; name: string };
-};
+
+export type CreateCommunityMutation = { __typename?: 'Mutation', createCommunity: { __typename?: 'Community', id: string, name: string } };
 
 export type JoinCommunityMutationVariables = Exact<{
-  communityId: Scalars["String"];
+  communityId: Scalars['String'];
 }>;
 
-export type JoinCommunityMutation = {
-  __typename?: "Mutation";
-  joinCommunity: {
-    __typename?: "AuthPayLoad";
-    token: string;
-    user: {
-      __typename?: "User";
-      id: number;
-      githubLogin: string;
-      profiles: Array<{
-        __typename?: "Profile";
-        id: number;
-        name: string;
-        matchingPoint: number;
-        bio: string;
-      }>;
-    };
-  };
-};
 
-export type ExitCommunityMutationVariables = Exact<{ [key: string]: never }>;
+export type JoinCommunityMutation = { __typename?: 'Mutation', joinCommunity: { __typename?: 'AuthPayLoad', token: string, user: { __typename?: 'User', id: number, githubLogin: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string }> } } };
 
-export type ExitCommunityMutation = {
-  __typename?: "Mutation";
-  deleteMyProfile?: { __typename?: "AuthPayLoad"; token: string } | null;
-};
+export type ExitCommunityMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type FetchSkillsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type FetchSkillsQuery = {
-  __typename?: "Query";
-  skills: Array<{ __typename?: "Skill"; id: number; name: string }>;
-};
+export type ExitCommunityMutation = { __typename?: 'Mutation', deleteMyProfile?: { __typename?: 'AuthPayLoad', token: string } | null };
+
+export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchSkillsQuery = { __typename?: 'Query', skills: Array<{ __typename?: 'Skill', id: number, name: string, imageUrl?: string | null }> };
 
 export type GetVideoAccessTokenQueryVariables = Exact<{
-  identity: Scalars["String"];
-  room: Scalars["String"];
+  identity: Scalars['String'];
+  room: Scalars['String'];
 }>;
 
-export type GetVideoAccessTokenQuery = {
-  __typename?: "Query";
-  accessToken: { __typename?: "Video"; accessToken: string };
-};
 
-export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never }>;
+export type GetVideoAccessTokenQuery = { __typename?: 'Query', accessToken: { __typename?: 'Video', accessToken: string } };
 
-export type FetchUnmatchedPostQuery = {
-  __typename?: "Query";
-  unmatchedPosts: Array<{
-    __typename?: "Post";
-    id: string;
-    description: string;
-    title: string;
-    driver?: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    } | null;
-    requiredSkills: Array<{ __typename?: "Skill"; id: number; name: string }>;
-  } | null>;
-};
+export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type FetchMyPostQueryVariables = Exact<{ [key: string]: never }>;
 
-export type FetchMyPostQuery = {
-  __typename?: "Query";
-  myDrivingPosts: Array<{
-    __typename?: "Post";
-    id: string;
-    description: string;
-    title: string;
-    requiredSkills: Array<{ __typename?: "Skill"; id: number; name: string }>;
-  }>;
-};
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
-export type FetchMatchedPostQueryVariables = Exact<{ [key: string]: never }>;
+export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type FetchMatchedPostQuery = {
-  __typename?: "Query";
-  myMatchedPosts: Array<{
-    __typename?: "Post";
-    id: string;
-    description: string;
-    title: string;
-    navigator?: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    } | null;
-    driver?: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    } | null;
-    requiredSkills: Array<{ __typename?: "Skill"; id: number; name: string }>;
-  }>;
-};
+
+export type FetchMyPostQuery = { __typename?: 'Query', myDrivingPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+
+export type FetchMatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchMatchedPostQuery = { __typename?: 'Query', myMatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchSpecificPostQueryVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type FetchSpecificPostQuery = {
-  __typename?: "Query";
-  post?: {
-    __typename?: "Post";
-    id: string;
-    description: string;
-    title: string;
-    navigator?: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    } | null;
-    driver?: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    } | null;
-    requiredSkills: Array<{ __typename?: "Skill"; id: number; name: string }>;
-  } | null;
-};
+
+export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
 
 export type FetchMessagesQueryVariables = Exact<{
-  postId: Scalars["String"];
+  postId: Scalars['String'];
 }>;
 
-export type FetchMessagesQuery = {
-  __typename?: "Query";
-  messagesByPostId: Array<{
-    __typename?: "Message";
-    id: number;
-    content: string;
-    createdBy: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    };
-  }>;
-};
 
-export type FetchMeQueryVariables = Exact<{ [key: string]: never }>;
+export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array<{ __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } }> };
 
-export type FetchMeQuery = {
-  __typename?: "Query";
-  myProfile: {
-    __typename?: "Profile";
-    id: number;
-    name: string;
-    matchingPoint: number;
-    bio: string;
-    user: { __typename?: "User"; githubLogin: string };
-  };
-};
+export type FetchMeQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type FetchMyCommunitiesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type FetchMyCommunitiesQuery = {
-  __typename?: "Query";
-  myCommunities: Array<{
-    __typename?: "Community";
-    id: string;
-    name: string;
-    profiles: Array<{
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    }>;
-  }>;
-};
+export type FetchMeQuery = { __typename?: 'Query', myProfile: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } };
 
-export type FetchCurrentCommunityQueryVariables = Exact<{
-  [key: string]: never;
-}>;
+export type FetchMyCommunitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type FetchCurrentCommunityQuery = {
-  __typename?: "Query";
-  myCurrentCommunity?: {
-    __typename?: "Community";
-    id: string;
-    name: string;
-    profiles: Array<{
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    }>;
-  } | null;
-};
+
+export type FetchMyCommunitiesQuery = { __typename?: 'Query', myCommunities: Array<{ __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> }> };
+
+export type FetchCurrentCommunityQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null };
 
 export type FetchMessageSubscriptionVariables = Exact<{
-  postId: Scalars["String"];
+  postId: Scalars['String'];
 }>;
 
-export type FetchMessageSubscription = {
-  __typename?: "Subscription";
-  waitForMessage?: {
-    __typename?: "Message";
-    id: number;
-    content: string;
-    createdBy: {
-      __typename?: "Profile";
-      id: number;
-      name: string;
-      matchingPoint: number;
-      bio: string;
-      user: { __typename?: "User"; githubLogin: string };
-    };
-  } | null;
-};
+
+export type FetchMessageSubscription = { __typename?: 'Subscription', waitForMessage?: { __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } } | null };
+
 
 export const SignInDocument = gql`
-  mutation SignIn($code: String!) {
-    authGithub(code: $code) {
-      token
-      user {
+    mutation SignIn($code: String!) {
+  authGithub(code: $code) {
+    token
+    user {
+      id
+      githubLogin
+      profiles {
         id
-        githubLogin
-        profiles {
-          id
-          name
-          matchingPoint
-          bio
-        }
+        name
+        matchingPoint
+        bio
       }
     }
   }
-`;
-export type SignInMutationFn = Apollo.MutationFunction<
-  SignInMutation,
-  SignInMutationVariables
->;
+}
+    `;
+export type SignInMutationFn = Apollo.MutationFunction<SignInMutation, SignInMutationVariables>;
 
 /**
  * __useSignInMutation__
@@ -601,36 +413,22 @@ export type SignInMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSignInMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SignInMutation,
-    SignInMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<SignInMutation, SignInMutationVariables>(
-    SignInDocument,
-    options
-  );
-}
+export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignInMutation, SignInMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, options);
+      }
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
-export type SignInMutationOptions = Apollo.BaseMutationOptions<
-  SignInMutation,
-  SignInMutationVariables
->;
+export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
 export const UpdateProfileDocument = gql`
-  mutation UpdateProfile($name: String!, $bio: String!) {
-    updateMyProfile(name: $name, bio: $bio) {
-      name
-      bio
-    }
+    mutation UpdateProfile($name: String!, $bio: String!) {
+  updateMyProfile(name: $name, bio: $bio) {
+    name
+    bio
   }
-`;
-export type UpdateProfileMutationFn = Apollo.MutationFunction<
-  UpdateProfileMutation,
-  UpdateProfileMutationVariables
->;
+}
+    `;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
 
 /**
  * __useUpdateProfileMutation__
@@ -650,60 +448,39 @@ export type UpdateProfileMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateProfileMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateProfileMutation,
-    UpdateProfileMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateProfileMutation,
-    UpdateProfileMutationVariables
-  >(UpdateProfileDocument, options);
-}
-export type UpdateProfileMutationHookResult = ReturnType<
-  typeof useUpdateProfileMutation
->;
-export type UpdateProfileMutationResult =
-  Apollo.MutationResult<UpdateProfileMutation>;
-export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<
-  UpdateProfileMutation,
-  UpdateProfileMutationVariables
->;
-export const CreatePostDocument = gql`
-  mutation createPost(
-    $description: String!
-    $title: String!
-    $requiredSkillsId: [Int!]!
-  ) {
-    post(
-      description: $description
-      title: $title
-      requiredSkillsId: $requiredSkillsId
-    ) {
-      description
-      title
-      requiredSkills {
-        id
-        name
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
       }
-      driver {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
-        }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const CreatePostDocument = gql`
+    mutation createPost($description: String!, $title: String!, $requiredSkillsId: [Int!]!) {
+  post(
+    description: $description
+    title: $title
+    requiredSkillsId: $requiredSkillsId
+  ) {
+    description
+    title
+    requiredSkills {
+      id
+      name
+    }
+    driver {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
       }
     }
   }
-`;
-export type CreatePostMutationFn = Apollo.MutationFunction<
-  CreatePostMutation,
-  CreatePostMutationVariables
->;
+}
+    `;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
 
 /**
  * __useCreatePostMutation__
@@ -724,38 +501,21 @@ export type CreatePostMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreatePostMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreatePostMutation,
-    CreatePostMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(
-    CreatePostDocument,
-    options
-  );
-}
-export type CreatePostMutationHookResult = ReturnType<
-  typeof useCreatePostMutation
->;
-export type CreatePostMutationResult =
-  Apollo.MutationResult<CreatePostMutation>;
-export type CreatePostMutationOptions = Apollo.BaseMutationOptions<
-  CreatePostMutation,
-  CreatePostMutationVariables
->;
+export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
+      }
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const DeletePostDocument = gql`
-  mutation deletePost($id: String!) {
-    deletePost(id: $id) {
-      id
-    }
+    mutation deletePost($id: String!) {
+  deletePost(id: $id) {
+    id
   }
-`;
-export type DeletePostMutationFn = Apollo.MutationFunction<
-  DeletePostMutation,
-  DeletePostMutationVariables
->;
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
 
 /**
  * __useDeletePostMutation__
@@ -774,46 +534,29 @@ export type DeletePostMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeletePostMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeletePostMutation,
-    DeletePostMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(
-    DeletePostDocument,
-    options
-  );
-}
-export type DeletePostMutationHookResult = ReturnType<
-  typeof useDeletePostMutation
->;
-export type DeletePostMutationResult =
-  Apollo.MutationResult<DeletePostMutation>;
-export type DeletePostMutationOptions = Apollo.BaseMutationOptions<
-  DeletePostMutation,
-  DeletePostMutationVariables
->;
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const MatchPostDocument = gql`
-  mutation matchPost($postId: String!, $navigatorId: Int!) {
-    registerNavigator(postId: $postId, navigatorId: $navigatorId) {
-      navigator {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
-        }
+    mutation matchPost($postId: String!, $navigatorId: Int!) {
+  registerNavigator(postId: $postId, navigatorId: $navigatorId) {
+    navigator {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
       }
     }
   }
-`;
-export type MatchPostMutationFn = Apollo.MutationFunction<
-  MatchPostMutation,
-  MatchPostMutationVariables
->;
+}
+    `;
+export type MatchPostMutationFn = Apollo.MutationFunction<MatchPostMutation, MatchPostMutationVariables>;
 
 /**
  * __useMatchPostMutation__
@@ -833,47 +576,26 @@ export type MatchPostMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useMatchPostMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    MatchPostMutation,
-    MatchPostMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<MatchPostMutation, MatchPostMutationVariables>(
-    MatchPostDocument,
-    options
-  );
-}
-export type MatchPostMutationHookResult = ReturnType<
-  typeof useMatchPostMutation
->;
+export function useMatchPostMutation(baseOptions?: Apollo.MutationHookOptions<MatchPostMutation, MatchPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MatchPostMutation, MatchPostMutationVariables>(MatchPostDocument, options);
+      }
+export type MatchPostMutationHookResult = ReturnType<typeof useMatchPostMutation>;
 export type MatchPostMutationResult = Apollo.MutationResult<MatchPostMutation>;
-export type MatchPostMutationOptions = Apollo.BaseMutationOptions<
-  MatchPostMutation,
-  MatchPostMutationVariables
->;
+export type MatchPostMutationOptions = Apollo.BaseMutationOptions<MatchPostMutation, MatchPostMutationVariables>;
 export const UpdatePostDocument = gql`
-  mutation UpdatePost(
-    $id: String!
-    $title: String
-    $description: String
-    $requiredSkillsIds: [Int]
+    mutation UpdatePost($id: String!, $title: String, $description: String, $requiredSkillsIds: [Int]) {
+  updatePost(
+    id: $id
+    title: $title
+    description: $description
+    requiredSkillsIds: $requiredSkillsIds
   ) {
-    updatePost(
-      id: $id
-      title: $title
-      description: $description
-      requiredSkillsIds: $requiredSkillsIds
-    ) {
-      id
-    }
+    id
   }
-`;
-export type UpdatePostMutationFn = Apollo.MutationFunction<
-  UpdatePostMutation,
-  UpdatePostMutationVariables
->;
+}
+    `;
+export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
 
 /**
  * __useUpdatePostMutation__
@@ -895,39 +617,22 @@ export type UpdatePostMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdatePostMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdatePostMutation,
-    UpdatePostMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(
-    UpdatePostDocument,
-    options
-  );
-}
-export type UpdatePostMutationHookResult = ReturnType<
-  typeof useUpdatePostMutation
->;
-export type UpdatePostMutationResult =
-  Apollo.MutationResult<UpdatePostMutation>;
-export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<
-  UpdatePostMutation,
-  UpdatePostMutationVariables
->;
+export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument, options);
+      }
+export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
+export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
+export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const SendMessageDocument = gql`
-  mutation sendMessage($postId: String!, $content: String!) {
-    createMessage(postId: $postId, content: $content) {
-      id
-      content
-    }
+    mutation sendMessage($postId: String!, $content: String!) {
+  createMessage(postId: $postId, content: $content) {
+    id
+    content
   }
-`;
-export type SendMessageMutationFn = Apollo.MutationFunction<
-  SendMessageMutation,
-  SendMessageMutationVariables
->;
+}
+    `;
+export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation, SendMessageMutationVariables>;
 
 /**
  * __useSendMessageMutation__
@@ -947,39 +652,22 @@ export type SendMessageMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSendMessageMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SendMessageMutation,
-    SendMessageMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(
-    SendMessageDocument,
-    options
-  );
-}
-export type SendMessageMutationHookResult = ReturnType<
-  typeof useSendMessageMutation
->;
-export type SendMessageMutationResult =
-  Apollo.MutationResult<SendMessageMutation>;
-export type SendMessageMutationOptions = Apollo.BaseMutationOptions<
-  SendMessageMutation,
-  SendMessageMutationVariables
->;
+export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(SendMessageDocument, options);
+      }
+export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
+export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
+export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
 export const CreateCommunityDocument = gql`
-  mutation createCommunity($name: String!) {
-    createCommunity(name: $name) {
-      id
-      name
-    }
+    mutation createCommunity($name: String!) {
+  createCommunity(name: $name) {
+    id
+    name
   }
-`;
-export type CreateCommunityMutationFn = Apollo.MutationFunction<
-  CreateCommunityMutation,
-  CreateCommunityMutationVariables
->;
+}
+    `;
+export type CreateCommunityMutationFn = Apollo.MutationFunction<CreateCommunityMutation, CreateCommunityMutationVariables>;
 
 /**
  * __useCreateCommunityMutation__
@@ -998,48 +686,31 @@ export type CreateCommunityMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateCommunityMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCommunityMutation,
-    CreateCommunityMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateCommunityMutation,
-    CreateCommunityMutationVariables
-  >(CreateCommunityDocument, options);
-}
-export type CreateCommunityMutationHookResult = ReturnType<
-  typeof useCreateCommunityMutation
->;
-export type CreateCommunityMutationResult =
-  Apollo.MutationResult<CreateCommunityMutation>;
-export type CreateCommunityMutationOptions = Apollo.BaseMutationOptions<
-  CreateCommunityMutation,
-  CreateCommunityMutationVariables
->;
+export function useCreateCommunityMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommunityMutation, CreateCommunityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommunityMutation, CreateCommunityMutationVariables>(CreateCommunityDocument, options);
+      }
+export type CreateCommunityMutationHookResult = ReturnType<typeof useCreateCommunityMutation>;
+export type CreateCommunityMutationResult = Apollo.MutationResult<CreateCommunityMutation>;
+export type CreateCommunityMutationOptions = Apollo.BaseMutationOptions<CreateCommunityMutation, CreateCommunityMutationVariables>;
 export const JoinCommunityDocument = gql`
-  mutation joinCommunity($communityId: String!) {
-    joinCommunity(communityId: $communityId) {
-      token
-      user {
+    mutation joinCommunity($communityId: String!) {
+  joinCommunity(communityId: $communityId) {
+    token
+    user {
+      id
+      githubLogin
+      profiles {
         id
-        githubLogin
-        profiles {
-          id
-          name
-          matchingPoint
-          bio
-        }
+        name
+        matchingPoint
+        bio
       }
     }
   }
-`;
-export type JoinCommunityMutationFn = Apollo.MutationFunction<
-  JoinCommunityMutation,
-  JoinCommunityMutationVariables
->;
+}
+    `;
+export type JoinCommunityMutationFn = Apollo.MutationFunction<JoinCommunityMutation, JoinCommunityMutationVariables>;
 
 /**
  * __useJoinCommunityMutation__
@@ -1058,38 +729,21 @@ export type JoinCommunityMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useJoinCommunityMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    JoinCommunityMutation,
-    JoinCommunityMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    JoinCommunityMutation,
-    JoinCommunityMutationVariables
-  >(JoinCommunityDocument, options);
-}
-export type JoinCommunityMutationHookResult = ReturnType<
-  typeof useJoinCommunityMutation
->;
-export type JoinCommunityMutationResult =
-  Apollo.MutationResult<JoinCommunityMutation>;
-export type JoinCommunityMutationOptions = Apollo.BaseMutationOptions<
-  JoinCommunityMutation,
-  JoinCommunityMutationVariables
->;
+export function useJoinCommunityMutation(baseOptions?: Apollo.MutationHookOptions<JoinCommunityMutation, JoinCommunityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinCommunityMutation, JoinCommunityMutationVariables>(JoinCommunityDocument, options);
+      }
+export type JoinCommunityMutationHookResult = ReturnType<typeof useJoinCommunityMutation>;
+export type JoinCommunityMutationResult = Apollo.MutationResult<JoinCommunityMutation>;
+export type JoinCommunityMutationOptions = Apollo.BaseMutationOptions<JoinCommunityMutation, JoinCommunityMutationVariables>;
 export const ExitCommunityDocument = gql`
-  mutation exitCommunity {
-    deleteMyProfile {
-      token
-    }
+    mutation exitCommunity {
+  deleteMyProfile {
+    token
   }
-`;
-export type ExitCommunityMutationFn = Apollo.MutationFunction<
-  ExitCommunityMutation,
-  ExitCommunityMutationVariables
->;
+}
+    `;
+export type ExitCommunityMutationFn = Apollo.MutationFunction<ExitCommunityMutation, ExitCommunityMutationVariables>;
 
 /**
  * __useExitCommunityMutation__
@@ -1107,35 +761,22 @@ export type ExitCommunityMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useExitCommunityMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ExitCommunityMutation,
-    ExitCommunityMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    ExitCommunityMutation,
-    ExitCommunityMutationVariables
-  >(ExitCommunityDocument, options);
-}
-export type ExitCommunityMutationHookResult = ReturnType<
-  typeof useExitCommunityMutation
->;
-export type ExitCommunityMutationResult =
-  Apollo.MutationResult<ExitCommunityMutation>;
-export type ExitCommunityMutationOptions = Apollo.BaseMutationOptions<
-  ExitCommunityMutation,
-  ExitCommunityMutationVariables
->;
+export function useExitCommunityMutation(baseOptions?: Apollo.MutationHookOptions<ExitCommunityMutation, ExitCommunityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ExitCommunityMutation, ExitCommunityMutationVariables>(ExitCommunityDocument, options);
+      }
+export type ExitCommunityMutationHookResult = ReturnType<typeof useExitCommunityMutation>;
+export type ExitCommunityMutationResult = Apollo.MutationResult<ExitCommunityMutation>;
+export type ExitCommunityMutationOptions = Apollo.BaseMutationOptions<ExitCommunityMutation, ExitCommunityMutationVariables>;
 export const FetchSkillsDocument = gql`
-  query fetchSkills {
-    skills {
-      id
-      name
-    }
+    query fetchSkills {
+  skills {
+    id
+    name
+    imageUrl
   }
-`;
+}
+    `;
 
 /**
  * __useFetchSkillsQuery__
@@ -1152,45 +793,24 @@ export const FetchSkillsDocument = gql`
  *   },
  * });
  */
-export function useFetchSkillsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchSkillsQuery,
-    FetchSkillsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FetchSkillsQuery, FetchSkillsQueryVariables>(
-    FetchSkillsDocument,
-    options
-  );
-}
-export function useFetchSkillsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchSkillsQuery,
-    FetchSkillsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FetchSkillsQuery, FetchSkillsQueryVariables>(
-    FetchSkillsDocument,
-    options
-  );
-}
+export function useFetchSkillsQuery(baseOptions?: Apollo.QueryHookOptions<FetchSkillsQuery, FetchSkillsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchSkillsQuery, FetchSkillsQueryVariables>(FetchSkillsDocument, options);
+      }
+export function useFetchSkillsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchSkillsQuery, FetchSkillsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchSkillsQuery, FetchSkillsQueryVariables>(FetchSkillsDocument, options);
+        }
 export type FetchSkillsQueryHookResult = ReturnType<typeof useFetchSkillsQuery>;
-export type FetchSkillsLazyQueryHookResult = ReturnType<
-  typeof useFetchSkillsLazyQuery
->;
-export type FetchSkillsQueryResult = Apollo.QueryResult<
-  FetchSkillsQuery,
-  FetchSkillsQueryVariables
->;
+export type FetchSkillsLazyQueryHookResult = ReturnType<typeof useFetchSkillsLazyQuery>;
+export type FetchSkillsQueryResult = Apollo.QueryResult<FetchSkillsQuery, FetchSkillsQueryVariables>;
 export const GetVideoAccessTokenDocument = gql`
-  query getVideoAccessToken($identity: String!, $room: String!) {
-    accessToken(identity: $identity, room: $room) {
-      accessToken
-    }
+    query getVideoAccessToken($identity: String!, $room: String!) {
+  accessToken(identity: $identity, room: $room) {
+    accessToken
   }
-`;
+}
+    `;
 
 /**
  * __useGetVideoAccessTokenQuery__
@@ -1209,62 +829,39 @@ export const GetVideoAccessTokenDocument = gql`
  *   },
  * });
  */
-export function useGetVideoAccessTokenQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetVideoAccessTokenQuery,
-    GetVideoAccessTokenQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetVideoAccessTokenQuery,
-    GetVideoAccessTokenQueryVariables
-  >(GetVideoAccessTokenDocument, options);
-}
-export function useGetVideoAccessTokenLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetVideoAccessTokenQuery,
-    GetVideoAccessTokenQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetVideoAccessTokenQuery,
-    GetVideoAccessTokenQueryVariables
-  >(GetVideoAccessTokenDocument, options);
-}
-export type GetVideoAccessTokenQueryHookResult = ReturnType<
-  typeof useGetVideoAccessTokenQuery
->;
-export type GetVideoAccessTokenLazyQueryHookResult = ReturnType<
-  typeof useGetVideoAccessTokenLazyQuery
->;
-export type GetVideoAccessTokenQueryResult = Apollo.QueryResult<
-  GetVideoAccessTokenQuery,
-  GetVideoAccessTokenQueryVariables
->;
-export const FetchUnmatchedPostDocument = gql`
-  query fetchUnmatchedPost {
-    unmatchedPosts {
-      id
-      description
-      title
-      driver {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
-        }
+export function useGetVideoAccessTokenQuery(baseOptions: Apollo.QueryHookOptions<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>(GetVideoAccessTokenDocument, options);
       }
-      requiredSkills {
-        id
-        name
+export function useGetVideoAccessTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>(GetVideoAccessTokenDocument, options);
+        }
+export type GetVideoAccessTokenQueryHookResult = ReturnType<typeof useGetVideoAccessTokenQuery>;
+export type GetVideoAccessTokenLazyQueryHookResult = ReturnType<typeof useGetVideoAccessTokenLazyQuery>;
+export type GetVideoAccessTokenQueryResult = Apollo.QueryResult<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>;
+export const FetchUnmatchedPostDocument = gql`
+    query fetchUnmatchedPost {
+  unmatchedPosts {
+    id
+    description
+    title
+    driver {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
       }
     }
+    requiredSkills {
+      id
+      name
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchUnmatchedPostQuery__
@@ -1281,53 +878,30 @@ export const FetchUnmatchedPostDocument = gql`
  *   },
  * });
  */
-export function useFetchUnmatchedPostQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchUnmatchedPostQuery,
-    FetchUnmatchedPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FetchUnmatchedPostQuery,
-    FetchUnmatchedPostQueryVariables
-  >(FetchUnmatchedPostDocument, options);
-}
-export function useFetchUnmatchedPostLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchUnmatchedPostQuery,
-    FetchUnmatchedPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FetchUnmatchedPostQuery,
-    FetchUnmatchedPostQueryVariables
-  >(FetchUnmatchedPostDocument, options);
-}
-export type FetchUnmatchedPostQueryHookResult = ReturnType<
-  typeof useFetchUnmatchedPostQuery
->;
-export type FetchUnmatchedPostLazyQueryHookResult = ReturnType<
-  typeof useFetchUnmatchedPostLazyQuery
->;
-export type FetchUnmatchedPostQueryResult = Apollo.QueryResult<
-  FetchUnmatchedPostQuery,
-  FetchUnmatchedPostQueryVariables
->;
-export const FetchMyPostDocument = gql`
-  query fetchMyPost {
-    myDrivingPosts {
-      id
-      description
-      title
-      requiredSkills {
-        id
-        name
+export function useFetchUnmatchedPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>(FetchUnmatchedPostDocument, options);
       }
+export function useFetchUnmatchedPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>(FetchUnmatchedPostDocument, options);
+        }
+export type FetchUnmatchedPostQueryHookResult = ReturnType<typeof useFetchUnmatchedPostQuery>;
+export type FetchUnmatchedPostLazyQueryHookResult = ReturnType<typeof useFetchUnmatchedPostLazyQuery>;
+export type FetchUnmatchedPostQueryResult = Apollo.QueryResult<FetchUnmatchedPostQuery, FetchUnmatchedPostQueryVariables>;
+export const FetchMyPostDocument = gql`
+    query fetchMyPost {
+  myDrivingPosts {
+    id
+    description
+    title
+    requiredSkills {
+      id
+      name
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchMyPostQuery__
@@ -1344,69 +918,48 @@ export const FetchMyPostDocument = gql`
  *   },
  * });
  */
-export function useFetchMyPostQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchMyPostQuery,
-    FetchMyPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FetchMyPostQuery, FetchMyPostQueryVariables>(
-    FetchMyPostDocument,
-    options
-  );
-}
-export function useFetchMyPostLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchMyPostQuery,
-    FetchMyPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FetchMyPostQuery, FetchMyPostQueryVariables>(
-    FetchMyPostDocument,
-    options
-  );
-}
+export function useFetchMyPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchMyPostQuery, FetchMyPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMyPostQuery, FetchMyPostQueryVariables>(FetchMyPostDocument, options);
+      }
+export function useFetchMyPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMyPostQuery, FetchMyPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMyPostQuery, FetchMyPostQueryVariables>(FetchMyPostDocument, options);
+        }
 export type FetchMyPostQueryHookResult = ReturnType<typeof useFetchMyPostQuery>;
-export type FetchMyPostLazyQueryHookResult = ReturnType<
-  typeof useFetchMyPostLazyQuery
->;
-export type FetchMyPostQueryResult = Apollo.QueryResult<
-  FetchMyPostQuery,
-  FetchMyPostQueryVariables
->;
+export type FetchMyPostLazyQueryHookResult = ReturnType<typeof useFetchMyPostLazyQuery>;
+export type FetchMyPostQueryResult = Apollo.QueryResult<FetchMyPostQuery, FetchMyPostQueryVariables>;
 export const FetchMatchedPostDocument = gql`
-  query fetchMatchedPost {
-    myMatchedPosts {
+    query fetchMatchedPost {
+  myMatchedPosts {
+    id
+    description
+    title
+    navigator {
       id
-      description
-      title
-      navigator {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
-        }
-      }
-      driver {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
-        }
-      }
-      requiredSkills {
-        id
-        name
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
       }
     }
+    driver {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    requiredSkills {
+      id
+      name
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchMatchedPostQuery__
@@ -1423,71 +976,48 @@ export const FetchMatchedPostDocument = gql`
  *   },
  * });
  */
-export function useFetchMatchedPostQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchMatchedPostQuery,
-    FetchMatchedPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>(
-    FetchMatchedPostDocument,
-    options
-  );
-}
-export function useFetchMatchedPostLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchMatchedPostQuery,
-    FetchMatchedPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FetchMatchedPostQuery,
-    FetchMatchedPostQueryVariables
-  >(FetchMatchedPostDocument, options);
-}
-export type FetchMatchedPostQueryHookResult = ReturnType<
-  typeof useFetchMatchedPostQuery
->;
-export type FetchMatchedPostLazyQueryHookResult = ReturnType<
-  typeof useFetchMatchedPostLazyQuery
->;
-export type FetchMatchedPostQueryResult = Apollo.QueryResult<
-  FetchMatchedPostQuery,
-  FetchMatchedPostQueryVariables
->;
+export function useFetchMatchedPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>(FetchMatchedPostDocument, options);
+      }
+export function useFetchMatchedPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>(FetchMatchedPostDocument, options);
+        }
+export type FetchMatchedPostQueryHookResult = ReturnType<typeof useFetchMatchedPostQuery>;
+export type FetchMatchedPostLazyQueryHookResult = ReturnType<typeof useFetchMatchedPostLazyQuery>;
+export type FetchMatchedPostQueryResult = Apollo.QueryResult<FetchMatchedPostQuery, FetchMatchedPostQueryVariables>;
 export const FetchSpecificPostDocument = gql`
-  query fetchSpecificPost($id: String!) {
-    post(id: $id) {
+    query fetchSpecificPost($id: String!) {
+  post(id: $id) {
+    id
+    description
+    title
+    navigator {
       id
-      description
-      title
-      navigator {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
-        }
-      }
-      driver {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
-        }
-      }
-      requiredSkills {
-        id
-        name
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
       }
     }
+    driver {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    requiredSkills {
+      id
+      name
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchSpecificPostQuery__
@@ -1505,57 +1035,34 @@ export const FetchSpecificPostDocument = gql`
  *   },
  * });
  */
-export function useFetchSpecificPostQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FetchSpecificPostQuery,
-    FetchSpecificPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FetchSpecificPostQuery,
-    FetchSpecificPostQueryVariables
-  >(FetchSpecificPostDocument, options);
-}
-export function useFetchSpecificPostLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchSpecificPostQuery,
-    FetchSpecificPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FetchSpecificPostQuery,
-    FetchSpecificPostQueryVariables
-  >(FetchSpecificPostDocument, options);
-}
-export type FetchSpecificPostQueryHookResult = ReturnType<
-  typeof useFetchSpecificPostQuery
->;
-export type FetchSpecificPostLazyQueryHookResult = ReturnType<
-  typeof useFetchSpecificPostLazyQuery
->;
-export type FetchSpecificPostQueryResult = Apollo.QueryResult<
-  FetchSpecificPostQuery,
-  FetchSpecificPostQueryVariables
->;
-export const FetchMessagesDocument = gql`
-  query fetchMessages($postId: String!) {
-    messagesByPostId(postId: $postId) {
-      id
-      content
-      createdBy {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
+export function useFetchSpecificPostQuery(baseOptions: Apollo.QueryHookOptions<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>(FetchSpecificPostDocument, options);
+      }
+export function useFetchSpecificPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>(FetchSpecificPostDocument, options);
         }
+export type FetchSpecificPostQueryHookResult = ReturnType<typeof useFetchSpecificPostQuery>;
+export type FetchSpecificPostLazyQueryHookResult = ReturnType<typeof useFetchSpecificPostLazyQuery>;
+export type FetchSpecificPostQueryResult = Apollo.QueryResult<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>;
+export const FetchMessagesDocument = gql`
+    query fetchMessages($postId: String!) {
+  messagesByPostId(postId: $postId) {
+    id
+    content
+    createdBy {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchMessagesQuery__
@@ -1573,53 +1080,30 @@ export const FetchMessagesDocument = gql`
  *   },
  * });
  */
-export function useFetchMessagesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    FetchMessagesQuery,
-    FetchMessagesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FetchMessagesQuery, FetchMessagesQueryVariables>(
-    FetchMessagesDocument,
-    options
-  );
-}
-export function useFetchMessagesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchMessagesQuery,
-    FetchMessagesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FetchMessagesQuery, FetchMessagesQueryVariables>(
-    FetchMessagesDocument,
-    options
-  );
-}
-export type FetchMessagesQueryHookResult = ReturnType<
-  typeof useFetchMessagesQuery
->;
-export type FetchMessagesLazyQueryHookResult = ReturnType<
-  typeof useFetchMessagesLazyQuery
->;
-export type FetchMessagesQueryResult = Apollo.QueryResult<
-  FetchMessagesQuery,
-  FetchMessagesQueryVariables
->;
-export const FetchMeDocument = gql`
-  query fetchMe {
-    myProfile {
-      id
-      name
-      matchingPoint
-      bio
-      user {
-        githubLogin
+export function useFetchMessagesQuery(baseOptions: Apollo.QueryHookOptions<FetchMessagesQuery, FetchMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMessagesQuery, FetchMessagesQueryVariables>(FetchMessagesDocument, options);
       }
+export function useFetchMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMessagesQuery, FetchMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMessagesQuery, FetchMessagesQueryVariables>(FetchMessagesDocument, options);
+        }
+export type FetchMessagesQueryHookResult = ReturnType<typeof useFetchMessagesQuery>;
+export type FetchMessagesLazyQueryHookResult = ReturnType<typeof useFetchMessagesLazyQuery>;
+export type FetchMessagesQueryResult = Apollo.QueryResult<FetchMessagesQuery, FetchMessagesQueryVariables>;
+export const FetchMeDocument = gql`
+    query fetchMe {
+  myProfile {
+    id
+    name
+    matchingPoint
+    bio
+    user {
+      githubLogin
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchMeQuery__
@@ -1636,46 +1120,33 @@ export const FetchMeDocument = gql`
  *   },
  * });
  */
-export function useFetchMeQuery(
-  baseOptions?: Apollo.QueryHookOptions<FetchMeQuery, FetchMeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FetchMeQuery, FetchMeQueryVariables>(
-    FetchMeDocument,
-    options
-  );
-}
-export function useFetchMeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FetchMeQuery, FetchMeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FetchMeQuery, FetchMeQueryVariables>(
-    FetchMeDocument,
-    options
-  );
-}
+export function useFetchMeQuery(baseOptions?: Apollo.QueryHookOptions<FetchMeQuery, FetchMeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMeQuery, FetchMeQueryVariables>(FetchMeDocument, options);
+      }
+export function useFetchMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMeQuery, FetchMeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMeQuery, FetchMeQueryVariables>(FetchMeDocument, options);
+        }
 export type FetchMeQueryHookResult = ReturnType<typeof useFetchMeQuery>;
 export type FetchMeLazyQueryHookResult = ReturnType<typeof useFetchMeLazyQuery>;
-export type FetchMeQueryResult = Apollo.QueryResult<
-  FetchMeQuery,
-  FetchMeQueryVariables
->;
+export type FetchMeQueryResult = Apollo.QueryResult<FetchMeQuery, FetchMeQueryVariables>;
 export const FetchMyCommunitiesDocument = gql`
-  query fetchMyCommunities {
-    myCommunities {
+    query fetchMyCommunities {
+  myCommunities {
+    id
+    name
+    profiles {
       id
       name
-      profiles {
-        id
-        name
-        bio
-        user {
-          githubLogin
-        }
+      bio
+      user {
+        githubLogin
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchMyCommunitiesQuery__
@@ -1692,56 +1163,33 @@ export const FetchMyCommunitiesDocument = gql`
  *   },
  * });
  */
-export function useFetchMyCommunitiesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchMyCommunitiesQuery,
-    FetchMyCommunitiesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FetchMyCommunitiesQuery,
-    FetchMyCommunitiesQueryVariables
-  >(FetchMyCommunitiesDocument, options);
-}
-export function useFetchMyCommunitiesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchMyCommunitiesQuery,
-    FetchMyCommunitiesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FetchMyCommunitiesQuery,
-    FetchMyCommunitiesQueryVariables
-  >(FetchMyCommunitiesDocument, options);
-}
-export type FetchMyCommunitiesQueryHookResult = ReturnType<
-  typeof useFetchMyCommunitiesQuery
->;
-export type FetchMyCommunitiesLazyQueryHookResult = ReturnType<
-  typeof useFetchMyCommunitiesLazyQuery
->;
-export type FetchMyCommunitiesQueryResult = Apollo.QueryResult<
-  FetchMyCommunitiesQuery,
-  FetchMyCommunitiesQueryVariables
->;
+export function useFetchMyCommunitiesQuery(baseOptions?: Apollo.QueryHookOptions<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>(FetchMyCommunitiesDocument, options);
+      }
+export function useFetchMyCommunitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>(FetchMyCommunitiesDocument, options);
+        }
+export type FetchMyCommunitiesQueryHookResult = ReturnType<typeof useFetchMyCommunitiesQuery>;
+export type FetchMyCommunitiesLazyQueryHookResult = ReturnType<typeof useFetchMyCommunitiesLazyQuery>;
+export type FetchMyCommunitiesQueryResult = Apollo.QueryResult<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>;
 export const FetchCurrentCommunityDocument = gql`
-  query fetchCurrentCommunity {
-    myCurrentCommunity {
+    query fetchCurrentCommunity {
+  myCurrentCommunity {
+    id
+    name
+    profiles {
       id
       name
-      profiles {
-        id
-        name
-        bio
-        user {
-          githubLogin
-        }
+      bio
+      user {
+        githubLogin
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchCurrentCommunityQuery__
@@ -1758,57 +1206,34 @@ export const FetchCurrentCommunityDocument = gql`
  *   },
  * });
  */
-export function useFetchCurrentCommunityQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    FetchCurrentCommunityQuery,
-    FetchCurrentCommunityQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FetchCurrentCommunityQuery,
-    FetchCurrentCommunityQueryVariables
-  >(FetchCurrentCommunityDocument, options);
-}
-export function useFetchCurrentCommunityLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FetchCurrentCommunityQuery,
-    FetchCurrentCommunityQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FetchCurrentCommunityQuery,
-    FetchCurrentCommunityQueryVariables
-  >(FetchCurrentCommunityDocument, options);
-}
-export type FetchCurrentCommunityQueryHookResult = ReturnType<
-  typeof useFetchCurrentCommunityQuery
->;
-export type FetchCurrentCommunityLazyQueryHookResult = ReturnType<
-  typeof useFetchCurrentCommunityLazyQuery
->;
-export type FetchCurrentCommunityQueryResult = Apollo.QueryResult<
-  FetchCurrentCommunityQuery,
-  FetchCurrentCommunityQueryVariables
->;
-export const FetchMessageDocument = gql`
-  subscription fetchMessage($postId: String!) {
-    waitForMessage(postId: $postId) {
-      id
-      content
-      createdBy {
-        id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
+export function useFetchCurrentCommunityQuery(baseOptions?: Apollo.QueryHookOptions<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>(FetchCurrentCommunityDocument, options);
+      }
+export function useFetchCurrentCommunityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>(FetchCurrentCommunityDocument, options);
         }
+export type FetchCurrentCommunityQueryHookResult = ReturnType<typeof useFetchCurrentCommunityQuery>;
+export type FetchCurrentCommunityLazyQueryHookResult = ReturnType<typeof useFetchCurrentCommunityLazyQuery>;
+export type FetchCurrentCommunityQueryResult = Apollo.QueryResult<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>;
+export const FetchMessageDocument = gql`
+    subscription fetchMessage($postId: String!) {
+  waitForMessage(postId: $postId) {
+    id
+    content
+    createdBy {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useFetchMessageSubscription__
@@ -1826,20 +1251,9 @@ export const FetchMessageDocument = gql`
  *   },
  * });
  */
-export function useFetchMessageSubscription(
-  baseOptions: Apollo.SubscriptionHookOptions<
-    FetchMessageSubscription,
-    FetchMessageSubscriptionVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSubscription<
-    FetchMessageSubscription,
-    FetchMessageSubscriptionVariables
-  >(FetchMessageDocument, options);
-}
-export type FetchMessageSubscriptionHookResult = ReturnType<
-  typeof useFetchMessageSubscription
->;
-export type FetchMessageSubscriptionResult =
-  Apollo.SubscriptionResult<FetchMessageSubscription>;
+export function useFetchMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<FetchMessageSubscription, FetchMessageSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<FetchMessageSubscription, FetchMessageSubscriptionVariables>(FetchMessageDocument, options);
+      }
+export type FetchMessageSubscriptionHookResult = ReturnType<typeof useFetchMessageSubscription>;
+export type FetchMessageSubscriptionResult = Apollo.SubscriptionResult<FetchMessageSubscription>;

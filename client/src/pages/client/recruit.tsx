@@ -36,7 +36,7 @@ export const RecruitPage = () => {
   /**
    * page hooks
    */
-  const { posts, languages, matchPost } = useRecruitHooks();
+  const { posts, languages, matchPost, languagesData } = useRecruitHooks();
 
   /**
    * form validation
@@ -142,7 +142,12 @@ export const RecruitPage = () => {
               />
             ))}
         </Box>
-        <BackButton style={{ margin: "0 auto", width: "350px" }} onClick={() => goToHome()}>戻る</BackButton>
+        <BackButton
+          style={{ margin: "0 auto", width: "350px" }}
+          onClick={() => goToHome()}
+        >
+          戻る
+        </BackButton>
       </Box>
       <Modal
         open={openPostModal}
@@ -164,6 +169,7 @@ export const RecruitPage = () => {
               agreeTitle="マッチングする"
               onClose={setOpenPostModal.off}
               onAgree={handleMatch}
+              languagesData={languagesData ?? []}
             />
           )}
         </Box>
