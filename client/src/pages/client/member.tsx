@@ -8,7 +8,7 @@ import { useClientRoute } from "../../hooks/useClientRoute";
 import { useMemberHooks } from "../hooks/useMemberHooks";
 
 const TAKE_PAGINATION = 6;
-const DEFAULT_PAGE_NUMBER = 0;
+const DEFAULT_PAGE_NUMBER = 1;
 
 /**
  * client/member
@@ -123,6 +123,7 @@ export const MemberPage = () => {
           size="large"
           page={pagination}
           count={paginationCount}
+          defaultPage={DEFAULT_PAGE_NUMBER + 1}
           onChange={handleChangePagination}
         />
         <BackButton style={{ width: "350px" }} onClick={() => goToHome()}>

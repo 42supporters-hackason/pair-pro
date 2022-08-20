@@ -24,7 +24,7 @@ import {
 } from "../validation/recruit_filter_validation";
 
 const TAKE_PAGINATION = 10;
-const DEFAULT_PAGE_NUMBER = 0;
+const DEFAULT_PAGE_NUMBER = 1;
 
 interface FilterProps {
   /**
