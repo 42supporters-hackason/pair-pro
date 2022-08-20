@@ -51,6 +51,14 @@ export const Post = objectType({
   },
 });
 
+export const PaginatedPosts = objectType({
+  name: "PaginatedPosts",
+  definition(t) {
+    t.nonNull.list.nonNull.field("posts", { type: Post });
+    t.nonNull.int("count");
+  },
+});
+
 export const PostQuery = extendType({
   type: "Query",
   definition(t) {
@@ -72,17 +80,24 @@ export const PostQuery = extendType({
         });
       },
     });
-    t.nonNull.list.nonNull.field("unmatchedPosts", {
-      type: "Post",
+    t.nonNull.field("unmatchedPosts", {
+      type: "PaginatedPosts",
       args: {
         driverNameFilter: stringArg(),
         requiredSkillsFilter: intArg(),
+        keywordFilter: stringArg(),
         skip: intArg(),
         take: intArg(),
       },
       async resolve(parent, args, context) {
         const { profileId, communityId } = context;
-        const { driverNameFilter, requiredSkillsFilter, skip, take } = args;
+        const {
+          driverNameFilter,
+          requiredSkillsFilter,
+          keywordFilter,
+          skip,
+          take,
+        } = args;
         if (!profileId || !communityId) {
           throw new Error("You have to be in community");
         }
@@ -121,12 +136,21 @@ export const PostQuery = extendType({
             },
           };
         }
+        if (keywordFilter) {
+          where.OR = [
+            { title: { contains: keywordFilter } },
+            { description: { contains: keywordFilter } },
+          ];
+        }
 
-        return context.prisma.post.findMany({
+        const posts = await context.prisma.post.findMany({
           where,
           skip: skip as number | undefined,
           take: take as number | undefined,
         });
+        const count = await context.prisma.post.count({ where });
+
+        return { posts, count };
       },
     });
     t.nonNull.list.nonNull.field("myDrivingPosts", {
