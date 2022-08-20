@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useProfile } from "../../context/auth";
 import {
   FetchUnmatchedPostQuery,
@@ -36,6 +36,14 @@ interface Props {
    * 使用言語の絞り込み
    */
   requiredSkillsFilter?: number;
+  /**
+   * 一度に取得する個数
+   */
+  skip?: number;
+  /**
+   * 何個めを取得するか
+   */
+  take?: number;
 }
 
 /**
@@ -44,6 +52,8 @@ interface Props {
 export const useRecruitHooks = ({
   driverNameFilter,
   requiredSkillsFilter,
+  skip,
+  take,
 }: Props) => {
   /**
    * misc.
@@ -70,9 +80,17 @@ export const useRecruitHooks = ({
       variables: {
         driverNameFilter,
         requiredSkillsFilter,
+        skip,
+        take,
       },
     });
   const posts = fetchPosts && postsTranslator(fetchPosts);
+  const paginationCountData = fetchPosts?.unmatchedPosts.count;
+  const paginationCount = useMemo(() => {
+    if (take !== undefined && paginationCountData !== undefined) {
+      return Math.ceil(paginationCountData / take);
+    }
+  }, [take, paginationCountData]);
 
   /**
    * POSTをマッチさせるhandler
@@ -109,5 +127,6 @@ export const useRecruitHooks = ({
     skillsData,
     refetchPosts,
     communityMember,
+    paginationCount,
   };
 };

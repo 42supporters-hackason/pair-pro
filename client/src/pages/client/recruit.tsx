@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Modal,
+  Pagination,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,6 +22,8 @@ import {
   RecruitFilterSchema,
   recruitFilterSchema,
 } from "../validation/recruit_filter_validation";
+
+const TAKE_PAGINATION = 10;
 
 interface FilterProps {
   /**
@@ -42,9 +45,11 @@ export const RecruitPage = () => {
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [pagination, setPagination] = useState<number>(0);
   const { goToHome } = useClientRoute();
   const { profile } = useProfile();
   const [filterState, setFilterState] = useState<FilterProps>();
+  const ref = useRef<HTMLDivElement>(null);
 
   /**
    * page hooks
@@ -56,9 +61,12 @@ export const RecruitPage = () => {
     skillsData,
     refetchPosts,
     communityMember,
+    paginationCount,
   } = useRecruitHooks({
     driverNameFilter: filterState?.driverNameFilter,
     requiredSkillsFilter: filterState?.requiredSkillsFilter,
+    take: TAKE_PAGINATION,
+    skip: pagination,
   });
 
   /**
@@ -92,9 +100,17 @@ export const RecruitPage = () => {
     }
   }, [selectedId, profile, matchPost, setOpenPostModal]);
 
+  const handleChangePagination = useCallback(
+    (event: React.ChangeEvent<unknown>, value: number) => {
+      setPagination(value);
+      ref.current?.scrollIntoView();
+    },
+    [setPagination]
+  );
+
   return (
     <Box sx={{ mx: "100px" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }} ref={ref}>
         <Typography
           variant="h6"
           fontWeight="bold"
@@ -171,6 +187,15 @@ export const RecruitPage = () => {
                 }}
               />
             ))}
+        </Box>
+        <Box sx={{ mx: "auto" }}>
+          <Pagination
+            color="primary"
+            count={paginationCount}
+            size="large"
+            page={pagination}
+            onChange={handleChangePagination}
+          />
         </Box>
         <BackButton
           style={{ margin: "0 auto", width: "350px" }}
