@@ -61,13 +61,13 @@ export interface NexusGenObjects {
     id: number; // Int!
   }
   Mutation: {};
-  PaginatedCommunities: { // root type
-    communities: NexusGenRootTypes['Community'][]; // [Community!]!
-    count: number; // Int!
-  }
   PaginatedPosts: { // root type
     count: number; // Int!
     posts: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
+  PaginatedProfiles: { // root type
+    count: number; // Int!
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
   }
   Post: { // root type
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -145,13 +145,13 @@ export interface NexusGenFieldTypes {
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
   }
-  PaginatedCommunities: { // field return type
-    communities: NexusGenRootTypes['Community'][]; // [Community!]!
-    count: number; // Int!
-  }
   PaginatedPosts: { // field return type
     count: number; // Int!
     posts: NexusGenRootTypes['Post'][]; // [Post!]!
+  }
+  PaginatedProfiles: { // field return type
+    count: number; // Int!
+    profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
   }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -181,7 +181,7 @@ export interface NexusGenFieldTypes {
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
-    myCommunities: NexusGenRootTypes['PaginatedCommunities']; // PaginatedCommunities!
+    myCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
     myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -189,6 +189,7 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Post'] | null; // Post
     profile: NexusGenRootTypes['Profile'] | null; // Profile
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
+    profilesInMyCommunity: NexusGenRootTypes['PaginatedProfiles']; // PaginatedProfiles!
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     unmatchedPosts: NexusGenRootTypes['PaginatedPosts']; // PaginatedPosts!
   }
@@ -247,13 +248,13 @@ export interface NexusGenFieldTypeNames {
     updateMyProfile: 'Profile'
     updatePost: 'Post'
   }
-  PaginatedCommunities: { // field return type name
-    communities: 'Community'
-    count: 'Int'
-  }
   PaginatedPosts: { // field return type name
     count: 'Int'
     posts: 'Post'
+  }
+  PaginatedProfiles: { // field return type name
+    count: 'Int'
+    profiles: 'Profile'
   }
   Post: { // field return type name
     completedAt: 'DateTime'
@@ -283,7 +284,7 @@ export interface NexusGenFieldTypeNames {
     communities: 'Community'
     feed: 'Post'
     messagesByPostId: 'Message'
-    myCommunities: 'PaginatedCommunities'
+    myCommunities: 'Community'
     myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
@@ -291,6 +292,7 @@ export interface NexusGenFieldTypeNames {
     post: 'Post'
     profile: 'Profile'
     profiles: 'Profile'
+    profilesInMyCommunity: 'PaginatedProfiles'
     skills: 'Skill'
     unmatchedPosts: 'PaginatedPosts'
   }
@@ -368,15 +370,15 @@ export interface NexusGenArgTypes {
     messagesByPostId: { // args
       postId: string; // String!
     }
-    myCommunities: { // args
-      skip?: number | null; // Int
-      take?: number | null; // Int
-    }
     post: { // args
       id: string; // String!
     }
     profile: { // args
       id: number; // Int!
+    }
+    profilesInMyCommunity: { // args
+      skip?: number | null; // Int
+      take?: number | null; // Int
     }
     unmatchedPosts: { // args
       driverNameFilter?: string | null; // String
