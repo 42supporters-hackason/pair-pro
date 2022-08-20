@@ -37,6 +37,10 @@ interface Props {
    */
   requiredSkillsFilter?: number;
   /**
+   * キーワード検索
+   */
+  keywordFilter?: string;
+  /**
    * 一度に取得する個数
    */
   skip?: number;
@@ -52,6 +56,7 @@ interface Props {
 export const useRecruitHooks = ({
   driverNameFilter,
   requiredSkillsFilter,
+  keywordFilter,
   skip,
   take,
 }: Props) => {
@@ -80,6 +85,7 @@ export const useRecruitHooks = ({
       variables: {
         driverNameFilter,
         requiredSkillsFilter,
+        keywordFilter,
         skip,
         take,
       },

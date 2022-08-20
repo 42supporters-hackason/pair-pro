@@ -34,6 +34,10 @@ interface FilterProps {
    * 使用言語の絞り込み
    */
   requiredSkillsFilter?: number;
+  /**
+   * キーワード検索
+   */
+  keywordFilter?: string;
 }
 
 /**
@@ -65,6 +69,7 @@ export const RecruitPage = () => {
   } = useRecruitHooks({
     driverNameFilter: filterState?.driverNameFilter,
     requiredSkillsFilter: filterState?.requiredSkillsFilter,
+    keywordFilter: filterState?.keywordFilter,
     take: TAKE_PAGINATION,
     skip: pagination,
   });
@@ -72,7 +77,7 @@ export const RecruitPage = () => {
   /**
    * form validation
    */
-  const { control, getValues } = useForm<RecruitFilterSchema>({
+  const { register, control, getValues } = useForm<RecruitFilterSchema>({
     resolver: zodResolver(recruitFilterSchema),
   });
 
@@ -86,6 +91,7 @@ export const RecruitPage = () => {
       requiredSkillsFilter: skillsData?.skills.find(
         ({ name }) => name === formValue.language
       )?.id as number,
+      keywordFilter: formValue.keyword,
     });
     setTimeout(() => refetchPosts(), 10);
   }, [setFilterState, getValues, skillsData, refetchPosts]);
@@ -159,6 +165,13 @@ export const RecruitPage = () => {
                   }}
                 />
               )}
+            />
+          </Box>
+          <Box sx={{ width: "20%" }}>
+            <TextField
+              sx={{ width: "100%" }}
+              {...register("keyword")}
+              label="キーワード"
             />
           </Box>
           <Button
