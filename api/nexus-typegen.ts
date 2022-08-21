@@ -60,7 +60,7 @@ export interface NexusGenObjects {
     content: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: number; // Int!
-    isRead?: boolean | null; // Boolean
+    isRead: boolean; // Boolean!
   }
   Mutation: {};
   PaginatedPosts: { // root type
@@ -136,7 +136,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     createdBy: NexusGenRootTypes['Profile']; // Profile!
     id: number; // Int!
-    isRead: boolean | null; // Boolean
+    isRead: boolean; // Boolean!
     post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type

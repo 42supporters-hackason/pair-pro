@@ -28,7 +28,7 @@ type Message {
   createdAt: DateTime!
   createdBy: Profile!
   id: Int!
-  isRead: Boolean
+  isRead: Boolean!
   post: Post!
 }
 

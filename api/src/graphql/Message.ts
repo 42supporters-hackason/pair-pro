@@ -36,7 +36,7 @@ export const MessageObject = objectType({
           .createdBy()) as Profile;
       },
     });
-    t.boolean("isRead");
+    t.nonNull.boolean("isRead");
   },
 });
 
