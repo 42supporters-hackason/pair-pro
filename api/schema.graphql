@@ -32,6 +32,7 @@ type Message {
 
 type Mutation {
   authGithub(code: String!): AuthPayLoad!
+  completePairProgramming(postId: String!): Post!
   createCommunity(name: String!): Community!
   createMessage(content: String!, postId: String!): Message!
   deleteCommunity(communityId: String!): Community!
@@ -53,6 +54,11 @@ type PaginatedPosts {
 type PaginatedProfiles {
   count: Int!
   profiles: [Profile!]!
+}
+
+type PairProgrammingCount {
+  count: Int!
+  profile: Profile!
 }
 
 type Post {
@@ -80,12 +86,15 @@ type Profile {
 
 type Query {
   ListDrivenSkills: [LearnedSkill!]!
+  ListDriverPostsRanking: [PairProgrammingCount!]!
   ListNavigatedSkills: [LearnedSkill!]!
+  ListNavigatorPostsRanking: [PairProgrammingCount!]!
   accessToken(identity: String, room: String): Video!
   communities: [Community!]!
   feed: [Post!]!
   messagesByPostId(postId: String!): [Message!]!
   myCommunities: [Community!]!
+  myCompletedPosts: [Post!]!
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
