@@ -25,8 +25,10 @@ type LearnedSkill {
 
 type Message {
   content: String!
+  createdAt: DateTime!
   createdBy: Profile!
   id: Int!
+  isRead: Boolean
   post: Post!
 }
 
@@ -40,6 +42,7 @@ type Mutation {
   deletePost(id: String!): Post!
   joinCommunity(communityId: String!): AuthPayLoad!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
+  readMessages(postId: String!): [Message!]!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
   updateCommunity(id: String!, name: String!): Community!
   updateMyProfile(bio: String, name: String): Profile
@@ -98,6 +101,7 @@ type Query {
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
+  myMatchedPostsWithUnreadMessages: [Post!]!
   myProfile: Profile!
   post(id: String!): Post
   profile(id: Int!): Profile
