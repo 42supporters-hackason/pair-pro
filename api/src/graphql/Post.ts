@@ -51,6 +51,14 @@ export const Post = objectType({
   },
 });
 
+export const PaginatedPosts = objectType({
+  name: "PaginatedPosts",
+  definition(t) {
+    t.nonNull.list.nonNull.field("posts", { type: Post });
+    t.nonNull.int("count");
+  },
+});
+
 export const PostQuery = extendType({
   type: "Query",
   definition(t) {
@@ -73,18 +81,24 @@ export const PostQuery = extendType({
         });
       },
     });
-
-    t.nonNull.list.nonNull.field("unmatchedPosts", {
-      type: "Post",
+    t.nonNull.field("unmatchedPosts", {
+      type: "PaginatedPosts",
       args: {
         driverNameFilter: stringArg(),
         requiredSkillsFilter: intArg(),
+        keywordFilter: stringArg(),
         skip: intArg(),
         take: intArg(),
       },
       async resolve(parent, args, context) {
         const { profileId, communityId } = context.expectUserJoinedCommunity();
-        const { driverNameFilter, requiredSkillsFilter, skip, take } = args;
+        const {
+          driverNameFilter,
+          requiredSkillsFilter,
+          keywordFilter,
+          skip,
+          take,
+        } = args;
 
         const profileIds = (
           await context.prisma.profile.findMany({
@@ -120,12 +134,21 @@ export const PostQuery = extendType({
             },
           };
         }
+        if (keywordFilter) {
+          where.OR = [
+            { title: { contains: keywordFilter } },
+            { description: { contains: keywordFilter } },
+          ];
+        }
 
-        return context.prisma.post.findMany({
+        const posts = await context.prisma.post.findMany({
           where,
           skip: skip as number | undefined,
           take: take as number | undefined,
         });
+        const count = await context.prisma.post.count({ where });
+
+        return { posts, count };
       },
     });
 
@@ -315,11 +338,10 @@ export const PostMutation = extendType({
         const { postId, navigatorId } = args;
         const { profileId } = context.expectUserJoinedCommunity();
 
-
         // check if the post exists
         const post = await context.prisma.post.findUnique({
           where: { id: postId },
-          include: { driver: true }
+          include: { driver: true },
         });
         if (!post) {
           throw new Error("There is no such post");

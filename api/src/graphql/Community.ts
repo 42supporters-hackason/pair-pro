@@ -34,21 +34,13 @@ export const CommunityQuery = extendType({
     // List communities that user has
     t.nonNull.list.nonNull.field("myCommunities", {
       type: "Community",
-      args: {
-        skip: intArg(),
-        take: intArg(),
-      },
       async resolve(parent, args, context) {
         const { userId } = context.expectUserLoggedIn();
-        const { skip, take } = args;
 
         const profiles = await context.prisma.profile.findMany({
           where: { userId },
           include: { community: true },
-          skip: skip as number | undefined,
-          take: take as number | undefined,
         });
-
         return profiles.map((profile) => profile.community);
       },
     });
