@@ -39,11 +39,8 @@ export const CommunityQuery = extendType({
         take: intArg(),
       },
       async resolve(parent, args, context) {
-        const { userId } = context;
+        const { userId } = context.expectUserLoggedIn();
         const { skip, take } = args;
-        if (!userId) {
-          throw new Error("You have to log in");
-        }
 
         const profiles = await context.prisma.profile.findMany({
           where: { userId },
@@ -59,10 +56,7 @@ export const CommunityQuery = extendType({
     t.field("myCurrentCommunity", {
       type: "Community",
       resolve(parent, args, context) {
-        const { userId, communityId } = context;
-        if (!communityId) {
-          throw new Error("You are not in community!");
-        }
+        const { communityId } = context.expectUserJoinedCommunity();
 
         return context.prisma.community.findUnique({
           where: { id: communityId },
@@ -82,10 +76,6 @@ export const CommunityMutation = extendType({
         name: nonNull(stringArg()),
       },
       resolve(parent, args, context) {
-        const { userId } = context;
-        if (!userId) {
-          throw new Error("You have to log in");
-        }
         return context.prisma.community.create({
           data: {
             name: args.name,
@@ -102,10 +92,6 @@ export const CommunityMutation = extendType({
         name: nonNull(stringArg()),
       },
       resolve(parent, args, context) {
-        const { userId } = context;
-        if (!userId) {
-          throw new Error("You have to log in");
-        }
         return context.prisma.community.update({
           where: { id: args.id },
           data: {
@@ -121,11 +107,8 @@ export const CommunityMutation = extendType({
         communityId: nonNull(stringArg()),
       },
       async resolve(parent, args, context) {
-        const { userId } = context;
+        const { userId } = context.expectUserLoggedIn();
         const { communityId } = args;
-        if (!userId) {
-          throw new Error("You have to log in");
-        }
 
         // check if community exists
         const community = await context.prisma.community.findUnique({

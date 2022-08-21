@@ -58,13 +58,7 @@ export const LearnedSkillQuery = extendType({
     t.nonNull.list.nonNull.field("ListNavigatedSkills", {
       type: "LearnedSkill",
       async resolve(parent, args, context) {
-        const { profileId, userId } = context;
-        if (!userId) {
-          throw new Error("You have to log in");
-        }
-        if (!profileId) {
-          throw new Error("You have to be in the community");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
         const posts = await context.prisma.post.findMany({
           where: { navigatorId: profileId },
           include: { requiredSkills: true },
@@ -88,13 +82,7 @@ export const LearnedSkillQuery = extendType({
       t.nonNull.list.nonNull.field("ListDrivenSkills", {
         type: "LearnedSkill",
         async resolve(parent, args, context) {
-          const { profileId, userId } = context;
-          if (!userId) {
-            throw new Error("You have to log in");
-          }
-          if (!profileId) {
-            throw new Error("You have to be in the community");
-          }
+          const { profileId } = context.expectUserJoinedCommunity();
           const posts = await context.prisma.post.findMany({
             where: { driverId: profileId },
             include: { requiredSkills: true },

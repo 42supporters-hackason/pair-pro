@@ -83,11 +83,8 @@ export const PostQuery = extendType({
         take: intArg(),
       },
       async resolve(parent, args, context) {
-        const { profileId, communityId } = context;
+        const { profileId, communityId } = context.expectUserJoinedCommunity();
         const { driverNameFilter, requiredSkillsFilter, skip, take } = args;
-        if (!profileId || !communityId) {
-          throw new Error("You have to be in community");
-        }
 
         const profileIds = (
           await context.prisma.profile.findMany({
@@ -135,10 +132,7 @@ export const PostQuery = extendType({
     t.nonNull.list.nonNull.field("myDrivingPosts", {
       type: "Post",
       resolve(parent, args, context) {
-        const { profileId } = context;
-        if (!profileId) {
-          throw new Error("You have to log in");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         return context.prisma.post.findMany({
           where: {
@@ -152,10 +146,7 @@ export const PostQuery = extendType({
     t.nonNull.list.nonNull.field("myMatchedPosts", {
       type: "Post",
       resolve(parent, args, context) {
-        const { profileId } = context;
-        if (!profileId) {
-          throw new Error("You have to log in");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         return context.prisma.post.findMany({
           where: {
@@ -200,11 +191,7 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { description, title, requiredSkillsId } = args;
-        const { profileId } = context;
-
-        if (!profileId) {
-          throw new Error("You have to log in");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         const profile = (await context.prisma.profile.findUnique({
           where: { id: profileId },
@@ -241,11 +228,7 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const postId = args.id;
-        const { profileId } = context;
-
-        if (!profileId) {
-          throw new Error("You have to log in");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         // check if the post exists
         const postToDelete = await context.prisma.post.findUnique({
@@ -285,10 +268,7 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { id, title, description, requiredSkillsIds } = args;
-        const { profileId } = context;
-        if (!profileId) {
-          throw new Error("You have to log in");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         // check if the post exists
         const post = await context.prisma.post.findUnique({
@@ -333,11 +313,8 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { postId, navigatorId } = args;
-        const { profileId, communityId } = context;
+        const { profileId } = context.expectUserJoinedCommunity();
 
-        if (!profileId) {
-          throw new Error("You have to log in");
-        }
 
         // check if the post exists
         const post = await context.prisma.post.findUnique({
