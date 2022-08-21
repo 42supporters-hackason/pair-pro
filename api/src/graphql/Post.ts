@@ -336,7 +336,7 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { postId, navigatorId } = args;
-        const { profileId } = context.expectUserJoinedCommunity();
+        const { communityId } = context.expectUserJoinedCommunity();
 
         // check if the post exists
         const post = await context.prisma.post.findUnique({
