@@ -61,6 +61,11 @@ type PairProgrammingCount {
   profile: Profile!
 }
 
+type PopularSkillsCount {
+  count: Int!
+  skill: Skill!
+}
+
 type Post {
   completedAt: DateTime
   createdAt: DateTime!
@@ -89,6 +94,7 @@ type Query {
   ListDriverPostsRanking: [PairProgrammingCount!]!
   ListNavigatedSkills: [LearnedSkill!]!
   ListNavigatorPostsRanking: [PairProgrammingCount!]!
+  ListPopularSkillsRanking(take: Int): [PopularSkillsCount!]!
   accessToken(identity: String, room: String): Video!
   communities: [Community!]!
   feed: [Post!]!
