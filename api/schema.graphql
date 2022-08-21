@@ -46,6 +46,11 @@ type Mutation {
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
+type PairProgrammingCount {
+  count: Int!
+  profile: Profile!
+}
+
 type Post {
   completedAt: DateTime
   createdAt: DateTime!
@@ -71,7 +76,9 @@ type Profile {
 
 type Query {
   ListDrivenSkills: [LearnedSkill!]!
+  ListDriverPostsRanking: [PairProgrammingCount!]!
   ListNavigatedSkills: [LearnedSkill!]!
+  ListNavigatorPostsRanking: [PairProgrammingCount!]!
   accessToken(identity: String, room: String): Video!
   communities: [Community!]!
   feed: [Post!]!
