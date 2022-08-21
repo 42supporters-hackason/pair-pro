@@ -60,6 +60,7 @@ export const PostQuery = extendType({
         return context.prisma.post.findMany();
       },
     });
+
     t.field("post", {
       type: "Post",
       args: {
@@ -72,6 +73,7 @@ export const PostQuery = extendType({
         });
       },
     });
+
     t.nonNull.list.nonNull.field("unmatchedPosts", {
       type: "Post",
       args: {
@@ -126,6 +128,7 @@ export const PostQuery = extendType({
         });
       },
     });
+
     t.nonNull.list.nonNull.field("myDrivingPosts", {
       type: "Post",
       resolve(parent, args, context) {
@@ -139,6 +142,7 @@ export const PostQuery = extendType({
         });
       },
     });
+
     t.nonNull.list.nonNull.field("myMatchedPosts", {
       type: "Post",
       resolve(parent, args, context) {
@@ -149,6 +153,25 @@ export const PostQuery = extendType({
             OR: [{ navigatorId: profileId }, { driverId: profileId }],
             navigatorId: { not: null },
             driverId: { not: null },
+            completedAt: null,
+          },
+        });
+      },
+    });
+
+    t.nonNull.list.nonNull.field("myCompletedPosts", {
+      type: "Post",
+      resolve(parent, args, context) {
+        const { profileId } = context;
+        if (!profileId) {
+          throw new Error("You have to log in");
+        }
+        return context.prisma.post.findMany({
+          where: {
+            OR: [{ navigatorId: profileId }, { driverId: profileId }],
+            navigatorId: { not: null },
+            driverId: { not: null },
+            completedAt: { not: null },
           },
         });
       },
@@ -250,6 +273,7 @@ export const PostMutation = extendType({
         // check if the post exists
         const post = await context.prisma.post.findUnique({
           where: { id: id },
+          include: { requiredSkills: true },
         });
         if (!post) {
           throw new Error("There is no such post");
@@ -260,15 +284,23 @@ export const PostMutation = extendType({
           throw new Error("You do not have rights to update this post");
         }
 
+        const data: { [key: string]: any } = {
+          title: title,
+          description: description,
+        };
+
+        // dataのupdateがあるときは、既存で持っているデータをdisconnectしてから
+        // connectで新しいdataに更新する。requiredSkillsIdsがnullのときは変化なし
+        if (requiredSkillsIds) {
+          data.requiredSkills = {
+            disconnect: post.requiredSkills?.map((skill) => ({ id: skill.id })),
+            connect: requiredSkillsIds?.map((id) => ({ id })),
+          };
+        }
+
         return context.prisma.post.update({
-          where: { id: id },
-          data: {
-            title: title as string,
-            description: description as string,
-            // requiredSkills: {
-            //   connect: requiredSkillsIds.map(id => ({ id })),
-            // }
-          },
+          where: { id },
+          data,
         });
       },
     });
@@ -283,9 +315,11 @@ export const PostMutation = extendType({
         const { postId, navigatorId } = args;
         const { profileId } = context.expectUserJoinedCommunity();
 
+
         // check if the post exists
         const post = await context.prisma.post.findUnique({
           where: { id: postId },
+          include: { driver: true }
         });
         if (!post) {
           throw new Error("There is no such post");
@@ -304,17 +338,61 @@ export const PostMutation = extendType({
           throw new Error("There is no such navigator");
         }
 
+        // check if the navigator belongs to the same community
+        if (post.driver?.communityId != communityId) {
+          throw new Error("Navigator does not belong to the same community");
+        }
+
         // increment navigator's matching point
         await context.prisma.profile.update({
           where: { id: navigatorId },
           data: { matchingPoint: navigator.matchingPoint + 1 },
         });
 
-        // update navigator and completedAt
+        // update navigator
         return context.prisma.post.update({
           where: { id: postId },
           data: {
             navigator: { connect: { id: navigatorId } },
+          },
+        });
+      },
+    });
+
+    t.nonNull.field("completePairProgramming", {
+      type: "Post",
+      args: {
+        postId: nonNull(stringArg()),
+      },
+      async resolve(parent, args, context) {
+        const { postId } = args;
+        const { userId, profileId } = context;
+
+        if (!userId) {
+          throw new Error("You have to log in");
+        } else if (!profileId) {
+          throw new Error("You have to be in the community");
+        }
+
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId },
+        });
+
+        if (!post) {
+          throw new Error("There is no such Post");
+        } else if (
+          !(profileId == post.driverId || profileId == post.navigatorId)
+        ) {
+          throw new Error("You do not have rights to complete this post.");
+        } else if (post.navigatorId == null) {
+          throw new Error("This post is not matched yet.");
+        } else if (post.completedAt != null) {
+          throw new Error("This post is already completed.");
+        }
+
+        return context.prisma.post.update({
+          where: { id: postId },
+          data: {
             completedAt: new Date(),
           },
         });
