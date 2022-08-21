@@ -125,6 +125,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    completePairProgramming: NexusGenRootTypes['Post']; // Post!
     createCommunity: NexusGenRootTypes['Community']; // Community!
     createMessage: NexusGenRootTypes['Message']; // Message!
     deleteCommunity: NexusGenRootTypes['Community']; // Community!
@@ -166,6 +167,7 @@ export interface NexusGenFieldTypes {
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
     messagesByPostId: NexusGenRootTypes['Message'][]; // [Message!]!
     myCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
+    myCompletedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -219,6 +221,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     authGithub: 'AuthPayLoad'
+    completePairProgramming: 'Post'
     createCommunity: 'Community'
     createMessage: 'Message'
     deleteCommunity: 'Community'
@@ -260,6 +263,7 @@ export interface NexusGenFieldTypeNames {
     feed: 'Post'
     messagesByPostId: 'Message'
     myCommunities: 'Community'
+    myCompletedPosts: 'Post'
     myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
@@ -295,6 +299,9 @@ export interface NexusGenArgTypes {
   Mutation: {
     authGithub: { // args
       code: string; // String!
+    }
+    completePairProgramming: { // args
+      postId: string; // String!
     }
     createCommunity: { // args
       name: string; // String!
