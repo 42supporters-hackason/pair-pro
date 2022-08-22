@@ -9,6 +9,7 @@ import {
   useFetchMatchedPostQuery,
   useFetchMeQuery,
   useFetchMyPostQuery,
+  useFetchUnreadPostsQuery,
 } from "../../gen/graphql-client";
 import { FetchMyPostQuery } from "./../../gen/graphql-client";
 
@@ -121,6 +122,14 @@ export const useHomeHooks = () => {
     completedPostsTaranslator(completedPostData, profile.githubLogin ?? "");
 
   /**
+   * 未読のPOST一覧を取得
+   */
+  const { data: unreadPostsData } = useFetchUnreadPostsQuery();
+  const unreadPosts = unreadPostsData?.myMatchedPostsWithUnreadMessages.map(
+    ({ id }) => id
+  );
+
+  /**
    * POSTを削除するhandler
    */
   const deletePost = useCallback(
@@ -165,5 +174,6 @@ export const useHomeHooks = () => {
     deletePost,
     completePost,
     profile,
+    unreadPosts,
   };
 };

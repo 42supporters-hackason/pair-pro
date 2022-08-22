@@ -57,6 +57,7 @@ export const HomePage = () => {
     deletePost,
     completePost,
     completedPosts,
+    unreadPosts,
   } = useHomeHooks();
 
   /**
@@ -100,6 +101,7 @@ export const HomePage = () => {
                     setOpenPostModal.on();
                     setSelectedId(id);
                   }}
+                  hasUnreadMessage={unreadPosts?.includes(id)}
                 />
               )
             )}
