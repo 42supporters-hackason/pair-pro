@@ -11,6 +11,11 @@ import {
 } from "@mui/material";
 import Card from "@mui/material/Card";
 
+interface LanguagesDataType {
+  name: string;
+  imageUrl?: string | null;
+}
+
 export interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
    * タイトル
@@ -33,6 +38,10 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
    */
   githubLogin?: string;
   /**
+   * 言語のデータ
+   */
+  languagesData: LanguagesDataType[];
+  /*
    * ぺあぷろ完了のアクション
    */
   onComplete?: () => void;
@@ -48,6 +57,7 @@ export const PostCard = ({
   languages,
   name,
   githubLogin,
+  languagesData,
   onComplete,
   onClick,
   ...props
@@ -68,14 +78,57 @@ export const PostCard = ({
               <Box
                 sx={{ display: "flex", gap: 10, alignItems: "center", px: 3 }}
               >
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    alignItems: "center",
+                    width: "50%",
+                  }}
+                >
                   <Typography variant="subtitle1">使用言語</Typography>
-                  {languages &&
-                    languages.map((language) => (
-                      <Typography variant="h6" key={language}>
-                        {language}
-                      </Typography>
-                    ))}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {languages &&
+                      languages.map((language) => (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "1px",
+                          }}
+                          key={language}
+                        >
+                          {languagesData.find(({ name }) => name === language)
+                            ?.imageUrl ? (
+                            <>
+                              <Box
+                                component="img"
+                                src={
+                                  languagesData.find(
+                                    ({ name }) => name === language
+                                  )?.imageUrl ?? ""
+                                }
+                                sx={{ width: "50px", height: "50px" }}
+                              />
+                              <Typography
+                                sx={{ fontSize: "6px", mt: "auto", mb: "10px" }}
+                              >
+                                {language}
+                              </Typography>
+                            </>
+                          ) : (
+                            <Typography variant="h6">{language}</Typography>
+                          )}
+                        </Box>
+                      ))}
+                  </Box>
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Typography variant="subtitle1">名前</Typography>

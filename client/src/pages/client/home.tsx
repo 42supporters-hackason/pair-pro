@@ -57,6 +57,7 @@ export const HomePage = () => {
     deletePost,
     completePost,
     completedPosts,
+    languagesData,
   } = useHomeHooks();
 
   /**
@@ -100,6 +101,7 @@ export const HomePage = () => {
                     setOpenPostModal.on();
                     setSelectedId(id);
                   }}
+                  languagesData={languagesData ?? []}
                 />
               )
             )}
@@ -133,6 +135,7 @@ export const HomePage = () => {
                     setOpenFinishedPostModal.on();
                     setFinishedPostId(id);
                   }}
+                  languagesData={languagesData ?? []}
                 />
               )
             )}
@@ -200,6 +203,7 @@ export const HomePage = () => {
               agreeTitle="チャットルームに移動する"
               onAgree={() => goToChat(selectedId)}
               onClose={setOpenPostModal.off}
+              languagesData={languagesData ?? []}
             />
           )}
         </Box>
@@ -231,6 +235,7 @@ export const HomePage = () => {
               }
               bio={completedPosts.find(({ id }) => id === finishedPostId)?.bio}
               hasButton={false}
+              languagesData={languagesData ?? []}
             />
           )}
         </Box>
