@@ -39,8 +39,10 @@ export type LearnedSkill = {
 export type Message = {
   __typename?: 'Message';
   content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   createdBy: Profile;
   id: Scalars['Int'];
+  isRead: Scalars['Boolean'];
   post: Post;
 };
 
@@ -55,6 +57,7 @@ export type Mutation = {
   deletePost: Post;
   joinCommunity: AuthPayLoad;
   post: Post;
+  readMessages: Array<Message>;
   registerNavigator: Post;
   updateCommunity: Community;
   updateMyProfile?: Maybe<Profile>;
@@ -102,6 +105,11 @@ export type MutationPostArgs = {
   description: Scalars['String'];
   requiredSkillsId: Array<Scalars['Int']>;
   title: Scalars['String'];
+};
+
+
+export type MutationReadMessagesArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -188,6 +196,7 @@ export type Query = {
   myCurrentCommunity?: Maybe<Community>;
   myDrivingPosts: Array<Post>;
   myMatchedPosts: Array<Post>;
+  myMatchedPostsWithUnreadMessages: Array<Post>;
   myProfile: Profile;
   post?: Maybe<Post>;
   profile?: Maybe<Profile>;
@@ -321,6 +330,13 @@ export type CompletePostMutationVariables = Exact<{
 
 export type CompletePostMutation = { __typename?: 'Mutation', completePairProgramming: { __typename?: 'Post', id: string } };
 
+export type ReadPostMessageMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type ReadPostMessageMutation = { __typename?: 'Mutation', readMessages: Array<{ __typename?: 'Message', id: number }> };
+
 export type SendMessageMutationVariables = Exact<{
   postId: Scalars['String'];
   content: Scalars['String'];
@@ -393,6 +409,11 @@ export type FetchCompletedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FetchCompletedPostQuery = { __typename?: 'Query', myCompletedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+
+export type FetchUnreadPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchUnreadPostsQuery = { __typename?: 'Query', myMatchedPostsWithUnreadMessages: Array<{ __typename?: 'Post', id: string }> };
 
 export type FetchMessagesQueryVariables = Exact<{
   postId: Scalars['String'];
@@ -707,6 +728,39 @@ export function useCompletePostMutation(baseOptions?: Apollo.MutationHookOptions
 export type CompletePostMutationHookResult = ReturnType<typeof useCompletePostMutation>;
 export type CompletePostMutationResult = Apollo.MutationResult<CompletePostMutation>;
 export type CompletePostMutationOptions = Apollo.BaseMutationOptions<CompletePostMutation, CompletePostMutationVariables>;
+export const ReadPostMessageDocument = gql`
+    mutation readPostMessage($postId: String!) {
+  readMessages(postId: $postId) {
+    id
+  }
+}
+    `;
+export type ReadPostMessageMutationFn = Apollo.MutationFunction<ReadPostMessageMutation, ReadPostMessageMutationVariables>;
+
+/**
+ * __useReadPostMessageMutation__
+ *
+ * To run a mutation, you first call `useReadPostMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReadPostMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [readPostMessageMutation, { data, loading, error }] = useReadPostMessageMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useReadPostMessageMutation(baseOptions?: Apollo.MutationHookOptions<ReadPostMessageMutation, ReadPostMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReadPostMessageMutation, ReadPostMessageMutationVariables>(ReadPostMessageDocument, options);
+      }
+export type ReadPostMessageMutationHookResult = ReturnType<typeof useReadPostMessageMutation>;
+export type ReadPostMessageMutationResult = Apollo.MutationResult<ReadPostMessageMutation>;
+export type ReadPostMessageMutationOptions = Apollo.BaseMutationOptions<ReadPostMessageMutation, ReadPostMessageMutationVariables>;
 export const SendMessageDocument = gql`
     mutation sendMessage($postId: String!, $content: String!) {
   createMessage(postId: $postId, content: $content) {
@@ -1200,6 +1254,40 @@ export function useFetchCompletedPostLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type FetchCompletedPostQueryHookResult = ReturnType<typeof useFetchCompletedPostQuery>;
 export type FetchCompletedPostLazyQueryHookResult = ReturnType<typeof useFetchCompletedPostLazyQuery>;
 export type FetchCompletedPostQueryResult = Apollo.QueryResult<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>;
+export const FetchUnreadPostsDocument = gql`
+    query fetchUnreadPosts {
+  myMatchedPostsWithUnreadMessages {
+    id
+  }
+}
+    `;
+
+/**
+ * __useFetchUnreadPostsQuery__
+ *
+ * To run a query within a React component, call `useFetchUnreadPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchUnreadPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchUnreadPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchUnreadPostsQuery(baseOptions?: Apollo.QueryHookOptions<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>(FetchUnreadPostsDocument, options);
+      }
+export function useFetchUnreadPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>(FetchUnreadPostsDocument, options);
+        }
+export type FetchUnreadPostsQueryHookResult = ReturnType<typeof useFetchUnreadPostsQuery>;
+export type FetchUnreadPostsLazyQueryHookResult = ReturnType<typeof useFetchUnreadPostsLazyQuery>;
+export type FetchUnreadPostsQueryResult = Apollo.QueryResult<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>;
 export const FetchMessagesDocument = gql`
     query fetchMessages($postId: String!) {
   messagesByPostId(postId: $postId) {

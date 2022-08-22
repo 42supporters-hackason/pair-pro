@@ -171,6 +171,14 @@ export const FETCH_COMPLETED_POST = gql`
   }
 `;
 
+export const FETCH_UNREAD_POSTS = gql`
+  query fetchUnreadPosts {
+    myMatchedPostsWithUnreadMessages {
+      id
+    }
+  }
+`;
+
 /**
  * message
  */
