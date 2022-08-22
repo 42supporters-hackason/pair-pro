@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Pagination, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { BackButton } from "../../components/BackButton";
@@ -7,12 +7,34 @@ import { UserItem } from "../../components/UserItem";
 import { useClientRoute } from "../../hooks/useClientRoute";
 import { useMemberHooks } from "../hooks/useMemberHooks";
 
+const TAKE_PAGINATION = 6;
+const DEFAULT_PAGE_NUMBER = 1;
+
 /**
  * client/member
  */
 export const MemberPage = () => {
-  const { communityMember, communityName, communityId } = useMemberHooks();
+  const [pagination, setPagination] = useState(DEFAULT_PAGE_NUMBER);
+  const {
+    communityName,
+    communityId,
+    paginationCount,
+    firstCommunityMember,
+    secondCommunityMember,
+  } = useMemberHooks({
+    take: TAKE_PAGINATION,
+    skip: pagination !== 0 ? (pagination - 1) * TAKE_PAGINATION : 0,
+  });
+
   const { goToHome } = useClientRoute();
+
+  const handleChangePagination = useCallback(
+    (event: React.ChangeEvent<unknown>, value: number) => {
+      setPagination(value);
+    },
+    [setPagination]
+  );
+
   return (
     <Box
       sx={{
@@ -57,8 +79,8 @@ export const MemberPage = () => {
             gap: 2,
           }}
         >
-          {communityMember &&
-            communityMember.map(({ id, name, user, bio }) => (
+          {firstCommunityMember &&
+            firstCommunityMember.map(({ id, name, user, bio }) => (
               <UserItem
                 key={id}
                 name={name}
@@ -75,8 +97,8 @@ export const MemberPage = () => {
             gap: 2,
           }}
         >
-          {communityMember &&
-            communityMember.map(({ id, name, user, bio }) => (
+          {secondCommunityMember &&
+            secondCommunityMember.map(({ id, name, user, bio }) => (
               <UserItem
                 key={id}
                 name={name}
@@ -96,7 +118,14 @@ export const MemberPage = () => {
           gap: 3,
         }}
       >
-        <Pagination />
+        <Pagination
+          color="primary"
+          size="large"
+          page={pagination}
+          count={paginationCount}
+          defaultPage={DEFAULT_PAGE_NUMBER + 1}
+          onChange={handleChangePagination}
+        />
         <BackButton style={{ width: "350px" }} onClick={() => goToHome()}>
           ホームに戻る
         </BackButton>

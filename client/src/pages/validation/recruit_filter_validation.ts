@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const recruitFilterSchema = z.object({
-  languages: z.string().array(),
-  name: z.string().array(),
+  language: z.string(),
+  name: z.string(),
   keyword: z.string(),
 });
 

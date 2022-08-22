@@ -1,10 +1,12 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Autocomplete,
   Box,
   Button,
   Modal,
+  Pagination,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,6 +23,24 @@ import {
   recruitFilterSchema,
 } from "../validation/recruit_filter_validation";
 
+const TAKE_PAGINATION = 10;
+const DEFAULT_PAGE_NUMBER = 1;
+
+interface FilterProps {
+  /**
+   * ユーザ名の絞り込み
+   */
+  driverNameFilter?: string;
+  /**
+   * 使用言語の絞り込み
+   */
+  requiredSkillsFilter?: number;
+  /**
+   * キーワード検索
+   */
+  keywordFilter?: string;
+}
+
 /**
  * 募集一覧ページ
  */
@@ -30,18 +50,35 @@ export const RecruitPage = () => {
    */
   const [openPostModal, setOpenPostModal] = useBoolean(false);
   const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [pagination, setPagination] = useState<number>(DEFAULT_PAGE_NUMBER);
   const { goToHome } = useClientRoute();
   const { profile } = useProfile();
+  const [filterState, setFilterState] = useState<FilterProps>();
+  const ref = useRef<HTMLDivElement>(null);
 
   /**
    * page hooks
    */
-  const { posts, languages, matchPost } = useRecruitHooks();
+  const {
+    posts,
+    languages,
+    matchPost,
+    skillsData,
+    refetchPosts,
+    communityMember,
+    paginationCount,
+  } = useRecruitHooks({
+    driverNameFilter: filterState?.driverNameFilter,
+    requiredSkillsFilter: filterState?.requiredSkillsFilter,
+    keywordFilter: filterState?.keywordFilter,
+    take: TAKE_PAGINATION,
+    skip: pagination !== 0 ? (pagination - 1) * TAKE_PAGINATION : 0,
+  });
 
   /**
    * form validation
    */
-  const { register, control, handleSubmit } = useForm<RecruitFilterSchema>({
+  const { register, control, getValues } = useForm<RecruitFilterSchema>({
     resolver: zodResolver(recruitFilterSchema),
   });
 
@@ -49,8 +86,16 @@ export const RecruitPage = () => {
    * event-handler
    */
   const handleFilter = useCallback(() => {
-    console.log();
-  }, []);
+    const formValue = getValues();
+    setFilterState({
+      driverNameFilter: formValue.name,
+      requiredSkillsFilter: skillsData?.skills.find(
+        ({ name }) => name === formValue.language
+      )?.id as number,
+      keywordFilter: formValue.keyword,
+    });
+    setTimeout(() => refetchPosts(), 10);
+  }, [setFilterState, getValues, skillsData, refetchPosts]);
 
   const handleMatch = useCallback(() => {
     if (selectedId !== undefined && profile?.id !== undefined) {
@@ -62,9 +107,17 @@ export const RecruitPage = () => {
     }
   }, [selectedId, profile, matchPost, setOpenPostModal]);
 
+  const handleChangePagination = useCallback(
+    (event: React.ChangeEvent<unknown>, value: number) => {
+      setPagination(value);
+      ref.current?.scrollIntoView();
+    },
+    [setPagination]
+  );
+
   return (
     <Box sx={{ mx: "100px" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }} ref={ref}>
         <Typography
           variant="h6"
           fontWeight="bold"
@@ -78,17 +131,14 @@ export const RecruitPage = () => {
             gap: 2,
             justifyContent: "center",
           }}
-          component="form"
-          onSubmit={handleSubmit(handleFilter)}
         >
-          <Box sx={{ width: "25%" }}>
+          <Box sx={{ width: "20%" }}>
             <Controller
-              name="languages"
+              name="language"
               control={control}
               render={({ field: { onChange } }) => (
                 <Autocomplete
                   options={languages ?? []}
-                  multiple
                   renderInput={(params) => (
                     <TextField {...params} label="使用言語" />
                   )}
@@ -100,29 +150,39 @@ export const RecruitPage = () => {
               )}
             />
           </Box>
-          <TextField
-            variant="outlined"
-            label="ユーザ名"
-            sx={{ width: "25%" }}
-            {...register("name")}
-          />
-          <TextField
-            variant="outlined"
-            label="キーワード"
-            sx={{ width: "25%" }}
-            {...register("keyword")}
-          />
+          <Box sx={{ width: "20%" }}>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Autocomplete
+                  options={communityMember ?? []}
+                  renderInput={(params) => (
+                    <TextField {...params} label="ユーザ名" />
+                  )}
+                  onChange={(_, data) => {
+                    onChange(data);
+                    return data;
+                  }}
+                />
+              )}
+            />
+          </Box>
+          <Box sx={{ width: "20%" }}>
+            <TextField
+              sx={{ width: "100%" }}
+              {...register("keyword")}
+              label="キーワード"
+            />
+          </Box>
           <Button
             sx={{
-              mb: "35px",
-              mt: "15px",
-              width: "15%",
-              borderRadius: "10px",
+              borderRadius: "999px",
             }}
             variant="contained"
-            type="submit"
+            onClick={handleFilter}
           >
-            絞り込む
+            <SearchIcon />
           </Button>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -142,7 +202,21 @@ export const RecruitPage = () => {
               />
             ))}
         </Box>
-        <BackButton style={{ margin: "0 auto", width: "350px" }} onClick={() => goToHome()}>戻る</BackButton>
+        <Box sx={{ mx: "auto" }}>
+          <Pagination
+            color="primary"
+            count={paginationCount}
+            size="large"
+            page={pagination}
+            onChange={handleChangePagination}
+          />
+        </Box>
+        <BackButton
+          style={{ margin: "0 auto", width: "350px" }}
+          onClick={() => goToHome()}
+        >
+          戻る
+        </BackButton>
       </Box>
       <Modal
         open={openPostModal}

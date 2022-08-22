@@ -13,11 +13,23 @@ interface Props {
 export const UserItem = ({ name, githubLogin, bio }: Props) => {
   return (
     <Card>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+      <Box
+        sx={{ display: "flex", alignItems: "center", gap: 3, width: "100%" }}
+      >
         <Avatar src={`https://github.com/${githubLogin}.png`} />
-        <Box>
+        <Box sx={{ width: "100%" }}>
           <Typography fontWeight="bold">{name}</Typography>
-          <Typography>{bio}</Typography>
+          <Typography
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "3",
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {bio}
+          </Typography>
         </Box>
       </Box>
     </Card>
