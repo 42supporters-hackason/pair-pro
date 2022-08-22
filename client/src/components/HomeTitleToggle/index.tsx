@@ -1,8 +1,8 @@
 import React from "react";
-import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { TitleToggle } from "../TitleToggle";
 
-type ShowList = "myPostList" | "matchedList";
+type ShowList = "myPostList" | "matchedList" | "finishedPost";
 
 interface Props {
   /**
@@ -28,35 +28,24 @@ export const HomeTitleToggle = ({ showList, setShowList }: Props) => {
         gap: "50px",
       }}
     >
-      {showList === "matchedList" ? (
-        <>
-          <Typography fontWeight="bold" sx={{ textDecoration: "underline" }}>
-            マッチング済みの予定
-          </Typography>
-          <Typography
-            fontWeight="bold"
-            color="secondary.main"
-            onClick={() => setShowList("myPostList")}
-            sx={{ cursor: "pointer" }}
-          >
-            募集中の投稿
-          </Typography>
-        </>
-      ) : (
-        <>
-          <Typography
-            fontWeight="bold"
-            color="secondary.main"
-            onClick={() => setShowList("matchedList")}
-            sx={{ cursor: "pointer" }}
-          >
-            マッチング済みの予定
-          </Typography>
-          <Typography fontWeight="bold" sx={{ textDecoration: "underline" }}>
-            募集中の投稿
-          </Typography>
-        </>
-      )}
+      <TitleToggle
+        selected={showList === "matchedList"}
+        onClick={() => setShowList("matchedList")}
+      >
+        マッチング済みの予定
+      </TitleToggle>
+      <TitleToggle
+        selected={showList === "myPostList"}
+        onClick={() => setShowList("myPostList")}
+      >
+        募集中の投稿
+      </TitleToggle>
+      <TitleToggle
+        selected={showList === "finishedPost"}
+        onClick={() => setShowList("finishedPost")}
+      >
+        終了した投稿
+      </TitleToggle>
     </Box>
   );
 };

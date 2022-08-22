@@ -25,24 +25,39 @@ export const GET_VIDEO_ACCESS_TOKEN = gql`
  * post
  */
 export const FETCH_UNMATCHED_POST = gql`
-  query fetchUnmatchedPost {
-    unmatchedPosts {
-      id
-      description
-      title
-      driver {
+  query fetchUnmatchedPost(
+    $driverNameFilter: String
+    $requiredSkillsFilter: Int
+    $keywordFilter: String
+    $skip: Int
+    $take: Int
+  ) {
+    unmatchedPosts(
+      driverNameFilter: $driverNameFilter
+      requiredSkillsFilter: $requiredSkillsFilter
+      keywordFilter: $keywordFilter
+      skip: $skip
+      take: $take
+    ) {
+      posts {
         id
-        name
-        matchingPoint
-        bio
-        user {
-          githubLogin
+        description
+        title
+        driver {
+          id
+          name
+          matchingPoint
+          bio
+          user {
+            githubLogin
+          }
+        }
+        requiredSkills {
+          id
+          name
         }
       }
-      requiredSkills {
-        id
-        name
-      }
+      count
     }
   }
 `;
@@ -96,6 +111,38 @@ export const FETCH_MATCHED_POST = gql`
 export const FETCH_SPECIFIC_POST = gql`
   query fetchSpecificPost($id: String!) {
     post(id: $id) {
+      id
+      description
+      title
+      navigator {
+        id
+        name
+        matchingPoint
+        bio
+        user {
+          githubLogin
+        }
+      }
+      driver {
+        id
+        name
+        matchingPoint
+        bio
+        user {
+          githubLogin
+        }
+      }
+      requiredSkills {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const FETCH_COMPLETED_POST = gql`
+  query fetchCompletedPost {
+    myCompletedPosts {
       id
       description
       title
@@ -184,10 +231,21 @@ export const FETCH_MY_COMMUNITIES = gql`
 `;
 
 export const FETCH_CURRENT_COMMUNITY = gql`
-  query fetchCurrentCommunity {
+  query fetchCurrentCommunity($skip: Int, $take: Int) {
     myCurrentCommunity {
       id
       name
+      profiles {
+        id
+        name
+        bio
+        user {
+          githubLogin
+        }
+      }
+    }
+    profilesInMyCommunity(skip: $skip, take: $take) {
+      count
       profiles {
         id
         name

@@ -154,7 +154,11 @@ export const ProfileCard = ({
                   languages.map((language) => {
                     return (
                       <Box
-                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1px",
+                        }}
                         key={language}
                       >
                         {languagesData.find(({ name }) => name === language)

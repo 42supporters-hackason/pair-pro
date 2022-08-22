@@ -7,4 +7,5 @@ export * from "./Video";
 export * from "./Profile";
 export * from "./Community";
 export * from "./LearnedSkill";
+export * from "./PairProgrammingCount";
 export * from "./scalars/Date";

@@ -108,6 +108,14 @@ export const UPDATE_POST = gql`
   }
 `;
 
+export const COMPLETE_POST = gql`
+  mutation completePost($postId: String!) {
+    completePairProgramming(postId: $postId) {
+      id
+    }
+  }
+`;
+
 /**
  * message
  */

@@ -47,6 +47,7 @@ export type Message = {
 export type Mutation = {
   __typename?: 'Mutation';
   authGithub: AuthPayLoad;
+  completePairProgramming: Post;
   createCommunity: Community;
   createMessage: Message;
   deleteCommunity: Community;
@@ -63,6 +64,11 @@ export type Mutation = {
 
 export type MutationAuthGithubArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationCompletePairProgrammingArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -124,6 +130,24 @@ export type MutationUpdatePostArgs = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export type PaginatedPosts = {
+  __typename?: 'PaginatedPosts';
+  count: Scalars['Int'];
+  posts: Array<Post>;
+};
+
+export type PaginatedProfiles = {
+  __typename?: 'PaginatedProfiles';
+  count: Scalars['Int'];
+  profiles: Array<Profile>;
+};
+
+export type PairProgrammingCount = {
+  __typename?: 'PairProgrammingCount';
+  count: Scalars['Int'];
+  profile: Profile;
+};
+
 export type Post = {
   __typename?: 'Post';
   completedAt?: Maybe<Scalars['DateTime']>;
@@ -152,12 +176,15 @@ export type Profile = {
 export type Query = {
   __typename?: 'Query';
   ListDrivenSkills: Array<LearnedSkill>;
+  ListDriverPostsRanking: Array<PairProgrammingCount>;
   ListNavigatedSkills: Array<LearnedSkill>;
+  ListNavigatorPostsRanking: Array<PairProgrammingCount>;
   accessToken: Video;
   communities: Array<Community>;
   feed: Array<Post>;
   messagesByPostId: Array<Message>;
   myCommunities: Array<Community>;
+  myCompletedPosts: Array<Post>;
   myCurrentCommunity?: Maybe<Community>;
   myDrivingPosts: Array<Post>;
   myMatchedPosts: Array<Post>;
@@ -165,8 +192,9 @@ export type Query = {
   post?: Maybe<Post>;
   profile?: Maybe<Profile>;
   profiles: Array<Profile>;
+  profilesInMyCommunity: PaginatedProfiles;
   skills: Array<Skill>;
-  unmatchedPosts: Array<Post>;
+  unmatchedPosts: PaginatedPosts;
 };
 
 
@@ -181,12 +209,6 @@ export type QueryMessagesByPostIdArgs = {
 };
 
 
-export type QueryMyCommunitiesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
-};
-
-
 export type QueryPostArgs = {
   id: Scalars['String'];
 };
@@ -197,8 +219,15 @@ export type QueryProfileArgs = {
 };
 
 
+export type QueryProfilesInMyCommunityArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryUnmatchedPostsArgs = {
   driverNameFilter?: InputMaybe<Scalars['String']>;
+  keywordFilter?: InputMaybe<Scalars['String']>;
   requiredSkillsFilter?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -285,6 +314,13 @@ export type UpdatePostMutationVariables = Exact<{
 
 export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string } };
 
+export type CompletePostMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type CompletePostMutation = { __typename?: 'Mutation', completePairProgramming: { __typename?: 'Post', id: string } };
+
 export type SendMessageMutationVariables = Exact<{
   postId: Scalars['String'];
   content: Scalars['String'];
@@ -325,10 +361,16 @@ export type GetVideoAccessTokenQueryVariables = Exact<{
 
 export type GetVideoAccessTokenQuery = { __typename?: 'Query', accessToken: { __typename?: 'Video', accessToken: string } };
 
-export type FetchUnmatchedPostQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchUnmatchedPostQueryVariables = Exact<{
+  driverNameFilter?: InputMaybe<Scalars['String']>;
+  requiredSkillsFilter?: InputMaybe<Scalars['Int']>;
+  keywordFilter?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+export type FetchUnmatchedPostQuery = { __typename?: 'Query', unmatchedPosts: { __typename?: 'PaginatedPosts', count: number, posts: Array<{ __typename?: 'Post', id: string, description: string, title: string, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> } };
 
 export type FetchMyPostQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -347,6 +389,11 @@ export type FetchSpecificPostQueryVariables = Exact<{
 
 export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
 
+export type FetchCompletedPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchCompletedPostQuery = { __typename?: 'Query', myCompletedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
+
 export type FetchMessagesQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
@@ -364,10 +411,13 @@ export type FetchMyCommunitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchMyCommunitiesQuery = { __typename?: 'Query', myCommunities: Array<{ __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> }> };
 
-export type FetchCurrentCommunityQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchCurrentCommunityQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null };
+export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null, profilesInMyCommunity: { __typename?: 'PaginatedProfiles', count: number, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } };
 
 export type FetchMessageSubscriptionVariables = Exact<{
   postId: Scalars['String'];
@@ -624,6 +674,39 @@ export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const CompletePostDocument = gql`
+    mutation completePost($postId: String!) {
+  completePairProgramming(postId: $postId) {
+    id
+  }
+}
+    `;
+export type CompletePostMutationFn = Apollo.MutationFunction<CompletePostMutation, CompletePostMutationVariables>;
+
+/**
+ * __useCompletePostMutation__
+ *
+ * To run a mutation, you first call `useCompletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completePostMutation, { data, loading, error }] = useCompletePostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useCompletePostMutation(baseOptions?: Apollo.MutationHookOptions<CompletePostMutation, CompletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CompletePostMutation, CompletePostMutationVariables>(CompletePostDocument, options);
+      }
+export type CompletePostMutationHookResult = ReturnType<typeof useCompletePostMutation>;
+export type CompletePostMutationResult = Apollo.MutationResult<CompletePostMutation>;
+export type CompletePostMutationOptions = Apollo.BaseMutationOptions<CompletePostMutation, CompletePostMutationVariables>;
 export const SendMessageDocument = gql`
     mutation sendMessage($postId: String!, $content: String!) {
   createMessage(postId: $postId, content: $content) {
@@ -841,24 +924,33 @@ export type GetVideoAccessTokenQueryHookResult = ReturnType<typeof useGetVideoAc
 export type GetVideoAccessTokenLazyQueryHookResult = ReturnType<typeof useGetVideoAccessTokenLazyQuery>;
 export type GetVideoAccessTokenQueryResult = Apollo.QueryResult<GetVideoAccessTokenQuery, GetVideoAccessTokenQueryVariables>;
 export const FetchUnmatchedPostDocument = gql`
-    query fetchUnmatchedPost {
-  unmatchedPosts {
-    id
-    description
-    title
-    driver {
+    query fetchUnmatchedPost($driverNameFilter: String, $requiredSkillsFilter: Int, $keywordFilter: String, $skip: Int, $take: Int) {
+  unmatchedPosts(
+    driverNameFilter: $driverNameFilter
+    requiredSkillsFilter: $requiredSkillsFilter
+    keywordFilter: $keywordFilter
+    skip: $skip
+    take: $take
+  ) {
+    posts {
       id
-      name
-      matchingPoint
-      bio
-      user {
-        githubLogin
+      description
+      title
+      driver {
+        id
+        name
+        matchingPoint
+        bio
+        user {
+          githubLogin
+        }
+      }
+      requiredSkills {
+        id
+        name
       }
     }
-    requiredSkills {
-      id
-      name
-    }
+    count
   }
 }
     `;
@@ -875,6 +967,11 @@ export const FetchUnmatchedPostDocument = gql`
  * @example
  * const { data, loading, error } = useFetchUnmatchedPostQuery({
  *   variables: {
+ *      driverNameFilter: // value for 'driverNameFilter'
+ *      requiredSkillsFilter: // value for 'requiredSkillsFilter'
+ *      keywordFilter: // value for 'keywordFilter'
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */
@@ -1046,6 +1143,64 @@ export function useFetchSpecificPostLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type FetchSpecificPostQueryHookResult = ReturnType<typeof useFetchSpecificPostQuery>;
 export type FetchSpecificPostLazyQueryHookResult = ReturnType<typeof useFetchSpecificPostLazyQuery>;
 export type FetchSpecificPostQueryResult = Apollo.QueryResult<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>;
+export const FetchCompletedPostDocument = gql`
+    query fetchCompletedPost {
+  myCompletedPosts {
+    id
+    description
+    title
+    navigator {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    driver {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    requiredSkills {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchCompletedPostQuery__
+ *
+ * To run a query within a React component, call `useFetchCompletedPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchCompletedPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchCompletedPostQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchCompletedPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>(FetchCompletedPostDocument, options);
+      }
+export function useFetchCompletedPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>(FetchCompletedPostDocument, options);
+        }
+export type FetchCompletedPostQueryHookResult = ReturnType<typeof useFetchCompletedPostQuery>;
+export type FetchCompletedPostLazyQueryHookResult = ReturnType<typeof useFetchCompletedPostLazyQuery>;
+export type FetchCompletedPostQueryResult = Apollo.QueryResult<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>;
 export const FetchMessagesDocument = gql`
     query fetchMessages($postId: String!) {
   messagesByPostId(postId: $postId) {
@@ -1175,10 +1330,21 @@ export type FetchMyCommunitiesQueryHookResult = ReturnType<typeof useFetchMyComm
 export type FetchMyCommunitiesLazyQueryHookResult = ReturnType<typeof useFetchMyCommunitiesLazyQuery>;
 export type FetchMyCommunitiesQueryResult = Apollo.QueryResult<FetchMyCommunitiesQuery, FetchMyCommunitiesQueryVariables>;
 export const FetchCurrentCommunityDocument = gql`
-    query fetchCurrentCommunity {
+    query fetchCurrentCommunity($skip: Int, $take: Int) {
   myCurrentCommunity {
     id
     name
+    profiles {
+      id
+      name
+      bio
+      user {
+        githubLogin
+      }
+    }
+  }
+  profilesInMyCommunity(skip: $skip, take: $take) {
+    count
     profiles {
       id
       name
@@ -1203,6 +1369,8 @@ export const FetchCurrentCommunityDocument = gql`
  * @example
  * const { data, loading, error } = useFetchCurrentCommunityQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */
