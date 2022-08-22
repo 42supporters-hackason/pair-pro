@@ -8,6 +8,7 @@ export const FETCH_SKILLS = gql`
     skills {
       id
       name
+      imageUrl
     }
   }
 `;

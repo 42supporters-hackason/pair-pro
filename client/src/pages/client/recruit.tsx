@@ -67,6 +67,7 @@ export const RecruitPage = () => {
     refetchPosts,
     communityMember,
     paginationCount,
+    languagesData,
   } = useRecruitHooks({
     driverNameFilter: filterState?.driverNameFilter,
     requiredSkillsFilter: filterState?.requiredSkillsFilter,
@@ -199,6 +200,7 @@ export const RecruitPage = () => {
                   setOpenPostModal.on();
                   setSelectedId(id);
                 }}
+                languagesData={languagesData ?? []}
               />
             ))}
         </Box>
@@ -238,6 +240,7 @@ export const RecruitPage = () => {
               agreeTitle="マッチングする"
               onClose={setOpenPostModal.off}
               onAgree={handleMatch}
+              languagesData={languagesData ?? []}
             />
           )}
         </Box>

@@ -125,9 +125,12 @@ export const ChatPage = () => {
   }, [shareScreenTrack, setShareScreenTrack, roomData?.localParticipant]);
 
   const handleToggleVideo = useCallback(() => {
-    roomData?.localParticipant.videoTracks.forEach((videoTrack) =>
-      videoOn ? videoTrack.track.disable() : videoTrack.track.enable()
-    );
+    roomData?.localParticipant.videoTracks.forEach((videoTrack) => {
+      // if not screen share
+      if (videoTrack.track.mediaStreamTrack.onended === null) {
+        videoOn ? videoTrack.track.disable() : videoTrack.track.enable();
+      }
+    });
     setVideoOn.toggle();
   }, [roomData, videoOn, setVideoOn]);
 

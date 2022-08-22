@@ -367,7 +367,7 @@ export type ExitCommunityMutation = { __typename?: 'Mutation', deleteMyProfile?:
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchSkillsQuery = { __typename?: 'Query', skills: Array<{ __typename?: 'Skill', id: number, name: string }> };
+export type FetchSkillsQuery = { __typename?: 'Query', skills: Array<{ __typename?: 'Skill', id: number, name: string, imageUrl?: string | null }> };
 
 export type GetVideoAccessTokenQueryVariables = Exact<{
   identity: Scalars['String'];
@@ -910,6 +910,7 @@ export const FetchSkillsDocument = gql`
   skills {
     id
     name
+    imageUrl
   }
 }
     `;
