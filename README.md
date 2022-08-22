@@ -36,6 +36,20 @@ heroku logs --tail #デバッグ
 heroku open #apiのURLにアクセス
 ```
 
+## localでseed値を入れる
+
+```
+$ npx prisma db seed 
+```
+
+
+**注意点**
+- seedを追加しても差分管理はされない
+- `npx prisma migrate reset`は `seeding` もしてくれる
+
+
+
+
 ## テスト環境でのgithubログインの省略
 ```
 # user1 

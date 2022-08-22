@@ -12,6 +12,8 @@ export interface Context {
   profileId?: number;
   communityId?: string;
   pubsub: PubSub;
+  expectUserLoggedIn(): Context;
+  expectUserJoinedCommunity(): Context;
 }
 
 export const context = ({ req }: { req: Request }): Context => {
@@ -26,5 +28,17 @@ export const context = ({ req }: { req: Request }): Context => {
     profileId: token?.profileId,
     communityId: token?.communityId,
     pubsub,
+    expectUserLoggedIn(): Context {
+      if (!this.userId) {
+        throw new Error("You have to log in");
+      }
+      return this;
+    },
+    expectUserJoinedCommunity(): Context {
+      if (!this.userId || !this.profileId || !this.communityId) {
+        throw new Error("You have to join a community");
+      }
+      return this;
+    },
   };
 };

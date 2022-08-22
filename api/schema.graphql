@@ -46,6 +46,21 @@ type Mutation {
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
 }
 
+type PaginatedPosts {
+  count: Int!
+  posts: [Post!]!
+}
+
+type PaginatedProfiles {
+  count: Int!
+  profiles: [Profile!]!
+}
+
+type PairProgrammingCount {
+  count: Int!
+  profile: Profile!
+}
+
 type Post {
   completedAt: DateTime
   createdAt: DateTime!
@@ -71,12 +86,14 @@ type Profile {
 
 type Query {
   ListDrivenSkills: [LearnedSkill!]!
+  ListDriverPostsRanking: [PairProgrammingCount!]!
   ListNavigatedSkills: [LearnedSkill!]!
+  ListNavigatorPostsRanking: [PairProgrammingCount!]!
   accessToken(identity: String, room: String): Video!
   communities: [Community!]!
   feed: [Post!]!
   messagesByPostId(postId: String!): [Message!]!
-  myCommunities(skip: Int, take: Int): [Community!]!
+  myCommunities: [Community!]!
   myCompletedPosts: [Post!]!
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
@@ -85,8 +102,9 @@ type Query {
   post(id: String!): Post
   profile(id: Int!): Profile
   profiles: [Profile!]!
+  profilesInMyCommunity(skip: Int, take: Int): PaginatedProfiles!
   skills: [Skill!]!
-  unmatchedPosts(driverNameFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): [Post!]!
+  unmatchedPosts(driverNameFilter: String, keywordFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): PaginatedPosts!
 }
 
 type Skill {

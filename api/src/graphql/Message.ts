@@ -68,11 +68,7 @@ export const MessageMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { postId, content } = args;
-        const { profileId } = context;
-
-        if (!profileId) {
-          throw new Error("You have to log in.");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         const newMessage = await context.prisma.message.create({
           data: {

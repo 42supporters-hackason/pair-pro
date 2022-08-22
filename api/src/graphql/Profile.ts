@@ -55,6 +55,14 @@ export const ProfileObject = objectType({
   },
 });
 
+export const PaginatedProfilesObject = objectType({
+  name: "PaginatedProfiles",
+  definition(t) {
+    t.nonNull.list.nonNull.field("profiles", { type: ProfileObject });
+    t.nonNull.int("count");
+  },
+});
+
 export const ProfileQuery = extendType({
   type: "Query",
   definition(t) {
@@ -79,16 +87,36 @@ export const ProfileQuery = extendType({
     t.nonNull.field("myProfile", {
       type: "Profile",
       async resolve(parent, args, context) {
-        const { profileId } = context;
-
-        if (!profileId) {
-          throw new Error("You have to log in.");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         const profile = await context.prisma.profile.findUnique({
           where: { id: profileId },
         });
         return profile as Profile;
+      },
+    });
+    t.nonNull.field("profilesInMyCommunity", {
+      type: "PaginatedProfiles",
+      args: {
+        skip: intArg(),
+        take: intArg(),
+      },
+      async resolve(parent, args, context) {
+        const { communityId } = context;
+        const { skip, take } = args;
+        if (!communityId) {
+          throw new Error("You have to log in");
+        }
+        const profiles = await context.prisma.profile.findMany({
+          where: { communityId },
+          skip: skip as number | undefined,
+          take: take as number | undefined,
+        });
+        const count = await context.prisma.profile.count({
+          where: { communityId },
+        });
+
+        return {profiles, count}
       },
     });
   },
@@ -105,11 +133,7 @@ export const ProfileMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { name, bio } = args;
-        const { profileId } = context;
-
-        if (!profileId) {
-          throw new Error("You have to log in.");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         const oldMyProfile = (await context.prisma.profile.findUnique({
           where: { id: profileId },
@@ -129,13 +153,7 @@ export const ProfileMutation = extendType({
     t.field("deleteMyProfile", {
       type: "AuthPayLoad",
       async resolve(parent, args, context) {
-        const { userId, profileId } = context;
-        if (!userId) {
-          throw new Error("You have to log in.");
-        }
-        if (!profileId) {
-          throw new Error("You have to be in a community.");
-        }
+        const { userId, profileId } = context.expectUserJoinedCommunity();
 
         await context.prisma.profile.delete({
           where: { id: profileId },
