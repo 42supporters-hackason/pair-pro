@@ -47,6 +47,7 @@ export type Message = {
 export type Mutation = {
   __typename?: 'Mutation';
   authGithub: AuthPayLoad;
+  completePairProgramming: Post;
   createCommunity: Community;
   createMessage: Message;
   deleteCommunity: Community;
@@ -63,6 +64,11 @@ export type Mutation = {
 
 export type MutationAuthGithubArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationCompletePairProgrammingArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -136,6 +142,12 @@ export type PaginatedProfiles = {
   profiles: Array<Profile>;
 };
 
+export type PairProgrammingCount = {
+  __typename?: 'PairProgrammingCount';
+  count: Scalars['Int'];
+  profile: Profile;
+};
+
 export type Post = {
   __typename?: 'Post';
   completedAt?: Maybe<Scalars['DateTime']>;
@@ -164,12 +176,15 @@ export type Profile = {
 export type Query = {
   __typename?: 'Query';
   ListDrivenSkills: Array<LearnedSkill>;
+  ListDriverPostsRanking: Array<PairProgrammingCount>;
   ListNavigatedSkills: Array<LearnedSkill>;
+  ListNavigatorPostsRanking: Array<PairProgrammingCount>;
   accessToken: Video;
   communities: Array<Community>;
   feed: Array<Post>;
   messagesByPostId: Array<Message>;
   myCommunities: Array<Community>;
+  myCompletedPosts: Array<Post>;
   myCurrentCommunity?: Maybe<Community>;
   myDrivingPosts: Array<Post>;
   myMatchedPosts: Array<Post>;
@@ -299,6 +314,13 @@ export type UpdatePostMutationVariables = Exact<{
 
 export type UpdatePostMutation = { __typename?: 'Mutation', updatePost: { __typename?: 'Post', id: string } };
 
+export type CompletePostMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type CompletePostMutation = { __typename?: 'Mutation', completePairProgramming: { __typename?: 'Post', id: string } };
+
 export type SendMessageMutationVariables = Exact<{
   postId: Scalars['String'];
   content: Scalars['String'];
@@ -366,6 +388,11 @@ export type FetchSpecificPostQueryVariables = Exact<{
 
 
 export type FetchSpecificPostQuery = { __typename?: 'Query', post?: { __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> } | null };
+
+export type FetchCompletedPostQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchCompletedPostQuery = { __typename?: 'Query', myCompletedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
 export type FetchMessagesQueryVariables = Exact<{
   postId: Scalars['String'];
@@ -647,6 +674,39 @@ export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const CompletePostDocument = gql`
+    mutation completePost($postId: String!) {
+  completePairProgramming(postId: $postId) {
+    id
+  }
+}
+    `;
+export type CompletePostMutationFn = Apollo.MutationFunction<CompletePostMutation, CompletePostMutationVariables>;
+
+/**
+ * __useCompletePostMutation__
+ *
+ * To run a mutation, you first call `useCompletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completePostMutation, { data, loading, error }] = useCompletePostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useCompletePostMutation(baseOptions?: Apollo.MutationHookOptions<CompletePostMutation, CompletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CompletePostMutation, CompletePostMutationVariables>(CompletePostDocument, options);
+      }
+export type CompletePostMutationHookResult = ReturnType<typeof useCompletePostMutation>;
+export type CompletePostMutationResult = Apollo.MutationResult<CompletePostMutation>;
+export type CompletePostMutationOptions = Apollo.BaseMutationOptions<CompletePostMutation, CompletePostMutationVariables>;
 export const SendMessageDocument = gql`
     mutation sendMessage($postId: String!, $content: String!) {
   createMessage(postId: $postId, content: $content) {
@@ -1082,6 +1142,64 @@ export function useFetchSpecificPostLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type FetchSpecificPostQueryHookResult = ReturnType<typeof useFetchSpecificPostQuery>;
 export type FetchSpecificPostLazyQueryHookResult = ReturnType<typeof useFetchSpecificPostLazyQuery>;
 export type FetchSpecificPostQueryResult = Apollo.QueryResult<FetchSpecificPostQuery, FetchSpecificPostQueryVariables>;
+export const FetchCompletedPostDocument = gql`
+    query fetchCompletedPost {
+  myCompletedPosts {
+    id
+    description
+    title
+    navigator {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    driver {
+      id
+      name
+      matchingPoint
+      bio
+      user {
+        githubLogin
+      }
+    }
+    requiredSkills {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchCompletedPostQuery__
+ *
+ * To run a query within a React component, call `useFetchCompletedPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchCompletedPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchCompletedPostQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchCompletedPostQuery(baseOptions?: Apollo.QueryHookOptions<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>(FetchCompletedPostDocument, options);
+      }
+export function useFetchCompletedPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>(FetchCompletedPostDocument, options);
+        }
+export type FetchCompletedPostQueryHookResult = ReturnType<typeof useFetchCompletedPostQuery>;
+export type FetchCompletedPostLazyQueryHookResult = ReturnType<typeof useFetchCompletedPostLazyQuery>;
+export type FetchCompletedPostQueryResult = Apollo.QueryResult<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>;
 export const FetchMessagesDocument = gql`
     query fetchMessages($postId: String!) {
   messagesByPostId(postId: $postId) {

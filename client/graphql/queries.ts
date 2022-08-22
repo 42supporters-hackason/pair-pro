@@ -139,6 +139,38 @@ export const FETCH_SPECIFIC_POST = gql`
   }
 `;
 
+export const FETCH_COMPLETED_POST = gql`
+  query fetchCompletedPost {
+    myCompletedPosts {
+      id
+      description
+      title
+      navigator {
+        id
+        name
+        matchingPoint
+        bio
+        user {
+          githubLogin
+        }
+      }
+      driver {
+        id
+        name
+        matchingPoint
+        bio
+        user {
+          githubLogin
+        }
+      }
+      requiredSkills {
+        id
+        name
+      }
+    }
+  }
+`;
+
 /**
  * message
  */

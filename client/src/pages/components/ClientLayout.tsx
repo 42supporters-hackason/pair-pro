@@ -149,7 +149,7 @@ export const ClientLayout = () => {
             <br />
             <br />
             チェックをしてください
-            <Checkbox onChange={setConfirmExit.toggle} />
+            <Checkbox onChange={setConfirmExit.toggle} checked={!confirmExit} />
           </AgreeModal>
         </Box>
       </Modal>
