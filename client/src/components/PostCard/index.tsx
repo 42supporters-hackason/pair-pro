@@ -61,11 +61,8 @@ export const PostCard = ({
   languages,
   name,
   githubLogin,
-<<<<<<< HEAD
   hasUnreadMessage = false,
-=======
   languagesData,
->>>>>>> 694b655af13538dac95c59caf71f4198d18388f1
   onComplete,
   onClick,
   ...props
