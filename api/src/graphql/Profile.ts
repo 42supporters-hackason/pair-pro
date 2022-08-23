@@ -102,11 +102,9 @@ export const ProfileQuery = extendType({
         take: intArg(),
       },
       async resolve(parent, args, context) {
-        const { communityId } = context;
+        const { communityId } = context.expectUserJoinedCommunity();
         const { skip, take } = args;
-        if (!communityId) {
-          throw new Error("You have to log in");
-        }
+
         const profiles = await context.prisma.profile.findMany({
           where: { communityId },
           skip: skip as number | undefined,
@@ -116,7 +114,7 @@ export const ProfileQuery = extendType({
           where: { communityId },
         });
 
-        return {profiles, count}
+        return { profiles, count };
       },
     });
   },

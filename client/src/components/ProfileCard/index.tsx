@@ -4,6 +4,11 @@ import { Theme } from "@mui/system";
 import { BackButton } from "../BackButton";
 import { Card } from "../Card";
 
+interface LanguagesDataType {
+  name: string;
+  imageUrl?: string | null;
+}
+
 interface Props extends HTMLAttributes<HTMLDivElement> {
   /**
    * プロフィール名
@@ -38,6 +43,10 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
    */
   agreeTitle?: string;
   /**
+   * 言語のデータ
+   */
+  languagesData: LanguagesDataType[];
+  /**
    * 合意の場合のアクション
    */
   onAgree?: () => void;
@@ -60,6 +69,7 @@ export const ProfileCard = ({
   bio,
   hasButton = false,
   agreeTitle,
+  languagesData,
   onAgree,
   onClose,
   ...props
@@ -141,11 +151,40 @@ export const ProfileCard = ({
               <Typography>使用言語</Typography>
               <Box sx={{ display: "flex", gap: 2 }}>
                 {languages &&
-                  languages.map((language) => (
-                    <Typography fontWeight="bold" variant="h6" key={language}>
-                      {language}
-                    </Typography>
-                  ))}
+                  languages.map((language) => {
+                    return (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "1px",
+                        }}
+                        key={language}
+                      >
+                        {languagesData.find(({ name }) => name === language)
+                          ?.imageUrl ? (
+                          <>
+                            <Box
+                              component="img"
+                              src={
+                                languagesData.find(
+                                  ({ name }) => name === language
+                                )?.imageUrl ?? ""
+                              }
+                              sx={{ width: "50px", height: "50px" }}
+                            />
+                            <Typography
+                              sx={{ fontSize: "6px", mt: "auto", mb: "10px" }}
+                            >
+                              {language}
+                            </Typography>
+                          </>
+                        ) : (
+                          <Typography variant="h6">{language}</Typography>
+                        )}
+                      </Box>
+                    );
+                  })}
               </Box>
             </Box>
           </Box>
