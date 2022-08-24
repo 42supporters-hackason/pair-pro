@@ -419,6 +419,26 @@ export type FetchCurrentCommunityQueryVariables = Exact<{
 
 export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null, profilesInMyCommunity: { __typename?: 'PaginatedProfiles', count: number, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } };
 
+export type FetchNavigatedSkillsListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchNavigatedSkillsListQuery = { __typename?: 'Query', ListNavigatedSkills: Array<{ __typename?: 'LearnedSkill', count: number, skill: { __typename?: 'Skill', id: number, name: string, imageUrl?: string | null } }> };
+
+export type FetchDrivenSkillsListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchDrivenSkillsListQuery = { __typename?: 'Query', ListDrivenSkills: Array<{ __typename?: 'LearnedSkill', count: number, skill: { __typename?: 'Skill', id: number, name: string, imageUrl?: string | null } }> };
+
+export type FetchNavigatorRankingQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchNavigatorRankingQuery = { __typename?: 'Query', ListNavigatorPostsRanking: Array<{ __typename?: 'PairProgrammingCount', count: number, profile: { __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } } }> };
+
+export type FetchDriverRankingQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchDriverRankingQuery = { __typename?: 'Query', ListDriverPostsRanking: Array<{ __typename?: 'PairProgrammingCount', count: number, profile: { __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } } }> };
+
 export type FetchMessageSubscriptionVariables = Exact<{
   postId: Scalars['String'];
 }>;
@@ -1385,6 +1405,168 @@ export function useFetchCurrentCommunityLazyQuery(baseOptions?: Apollo.LazyQuery
 export type FetchCurrentCommunityQueryHookResult = ReturnType<typeof useFetchCurrentCommunityQuery>;
 export type FetchCurrentCommunityLazyQueryHookResult = ReturnType<typeof useFetchCurrentCommunityLazyQuery>;
 export type FetchCurrentCommunityQueryResult = Apollo.QueryResult<FetchCurrentCommunityQuery, FetchCurrentCommunityQueryVariables>;
+export const FetchNavigatedSkillsListDocument = gql`
+    query fetchNavigatedSkillsList {
+  ListNavigatedSkills {
+    count
+    skill {
+      id
+      name
+      imageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchNavigatedSkillsListQuery__
+ *
+ * To run a query within a React component, call `useFetchNavigatedSkillsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchNavigatedSkillsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchNavigatedSkillsListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchNavigatedSkillsListQuery(baseOptions?: Apollo.QueryHookOptions<FetchNavigatedSkillsListQuery, FetchNavigatedSkillsListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchNavigatedSkillsListQuery, FetchNavigatedSkillsListQueryVariables>(FetchNavigatedSkillsListDocument, options);
+      }
+export function useFetchNavigatedSkillsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchNavigatedSkillsListQuery, FetchNavigatedSkillsListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchNavigatedSkillsListQuery, FetchNavigatedSkillsListQueryVariables>(FetchNavigatedSkillsListDocument, options);
+        }
+export type FetchNavigatedSkillsListQueryHookResult = ReturnType<typeof useFetchNavigatedSkillsListQuery>;
+export type FetchNavigatedSkillsListLazyQueryHookResult = ReturnType<typeof useFetchNavigatedSkillsListLazyQuery>;
+export type FetchNavigatedSkillsListQueryResult = Apollo.QueryResult<FetchNavigatedSkillsListQuery, FetchNavigatedSkillsListQueryVariables>;
+export const FetchDrivenSkillsListDocument = gql`
+    query fetchDrivenSkillsList {
+  ListDrivenSkills {
+    count
+    skill {
+      id
+      name
+      imageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchDrivenSkillsListQuery__
+ *
+ * To run a query within a React component, call `useFetchDrivenSkillsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchDrivenSkillsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchDrivenSkillsListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchDrivenSkillsListQuery(baseOptions?: Apollo.QueryHookOptions<FetchDrivenSkillsListQuery, FetchDrivenSkillsListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchDrivenSkillsListQuery, FetchDrivenSkillsListQueryVariables>(FetchDrivenSkillsListDocument, options);
+      }
+export function useFetchDrivenSkillsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchDrivenSkillsListQuery, FetchDrivenSkillsListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchDrivenSkillsListQuery, FetchDrivenSkillsListQueryVariables>(FetchDrivenSkillsListDocument, options);
+        }
+export type FetchDrivenSkillsListQueryHookResult = ReturnType<typeof useFetchDrivenSkillsListQuery>;
+export type FetchDrivenSkillsListLazyQueryHookResult = ReturnType<typeof useFetchDrivenSkillsListLazyQuery>;
+export type FetchDrivenSkillsListQueryResult = Apollo.QueryResult<FetchDrivenSkillsListQuery, FetchDrivenSkillsListQueryVariables>;
+export const FetchNavigatorRankingDocument = gql`
+    query fetchNavigatorRanking {
+  ListNavigatorPostsRanking {
+    count
+    profile {
+      id
+      name
+      bio
+      user {
+        githubLogin
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchNavigatorRankingQuery__
+ *
+ * To run a query within a React component, call `useFetchNavigatorRankingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchNavigatorRankingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchNavigatorRankingQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchNavigatorRankingQuery(baseOptions?: Apollo.QueryHookOptions<FetchNavigatorRankingQuery, FetchNavigatorRankingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchNavigatorRankingQuery, FetchNavigatorRankingQueryVariables>(FetchNavigatorRankingDocument, options);
+      }
+export function useFetchNavigatorRankingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchNavigatorRankingQuery, FetchNavigatorRankingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchNavigatorRankingQuery, FetchNavigatorRankingQueryVariables>(FetchNavigatorRankingDocument, options);
+        }
+export type FetchNavigatorRankingQueryHookResult = ReturnType<typeof useFetchNavigatorRankingQuery>;
+export type FetchNavigatorRankingLazyQueryHookResult = ReturnType<typeof useFetchNavigatorRankingLazyQuery>;
+export type FetchNavigatorRankingQueryResult = Apollo.QueryResult<FetchNavigatorRankingQuery, FetchNavigatorRankingQueryVariables>;
+export const FetchDriverRankingDocument = gql`
+    query fetchDriverRanking {
+  ListDriverPostsRanking {
+    count
+    profile {
+      id
+      name
+      bio
+      user {
+        githubLogin
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchDriverRankingQuery__
+ *
+ * To run a query within a React component, call `useFetchDriverRankingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchDriverRankingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchDriverRankingQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchDriverRankingQuery(baseOptions?: Apollo.QueryHookOptions<FetchDriverRankingQuery, FetchDriverRankingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchDriverRankingQuery, FetchDriverRankingQueryVariables>(FetchDriverRankingDocument, options);
+      }
+export function useFetchDriverRankingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchDriverRankingQuery, FetchDriverRankingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchDriverRankingQuery, FetchDriverRankingQueryVariables>(FetchDriverRankingDocument, options);
+        }
+export type FetchDriverRankingQueryHookResult = ReturnType<typeof useFetchDriverRankingQuery>;
+export type FetchDriverRankingLazyQueryHookResult = ReturnType<typeof useFetchDriverRankingLazyQuery>;
+export type FetchDriverRankingQueryResult = Apollo.QueryResult<FetchDriverRankingQuery, FetchDriverRankingQueryVariables>;
 export const FetchMessageDocument = gql`
     subscription fetchMessage($postId: String!) {
   waitForMessage(postId: $postId) {

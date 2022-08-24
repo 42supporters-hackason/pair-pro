@@ -30,6 +30,7 @@ export const useClientHeaderMenu = ({
     goToEditProfile,
     goToMember,
     goToExplanation,
+    goToStatistics,
   } = useClientRoute();
 
   return {
@@ -45,6 +46,10 @@ export const useClientHeaderMenu = ({
       {
         label: "メンバーを見る",
         action: goToMember,
+      },
+      {
+        label: "ランキングを見る",
+        action: goToStatistics,
       },
     ],
     userMenu: [

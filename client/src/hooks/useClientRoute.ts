@@ -50,6 +50,13 @@ export const useClientRoute = () => {
     [navigate]
   );
 
+  const goToStatistics = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(CLIENT_ROUTE_PATH.STATISTICS, options);
+    },
+    [navigate]
+  );
+
   const goToEditPost = useCallback(
     (id?: string, options?: NavigateOptions) => {
       if (id === undefined) {
@@ -91,5 +98,6 @@ export const useClientRoute = () => {
     goToExplanation,
     goToMember,
     goToChat,
+    goToStatistics,
   };
 };
