@@ -37,16 +37,16 @@ export const PopularSkillsCountQuery = extendType({
           },
         });
 
-        // take に任意の値があったとき、引数を２つ展開する。
-        // takeに値がない時、引数はないので展開されず、sliceは配列に手を加えない
-        const sliceArg = take ? [0, take] : [];
-        return skills
+        const formattedSkills = skills
           .sort((a, b) => b.requiredBy.length - a.requiredBy.length)
           .map((skill) => ({
             skill,
             count: skill.requiredBy.length,
-          }))
-          .slice(...sliceArg); // スプレッド構文
+          }));
+        if (take) {
+          return formattedSkills.slice(0, take);
+        }
+        return formattedSkills;
       },
     });
   },
