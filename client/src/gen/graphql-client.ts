@@ -148,6 +148,12 @@ export type PairProgrammingCount = {
   profile: Profile;
 };
 
+export type PopularSkillsCount = {
+  __typename?: 'PopularSkillsCount';
+  count: Scalars['Int'];
+  skill: Skill;
+};
+
 export type Post = {
   __typename?: 'Post';
   completedAt?: Maybe<Scalars['DateTime']>;
@@ -179,6 +185,7 @@ export type Query = {
   ListDriverPostsRanking: Array<PairProgrammingCount>;
   ListNavigatedSkills: Array<LearnedSkill>;
   ListNavigatorPostsRanking: Array<PairProgrammingCount>;
+  ListPopularSkillsRanking: Array<PopularSkillsCount>;
   accessToken: Video;
   communities: Array<Community>;
   feed: Array<Post>;
@@ -195,6 +202,11 @@ export type Query = {
   profilesInMyCommunity: PaginatedProfiles;
   skills: Array<Skill>;
   unmatchedPosts: PaginatedPosts;
+};
+
+
+export type QueryListPopularSkillsRankingArgs = {
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -438,6 +450,13 @@ export type FetchDriverRankingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FetchDriverRankingQuery = { __typename?: 'Query', ListDriverPostsRanking: Array<{ __typename?: 'PairProgrammingCount', count: number, profile: { __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } } }> };
+
+export type FetchPopularSkillsListQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type FetchPopularSkillsListQuery = { __typename?: 'Query', ListPopularSkillsRanking: Array<{ __typename?: 'PopularSkillsCount', count: number, skill: { __typename?: 'Skill', id: number, name: string, imageUrl?: string | null } }> };
 
 export type FetchMessageSubscriptionVariables = Exact<{
   postId: Scalars['String'];
@@ -1567,6 +1586,46 @@ export function useFetchDriverRankingLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type FetchDriverRankingQueryHookResult = ReturnType<typeof useFetchDriverRankingQuery>;
 export type FetchDriverRankingLazyQueryHookResult = ReturnType<typeof useFetchDriverRankingLazyQuery>;
 export type FetchDriverRankingQueryResult = Apollo.QueryResult<FetchDriverRankingQuery, FetchDriverRankingQueryVariables>;
+export const FetchPopularSkillsListDocument = gql`
+    query fetchPopularSkillsList($take: Int) {
+  ListPopularSkillsRanking(take: $take) {
+    count
+    skill {
+      id
+      name
+      imageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchPopularSkillsListQuery__
+ *
+ * To run a query within a React component, call `useFetchPopularSkillsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchPopularSkillsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchPopularSkillsListQuery({
+ *   variables: {
+ *      take: // value for 'take'
+ *   },
+ * });
+ */
+export function useFetchPopularSkillsListQuery(baseOptions?: Apollo.QueryHookOptions<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>(FetchPopularSkillsListDocument, options);
+      }
+export function useFetchPopularSkillsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>(FetchPopularSkillsListDocument, options);
+        }
+export type FetchPopularSkillsListQueryHookResult = ReturnType<typeof useFetchPopularSkillsListQuery>;
+export type FetchPopularSkillsListLazyQueryHookResult = ReturnType<typeof useFetchPopularSkillsListLazyQuery>;
+export type FetchPopularSkillsListQueryResult = Apollo.QueryResult<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>;
 export const FetchMessageDocument = gql`
     subscription fetchMessage($postId: String!) {
   waitForMessage(postId: $postId) {

@@ -28,6 +28,7 @@ export const StatisticsPage = () => {
     navigatorRankig,
     drivenSkillsList,
     driverRanking,
+    popularSkillsList,
   } = useStatisticsHooks();
   return (
     <Box
@@ -173,6 +174,26 @@ export const StatisticsPage = () => {
                       bio={profile.bio}
                       githubLogin={profile.user.githubLogin}
                       rank={index + 1}
+                      count={count}
+                    />
+                  );
+                }
+              )}
+            </>
+          )}
+          {showStatistics === "mostUsedLanguage" && (
+            <>
+              {popularSkillsList?.ListPopularSkillsRanking.map(
+                ({ skill, count }, index) => {
+                  if (count <= 0) {
+                    return
+                  }
+                  return (
+                    <LanguageItem
+                      key={skill.id}
+                      rank={index + 1}
+                      name={skill.name}
+                      imageUrl={skill.imageUrl}
                       count={count}
                     />
                   );
