@@ -1,1 +1,1 @@
-export * from "./languages-object";
+export * from "./skillsData";

@@ -66,5 +66,7 @@ model Message {
 model Skill {
   id          Int      @id @default(autoincrement())
   name        String
+  category    String?
+  imageUrl    String?
   requiredBy  Post[] @relation(name: "RequiredBy")
 }

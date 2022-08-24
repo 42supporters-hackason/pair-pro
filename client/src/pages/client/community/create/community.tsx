@@ -2,16 +2,16 @@ import React, { useCallback } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { AgreeModal } from "../../../components/AgreeModal";
-import { BackButton } from "../../../components/BackButton";
-import { Card } from "../../../components/Card";
-import { useBoolean } from "../../../hooks/useBoolean";
-import { usePublicRoute } from "../../../hooks/usePublicRoute";
-import { useCreateCommunityHooks } from "../../hooks/useCreateCommunityHooks";
+import { AgreeModal } from "../../../../components/AgreeModal";
+import { BackButton } from "../../../../components/BackButton";
+import { Card } from "../../../../components/Card";
+import { useBoolean } from "../../../../hooks/useBoolean";
+import { usePublicRoute } from "../../../../hooks/usePublicRoute";
+import { useCreateCommunityHooks } from "../../../hooks/useCreateCommunityHooks";
 import {
   CreateCommunitySchema,
   createCommunitySchema,
-} from "../../validation/create_community_validation";
+} from "../../../validation/create_community_validation";
 
 export const CreateCommunityPage = () => {
   /**
@@ -110,10 +110,13 @@ export const CreateCommunityPage = () => {
       >
         <Box>
           <AgreeModal
-            content={`確定後にコミュニティ名を変更することはできません。本当によろしいですか？`}
             onAgree={handleCreateCommunity}
             onCancel={setOpenModal.off}
-          />
+          >
+            確定後にコミュニティ名を変更することはできません。
+            <br />
+            本当によろしいですか？
+          </AgreeModal>
         </Box>
       </Modal>
     </>

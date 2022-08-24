@@ -12,6 +12,22 @@ export interface Context {
   profileId?: number;
   communityId?: string;
   pubsub: PubSub;
+  expectUserLoggedIn(): UserLoggedInContext;
+  expectUserJoinedCommunity(): UserJoinedCommunityContext;
+}
+
+interface UserLoggedInContext {
+  prisma: PrismaClient;
+  pubsub: PubSub;
+  userId: number;
+}
+
+interface UserJoinedCommunityContext {
+  prisma: PrismaClient;
+  pubsub: PubSub;
+  userId: number;
+  profileId: number;
+  communityId: string;
 }
 
 export const context = ({ req }: { req: Request }): Context => {
@@ -26,5 +42,23 @@ export const context = ({ req }: { req: Request }): Context => {
     profileId: token?.profileId,
     communityId: token?.communityId,
     pubsub,
+    expectUserLoggedIn(): UserLoggedInContext {
+      if (!this.userId) {
+        throw new Error("You have to log in");
+      }
+      return { prisma: this.prisma, pubsub: this.pubsub, userId: this.userId };
+    },
+    expectUserJoinedCommunity(): UserJoinedCommunityContext {
+      if (!this.userId || !this.profileId || !this.communityId) {
+        throw new Error("You have to join a community");
+      }
+      return {
+        prisma: this.prisma,
+        pubsub: this.pubsub,
+        userId: this.userId,
+        profileId: this.profileId,
+        communityId: this.communityId,
+      };
+    },
   };
 };

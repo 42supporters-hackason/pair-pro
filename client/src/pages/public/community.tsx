@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Card } from "../../components/Card";
 import { useAuth, useCommunity } from "../../context/auth";
+import { useCommunityRoute } from "../../hooks/useCommunityRoute";
 import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { useCommunityHooks } from "../hooks/useCommunityHooks";
 import {
@@ -19,8 +20,9 @@ export const CommunityPage = () => {
   /**
    * misc.
    */
-  const { goToCreateCommunity, goToLogin } = usePublicRoute();
-  const { signIn } = useAuth();
+  const { goToLogin } = usePublicRoute();
+  const { goToCreateCommunity } = useCommunityRoute();
+  const { signIn, loginStatus } = useAuth();
 
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
@@ -69,11 +71,18 @@ export const CommunityPage = () => {
    * signIn処理を実行
    */
   useEffect(() => {
-    if (code !== null) {
+    if (loginStatus !== "authFinished") {
       signIn(code);
     }
     refecthMyCommunities();
-  }, [signIn, code, goToLogin, searchParams, refecthMyCommunities]);
+  }, [
+    signIn,
+    code,
+    goToLogin,
+    searchParams,
+    refecthMyCommunities,
+    loginStatus,
+  ]);
 
   return (
     <Box

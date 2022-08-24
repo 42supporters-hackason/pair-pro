@@ -8,13 +8,6 @@ import { PUBLIC_ROUTE_PATH } from "./../routes/public";
 export const usePublicRoute = () => {
   const navigate = useNavigate();
 
-  const goToLogin = useCallback(
-    (options?: NavigateOptions) => {
-      navigate(PUBLIC_ROUTE_PATH.LOGIN, options);
-    },
-    [navigate]
-  );
-
   const goToCommunity = useCallback(
     (options?: NavigateOptions) => {
       navigate(PUBLIC_ROUTE_PATH.COMMUNITY, options);
@@ -22,12 +15,12 @@ export const usePublicRoute = () => {
     [navigate]
   );
 
-  const goToCreateCommunity = useCallback(
+  const goToLogin = useCallback(
     (options?: NavigateOptions) => {
-      navigate(PUBLIC_ROUTE_PATH.CREATE_COMMUNITY, options);
+      navigate(PUBLIC_ROUTE_PATH.LOGIN, options);
     },
     [navigate]
   );
 
-  return { goToLogin, goToCommunity, goToCreateCommunity };
+  return { goToLogin, goToCommunity };
 };

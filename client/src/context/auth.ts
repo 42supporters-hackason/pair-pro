@@ -1,13 +1,14 @@
 import { useCallback, useState } from "react";
 import constate from "constate";
 import {
+  useExitCommunityMutation,
   useFetchCurrentCommunityLazyQuery,
   useFetchMeLazyQuery,
   useJoinCommunityMutation,
   useSignInMutation,
 } from "../gen/graphql-client";
-import { useBoolean } from "../hooks/useBoolean";
 import { usePublicRoute } from "../hooks/usePublicRoute";
+import { loginStatusStorage } from "../utils/local-storage/login_status";
 import { tokenStorage } from "../utils/local-storage/token";
 import { useClientRoute } from "./../hooks/useClientRoute";
 import { useHomeHooks } from "./../pages/hooks/useHomeHooks";
@@ -28,9 +29,13 @@ export interface Profile {
   bio?: string;
 }
 
+export type LoginStatus = "unLogin" | "authFinished" | "logined";
+
 export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
   () => {
-    const [isLogin, setIsLogin] = useBoolean(tokenStorage.load() !== null);
+    const [loginStatus, setLoginStatus] = useState<LoginStatus>(
+      () => loginStatusStorage.load() ?? "unLogin"
+    );
     const [profile, setProfile] = useState<Profile>();
     const [matchingPoint, setMatchingPoint] = useState<number>();
     const [communityName, setCommunityName] = useState<string>();
@@ -41,21 +46,31 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     const [fetchMe] = useFetchMeLazyQuery();
     const [joinCommunityMutation] = useJoinCommunityMutation();
     const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
+    const [exitCommunityMutation] = useExitCommunityMutation();
 
-    const signIn = async (code: string) => {
-      if (tokenStorage.load() === null) {
+    const signIn = async (code?: string | null) => {
+      if (code === null || code === undefined) {
+        goToLogin();
+      }
+      if (tokenStorage.load() === null && code) {
         await signInMutation({
           variables: { code },
           onCompleted: (data) => {
             tokenStorage.save(data?.authGithub.token ?? "");
+            loginStatusStorage.save("authFinished");
+            setLoginStatus("authFinished");
             goToCommunity({ replace: true });
           },
         });
-        if (tokenStorage.load() === null) {
-          goToLogin();
-        }
       }
     };
+
+    const logout = useCallback(() => {
+      tokenStorage.clear();
+      loginStatusStorage.save("unLogin");
+      setLoginStatus("unLogin");
+      goToLogin({ replace: true });
+    }, [goToLogin, setLoginStatus]);
 
     const joinCommunity = async (id: string) => {
       await joinCommunityMutation({
@@ -64,10 +79,31 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
           tokenStorage.save(data.joinCommunity.token);
           refetchMatchedPosts();
           refetchMyPosts();
+          loginStatusStorage.save("logined");
+          setLoginStatus("logined");
           goToHome({ replace: true });
         },
       });
     };
+
+    const changeCommunity = useCallback(() => {
+      setLoginStatus("authFinished");
+      loginStatusStorage.save("authFinished");
+      goToCommunity({ replace: true });
+    }, [goToCommunity, setLoginStatus]);
+
+    const exitCommunity = useCallback(() => {
+      exitCommunityMutation({
+        onCompleted: (data) => {
+          if (data.deleteMyProfile?.token) {
+            tokenStorage.save(data.deleteMyProfile.token);
+          }
+          setLoginStatus("authFinished");
+          loginStatusStorage.save("authFinished");
+          goToCommunity({ replace: true });
+        },
+      });
+    }, [exitCommunityMutation, goToCommunity, setLoginStatus]);
 
     const updateMatchingPoint = useCallback(async () => {
       await fetchMe({
@@ -97,8 +133,8 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
     }, [fetchMe, fetchCurrentCommunity]);
 
     return {
-      isLogin,
-      setIsLogin,
+      loginStatus,
+      setLoginStatus,
       profile,
       setProfile,
       signIn,
@@ -106,11 +142,28 @@ export const [AuthProvider, useAuth, useProfile, useCommunity] = constate(
       joinCommunity,
       fetchMyProfile,
       setCommunityName,
+      logout,
+      exitCommunity,
+      changeCommunity,
       matchingPoint,
       communityName,
     };
   },
-  ({ signIn, isLogin, setIsLogin }) => ({ signIn, isLogin, setIsLogin }),
+  ({
+    signIn,
+    loginStatus,
+    setLoginStatus,
+    logout,
+    exitCommunity,
+    changeCommunity,
+  }) => ({
+    signIn,
+    loginStatus,
+    setLoginStatus,
+    logout,
+    exitCommunity,
+    changeCommunity,
+  }),
   ({
     profile,
     setProfile,

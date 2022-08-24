@@ -1,0 +1,636 @@
+- id: 1
+  name: PHP
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/php.svg
+- id: 2
+  name: Perl
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/perl.svg
+- id: 3
+  name: Java
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/java.svg
+- id: 4
+  name: Python
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/python.svg
+- id: 5
+  name: Scala
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/scala.svg
+- id: 6
+  name: Go
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/gopher.svg
+- id: 7
+  name: Ruby
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/ruby.svg
+- id: 8
+  name: JavaScript
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/javascript.svg
+- id: 9
+  name: XML
+  category:
+  imageUrl: https://cdn-icons-png.flaticon.com/512/29/29611.png?w=360
+- id: 10
+  name: HTML5
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/html-5.svg
+- id: 11
+  name: CSS3
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/css-3.svg
+- id: 12
+  name: Objective-C
+  category:
+  imageUrl:
+- id: 13
+  name: Swift
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/swift.svg
+- id: 14
+  name: Android（Java）
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/java.svg
+- id: 15
+  name: Android（Kotlin）
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/kotlin-icon.svg
+- id: 16
+  name: VB.NET
+  category:
+  imageUrl:
+- id: 17
+  name: C#.NET
+  category:
+  imageUrl:
+- id: 18
+  name: VBA
+  category:
+  imageUrl:
+- id: 19
+  name: VB
+  category:
+  imageUrl:
+- id: 20
+  name: VC++
+  category:
+  imageUrl:
+- id: 21
+  name: C
+  category:
+  imageUrl: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLWCKeF2fwEQIpaJ5tUB92ytJb1McYq94gYaPa9fUVmA&s
+- id: 22
+  name: C++
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/c-plusplus.svg
+- id: 23
+  name: COBOL
+  category:
+  imageUrl: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFufFp6KEW-ZGC2Rr3ye2FQnPUYEjVX9YD1xrFG7ZmMA&s
+- id: 24
+  name: FORTRAN
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/fortran.svg
+- id: 25
+  name: SQL
+  category:
+  imageUrl: https://cdn-icons-png.flaticon.com/512/29/29165.png
+- id: 26
+  name: アセンブラ
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/assembla-icon.svg
+- id: 27
+  name: Bash
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/bash-icon.svg
+- id: 28
+  name: Kotlin
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/kotlin-icon.svg
+- id: 29
+  name: C#
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/c-sharp.svg
+- id: 30
+  name: VBS
+  category:
+  imageUrl:
+- id: 31
+  name: Shell
+  category:
+  imageUrl:
+- id: 32
+  name: R
+  category:
+  imageUrl:
+- id: 33
+  name: TypeScript
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/typescript-icon.svg
+- id: 34
+  name: Google Apps Script
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/google-icon.svg
+- id: 35
+  name: Powershell
+  category:
+  imageUrl: https://i0.wp.com/buralog.jp/wp-content/uploads/2019/11/ps-logo.png?fit=450%2C306&ssl=1
+- id: 36
+  name: Lua
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/lua.svg
+- id: 37
+  name: React Native
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/react.svg
+- id: 38
+  name: Struts
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/struts.svg
+- id: 39
+  name: Seasar
+  category:
+  imageUrl:
+- id: 40
+  name: Seasar2
+  category:
+  imageUrl:
+- id: 41
+  name: Spring
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/spring-icon.svg
+- id: 42
+  name: Swing
+  category:
+  imageUrl:
+- id: 43
+  name: JSP
+  category:
+  imageUrl:
+- id: 44
+  name: JUnit
+  category:
+  imageUrl:
+- id: 45
+  name: Symfony
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/symfony.svg
+- id: 46
+  name: CakePHP
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/cakephp-icon.svg
+- id: 47
+  name: Zend Framework
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/zend-framework.svg
+- id: 48
+  name: CodeIgnier
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/codeigniter-icon.svg
+- id: 49
+  name: Smarty
+  category:
+  imageUrl:
+- id: 50
+  name: FuelPHP
+  category:
+  imageUrl:
+- id: 51
+  name: Laravel
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/laravel.svg
+- id: 52
+  name: Ruby on Rails
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/rails.svg
+- id: 53
+  name: Django
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/django-icon.svg
+- id: 54
+  name: node.js
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/nodejs-icon.svg
+- id: 55
+  name: Backbone.js
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/backbone-icon.svg
+- id: 56
+  name: jQuery
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/jquery.svg
+- id: 57
+  name: Angular.JS
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/angular-icon.svg
+- id: 58
+  name: Gulp
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/gulp.svg
+- id: 59
+  name: Grunt
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/grunt.svg
+- id: 60
+  name: Babel
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/babel.svg
+- id: 61
+  name: React
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/react.svg
+- id: 62
+  name: ASP.NET
+  category:
+  imageUrl:
+- id: 63
+  name: Vue.js
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/vue.svg
+- id: 64
+  name: Elixir
+  category:
+  imageUrl:
+- id: 65
+  name: ストアドプロシージャ
+  category:
+  imageUrl:
+- id: 66
+  name: Oracle
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/oracle.svg
+- id: 67
+  name: MySQL
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/mysql-icon.svg
+- id: 68
+  name: PostgreSQL
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/postgresql.svg
+- id: 69
+  name: SQLserver
+  category:
+  imageUrl:
+- id: 70
+  name: MongoDB
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/mongodb-icon.svg
+- id: 71
+  name: SQLite
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/sqlite.svg
+- id: 72
+  name: Access
+  category:
+  imageUrl:
+- id: 73
+  name: DB2
+  category:
+  imageUrl:
+- id: 74
+  name: Linux
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/linux-tux.svg
+- id: 75
+  name: AWS
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/aws.svg
+- id: 76
+  name: AIX
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/aix.svg
+- id: 77
+  name: HP-UX
+  category:
+  imageUrl:
+- id: 78
+  name: Solaris
+  category:
+  imageUrl:
+- id: 79
+  name: RedHat
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/redhat-icon.svg
+- id: 80
+  name: CentOS
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/centos-icon.svg
+- id: 81
+  name: Windows Server
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/microsoft-windows.svg
+- id: 82
+  name: MacOS
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/macOS.svg
+- id: 83
+  name: Azure
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/microsoft-azure.svg
+- id: 84
+  name: GCP
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/google-icon.svg
+- id: 85
+  name: Windows
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/microsoft-windows.svg
+- id: 86
+  name: UNIX
+  category:
+  imageUrl:
+- id: 87
+  name: Unity
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/unity.svg
+- id: 88
+  name: OpenGL
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/opengl.svg
+- id: 89
+  name: Unreal Engine
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/unrealengine-icon.svg
+- id: 90
+  name: Apache
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/apache.svg
+- id: 91
+  name: nginx
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/nginx.svg
+- id: 92
+  name: VMware
+  category:
+  imageUrl:
+- id: 93
+  name: redis
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/redis.svg
+- id: 94
+  name: Hyper-V
+  category:
+  imageUrl:
+- id: 95
+  name: Cisco
+  category:
+  imageUrl:
+- id: 96
+  name: Catalyst
+  category:
+  imageUrl:
+- id: 97
+  name: アライドテレシス
+  category:
+  imageUrl:
+- id: 98
+  name: Brocade
+  category:
+  imageUrl:
+- id: 99
+  name: ファイヤーウォール
+  category:
+  imageUrl:
+- id: 100
+  name: ロードバランサー
+  category:
+  imageUrl:
+- id: 101
+  name: N/W
+  category:
+  imageUrl:
+- id: 102
+  name: Exchange Server
+  category:
+  imageUrl:
+- id: 103
+  name: Active Directory
+  category:
+  imageUrl:
+- id: 104
+  name: SharePoint Server
+  category:
+  imageUrl:
+- id: 105
+  name: VDI
+  category:
+  imageUrl:
+- id: 106
+  name: ThinClient
+  category:
+  imageUrl:
+- id: 107
+  name: Citrix XenApp
+  category:
+  imageUrl:
+- id: 108
+  name: Citrix XenApptop
+  category:
+  imageUrl:
+- id: 109
+  name: Office365
+  category:
+  imageUrl:
+- id: 110
+  name: OracleEBS
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/oracle.svg
+- id: 111
+  name: Photoshop
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/adobe-photoshop.svg
+- id: 112
+  name: Illustrator
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/adobe-illustrator.svg
+- id: 113
+  name: Fireworks
+  category:
+  imageUrl:
+- id: 114
+  name: Dreamweaver
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/adobe-dreamweaver.svg
+- id: 115
+  name: SAI
+  category:
+  imageUrl:
+- id: 116
+  name: MAYA
+  category:
+  imageUrl:
+- id: 117
+  name: Flash
+  category:
+  imageUrl:
+- id: 118
+  name: FLEX
+  category:
+  imageUrl:
+- id: 119
+  name: Excel
+  category:
+  imageUrl:
+- id: 120
+  name: EC-CUBE
+  category:
+  imageUrl:
+- id: 121
+  name: Jenkins
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/jenkins.svg
+- id: 122
+  name: Zabbix
+  category:
+  imageUrl:
+- id: 123
+  name: FFFTP
+  category:
+  imageUrl:
+- id: 124
+  name: Hinemos
+  category:
+  imageUrl:
+- id: 125
+  name: HULFT
+  category:
+  imageUrl:
+- id: 126
+  name: Tera Term
+  category:
+  imageUrl:
+- id: 127
+  name: LAMP
+  category:
+  imageUrl:
+- id: 128
+  name: Git
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/git-icon.svg
+- id: 129
+  name: GitHub
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/github-icon.svg
+- id: 130
+  name: SVN
+  category:
+  imageUrl:
+- id: 131
+  name: Redmine
+  category:
+  imageUrl:
+- id: 132
+  name: JIRA
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/jira.svg
+- id: 133
+  name: Backlog
+  category:
+  imageUrl:
+- id: 134
+  name: Eclipse
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/eclipse-icon.svg
+- id: 135
+  name: IntelliJ IDEA
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/intellij-idea.svg
+- id: 136
+  name: Visual Studio
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/visual-studio.svg
+- id: 137
+  name: Xcode
+  category:
+  imageUrl:
+- id: 138
+  name: ABAP
+  category:
+  imageUrl:
+- id: 139
+  name: SAP
+  category:
+  imageUrl:
+- id: 140
+  name: BASIS
+  category:
+  imageUrl:
+- id: 141
+  name: Sketch
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/sketch.svg
+- id: 142
+  name: Figma
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/figma.svg
+- id: 143
+  name: abstract
+  category:
+  imageUrl:
+- id: 144
+  name: SalesForce
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/salesforce.svg
+- id: 145
+  name: Visualforce
+  category:
+  imageUrl:
+- id: 146
+  name: MVC
+  category:
+  imageUrl:
+- id: 147
+  name: AJAX
+  category:
+  imageUrl:
+- id: 148
+  name: アジャイル開発
+  category:
+  imageUrl:
+- id: 149
+  name: オブジェクト指向
+  category:
+  imageUrl:
+- id: 150
+  name: データ構造
+  category:
+  imageUrl:
+- id: 151
+  name: RPA
+  category:
+  imageUrl:
+- id: 152
+  name: WinActor
+  category:
+  imageUrl:
+- id: 153
+  name: UiPath
+  category:
+  imageUrl:
+- id: 154
+  name: Automation Anywhere
+  category:
+  imageUrl:
+- id: 155
+  name: BizRobo
+  category:
+  imageUrl:
+- id: 156
+  name: Blue Prism
+  category:
+  imageUrl:
+- id: 157
+  name: Docker
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/docker-icon.svg
+- id: 158
+  name: Docker Compose
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/docker-icon.svg
+- id: 159
+  name: kubernetes
+  category:
+  imageUrl: https://cdn.svgporn.com/logos/kubernetes.svg

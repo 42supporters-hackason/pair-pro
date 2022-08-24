@@ -1,5 +1,4 @@
 import { useClientRoute } from "../../hooks/useClientRoute";
-import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { ClientMenu } from "./types";
 
 interface Props {
@@ -11,6 +10,10 @@ interface Props {
    * コミュニティ変更ハンドラ
    */
   onChangeCommunity: () => void;
+  /**
+   * コミュニティ脱退ハンドラ
+   */
+  onExitCommunity: () => void;
 }
 
 /**
@@ -19,6 +22,7 @@ interface Props {
 export const useClientHeaderMenu = ({
   onLogout,
   onChangeCommunity,
+  onExitCommunity,
 }: Props): ClientMenu => {
   const {
     goToApply,
@@ -28,7 +32,6 @@ export const useClientHeaderMenu = ({
     goToExplanation,
     goToStatistics,
   } = useClientRoute();
-  const { goToCommunity } = usePublicRoute();
 
   return {
     listMenu: [
@@ -61,6 +64,10 @@ export const useClientHeaderMenu = ({
       {
         label: "アプリの使い方",
         action: goToExplanation,
+      },
+      {
+        label: "コミュニティから脱退する",
+        action: onExitCommunity,
       },
       {
         label: "ログアウト",

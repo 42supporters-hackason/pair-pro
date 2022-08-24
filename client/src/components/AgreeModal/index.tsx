@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { BackButton } from "../BackButton";
 import { Card } from "../Card";
@@ -7,7 +7,7 @@ interface Props {
   /**
    * 文言
    */
-  content: string;
+  children: ReactNode;
   /**
    * 「はい」を押した際のアクション
    */
@@ -16,16 +16,25 @@ interface Props {
    * 「いいえ」を押した際のアクション
    */
   onCancel: () => void;
+  /**
+   * disabled
+   */
+  disabled?: boolean;
 }
 
 /**
  * 「はい」「いいえ」を答えるModalコンポーネント
  */
-export const AgreeModal = ({ content, onAgree, onCancel }: Props) => {
+export const AgreeModal = ({
+  children,
+  onAgree,
+  onCancel,
+  disabled = false,
+}: Props) => {
   return (
     <Card>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        <Typography sx={{ textAlign: "center" }}>{content}</Typography>
+        <Typography sx={{ textAlign: "center" }}>{children}</Typography>
         <Box sx={{ display: "flex", justifyContent: "center", gap: "25px" }}>
           <Button
             sx={{
@@ -36,6 +45,7 @@ export const AgreeModal = ({ content, onAgree, onCancel }: Props) => {
             }}
             variant="contained"
             onClick={onAgree}
+            disabled={disabled}
           >
             はい
           </Button>

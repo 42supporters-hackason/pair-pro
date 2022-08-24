@@ -1,9 +1,11 @@
 import { useCallback } from "react";
+import { useAuth } from "../../context/auth";
 import {
   useCreateCommunityMutation,
   useJoinCommunityMutation,
 } from "../../gen/graphql-client";
 import { useClientRoute } from "./../../hooks/useClientRoute";
+import { loginStatusStorage } from "./../../utils/local-storage/login_status";
 import { tokenStorage } from "./../../utils/local-storage/token";
 
 /**
@@ -13,6 +15,7 @@ export const useCreateCommunityHooks = () => {
   const [createCommunityMutation] = useCreateCommunityMutation();
   const [joinCommunityMutation] = useJoinCommunityMutation();
   const { goToHome } = useClientRoute();
+  const { setLoginStatus } = useAuth();
 
   const createCommunity = useCallback(
     (communityName: string) => {
@@ -27,13 +30,15 @@ export const useCreateCommunityHooks = () => {
             },
             onCompleted: (data) => {
               tokenStorage.save(data.joinCommunity.token);
+              loginStatusStorage.save("logined");
+              setLoginStatus("logined");
               goToHome({ replace: true });
             },
           });
         },
       });
     },
-    [createCommunityMutation, joinCommunityMutation, goToHome]
+    [createCommunityMutation, joinCommunityMutation, goToHome, setLoginStatus]
   );
 
   return { createCommunity };

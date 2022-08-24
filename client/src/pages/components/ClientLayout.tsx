@@ -1,17 +1,15 @@
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { Box, Modal } from "@mui/material";
+import { Suspense, useEffect, useState } from "react";
+import { Box, Checkbox, Modal, Typography } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { AgreeModal } from "../../components/AgreeModal";
 import { GeneralHeader } from "../../components/GeneralHeader";
 import { useClientHeaderMenu } from "../../components/GeneralHeader/useHeaderMenu";
-import { useProfile } from "../../context/auth";
+import { useAuth, useProfile } from "../../context/auth";
 import {
   useFetchCurrentCommunityLazyQuery,
   useFetchMeLazyQuery,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
-import { usePublicRoute } from "../../hooks/usePublicRoute";
-import { tokenStorage } from "../../utils/local-storage/token";
 
 /**
  * Client画面共通のLayout
@@ -20,33 +18,39 @@ export const ClientLayout = () => {
   /**
    * misc.
    */
+  /**
+   * modal state
+   */
   const [openLogoutModal, setOpenLogoutModal] = useBoolean(false);
+  const [confirmExit, setConfirmExit] = useBoolean(true);
   const [openChangeCommunityModal, setOpenChangeCommunityModal] =
     useBoolean(false);
+  const [openExitCommunityModal, setOpenExitCommunityModal] = useBoolean(false);
+
+  /**
+   * state
+   */
   const [communityName, setCommunityName] = useState<string>();
   const [matchingPoint, setMatchingPoint] = useState<number>();
   const [githubLogin, setGithubLogin] = useState<string>();
 
+  /**
+   * hooks
+   */
+  const { logout, changeCommunity, exitCommunity } = useAuth();
   const { setProfile } = useProfile();
-  const { goToLogin, goToCommunity } = usePublicRoute();
-  const menu = useClientHeaderMenu({
-    onLogout: setOpenLogoutModal.on,
-    onChangeCommunity: setOpenChangeCommunityModal.on,
-  });
+
+  /**
+   * graphql hooks
+   */
   const [fetchCurrentCommunity] = useFetchCurrentCommunityLazyQuery();
   const [fetchMe] = useFetchMeLazyQuery();
 
-  /**
-   * event-handler
-   */
-  const handleLogout = useCallback(() => {
-    tokenStorage.clear();
-    goToLogin({ replace: true });
-  }, [goToLogin]);
-
-  const handleChangeCommunity = useCallback(() => {
-    goToCommunity({ replace: true });
-  }, [goToCommunity]);
+  const menu = useClientHeaderMenu({
+    onLogout: setOpenLogoutModal.on,
+    onChangeCommunity: setOpenChangeCommunityModal.on,
+    onExitCommunity: setOpenExitCommunityModal.on,
+  });
 
   useEffect(() => {
     if (communityName === undefined) {
@@ -104,11 +108,9 @@ export const ClientLayout = () => {
         sx={{ top: "40%", mx: "auto", width: "600px" }}
       >
         <Box>
-          <AgreeModal
-            content="ログアウトしますか？"
-            onAgree={handleLogout}
-            onCancel={setOpenLogoutModal.off}
-          />
+          <AgreeModal onAgree={logout} onCancel={setOpenLogoutModal.off}>
+            ログアウトしますか？
+          </AgreeModal>
         </Box>
       </Modal>
       <Modal
@@ -118,10 +120,37 @@ export const ClientLayout = () => {
       >
         <Box>
           <AgreeModal
-            content="コミュニティを変更しますか？"
-            onAgree={handleChangeCommunity}
+            onAgree={changeCommunity}
             onCancel={setOpenChangeCommunityModal.off}
-          />
+          >
+            コミュニティを変更しますか？
+          </AgreeModal>
+        </Box>
+      </Modal>
+      <Modal
+        open={openExitCommunityModal}
+        onClose={setOpenExitCommunityModal.off}
+        sx={{ top: "40%", mx: "auto", width: "600px" }}
+      >
+        <Box>
+          <AgreeModal
+            onAgree={exitCommunity}
+            onCancel={setOpenExitCommunityModal.off}
+            disabled={confirmExit}
+          >
+            <Typography color="red" variant="h6" fontWeight="bold">
+              *注意
+            </Typography>
+            このコミュニティから退会しますか？
+            <br />
+            退会した場合、過去の履歴は全て削除されます。
+            <br />
+            再度加入する場合は、コミュニティIDを入力してください
+            <br />
+            <br />
+            チェックをしてください
+            <Checkbox onChange={setConfirmExit.toggle} checked={!confirmExit} />
+          </AgreeModal>
         </Box>
       </Modal>
     </Box>
