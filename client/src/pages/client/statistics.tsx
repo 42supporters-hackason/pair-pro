@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { LanguageItem } from "../../components/LanguageItem";
 import { TitleToggle } from "../../components/TitleToggle";
+import { UserRanking } from "../../components/UserRanking";
 import { useStatisticsHooks } from "../hooks/useStatisticsHooks";
 
 type MyStatisticsType = "teachedSkill" | "teachingSkill";
@@ -116,6 +117,53 @@ export const StatisticsPage = () => {
                     rank={index + 1}
                     name={skill.name}
                     imageUrl={skill.imageUrl}
+                    count={count}
+                  />
+                )
+              )}
+            </>
+          )}
+          {showStatistics === "teachingSkill" && (
+            <>
+              {drivenSkillsList?.ListDrivenSkills.map(
+                ({ skill, count }, index) => (
+                  <LanguageItem
+                    key={skill.id}
+                    rank={index + 1}
+                    name={skill.name}
+                    imageUrl={skill.imageUrl}
+                    count={count}
+                  />
+                )
+              )}
+            </>
+          )}
+          {showStatistics === "mostDrive" && (
+            <>
+              {driverRanking?.ListDriverPostsRanking.map(
+                ({ count, profile }, index) => (
+                  <UserRanking
+                    key={profile.id}
+                    name={profile.name}
+                    bio={profile.bio}
+                    githubLogin={profile.user.githubLogin}
+                    rank={index + 1}
+                    count={count}
+                  />
+                )
+              )}
+            </>
+          )}
+          {showStatistics === "mostNavigate" && (
+            <>
+              {navigatorRankig?.ListNavigatorPostsRanking.map(
+                ({ count, profile }, index) => (
+                  <UserRanking
+                    key={profile.id}
+                    name={profile.name}
+                    bio={profile.bio}
+                    githubLogin={profile.user.githubLogin}
+                    rank={index + 1}
                     count={count}
                   />
                 )
