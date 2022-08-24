@@ -257,3 +257,64 @@ export const FETCH_CURRENT_COMMUNITY = gql`
     }
   }
 `;
+
+/**
+ * statistics
+ */
+export const FETCH_NAVIGATED_SKILLS_LIST = gql`
+  query fetchNavigatedSkillsList {
+    ListNavigatedSkills {
+      count
+      skill {
+        id
+        name
+        imageUrl
+      }
+    }
+  }
+`;
+
+export const FETCH_DRIVEN_SKILLS_LIST = gql`
+  query fetchDrivenSkillsList {
+    ListDrivenSkills {
+      count
+      skill {
+        id
+        name
+        imageUrl
+      }
+    }
+  }
+`;
+
+export const FETCH_NAVIGATOR_RANKING = gql`
+  query fetchNavigatorRanking {
+    ListNavigatorPostsRanking {
+      count
+      profile {
+        id
+        name
+        bio
+        user {
+          githubLogin
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_DRIVER_RANKING = gql`
+  query fetchDriverRanking {
+    ListDriverPostsRanking {
+      count
+      profile {
+        id
+        name
+        bio
+        user {
+          githubLogin
+        }
+      }
+    }
+  }
+`;

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { LanguageItem } from "../../components/LanguageItem";
 import { TitleToggle } from "../../components/TitleToggle";
-import { UserItem } from "../../components/UserItem";
+import { useStatisticsHooks } from "../hooks/useStatisticsHooks";
 
 type MyStatisticsType = "teachedSkill" | "teachingSkill";
 type CommunityStatisticsType =
@@ -11,42 +12,22 @@ type CommunityStatisticsType =
   | "mostUsedLanguage";
 type StatisticsType = MyStatisticsType | CommunityStatisticsType;
 
-const demoStatistics = [
-  {
-    id: 1,
-    name: "taisei-13046",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-  {
-    id: 2,
-    name: "taisei-13046",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-  {
-    id: 3,
-    name: "taisei-13046",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-  {
-    id: 4,
-    name: "taisei-13046",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-  {
-    id: 5,
-    name: "taisei-13046",
-    githubLogin: "taisei-13046",
-    bio: "初めまして！",
-  },
-];
-
 export const StatisticsPage = () => {
+  /**
+   * state
+   */
   const [showStatistics, setShowStatistics] =
     useState<StatisticsType>("teachedSkill");
+
+  /**
+   * ページhooks
+   */
+  const {
+    navigatedSkillsList,
+    navigatorRankig,
+    drivenSkillsList,
+    driverRanking,
+  } = useStatisticsHooks();
   return (
     <Box
       sx={{
@@ -126,14 +107,21 @@ export const StatisticsPage = () => {
         }}
       >
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {demoStatistics.map(({ id, name, githubLogin, bio }) => (
-            <UserItem
-              key={id}
-              name={name}
-              githubLogin={githubLogin}
-              bio={bio}
-            />
-          ))}
+          {showStatistics === "teachedSkill" && (
+            <>
+              {navigatedSkillsList?.ListNavigatedSkills.map(
+                ({ skill, count }, index) => (
+                  <LanguageItem
+                    key={skill.id}
+                    rank={index + 1}
+                    name={skill.name}
+                    imageUrl={skill.imageUrl}
+                    count={count}
+                  />
+                )
+              )}
+            </>
+          )}
         </Box>
       </Box>
     </Box>
