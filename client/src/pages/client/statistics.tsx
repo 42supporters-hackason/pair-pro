@@ -141,32 +141,42 @@ export const StatisticsPage = () => {
           {showStatistics === "mostDrive" && (
             <>
               {driverRanking?.ListDriverPostsRanking.map(
-                ({ count, profile }, index) => (
-                  <UserRanking
-                    key={profile.id}
-                    name={profile.name}
-                    bio={profile.bio}
-                    githubLogin={profile.user.githubLogin}
-                    rank={index + 1}
-                    count={count}
-                  />
-                )
+                ({ count, profile }, index) => {
+                  if (count <= 0) {
+                    return;
+                  }
+                  return (
+                    <UserRanking
+                      key={profile.id}
+                      name={profile.name}
+                      bio={profile.bio}
+                      githubLogin={profile.user.githubLogin}
+                      rank={index + 1}
+                      count={count}
+                    />
+                  );
+                }
               )}
             </>
           )}
           {showStatistics === "mostNavigate" && (
             <>
               {navigatorRankig?.ListNavigatorPostsRanking.map(
-                ({ count, profile }, index) => (
-                  <UserRanking
-                    key={profile.id}
-                    name={profile.name}
-                    bio={profile.bio}
-                    githubLogin={profile.user.githubLogin}
-                    rank={index + 1}
-                    count={count}
-                  />
-                )
+                ({ count, profile }, index) => {
+                  if (count <= 0) {
+                    return;
+                  }
+                  return (
+                    <UserRanking
+                      key={profile.id}
+                      name={profile.name}
+                      bio={profile.bio}
+                      githubLogin={profile.user.githubLogin}
+                      rank={index + 1}
+                      count={count}
+                    />
+                  );
+                }
               )}
             </>
           )}

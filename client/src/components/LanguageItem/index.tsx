@@ -49,8 +49,9 @@ export const LanguageItem = ({ rank, name, count, imageUrl }: Props) => {
           sx={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             gap: "40px",
-            width: "50%",
+            width: "20%",
           }}
         >
           <Box component="img" src={imageUrl ?? ""} sx={{ height: "40px" }} />
