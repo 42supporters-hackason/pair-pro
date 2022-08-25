@@ -92,9 +92,13 @@ export const MessageMutation = extendType({
               connect: { id: profileId },
             },
           },
+          include: {
+            post: true,
+          },
         });
         // todo: is 'await' necessary? (https://codesandbox.io/s/nexus-example-subscriptions-59kdb?file=/src/schema/index.ts)
         await context.pubsub.publish(postId.toString(), newMessage);
+        await context.pubsub.publish("messageNotification", newMessage.post);
         return newMessage;
       },
     });
@@ -146,6 +150,16 @@ export const MessageSubscription = subscriptionType({
       },
       async resolve(messagePromise: Promise<Message>) {
         return await messagePromise;
+      },
+    });
+
+    t.field("waitForMessageNotification", {
+      type: "Post",
+      subscribe(parent, args, context) {
+        return context.pubsub.asyncIterator("messageNotification");
+      },
+      async resolve(postPromise: Promise<Post>) {
+        return await postPromise;
       },
     });
   },

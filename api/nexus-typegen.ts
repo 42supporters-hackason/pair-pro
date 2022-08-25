@@ -219,6 +219,7 @@ export interface NexusGenFieldTypes {
   }
   Subscription: { // field return type
     waitForMessage: NexusGenRootTypes['Message'] | null; // Message
+    waitForMessageNotification: NexusGenRootTypes['Post'] | null; // Post
   }
   User: { // field return type
     githubBio: string; // String!
@@ -334,6 +335,7 @@ export interface NexusGenFieldTypeNames {
   }
   Subscription: { // field return type name
     waitForMessage: 'Message'
+    waitForMessageNotification: 'Post'
   }
   User: { // field return type name
     githubBio: 'String'
