@@ -56,8 +56,8 @@ export type Mutation = {
   deleteMyProfile?: Maybe<AuthPayLoad>;
   deletePost: Post;
   joinCommunity: AuthPayLoad;
+  markMessagesAsRead: Array<Message>;
   post: Post;
-  readMessages: Array<Message>;
   registerNavigator: Post;
   updateCommunity: Community;
   updateMyProfile?: Maybe<Profile>;
@@ -101,15 +101,15 @@ export type MutationJoinCommunityArgs = {
 };
 
 
+export type MutationMarkMessagesAsReadArgs = {
+  postId: Scalars['String'];
+};
+
+
 export type MutationPostArgs = {
   description: Scalars['String'];
   requiredSkillsId: Array<Scalars['Int']>;
   title: Scalars['String'];
-};
-
-
-export type MutationReadMessagesArgs = {
-  postId: Scalars['String'];
 };
 
 
@@ -335,7 +335,7 @@ export type ReadPostMessageMutationVariables = Exact<{
 }>;
 
 
-export type ReadPostMessageMutation = { __typename?: 'Mutation', readMessages: Array<{ __typename?: 'Message', id: number }> };
+export type ReadPostMessageMutation = { __typename?: 'Mutation', markMessagesAsRead: Array<{ __typename?: 'Message', id: number }> };
 
 export type SendMessageMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -750,7 +750,7 @@ export type CompletePostMutationResult = Apollo.MutationResult<CompletePostMutat
 export type CompletePostMutationOptions = Apollo.BaseMutationOptions<CompletePostMutation, CompletePostMutationVariables>;
 export const ReadPostMessageDocument = gql`
     mutation readPostMessage($postId: String!) {
-  readMessages(postId: $postId) {
+  markMessagesAsRead(postId: $postId) {
     id
   }
 }
