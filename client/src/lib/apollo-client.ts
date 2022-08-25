@@ -22,11 +22,13 @@ const wsLink = new GraphQLWsLink(
   })
 );
 
+const MAX_SESSION_INTERVAL_MIN = 120;
+
 const authLink = setContext((_, { headers }) => {
   const session = sessionTimestampStorage.load();
   if (session !== null) {
     const lastUsedInterval = differenceInMinutes(new Date(), session);
-    if (lastUsedInterval >= 1) {
+    if (lastUsedInterval >= MAX_SESSION_INTERVAL_MIN) {
       tokenStorage.clear();
       localStorage.clear();
       return;
