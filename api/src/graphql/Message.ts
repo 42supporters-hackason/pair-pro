@@ -99,7 +99,7 @@ export const MessageMutation = extendType({
       },
     });
 
-    t.nonNull.list.nonNull.field("readMessages", {
+    t.nonNull.list.nonNull.field("markMessagesAsRead", {
       type: "Message",
       args: {
         postId: nonNull(stringArg()),

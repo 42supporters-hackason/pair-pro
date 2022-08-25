@@ -148,8 +148,8 @@ export interface NexusGenFieldTypes {
     deleteMyProfile: NexusGenRootTypes['AuthPayLoad'] | null; // AuthPayLoad
     deletePost: NexusGenRootTypes['Post']; // Post!
     joinCommunity: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    markMessagesAsRead: NexusGenRootTypes['Message'][]; // [Message!]!
     post: NexusGenRootTypes['Post']; // Post!
-    readMessages: NexusGenRootTypes['Message'][]; // [Message!]!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateCommunity: NexusGenRootTypes['Community']; // Community!
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
@@ -263,8 +263,8 @@ export interface NexusGenFieldTypeNames {
     deleteMyProfile: 'AuthPayLoad'
     deletePost: 'Post'
     joinCommunity: 'AuthPayLoad'
+    markMessagesAsRead: 'Message'
     post: 'Post'
-    readMessages: 'Message'
     registerNavigator: 'Post'
     updateCommunity: 'Community'
     updateMyProfile: 'Profile'
@@ -371,13 +371,13 @@ export interface NexusGenArgTypes {
     joinCommunity: { // args
       communityId: string; // String!
     }
+    markMessagesAsRead: { // args
+      postId: string; // String!
+    }
     post: { // args
       description: string; // String!
       requiredSkillsId: number[]; // [Int!]!
       title: string; // String!
-    }
-    readMessages: { // args
-      postId: string; // String!
     }
     registerNavigator: { // args
       navigatorId: number; // Int!
