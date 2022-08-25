@@ -41,8 +41,8 @@ type Mutation {
   deleteMyProfile: AuthPayLoad
   deletePost(id: String!): Post!
   joinCommunity(communityId: String!): AuthPayLoad!
+  markMessagesAsRead(postId: String!): [Message!]!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
-  readMessages(postId: String!): [Message!]!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
   updateCommunity(id: String!, name: String!): Community!
   updateMyProfile(bio: String, name: String): Profile

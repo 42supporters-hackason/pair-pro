@@ -10,6 +10,8 @@ import {
   useFetchMeLazyQuery,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
+import { usePublicRoute } from "../../hooks/usePublicRoute";
+import { tokenStorage } from "../../utils/local-storage/token";
 
 /**
  * Client画面共通のLayout
@@ -37,8 +39,9 @@ export const ClientLayout = () => {
   /**
    * hooks
    */
-  const { logout, changeCommunity, exitCommunity } = useAuth();
+  const { logout, changeCommunity, exitCommunity, setLoginStatus } = useAuth();
   const { setProfile } = useProfile();
+  const { goToNotFound } = usePublicRoute();
 
   /**
    * graphql hooks
@@ -81,6 +84,13 @@ export const ClientLayout = () => {
     matchingPoint,
     setProfile,
   ]);
+
+  useEffect(() => {
+    if (tokenStorage.load() === null) {
+      setLoginStatus("unLogin");
+      goToNotFound();
+    }
+  }, [goToNotFound, setLoginStatus]);
 
   return (
     <Box

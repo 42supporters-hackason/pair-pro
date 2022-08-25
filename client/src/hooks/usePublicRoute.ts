@@ -22,5 +22,12 @@ export const usePublicRoute = () => {
     [navigate]
   );
 
-  return { goToLogin, goToCommunity };
+  const goToNotFound = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(PUBLIC_ROUTE_PATH.NOT_FOUND, options);
+    },
+    [navigate]
+  );
+
+  return { goToLogin, goToCommunity, goToNotFound };
 };

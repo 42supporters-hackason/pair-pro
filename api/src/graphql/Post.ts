@@ -186,6 +186,7 @@ export const PostQuery = extendType({
       type: "Post",
       resolve(parent, args, context) {
         const { profileId } = context.expectUserJoinedCommunity();
+
         return context.prisma.post.findMany({
           where: {
             OR: [{ navigatorId: profileId }, { driverId: profileId }],
@@ -408,13 +409,7 @@ export const PostMutation = extendType({
       },
       async resolve(parent, args, context) {
         const { postId } = args;
-        const { userId, profileId } = context;
-
-        if (!userId) {
-          throw new Error("You have to log in");
-        } else if (!profileId) {
-          throw new Error("You have to be in the community");
-        }
+        const { profileId } = context.expectUserJoinedCommunity();
 
         const post = await context.prisma.post.findUnique({
           where: { id: postId },
