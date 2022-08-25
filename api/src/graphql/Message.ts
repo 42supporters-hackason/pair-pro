@@ -23,7 +23,7 @@ export const MessageObject = objectType({
           .post()) as Post;
       },
     });
-    // TODO createdAt
+    t.nonNull.dateTime("createdAt");
     t.nonNull.string("content");
     t.nonNull.field("createdBy", {
       type: "Profile",
@@ -36,6 +36,7 @@ export const MessageObject = objectType({
           .createdBy()) as Profile;
       },
     });
+    t.nonNull.boolean("isRead");
   },
 });
 
@@ -49,6 +50,17 @@ export const MessageQuery = extendType({
       },
       async resolve(parent, args, context) {
         const { postId } = args;
+        const { profileId } = context.expectUserJoinedCommunity();
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId },
+        });
+        if (!post) {
+          throw new Error("post doesn't exist");
+        }
+        if (profileId != post.driverId && profileId != post.navigatorId) {
+          throw new Error("no right to see messages");
+        }
+
         return await context.prisma.message.findMany({
           where: { postId },
         });
@@ -84,6 +96,37 @@ export const MessageMutation = extendType({
         // todo: is 'await' necessary? (https://codesandbox.io/s/nexus-example-subscriptions-59kdb?file=/src/schema/index.ts)
         await context.pubsub.publish(postId.toString(), newMessage);
         return newMessage;
+      },
+    });
+
+    t.nonNull.list.nonNull.field("markMessagesAsRead", {
+      type: "Message",
+      args: {
+        postId: nonNull(stringArg()),
+      },
+      async resolve(parent, args, context) {
+        const { postId } = args;
+        const { profileId } = context.expectUserJoinedCommunity();
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId },
+        });
+        if (!post) {
+          throw new Error("post doesn't exist");
+        }
+        if (profileId != post.driverId && profileId != post.navigatorId) {
+          throw new Error("no right to see messages");
+        }
+
+        const where = { postId, createdById: { not: profileId } };
+        await context.prisma.message.updateMany({
+          where,
+          data: {
+            isRead: true,
+          },
+        });
+        return await context.prisma.message.findMany({
+          where,
+        });
       },
     });
   },
