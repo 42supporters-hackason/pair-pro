@@ -132,6 +132,7 @@ export const HomePage = () => {
                   name={name}
                   githubLogin={githubLogin}
                   onClick={() => {
+                    setCompletePostCheck.off();
                     setOpenFinishedPostModal.on();
                     setFinishedPostId(id);
                   }}
@@ -256,7 +257,10 @@ export const HomePage = () => {
       </Modal>
       <Modal
         open={openCompleteModal}
-        onClose={setOpenCompleteModal.off}
+        onClose={() => {
+          setOpenCompleteModal.off();
+          setCompletePostCheck.off();
+        }}
         sx={{ top: "40%", mx: "auto", width: "600px" }}
       >
         <Box>
@@ -267,7 +271,10 @@ export const HomePage = () => {
                 setOpenCompleteModal.off();
               }
             }}
-            onCancel={setOpenCompleteModal.off}
+            onCancel={() => {
+              setOpenCompleteModal.off();
+              setCompletePostCheck.off();
+            }}
             disabled={!completePostCheck}
           >
             {completePostCheck && (

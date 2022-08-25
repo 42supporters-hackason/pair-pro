@@ -139,13 +139,19 @@ export const ClientLayout = () => {
       </Modal>
       <Modal
         open={openExitCommunityModal}
-        onClose={setOpenExitCommunityModal.off}
+        onClose={() => {
+          setOpenExitCommunityModal.off();
+          setConfirmExit.on();
+        }}
         sx={{ top: "40%", mx: "auto", width: "600px" }}
       >
         <Box>
           <AgreeModal
             onAgree={exitCommunity}
-            onCancel={setOpenExitCommunityModal.off}
+            onCancel={() => {
+              setOpenExitCommunityModal.off();
+              setConfirmExit.on();
+            }}
             disabled={confirmExit}
           >
             <Typography color="red" variant="h6" fontWeight="bold">
