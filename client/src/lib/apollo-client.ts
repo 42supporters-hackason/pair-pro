@@ -7,7 +7,9 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { differenceInMinutes } from "date-fns";
 import { createClient } from "graphql-ws";
+import { sessionTimestampStorage } from "../utils/local-storage/timestamp";
 import { tokenStorage } from "../utils/local-storage/token";
 
 const httpLink = createHttpLink({
@@ -20,8 +22,20 @@ const wsLink = new GraphQLWsLink(
   })
 );
 
+const MAX_SESSION_INTERVAL_MIN = 120;
+
 const authLink = setContext((_, { headers }) => {
+  const session = sessionTimestampStorage.load();
+  if (session !== null) {
+    const lastUsedInterval = differenceInMinutes(new Date(), session);
+    if (lastUsedInterval >= MAX_SESSION_INTERVAL_MIN) {
+      tokenStorage.clear();
+      localStorage.clear();
+      return;
+    }
+  }
   const token = tokenStorage.load();
+  sessionTimestampStorage.save(new Date());
 
   return {
     headers: {
