@@ -14,12 +14,7 @@ export const PairProgrammingCountQuery = extendType({
     t.nonNull.list.nonNull.field("ListNavigatorPostsRanking", {
       type: "PairProgrammingCount",
       async resolve(parent, args, context) {
-        const { profileId, userId, communityId } = context;
-        if (!userId) {
-          throw new Error("You have to log in");
-        } else if (!profileId) {
-          throw new Error("You have to be in the community");
-        }
+        const { communityId } = context.expectUserJoinedCommunity();
 
         const profiles = await context.prisma.profile.findMany({
           where: { communityId },
@@ -28,8 +23,8 @@ export const PairProgrammingCountQuery = extendType({
               where: {
                 completedAt: { not: null },
               },
-            }
             },
+          },
         });
         return profiles
           .map((profile) => ({
@@ -43,12 +38,7 @@ export const PairProgrammingCountQuery = extendType({
     t.nonNull.list.nonNull.field("ListDriverPostsRanking", {
       type: "PairProgrammingCount",
       async resolve(parent, args, context) {
-        const { profileId, userId, communityId } = context;
-        if (!userId) {
-          throw new Error("You have to log in");
-        } else if (!profileId) {
-          throw new Error("You have to be in the community");
-        }
+        const { communityId } = context.expectUserJoinedCommunity();
 
         const profiles = await context.prisma.profile.findMany({
           where: { communityId },
