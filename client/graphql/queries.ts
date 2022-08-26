@@ -326,3 +326,16 @@ export const FETCH_DRIVER_RANKING = gql`
     }
   }
 `;
+
+export const FETCH_POPULAR_SKILLS_LIST = gql`
+  query fetchPopularSkillsList($take: Int) {
+    ListPopularSkillsRanking(take: $take) {
+      count
+      skill {
+        id
+        name
+        imageUrl
+      }
+    }
+  }
+`;
