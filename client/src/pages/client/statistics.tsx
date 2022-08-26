@@ -79,13 +79,13 @@ export const StatisticsPage = () => {
               selected={showStatistics === "mostNavigate"}
               onClick={() => setShowStatistics("mostNavigate")}
             >
-              募集に対応した回数
+              ナビゲーターになった回数
             </TitleToggle>
             <TitleToggle
               selected={showStatistics === "mostDrive"}
               onClick={() => setShowStatistics("mostDrive")}
             >
-              募集した回数
+              ドライバーになった回数
             </TitleToggle>
             <TitleToggle
               selected={showStatistics === "mostUsedLanguage"}
@@ -111,7 +111,7 @@ export const StatisticsPage = () => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {showStatistics === "teachedSkill" && (
             <>
-              {navigatedSkillsList?.ListNavigatedSkills.map(
+              {drivenSkillsList?.ListDrivenSkills.map(
                 ({ skill, count }, index) => (
                   <LanguageItem
                     key={skill.id}
@@ -126,7 +126,7 @@ export const StatisticsPage = () => {
           )}
           {showStatistics === "teachingSkill" && (
             <>
-              {drivenSkillsList?.ListDrivenSkills.map(
+              {navigatedSkillsList?.ListNavigatedSkills.map(
                 ({ skill, count }, index) => (
                   <LanguageItem
                     key={skill.id}
@@ -186,7 +186,7 @@ export const StatisticsPage = () => {
               {popularSkillsList?.ListPopularSkillsRanking.map(
                 ({ skill, count }, index) => {
                   if (count <= 0) {
-                    return
+                    return;
                   }
                   return (
                     <LanguageItem
