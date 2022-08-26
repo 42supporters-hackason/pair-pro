@@ -19,10 +19,12 @@ const { NotFoundPage } = lazyImport(
 const LOGIN = "/";
 const CREATE = "/create";
 const COMMUNITY = "/community";
+const NOT_FOUND = "/404";
 
 export const PUBLIC_ROUTE_PATH = {
   LOGIN: `${LOGIN}`,
   COMMUNITY: `${COMMUNITY}`,
+  NOT_FOUND: `${NOT_FOUND}`,
 } as const;
 
 export const publicRoutes: RouteObject[] = [
@@ -33,6 +35,10 @@ export const publicRoutes: RouteObject[] = [
   {
     path: PUBLIC_ROUTE_PATH.LOGIN,
     element: <LoginPage />,
+  },
+  {
+    path: PUBLIC_ROUTE_PATH.NOT_FOUND,
+    element: <NotFoundPage />,
   },
   {
     path: "*",

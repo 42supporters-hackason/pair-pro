@@ -58,7 +58,9 @@ export interface NexusGenObjects {
   }
   Message: { // root type
     content: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: number; // Int!
+    isRead: boolean; // Boolean!
   }
   Mutation: {};
   PaginatedPosts: { // root type
@@ -135,8 +137,10 @@ export interface NexusGenFieldTypes {
   }
   Message: { // field return type
     content: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     createdBy: NexusGenRootTypes['Profile']; // Profile!
     id: number; // Int!
+    isRead: boolean; // Boolean!
     post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type
@@ -148,6 +152,7 @@ export interface NexusGenFieldTypes {
     deleteMyProfile: NexusGenRootTypes['AuthPayLoad'] | null; // AuthPayLoad
     deletePost: NexusGenRootTypes['Post']; // Post!
     joinCommunity: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    markMessagesAsRead: NexusGenRootTypes['Message'][]; // [Message!]!
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateCommunity: NexusGenRootTypes['Community']; // Community!
@@ -206,6 +211,7 @@ export interface NexusGenFieldTypes {
     myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    myMatchedPostsWithUnreadMessages: NexusGenRootTypes['Post'][]; // [Post!]!
     myProfile: NexusGenRootTypes['Profile']; // Profile!
     post: NexusGenRootTypes['Post'] | null; // Post
     profile: NexusGenRootTypes['Profile'] | null; // Profile
@@ -251,8 +257,10 @@ export interface NexusGenFieldTypeNames {
   }
   Message: { // field return type name
     content: 'String'
+    createdAt: 'DateTime'
     createdBy: 'Profile'
     id: 'Int'
+    isRead: 'Boolean'
     post: 'Post'
   }
   Mutation: { // field return type name
@@ -264,6 +272,7 @@ export interface NexusGenFieldTypeNames {
     deleteMyProfile: 'AuthPayLoad'
     deletePost: 'Post'
     joinCommunity: 'AuthPayLoad'
+    markMessagesAsRead: 'Message'
     post: 'Post'
     registerNavigator: 'Post'
     updateCommunity: 'Community'
@@ -322,6 +331,7 @@ export interface NexusGenFieldTypeNames {
     myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
+    myMatchedPostsWithUnreadMessages: 'Post'
     myProfile: 'Profile'
     post: 'Post'
     profile: 'Profile'
@@ -374,6 +384,9 @@ export interface NexusGenArgTypes {
     }
     joinCommunity: { // args
       communityId: string; // String!
+    }
+    markMessagesAsRead: { // args
+      postId: string; // String!
     }
     post: { // args
       description: string; // String!

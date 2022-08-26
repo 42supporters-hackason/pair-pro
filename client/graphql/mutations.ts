@@ -116,6 +116,14 @@ export const COMPLETE_POST = gql`
   }
 `;
 
+export const READ_POST_MESSAGE = gql`
+  mutation readPostMessage($postId: String!) {
+    markMessagesAsRead(postId: $postId) {
+      id
+    }
+  }
+`;
+
 /**
  * message
  */

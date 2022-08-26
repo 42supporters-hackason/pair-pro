@@ -197,6 +197,29 @@ export const PostQuery = extendType({
         });
       },
     });
+
+    t.nonNull.list.nonNull.field("myMatchedPostsWithUnreadMessages", {
+      type: "Post",
+      resolve(parent, args, context) {
+        const { profileId } = context.expectUserJoinedCommunity();
+        return context.prisma.post.findMany({
+          where: {
+            OR: [{ navigatorId: profileId }, { driverId: profileId }],
+            navigatorId: { not: null },
+            driverId: { not: null },
+            completedAt: null,
+            messages: {
+              some: {
+                isRead: false,
+                createdById: {
+                  not: profileId,
+                },
+              },
+            },
+          },
+        });
+      },
+    });
   },
 });
 

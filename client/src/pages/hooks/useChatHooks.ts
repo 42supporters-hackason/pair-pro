@@ -1,10 +1,12 @@
-import { RefObject, useState } from "react";
+import { RefObject, useCallback, useState } from "react";
 import { useProfile } from "../../context/auth";
 import {
   useFetchMeQuery,
   useFetchMessagesQuery,
   useFetchMessageSubscription,
   useFetchSpecificPostQuery,
+  useFetchUnreadPostsQuery,
+  useReadPostMessageMutation,
 } from "../../gen/graphql-client";
 
 interface Message {
@@ -22,6 +24,7 @@ export const useChatHooks = (
 ) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { profile } = useProfile();
+  const { refetch: refetchUnreadPosts } = useFetchUnreadPostsQuery();
 
   const { data: post } = useFetchSpecificPostQuery({
     variables: {
@@ -41,6 +44,22 @@ export const useChatHooks = (
     profile?.name === post?.post?.driver?.name
       ? post?.post?.navigator?.name
       : post?.post?.driver?.name;
+
+  /**
+   * メッセージに既読をつける
+   */
+  const [readMessageMutation] = useReadPostMessageMutation();
+
+  const readMessage = useCallback(async () => {
+    await readMessageMutation({
+      variables: {
+        postId: roomId,
+      },
+      onCompleted: () => {
+        refetchUnreadPosts();
+      },
+    });
+  }, [readMessageMutation, roomId, refetchUnreadPosts]);
 
   const { refetch: refetchMessages } = useFetchMessagesQuery({
     variables: {
@@ -81,11 +100,13 @@ export const useChatHooks = (
       setTimeout(() => ref.current?.scrollIntoView(), 10);
     },
   });
+
   return {
     messages,
     opponentGithubLogin,
     opponentName,
     myGithubLogin,
     refetchMessages,
+    readMessage,
   };
 };
