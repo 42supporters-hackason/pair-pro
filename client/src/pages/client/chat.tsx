@@ -44,6 +44,7 @@ export const ChatPage = () => {
     opponentName,
     myGithubLogin,
     refetchMessages,
+    readMessage,
   } = useChatHooks(roomId ?? unreachable(), ref);
   const videoRef = useRef<HTMLDivElement | null>(null);
 
@@ -184,8 +185,9 @@ export const ChatPage = () => {
 
   useEffect(() => {
     refetchMessages();
+    readMessage();
     ref.current?.scrollIntoView();
-  }, [messages, refetchMessages]);
+  }, [messages, refetchMessages, readMessage]);
 
   useEffect(() => {
     if (shareScreenTrack !== null) {
