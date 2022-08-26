@@ -78,13 +78,13 @@ export const StatisticsPage = () => {
               selected={showStatistics === "mostNavigate"}
               onClick={() => setShowStatistics("mostNavigate")}
             >
-              募集に対応した回数
+              ナビゲーターになった回数
             </TitleToggle>
             <TitleToggle
               selected={showStatistics === "mostDrive"}
               onClick={() => setShowStatistics("mostDrive")}
             >
-              募集した回数
+              ドライバーになった回数
             </TitleToggle>
             <TitleToggle
               selected={showStatistics === "mostUsedLanguage"}

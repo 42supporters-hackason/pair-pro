@@ -162,6 +162,8 @@ export const HomePage = () => {
               onClick={() => goToApply()}
             >
               自分の好きなテーマで募集する
+              <br />
+              (ドライバーになる)
             </Button>
             <Button
               size="large"
@@ -170,6 +172,8 @@ export const HomePage = () => {
               onClick={() => goToRecruit()}
             >
               募集一覧から気になるマッチング相手を探す
+              <br />
+              (ナビゲータになる)
             </Button>
           </Box>
         </Box>
