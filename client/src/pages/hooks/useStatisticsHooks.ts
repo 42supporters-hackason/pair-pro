@@ -3,6 +3,7 @@ import {
   useFetchDriverRankingQuery,
   useFetchNavigatedSkillsListQuery,
   useFetchNavigatorRankingQuery,
+  useFetchPopularSkillsListQuery,
 } from "../../gen/graphql-client";
 
 /**
@@ -13,11 +14,13 @@ export const useStatisticsHooks = () => {
   const { data: navigatedSkillsList } = useFetchNavigatedSkillsListQuery();
   const { data: navigatorRankig } = useFetchNavigatorRankingQuery();
   const { data: driverRanking } = useFetchDriverRankingQuery();
+  const { data: popularSkillsList } = useFetchPopularSkillsListQuery();
 
   return {
     drivenSkillsList,
     driverRanking,
     navigatedSkillsList,
     navigatorRankig,
+    popularSkillsList,
   };
 };

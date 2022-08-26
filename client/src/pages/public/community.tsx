@@ -12,6 +12,7 @@ import {
   CommunitySchema,
   communitySchema,
 } from "../validation/community_validation";
+import { LoadingPage } from "./loading";
 
 /**
  * public/community
@@ -83,6 +84,10 @@ export const CommunityPage = () => {
     refecthMyCommunities,
     loginStatus,
   ]);
+
+  if (loginStatus === "unLogin") {
+    return <LoadingPage />;
+  }
 
   return (
     <Box

@@ -58,7 +58,9 @@ export interface NexusGenObjects {
   }
   Message: { // root type
     content: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: number; // Int!
+    isRead: boolean; // Boolean!
   }
   Mutation: {};
   PaginatedPosts: { // root type
@@ -72,6 +74,10 @@ export interface NexusGenObjects {
   PairProgrammingCount: { // root type
     count: number; // Int!
     profile: NexusGenRootTypes['Profile']; // Profile!
+  }
+  PopularSkillsCount: { // root type
+    count: number; // Int!
+    skill: NexusGenRootTypes['Skill']; // Skill!
   }
   Post: { // root type
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -131,8 +137,10 @@ export interface NexusGenFieldTypes {
   }
   Message: { // field return type
     content: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     createdBy: NexusGenRootTypes['Profile']; // Profile!
     id: number; // Int!
+    isRead: boolean; // Boolean!
     post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type
@@ -144,6 +152,7 @@ export interface NexusGenFieldTypes {
     deleteMyProfile: NexusGenRootTypes['AuthPayLoad'] | null; // AuthPayLoad
     deletePost: NexusGenRootTypes['Post']; // Post!
     joinCommunity: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
+    markMessagesAsRead: NexusGenRootTypes['Message'][]; // [Message!]!
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateCommunity: NexusGenRootTypes['Community']; // Community!
@@ -161,6 +170,10 @@ export interface NexusGenFieldTypes {
   PairProgrammingCount: { // field return type
     count: number; // Int!
     profile: NexusGenRootTypes['Profile']; // Profile!
+  }
+  PopularSkillsCount: { // field return type
+    count: number; // Int!
+    skill: NexusGenRootTypes['Skill']; // Skill!
   }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -188,6 +201,7 @@ export interface NexusGenFieldTypes {
     ListDriverPostsRanking: NexusGenRootTypes['PairProgrammingCount'][]; // [PairProgrammingCount!]!
     ListNavigatedSkills: NexusGenRootTypes['LearnedSkill'][]; // [LearnedSkill!]!
     ListNavigatorPostsRanking: NexusGenRootTypes['PairProgrammingCount'][]; // [PairProgrammingCount!]!
+    ListPopularSkillsRanking: NexusGenRootTypes['PopularSkillsCount'][]; // [PopularSkillsCount!]!
     accessToken: NexusGenRootTypes['Video']; // Video!
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -197,6 +211,7 @@ export interface NexusGenFieldTypes {
     myCurrentCommunity: NexusGenRootTypes['Community'] | null; // Community
     myDrivingPosts: NexusGenRootTypes['Post'][]; // [Post!]!
     myMatchedPosts: NexusGenRootTypes['Post'][]; // [Post!]!
+    myMatchedPostsWithUnreadMessages: NexusGenRootTypes['Post'][]; // [Post!]!
     myProfile: NexusGenRootTypes['Profile']; // Profile!
     post: NexusGenRootTypes['Post'] | null; // Post
     profile: NexusGenRootTypes['Profile'] | null; // Profile
@@ -242,8 +257,10 @@ export interface NexusGenFieldTypeNames {
   }
   Message: { // field return type name
     content: 'String'
+    createdAt: 'DateTime'
     createdBy: 'Profile'
     id: 'Int'
+    isRead: 'Boolean'
     post: 'Post'
   }
   Mutation: { // field return type name
@@ -255,6 +272,7 @@ export interface NexusGenFieldTypeNames {
     deleteMyProfile: 'AuthPayLoad'
     deletePost: 'Post'
     joinCommunity: 'AuthPayLoad'
+    markMessagesAsRead: 'Message'
     post: 'Post'
     registerNavigator: 'Post'
     updateCommunity: 'Community'
@@ -272,6 +290,10 @@ export interface NexusGenFieldTypeNames {
   PairProgrammingCount: { // field return type name
     count: 'Int'
     profile: 'Profile'
+  }
+  PopularSkillsCount: { // field return type name
+    count: 'Int'
+    skill: 'Skill'
   }
   Post: { // field return type name
     completedAt: 'DateTime'
@@ -299,6 +321,7 @@ export interface NexusGenFieldTypeNames {
     ListDriverPostsRanking: 'PairProgrammingCount'
     ListNavigatedSkills: 'LearnedSkill'
     ListNavigatorPostsRanking: 'PairProgrammingCount'
+    ListPopularSkillsRanking: 'PopularSkillsCount'
     accessToken: 'Video'
     communities: 'Community'
     feed: 'Post'
@@ -308,6 +331,7 @@ export interface NexusGenFieldTypeNames {
     myCurrentCommunity: 'Community'
     myDrivingPosts: 'Post'
     myMatchedPosts: 'Post'
+    myMatchedPostsWithUnreadMessages: 'Post'
     myProfile: 'Profile'
     post: 'Post'
     profile: 'Profile'
@@ -361,6 +385,9 @@ export interface NexusGenArgTypes {
     joinCommunity: { // args
       communityId: string; // String!
     }
+    markMessagesAsRead: { // args
+      postId: string; // String!
+    }
     post: { // args
       description: string; // String!
       requiredSkillsId: number[]; // [Int!]!
@@ -386,6 +413,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    ListPopularSkillsRanking: { // args
+      take?: number | null; // Int
+    }
     accessToken: { // args
       identity?: string | null; // String
       room?: string | null; // String

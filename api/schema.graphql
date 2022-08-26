@@ -25,8 +25,10 @@ type LearnedSkill {
 
 type Message {
   content: String!
+  createdAt: DateTime!
   createdBy: Profile!
   id: Int!
+  isRead: Boolean!
   post: Post!
 }
 
@@ -39,6 +41,7 @@ type Mutation {
   deleteMyProfile: AuthPayLoad
   deletePost(id: String!): Post!
   joinCommunity(communityId: String!): AuthPayLoad!
+  markMessagesAsRead(postId: String!): [Message!]!
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
   updateCommunity(id: String!, name: String!): Community!
@@ -59,6 +62,11 @@ type PaginatedProfiles {
 type PairProgrammingCount {
   count: Int!
   profile: Profile!
+}
+
+type PopularSkillsCount {
+  count: Int!
+  skill: Skill!
 }
 
 type Post {
@@ -89,6 +97,7 @@ type Query {
   ListDriverPostsRanking: [PairProgrammingCount!]!
   ListNavigatedSkills: [LearnedSkill!]!
   ListNavigatorPostsRanking: [PairProgrammingCount!]!
+  ListPopularSkillsRanking(take: Int): [PopularSkillsCount!]!
   accessToken(identity: String, room: String): Video!
   communities: [Community!]!
   feed: [Post!]!
@@ -98,6 +107,7 @@ type Query {
   myCurrentCommunity: Community
   myDrivingPosts: [Post!]!
   myMatchedPosts: [Post!]!
+  myMatchedPostsWithUnreadMessages: [Post!]!
   myProfile: Profile!
   post(id: String!): Post
   profile(id: Int!): Profile

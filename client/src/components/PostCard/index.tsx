@@ -45,6 +45,10 @@ export interface Props extends HTMLAttributes<HTMLDivElement> {
    * ぺあぷろ完了のアクション
    */
   onComplete?: () => void;
+  /**
+   * 未読のメッセージがあるか
+   */
+  hasUnreadMessage?: boolean;
   sx?: SxProps<Theme>;
 }
 
@@ -57,6 +61,7 @@ export const PostCard = ({
   languages,
   name,
   githubLogin,
+  hasUnreadMessage = false,
   languagesData,
   onComplete,
   onClick,
@@ -71,6 +76,22 @@ export const PostCard = ({
               <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
                 <Avatar src={`https://github.com/${githubLogin}.png`} />
                 <Typography variant="h6">{title}</Typography>
+                {hasUnreadMessage && (
+                  <Typography
+                    sx={{
+                      ml: "auto",
+                      border: "1px solid",
+                      borderColor: "primary.main",
+                      py: "5px",
+                      px: "15px",
+                      borderRadius: "20px",
+                    }}
+                    color="primary.main"
+                    fontWeight="bold"
+                  >
+                    新着メッセージがあります！
+                  </Typography>
+                )}
               </Box>
               <Box sx={{ borderRadius: 2, bgcolor: "primary.light", p: 2 }}>
                 <Typography variant="subtitle1">{content}</Typography>

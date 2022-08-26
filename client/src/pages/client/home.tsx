@@ -9,6 +9,7 @@ import { ProfileCard } from "../../components/ProfileCard";
 import {
   useFetchCurrentCommunityQuery,
   useFetchMeQuery,
+  useFetchUnreadPostsQuery,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
@@ -46,6 +47,7 @@ export const HomePage = () => {
   const { goToApply, goToRecruit, goToChat, goToEditPost } = useClientRoute();
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
   const { refetch: refetchMe } = useFetchMeQuery();
+  const { refetch: refetchUnreadPost } = useFetchUnreadPostsQuery();
 
   /**
    * page hooks
@@ -57,6 +59,7 @@ export const HomePage = () => {
     deletePost,
     completePost,
     completedPosts,
+    unreadPosts,
     languagesData,
   } = useHomeHooks();
 
@@ -75,7 +78,8 @@ export const HomePage = () => {
   useEffect(() => {
     refetchCurrentCommunity();
     refetchMe();
-  }, [refetchCurrentCommunity, refetchMe]);
+    refetchUnreadPost();
+  }, [refetchCurrentCommunity, refetchMe, refetchUnreadPost]);
 
   return (
     <Box sx={{ m: "30px 45px 30px", display: "flex" }}>
@@ -101,6 +105,7 @@ export const HomePage = () => {
                     setOpenPostModal.on();
                     setSelectedId(id);
                   }}
+                  hasUnreadMessage={unreadPosts?.includes(id)}
                   languagesData={languagesData ?? []}
                 />
               )
@@ -132,6 +137,7 @@ export const HomePage = () => {
                   name={name}
                   githubLogin={githubLogin}
                   onClick={() => {
+                    setCompletePostCheck.off();
                     setOpenFinishedPostModal.on();
                     setFinishedPostId(id);
                   }}
@@ -260,7 +266,10 @@ export const HomePage = () => {
       </Modal>
       <Modal
         open={openCompleteModal}
-        onClose={setOpenCompleteModal.off}
+        onClose={() => {
+          setOpenCompleteModal.off();
+          setCompletePostCheck.off();
+        }}
         sx={{ top: "40%", mx: "auto", width: "600px" }}
       >
         <Box>
@@ -271,7 +280,10 @@ export const HomePage = () => {
                 setOpenCompleteModal.off();
               }
             }}
-            onCancel={setOpenCompleteModal.off}
+            onCancel={() => {
+              setOpenCompleteModal.off();
+              setCompletePostCheck.off();
+            }}
             disabled={!completePostCheck}
           >
             {completePostCheck && (

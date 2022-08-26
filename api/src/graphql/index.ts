@@ -8,4 +8,5 @@ export * from "./Profile";
 export * from "./Community";
 export * from "./LearnedSkill";
 export * from "./PairProgrammingCount";
+export * from "./PopularSkillsCount";
 export * from "./scalars/Date";
