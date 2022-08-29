@@ -57,9 +57,7 @@ export const MessageQuery = extendType({
         if (!post) {
           throw new Error("post doesn't exist");
         }
-        if (profileId != post.driverId && profileId != post.navigatorId) {
-          throw new Error("no right to see messages");
-        }
+        validateOwnership(profileId, post);
 
         return await context.prisma.message.findMany({
           where: { postId },
@@ -82,6 +80,14 @@ export const MessageMutation = extendType({
         const { postId, content } = args;
         const { profileId } = context.expectUserJoinedCommunity();
 
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId },
+        });
+        if (!post) {
+          throw new Error("post doesn't exist");
+        }
+        validateOwnership(profileId, post);
+
         const newMessage = await context.prisma.message.create({
           data: {
             post: {
@@ -92,13 +98,14 @@ export const MessageMutation = extendType({
               connect: { id: profileId },
             },
           },
-          include: {
-            post: true,
-          },
         });
+
         // todo: is 'await' necessary? (https://codesandbox.io/s/nexus-example-subscriptions-59kdb?file=/src/schema/index.ts)
         await context.pubsub.publish(postId.toString(), newMessage);
-        await context.pubsub.publish("messageNotification", newMessage.post);
+        await context.pubsub.publish(
+          "messageNotification:" + profileId.toString(),
+          post
+        );
         return newMessage;
       },
     });
@@ -117,9 +124,7 @@ export const MessageMutation = extendType({
         if (!post) {
           throw new Error("post doesn't exist");
         }
-        if (profileId != post.driverId && profileId != post.navigatorId) {
-          throw new Error("no right to see messages");
-        }
+        validateOwnership(profileId, post);
 
         const where = { postId, createdById: { not: profileId } };
         await context.prisma.message.updateMany({
@@ -144,8 +149,17 @@ export const MessageSubscription = subscriptionType({
       args: {
         postId: nonNull(stringArg()),
       },
-      subscribe(parent, args, context) {
+      async subscribe(parent, args, context) {
         const { postId } = args;
+        const { profileId } = context.expectUserJoinedCommunity();
+        const post = await context.prisma.post.findUnique({
+          where: { id: postId },
+        });
+        if (!post) {
+          throw new Error("post doesn't exist");
+        }
+        validateOwnership(profileId, post);
+
         return context.pubsub.asyncIterator(postId);
       },
       async resolve(messagePromise: Promise<Message>) {
@@ -156,7 +170,10 @@ export const MessageSubscription = subscriptionType({
     t.field("waitForMessageNotification", {
       type: "Post",
       subscribe(parent, args, context) {
-        return context.pubsub.asyncIterator("messageNotification");
+        const { profileId } = context.expectUserJoinedCommunity();
+        return context.pubsub.asyncIterator(
+          "messageNotification:" + profileId.toString()
+        );
       },
       async resolve(postPromise: Promise<Post>) {
         return await postPromise;
@@ -164,3 +181,9 @@ export const MessageSubscription = subscriptionType({
     });
   },
 });
+
+const validateOwnership = (profileId: number, post: Post) => {
+  if (profileId != post.driverId && profileId != post.navigatorId) {
+    throw new Error("no right to see messages");
+  }
+};
