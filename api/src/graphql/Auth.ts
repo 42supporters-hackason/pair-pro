@@ -31,9 +31,9 @@ export const AuthMutation = extendType({
       async resolve(_parent, args, context) {
         const { code } = args;
         const access_token = (await getAccessToken(code)) as string;
-        
+
         if (!access_token) {
-          throw new Error("Failed at getting access token")
+          throw new Error("Failed at getting access token");
         }
         const {
           id: githubId,
@@ -50,7 +50,7 @@ export const AuthMutation = extendType({
             data: {
               githubLogin,
               githubId,
-              githubBio,
+              githubBio: githubBio ?? "",
             },
           });
         }
