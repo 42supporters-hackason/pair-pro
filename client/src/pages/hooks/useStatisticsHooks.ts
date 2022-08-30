@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import {
   useFetchDrivenSkillsListQuery,
   useFetchDriverRankingQuery,
@@ -10,11 +11,30 @@ import {
  * client/statisticsで使われるhooks
  */
 export const useStatisticsHooks = () => {
-  const { data: drivenSkillsList } = useFetchDrivenSkillsListQuery();
-  const { data: navigatedSkillsList } = useFetchNavigatedSkillsListQuery();
-  const { data: navigatorRankig } = useFetchNavigatorRankingQuery();
-  const { data: driverRanking } = useFetchDriverRankingQuery();
-  const { data: popularSkillsList } = useFetchPopularSkillsListQuery();
+  const { data: drivenSkillsList, refetch: refetchdrivenSkillsList } =
+    useFetchDrivenSkillsListQuery();
+  const { data: navigatedSkillsList, refetch: refetchnavigatedSkillsList } =
+    useFetchNavigatedSkillsListQuery();
+  const { data: navigatorRankig, refetch: refetchnavigatorRankig } =
+    useFetchNavigatorRankingQuery();
+  const { data: driverRanking, refetch: refetchdriverRanking } =
+    useFetchDriverRankingQuery();
+  const { data: popularSkillsList, refetch: refetchpopularSkillsList } =
+    useFetchPopularSkillsListQuery();
+
+  const refetchRankings = useCallback(() => {
+    refetchdrivenSkillsList();
+    refetchnavigatedSkillsList();
+    refetchnavigatorRankig();
+    refetchdriverRanking();
+    refetchpopularSkillsList();
+  }, [
+    refetchdrivenSkillsList,
+    refetchnavigatedSkillsList,
+    refetchnavigatorRankig,
+    refetchdriverRanking,
+    refetchpopularSkillsList,
+  ]);
 
   return {
     drivenSkillsList,
@@ -22,5 +42,6 @@ export const useStatisticsHooks = () => {
     navigatedSkillsList,
     navigatorRankig,
     popularSkillsList,
+    refetchRankings,
   };
 };

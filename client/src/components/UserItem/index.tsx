@@ -28,7 +28,7 @@ export const UserItem = ({ name, githubLogin, bio }: Props) => {
         sx={{ display: "flex", alignItems: "center", gap: 3, width: "100%" }}
       >
         <Avatar src={`https://github.com/${githubLogin}.png`} />
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "80%" }}>
           <Typography fontWeight="bold">{name}</Typography>
           <Typography
             sx={{

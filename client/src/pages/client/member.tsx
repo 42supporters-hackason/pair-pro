@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Pagination, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { BackButton } from "../../components/BackButton";
@@ -21,6 +21,7 @@ export const MemberPage = () => {
     paginationCount,
     firstCommunityMember,
     secondCommunityMember,
+    refetchCurrentCommunity,
   } = useMemberHooks({
     take: TAKE_PAGINATION,
     skip: pagination !== 0 ? (pagination - 1) * TAKE_PAGINATION : 0,
@@ -34,6 +35,10 @@ export const MemberPage = () => {
     },
     [setPagination]
   );
+
+  useEffect(() => {
+    refetchCurrentCommunity();
+  }, [refetchCurrentCommunity]);
 
   return (
     <Box
