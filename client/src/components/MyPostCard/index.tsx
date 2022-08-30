@@ -52,10 +52,34 @@ export const MyPostCard = ({
         <CardContent sx={{ m: 1 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 3, px: 3 }}>
-              <Typography variant="h6">{title}</Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  wordBreak: "break-all",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "1",
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {title}
+              </Typography>
             </Box>
             <Box sx={{ borderRadius: 2, bgcolor: "primary.light", p: 2 }}>
-              <Typography variant="subtitle1">{content}</Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  wordBreak: "break-all",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "3",
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {content}
+              </Typography>
             </Box>
             <Box
               sx={{

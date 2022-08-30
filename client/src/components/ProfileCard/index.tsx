@@ -137,13 +137,25 @@ export const ProfileCard = ({
           >
             <Box>
               <Typography>募集タイトル</Typography>
-              <Typography fontWeight="bold" variant="h6">
+              <Typography
+                fontWeight="bold"
+                variant="h6"
+                sx={{
+                  wordBreak: "break-all",
+                }}
+              >
                 {title}
               </Typography>
             </Box>
             <Box>
               <Typography>募集詳細</Typography>
-              <Typography fontWeight="bold" variant="h6">
+              <Typography
+                fontWeight="bold"
+                variant="h6"
+                sx={{
+                  wordBreak: "break-all",
+                }}
+              >
                 {content}
               </Typography>
             </Box>

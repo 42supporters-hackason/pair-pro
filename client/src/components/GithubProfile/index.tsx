@@ -38,7 +38,7 @@ export const GithubProfile = ({ githubLogin, name, bio }: Props) => {
           <Typography fontWeight="bold" sx={{ textAlign: "center", mt: 2 }}>
             自己紹介
           </Typography>
-          <Typography sx={{ mx: 1, textAlign: "center" }}>{bio}</Typography>
+          <Typography sx={{ mx: 1, textAlign: "center", wordBreak: "break-all" }}>{bio}</Typography>
         </Box>
       </Card>
     </Box>
