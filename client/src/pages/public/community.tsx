@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Card } from "../../components/Card";
@@ -31,7 +37,8 @@ export const CommunityPage = () => {
   /**
    * custom hooks
    */
-  const { myCommunities, refecthMyCommunities } = useCommunityHooks();
+  const { myCommunities, refecthMyCommunities, loadingMyCommunities } =
+    useCommunityHooks();
   const { joinCommunity } = useCommunity();
 
   /**
@@ -135,7 +142,8 @@ export const CommunityPage = () => {
               py: 2,
             }}
           >
-            {myCommunities ? (
+            {myCommunities &&
+              !loadingMyCommunities &&
               myCommunities.myCommunities.map(({ id, name }) => (
                 <Button
                   key={id}
@@ -155,8 +163,9 @@ export const CommunityPage = () => {
                 >
                   {name}
                 </Button>
-              ))
-            ) : (
+              ))}
+            {loadingMyCommunities && <CircularProgress sx={{ m: "auto" }} />}
+            {myCommunities === undefined && !loadingMyCommunities && (
               <Box
                 sx={{
                   display: "flex",
