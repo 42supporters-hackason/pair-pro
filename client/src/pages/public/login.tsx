@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { GithubLoginButton } from "react-social-login-buttons";
 import logo from "../../assets/logo_transparent.png";
 import backgroundImg from "../../assets/p2p_background.jpg";
@@ -14,6 +15,8 @@ export const LoginPage = () => {
   const { goToHome } = useClientRoute();
   const { goToCommunity } = usePublicRoute();
 
+  const isMobile = useMediaQuery("(max-width:640px)");
+
   useEffect(() => {
     if (loginStatus === "authFinished") {
       goToCommunity({ replace: true });
@@ -22,6 +25,32 @@ export const LoginPage = () => {
       goToHome({ replace: true });
     }
   }, [loginStatus, goToCommunity, goToHome]);
+
+  if (isMobile) {
+    return (
+      <>
+        <Box
+          component="img"
+          src={backgroundImg}
+          sx={{
+            height: "100vh",
+            width: "100%",
+            position: "absolute",
+            zIndex: "-999",
+          }}
+        />
+        <Typography
+          sx={{ m: "auto", textAlign: "center", pt: "200px" }}
+          fontWeight="bold"
+        >
+          お使いの画面幅では使用できません。
+          <br />
+          お手持ちのPC等でご利用ください。
+        </Typography>
+      </>
+    );
+  }
+
   return (
     <>
       <Box
@@ -155,7 +184,12 @@ export const LoginPage = () => {
               </Card>
             </Box>
           </Box>
-          <Box sx={{ width: "50%", my: "auto" }}>
+          <Box
+            sx={{
+              width: "50%",
+              my: "auto",
+            }}
+          >
             <Card
               style={{
                 borderRadius: "999px",
