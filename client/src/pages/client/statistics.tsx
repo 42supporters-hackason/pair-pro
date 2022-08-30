@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { LanguageItem } from "../../components/LanguageItem";
@@ -29,7 +29,13 @@ export const StatisticsPage = () => {
     drivenSkillsList,
     driverRanking,
     popularSkillsList,
+    refetchRankings,
   } = useStatisticsHooks();
+
+  useEffect(() => {
+    refetchRankings();
+  }, [refetchRankings]);
+
   return (
     <Box
       sx={{
