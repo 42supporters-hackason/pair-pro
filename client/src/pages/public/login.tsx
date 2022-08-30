@@ -188,11 +188,6 @@ export const LoginPage = () => {
             sx={{
               width: "50%",
               my: "auto",
-              mx: {
-                xs: "auto",
-                sm: "auto",
-                md: "auto",
-              },
             }}
           >
             <Card
