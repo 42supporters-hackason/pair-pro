@@ -32,7 +32,7 @@ export const UserItem = ({ name, githubLogin, bio }: Props) => {
           <Typography
             fontWeight="bold"
             sx={{
-              overflow: "hidden",
+              wordBreak: "break-all",
             }}
           >
             {name}
