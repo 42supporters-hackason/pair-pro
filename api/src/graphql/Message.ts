@@ -61,6 +61,7 @@ export const MessageQuery = extendType({
 
         return await context.prisma.message.findMany({
           where: { postId },
+          orderBy: { id: "asc" },
         });
       },
     });
