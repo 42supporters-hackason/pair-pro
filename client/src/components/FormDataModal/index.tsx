@@ -67,6 +67,7 @@ export const FormDataModal = ({
               fontWeight="bold"
               sx={{
                 textAlign: "left",
+                wordBreak: "break-all",
               }}
             >
               {title}

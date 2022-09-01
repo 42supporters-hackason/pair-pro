@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -115,6 +115,10 @@ export const RecruitPage = () => {
     },
     [setPagination]
   );
+
+  useEffect(() => {
+    refetchPosts();
+  }, [refetchPosts]);
 
   return (
     <Box sx={{ mx: "100px" }}>

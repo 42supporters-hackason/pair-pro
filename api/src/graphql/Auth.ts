@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import * as jwt from "jsonwebtoken";
 import { stringify, parse } from "querystring";
 import { jwtKey } from "../utils/auth";
+import { User } from "@prisma/client";
 
 const clientId = process.env.GH_CLIENT_ID;
 const clientSecret = process.env.GH_CLIENT_SECRET;
@@ -30,27 +31,24 @@ export const AuthMutation = extendType({
       },
       async resolve(_parent, args, context) {
         const { code } = args;
-        const access_token = (await getAccessToken(code)) as string;
-        
-        if (!access_token) {
-          throw new Error("Failed at getting access token")
-        }
+        const access_token = await getAccessToken(code);
+
         const {
           id: githubId,
           login: githubLogin,
           bio: githubBio,
         } = await getGithubInfo(access_token);
 
-        let user = await context.prisma.user.findFirst({
+        let user = (await context.prisma.user.findFirst({
           where: { githubId },
-        });
+        })) as User;
 
         if (!user) {
           user = await context.prisma.user.create({
             data: {
               githubLogin,
               githubId,
-              githubBio,
+              githubBio: githubBio ?? "",
             },
           });
         }
@@ -81,7 +79,16 @@ async function getAccessToken(code: string) {
       },
     }
   );
-  return parse(data).access_token;
+  const json = parse(data);
+  if (!json.access_token) {
+    console.error(
+      `error: ${json.error ?? ""} ${json.error_description ?? ""} ${
+        json.error_uri ?? ""
+      }`
+    );
+    throw new Error(`Failed at getting access token:${json.error_description}`);
+  }
+  return json.access_token as string;
 }
 
 async function getGithubInfo(access_token: string) {

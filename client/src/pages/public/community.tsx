@@ -1,17 +1,24 @@
 import React, { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
+import { BackButton } from "../../components/BackButton";
 import { Card } from "../../components/Card";
 import { useAuth, useCommunity } from "../../context/auth";
 import { useCommunityRoute } from "../../hooks/useCommunityRoute";
-import { usePublicRoute } from "../../hooks/usePublicRoute";
 import { useCommunityHooks } from "../hooks/useCommunityHooks";
 import {
   CommunitySchema,
   communitySchema,
 } from "../validation/community_validation";
+import { LoadingPage } from "./loading";
 
 /**
  * public/community
@@ -20,9 +27,8 @@ export const CommunityPage = () => {
   /**
    * misc.
    */
-  const { goToLogin } = usePublicRoute();
   const { goToCreateCommunity } = useCommunityRoute();
-  const { signIn, loginStatus } = useAuth();
+  const { signIn, loginStatus, logout } = useAuth();
 
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
@@ -30,7 +36,8 @@ export const CommunityPage = () => {
   /**
    * custom hooks
    */
-  const { myCommunities, refecthMyCommunities } = useCommunityHooks();
+  const { myCommunities, refecthMyCommunities, loadingMyCommunities } =
+    useCommunityHooks();
   const { joinCommunity } = useCommunity();
 
   /**
@@ -75,14 +82,11 @@ export const CommunityPage = () => {
       signIn(code);
     }
     refecthMyCommunities();
-  }, [
-    signIn,
-    code,
-    goToLogin,
-    searchParams,
-    refecthMyCommunities,
-    loginStatus,
-  ]);
+  }, [signIn, code, searchParams, refecthMyCommunities, loginStatus]);
+
+  if (loginStatus === "unLogin") {
+    return <LoadingPage />;
+  }
 
   return (
     <Box
@@ -93,6 +97,7 @@ export const CommunityPage = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-between",
+        gap: "40px",
       }}
     >
       <Box
@@ -130,7 +135,8 @@ export const CommunityPage = () => {
               py: 2,
             }}
           >
-            {myCommunities ? (
+            {myCommunities &&
+              !loadingMyCommunities &&
               myCommunities.myCommunities.map(({ id, name }) => (
                 <Button
                   key={id}
@@ -150,8 +156,9 @@ export const CommunityPage = () => {
                 >
                   {name}
                 </Button>
-              ))
-            ) : (
+              ))}
+            {loadingMyCommunities && <CircularProgress sx={{ m: "auto" }} />}
+            {myCommunities === undefined && !loadingMyCommunities && (
               <Box
                 sx={{
                   display: "flex",
@@ -220,34 +227,42 @@ export const CommunityPage = () => {
           </Button>
         </Box>
       </Box>
-      <Card
-        style={{
-          width: "300px",
-          boxShadow:
-            "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-          marginBottom: "30px",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 2,
+      <Box sx={{ mb: 1 }}>
+        <Card
+          style={{
+            width: "300px",
+            boxShadow:
+              "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+            marginBottom: "30px",
           }}
         >
-          <Typography fontWeight="bold">
-            新しいコミュニティを作成する
-          </Typography>
-          <Button
-            variant="contained"
-            sx={{ borderRadius: "30px" }}
-            onClick={() => goToCreateCommunity()}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+            }}
           >
-            コミュニティ作成ページへ
-          </Button>
-        </Box>
-      </Card>
+            <Typography fontWeight="bold">
+              新しいコミュニティを作成する
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{ borderRadius: "30px" }}
+              onClick={() => goToCreateCommunity()}
+            >
+              コミュニティ作成ページへ
+            </Button>
+          </Box>
+        </Card>
+        <BackButton
+          style={{ margin: "0 auto", width: "350px" }}
+          onClick={logout}
+        >
+          Top画面に戻る
+        </BackButton>
+      </Box>
     </Box>
   );
 };

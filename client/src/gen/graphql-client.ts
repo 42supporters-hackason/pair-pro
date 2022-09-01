@@ -39,8 +39,10 @@ export type LearnedSkill = {
 export type Message = {
   __typename?: 'Message';
   content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   createdBy: Profile;
   id: Scalars['Int'];
+  isRead: Scalars['Boolean'];
   post: Post;
 };
 
@@ -54,6 +56,7 @@ export type Mutation = {
   deleteMyProfile?: Maybe<AuthPayLoad>;
   deletePost: Post;
   joinCommunity: AuthPayLoad;
+  markMessagesAsRead: Array<Message>;
   post: Post;
   registerNavigator: Post;
   updateCommunity: Community;
@@ -95,6 +98,11 @@ export type MutationDeletePostArgs = {
 
 export type MutationJoinCommunityArgs = {
   communityId: Scalars['String'];
+};
+
+
+export type MutationMarkMessagesAsReadArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -148,6 +156,12 @@ export type PairProgrammingCount = {
   profile: Profile;
 };
 
+export type PopularSkillsCount = {
+  __typename?: 'PopularSkillsCount';
+  count: Scalars['Int'];
+  skill: Skill;
+};
+
 export type Post = {
   __typename?: 'Post';
   completedAt?: Maybe<Scalars['DateTime']>;
@@ -179,6 +193,7 @@ export type Query = {
   ListDriverPostsRanking: Array<PairProgrammingCount>;
   ListNavigatedSkills: Array<LearnedSkill>;
   ListNavigatorPostsRanking: Array<PairProgrammingCount>;
+  ListPopularSkillsRanking: Array<PopularSkillsCount>;
   accessToken: Video;
   communities: Array<Community>;
   feed: Array<Post>;
@@ -188,6 +203,7 @@ export type Query = {
   myCurrentCommunity?: Maybe<Community>;
   myDrivingPosts: Array<Post>;
   myMatchedPosts: Array<Post>;
+  myMatchedPostsWithUnreadMessages: Array<Post>;
   myProfile: Profile;
   post?: Maybe<Post>;
   profile?: Maybe<Profile>;
@@ -195,6 +211,11 @@ export type Query = {
   profilesInMyCommunity: PaginatedProfiles;
   skills: Array<Skill>;
   unmatchedPosts: PaginatedPosts;
+};
+
+
+export type QueryListPopularSkillsRankingArgs = {
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -321,6 +342,13 @@ export type CompletePostMutationVariables = Exact<{
 
 export type CompletePostMutation = { __typename?: 'Mutation', completePairProgramming: { __typename?: 'Post', id: string } };
 
+export type ReadPostMessageMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type ReadPostMessageMutation = { __typename?: 'Mutation', markMessagesAsRead: Array<{ __typename?: 'Message', id: number }> };
+
 export type SendMessageMutationVariables = Exact<{
   postId: Scalars['String'];
   content: Scalars['String'];
@@ -394,6 +422,11 @@ export type FetchCompletedPostQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchCompletedPostQuery = { __typename?: 'Query', myCompletedPosts: Array<{ __typename?: 'Post', id: string, description: string, title: string, navigator?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, driver?: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } | null, requiredSkills: Array<{ __typename?: 'Skill', id: number, name: string }> }> };
 
+export type FetchUnreadPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchUnreadPostsQuery = { __typename?: 'Query', myMatchedPostsWithUnreadMessages: Array<{ __typename?: 'Post', id: string }> };
+
 export type FetchMessagesQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
@@ -438,6 +471,13 @@ export type FetchDriverRankingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FetchDriverRankingQuery = { __typename?: 'Query', ListDriverPostsRanking: Array<{ __typename?: 'PairProgrammingCount', count: number, profile: { __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } } }> };
+
+export type FetchPopularSkillsListQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type FetchPopularSkillsListQuery = { __typename?: 'Query', ListPopularSkillsRanking: Array<{ __typename?: 'PopularSkillsCount', count: number, skill: { __typename?: 'Skill', id: number, name: string, imageUrl?: string | null } }> };
 
 export type FetchMessageSubscriptionVariables = Exact<{
   postId: Scalars['String'];
@@ -727,6 +767,39 @@ export function useCompletePostMutation(baseOptions?: Apollo.MutationHookOptions
 export type CompletePostMutationHookResult = ReturnType<typeof useCompletePostMutation>;
 export type CompletePostMutationResult = Apollo.MutationResult<CompletePostMutation>;
 export type CompletePostMutationOptions = Apollo.BaseMutationOptions<CompletePostMutation, CompletePostMutationVariables>;
+export const ReadPostMessageDocument = gql`
+    mutation readPostMessage($postId: String!) {
+  markMessagesAsRead(postId: $postId) {
+    id
+  }
+}
+    `;
+export type ReadPostMessageMutationFn = Apollo.MutationFunction<ReadPostMessageMutation, ReadPostMessageMutationVariables>;
+
+/**
+ * __useReadPostMessageMutation__
+ *
+ * To run a mutation, you first call `useReadPostMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReadPostMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [readPostMessageMutation, { data, loading, error }] = useReadPostMessageMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useReadPostMessageMutation(baseOptions?: Apollo.MutationHookOptions<ReadPostMessageMutation, ReadPostMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReadPostMessageMutation, ReadPostMessageMutationVariables>(ReadPostMessageDocument, options);
+      }
+export type ReadPostMessageMutationHookResult = ReturnType<typeof useReadPostMessageMutation>;
+export type ReadPostMessageMutationResult = Apollo.MutationResult<ReadPostMessageMutation>;
+export type ReadPostMessageMutationOptions = Apollo.BaseMutationOptions<ReadPostMessageMutation, ReadPostMessageMutationVariables>;
 export const SendMessageDocument = gql`
     mutation sendMessage($postId: String!, $content: String!) {
   createMessage(postId: $postId, content: $content) {
@@ -1221,6 +1294,40 @@ export function useFetchCompletedPostLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type FetchCompletedPostQueryHookResult = ReturnType<typeof useFetchCompletedPostQuery>;
 export type FetchCompletedPostLazyQueryHookResult = ReturnType<typeof useFetchCompletedPostLazyQuery>;
 export type FetchCompletedPostQueryResult = Apollo.QueryResult<FetchCompletedPostQuery, FetchCompletedPostQueryVariables>;
+export const FetchUnreadPostsDocument = gql`
+    query fetchUnreadPosts {
+  myMatchedPostsWithUnreadMessages {
+    id
+  }
+}
+    `;
+
+/**
+ * __useFetchUnreadPostsQuery__
+ *
+ * To run a query within a React component, call `useFetchUnreadPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchUnreadPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchUnreadPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchUnreadPostsQuery(baseOptions?: Apollo.QueryHookOptions<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>(FetchUnreadPostsDocument, options);
+      }
+export function useFetchUnreadPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>(FetchUnreadPostsDocument, options);
+        }
+export type FetchUnreadPostsQueryHookResult = ReturnType<typeof useFetchUnreadPostsQuery>;
+export type FetchUnreadPostsLazyQueryHookResult = ReturnType<typeof useFetchUnreadPostsLazyQuery>;
+export type FetchUnreadPostsQueryResult = Apollo.QueryResult<FetchUnreadPostsQuery, FetchUnreadPostsQueryVariables>;
 export const FetchMessagesDocument = gql`
     query fetchMessages($postId: String!) {
   messagesByPostId(postId: $postId) {
@@ -1567,6 +1674,46 @@ export function useFetchDriverRankingLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type FetchDriverRankingQueryHookResult = ReturnType<typeof useFetchDriverRankingQuery>;
 export type FetchDriverRankingLazyQueryHookResult = ReturnType<typeof useFetchDriverRankingLazyQuery>;
 export type FetchDriverRankingQueryResult = Apollo.QueryResult<FetchDriverRankingQuery, FetchDriverRankingQueryVariables>;
+export const FetchPopularSkillsListDocument = gql`
+    query fetchPopularSkillsList($take: Int) {
+  ListPopularSkillsRanking(take: $take) {
+    count
+    skill {
+      id
+      name
+      imageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchPopularSkillsListQuery__
+ *
+ * To run a query within a React component, call `useFetchPopularSkillsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchPopularSkillsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchPopularSkillsListQuery({
+ *   variables: {
+ *      take: // value for 'take'
+ *   },
+ * });
+ */
+export function useFetchPopularSkillsListQuery(baseOptions?: Apollo.QueryHookOptions<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>(FetchPopularSkillsListDocument, options);
+      }
+export function useFetchPopularSkillsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>(FetchPopularSkillsListDocument, options);
+        }
+export type FetchPopularSkillsListQueryHookResult = ReturnType<typeof useFetchPopularSkillsListQuery>;
+export type FetchPopularSkillsListLazyQueryHookResult = ReturnType<typeof useFetchPopularSkillsListLazyQuery>;
+export type FetchPopularSkillsListQueryResult = Apollo.QueryResult<FetchPopularSkillsListQuery, FetchPopularSkillsListQueryVariables>;
 export const FetchMessageDocument = gql`
     subscription fetchMessage($postId: String!) {
   waitForMessage(postId: $postId) {

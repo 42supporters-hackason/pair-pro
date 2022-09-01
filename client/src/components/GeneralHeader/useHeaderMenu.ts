@@ -36,11 +36,11 @@ export const useClientHeaderMenu = ({
   return {
     listMenu: [
       {
-        label: "ペアプロを募集する",
+        label: "ドライバーになる",
         action: goToApply,
       },
       {
-        label: "投稿一覧を見る",
+        label: "ナビゲータになる",
         action: goToRecruit,
       },
       {

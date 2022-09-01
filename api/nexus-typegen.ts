@@ -75,6 +75,10 @@ export interface NexusGenObjects {
     count: number; // Int!
     profile: NexusGenRootTypes['Profile']; // Profile!
   }
+  PopularSkillsCount: { // root type
+    count: number; // Int!
+    skill: NexusGenRootTypes['Skill']; // Skill!
+  }
   Post: { // root type
     completedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -167,6 +171,10 @@ export interface NexusGenFieldTypes {
     count: number; // Int!
     profile: NexusGenRootTypes['Profile']; // Profile!
   }
+  PopularSkillsCount: { // field return type
+    count: number; // Int!
+    skill: NexusGenRootTypes['Skill']; // Skill!
+  }
   Post: { // field return type
     completedAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -193,6 +201,7 @@ export interface NexusGenFieldTypes {
     ListDriverPostsRanking: NexusGenRootTypes['PairProgrammingCount'][]; // [PairProgrammingCount!]!
     ListNavigatedSkills: NexusGenRootTypes['LearnedSkill'][]; // [LearnedSkill!]!
     ListNavigatorPostsRanking: NexusGenRootTypes['PairProgrammingCount'][]; // [PairProgrammingCount!]!
+    ListPopularSkillsRanking: NexusGenRootTypes['PopularSkillsCount'][]; // [PopularSkillsCount!]!
     accessToken: NexusGenRootTypes['Video']; // Video!
     communities: NexusGenRootTypes['Community'][]; // [Community!]!
     feed: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -283,6 +292,10 @@ export interface NexusGenFieldTypeNames {
     count: 'Int'
     profile: 'Profile'
   }
+  PopularSkillsCount: { // field return type name
+    count: 'Int'
+    skill: 'Skill'
+  }
   Post: { // field return type name
     completedAt: 'DateTime'
     createdAt: 'DateTime'
@@ -309,6 +322,7 @@ export interface NexusGenFieldTypeNames {
     ListDriverPostsRanking: 'PairProgrammingCount'
     ListNavigatedSkills: 'LearnedSkill'
     ListNavigatorPostsRanking: 'PairProgrammingCount'
+    ListPopularSkillsRanking: 'PopularSkillsCount'
     accessToken: 'Video'
     communities: 'Community'
     feed: 'Post'
@@ -401,6 +415,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    ListPopularSkillsRanking: { // args
+      take?: number | null; // Int
+    }
     accessToken: { // args
       identity?: string | null; // String
       room?: string | null; // String
