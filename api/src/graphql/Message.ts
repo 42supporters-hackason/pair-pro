@@ -99,11 +99,14 @@ export const MessageMutation = extendType({
             },
           },
         });
+        const opponentId = (
+          post.driverId == profileId ? post.navigatorId : post.driverId
+        ) as number;
 
         // todo: is 'await' necessary? (https://codesandbox.io/s/nexus-example-subscriptions-59kdb?file=/src/schema/index.ts)
         await context.pubsub.publish(postId.toString(), newMessage);
         await context.pubsub.publish(
-          "messageNotification:" + profileId.toString(),
+          "messageNotification:" + opponentId.toString(),
           post
         );
         return newMessage;
