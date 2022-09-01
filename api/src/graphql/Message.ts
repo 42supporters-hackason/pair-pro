@@ -148,7 +148,7 @@ export const MessageMutation = extendType({
 export const MessageSubscription = subscriptionType({
   definition(t) {
     // todo: should it be non-nullable?
-    t.field("waitForMessage", {
+    t.nonNull.field("waitForMessage", {
       type: "Message",
       args: {
         postId: nonNull(stringArg()),
@@ -171,7 +171,7 @@ export const MessageSubscription = subscriptionType({
       },
     });
 
-    t.field("waitForMessageNotification", {
+    t.nonNull.field("waitForMessageNotification", {
       type: "Post",
       subscribe(parent, args, context) {
         const { profileId } = context.expectUserJoinedCommunity();
