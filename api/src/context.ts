@@ -62,3 +62,36 @@ export const context = ({ req }: { req: Request }): Context => {
     },
   };
 };
+
+export const contextForWs = async (ctx: any, msg: any, args: any) => {
+  const token =
+    ctx && ctx.connectionParams && ctx.connectionParams.Authorization
+      ? decodeAuthHeader(ctx.connectionParams.Authorization)
+      : null;
+
+  return {
+    prisma,
+    userId: token?.userId,
+    profileId: token?.profileId,
+    communityId: token?.communityId,
+    pubsub,
+    expectUserLoggedIn(): UserLoggedInContext {
+      if (!this.userId) {
+        throw new Error("You have to log in");
+      }
+      return { prisma: this.prisma, pubsub: this.pubsub, userId: this.userId };
+    },
+    expectUserJoinedCommunity(): UserJoinedCommunityContext {
+      if (!this.userId || !this.profileId || !this.communityId) {
+        throw new Error("You have to join a community");
+      }
+      return {
+        prisma: this.prisma,
+        pubsub: this.pubsub,
+        userId: this.userId,
+        profileId: this.profileId,
+        communityId: this.communityId,
+      };
+    },
+  };
+};
