@@ -8,6 +8,7 @@ type AuthPayLoad {
 }
 
 type Community {
+  creator: Profile
   id: String!
   name: String!
   profiles: [Profile!]!
@@ -84,6 +85,7 @@ type Post {
 type Profile {
   bio: String!
   community: Community!
+  createdCommunities: [Community!]!
   driverPost: [Post!]!
   id: Int!
   matchingPoint: Int!

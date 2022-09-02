@@ -17,6 +17,14 @@ export const Community = objectType({
           .profiles();
       },
     });
+    t.field("creator", {
+      type: "Profile",
+      resolve(parent, args, context) {
+        return context.prisma.community
+          .findUnique({ where: { id: parent.id } })
+          .creator();
+      }
+    })
   },
 });
 
