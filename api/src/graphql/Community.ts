@@ -75,10 +75,45 @@ export const CommunityMutation = extendType({
       args: {
         name: nonNull(stringArg()),
       },
-      resolve(parent, args, context) {
-        return context.prisma.community.create({
+      async resolve(parent, args, context) {
+        const { userId } = context.expectUserLoggedIn();
+
+        const me = await context.prisma.user.findUnique({
+          where: { id: userId },
+          include: {
+            profiles: {
+              include: {
+                community: true,
+              },
+            },
+          },
+        });
+        if (!me) {
+          throw new Error("unreachable");
+        }
+        const profile = await context.prisma.profile.create({
+          data: {
+            name: me.githubLogin,
+            matchingPoint: defaultMatchingPoint,
+            bio: me.githubBio,
+            user: {
+              connect: { id: userId },
+            },
+            community: {
+              create: {
+                name: args.name,
+              },
+            },
+          },
+        });
+
+        return context.prisma.community.update({
+          where: {
+            id: profile.communityId,
+          },
           data: {
             name: args.name,
+            creatorId: profile.id,
           },
         });
       },
