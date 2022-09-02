@@ -33,6 +33,7 @@ type Message {
 }
 
 type Mutation {
+  UpdateUserSettings(sendEmailOnMatching: Boolean): Setting!
   authGithub(code: String!): AuthPayLoad!
   completePairProgramming(postId: String!): Post!
   createCommunity(name: String!): Community!
@@ -115,6 +116,10 @@ type Query {
   profilesInMyCommunity(skip: Int, take: Int): PaginatedProfiles!
   skills: [Skill!]!
   unmatchedPosts(driverNameFilter: String, keywordFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): PaginatedPosts!
+}
+
+type Setting {
+  sendEmailOnMatching: Boolean!
 }
 
 type Skill {
