@@ -157,6 +157,7 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateCommunity: NexusGenRootTypes['Community']; // Community!
+    updateMyCommunity: NexusGenRootTypes['Community']; // Community!
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
   }
@@ -279,6 +280,7 @@ export interface NexusGenFieldTypeNames {
     post: 'Post'
     registerNavigator: 'Post'
     updateCommunity: 'Community'
+    updateMyCommunity: 'Community'
     updateMyProfile: 'Profile'
     updatePost: 'Post'
   }
@@ -404,6 +406,9 @@ export interface NexusGenArgTypes {
     updateCommunity: { // args
       id: string; // String!
       name: string; // String!
+    }
+    updateMyCommunity: { // args
+      name?: string | null; // String
     }
     updateMyProfile: { // args
       bio?: string | null; // String
