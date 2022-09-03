@@ -37,37 +37,28 @@ export async function sendMatchingNotificationMail({
   } else if (!profile.user.setting?.sendEmailOnMatching) {
     return;
   } else if (!profile.user.email) {
-    throw new Error("User email address is empty.");
+    console.error("User email address is empty.");
+    return;
   }
 
-  let testAccount = await createTestAccount();
-
-  // create reusable transporter object using the default SMTP transport
   let transporter = createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    service: "Gmail",
+    port: 456,
+    secure: true,
     auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
+      user: process.env.SMTP_SERVER,
+      pass: process.env.SMTP_SERVER_PASS,
     },
   });
 
-  // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"ぺあぷろ！事務局" <no-reply@example.com>', // sender address
-      
-    to: profile.user.email, // list of receivers
-    subject: "ペアプロ相手とマッチングしました！", // Subject line
-    text: await generateMailContent({ post: on, opponent: matchedBy }), // plain text body
+    from: '"ぺあぷろ！事務局" <no-reply@example.com>',
+    to: profile.user.email,
+    subject: "ペアプロ相手とマッチングしました！",
+    text: await generateMailContent({ post: on, opponent: matchedBy }),
   });
 
   console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
 
 type Param2 = {
