@@ -84,6 +84,7 @@ export const PostCard = ({
                     display: "-webkit-box",
                     WebkitLineClamp: "1",
                     WebkitBoxOrient: "vertical",
+                    width: "50%",
                   }}
                 >
                   {title}

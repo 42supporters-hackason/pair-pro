@@ -10,6 +10,7 @@ import {
   useFetchCurrentCommunityQuery,
   useFetchMeQuery,
   useFetchUnreadPostsQuery,
+  useMessageNotificationSubscription,
 } from "../../gen/graphql-client";
 import { useBoolean } from "../../hooks/useBoolean";
 import { useClientRoute } from "../../hooks/useClientRoute";
@@ -40,6 +41,7 @@ export const HomePage = () => {
   const [showList, setShowList] = useState<
     "myPostList" | "matchedList" | "finishedPost"
   >("matchedList");
+  const [unReadPost, setUnReadPost] = useState<string>();
 
   /**
    * graphql hooks .etc
@@ -48,6 +50,12 @@ export const HomePage = () => {
   const { refetch: refetchCurrentCommunity } = useFetchCurrentCommunityQuery();
   const { refetch: refetchMe } = useFetchMeQuery();
   const { refetch: refetchUnreadPost } = useFetchUnreadPostsQuery();
+
+  useMessageNotificationSubscription({
+    onSubscriptionData(data) {
+      setUnReadPost(data.subscriptionData.data?.waitForMessageNotification.id);
+    },
+  });
 
   /**
    * page hooks
@@ -105,7 +113,9 @@ export const HomePage = () => {
                     setOpenPostModal.on();
                     setSelectedId(id);
                   }}
-                  hasUnreadMessage={unreadPosts?.includes(id)}
+                  hasUnreadMessage={
+                    unreadPosts?.includes(id) || unReadPost?.includes(id)
+                  }
                   languagesData={languagesData ?? []}
                 />
               )
