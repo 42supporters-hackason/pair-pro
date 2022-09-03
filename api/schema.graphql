@@ -48,6 +48,7 @@ type Mutation {
   updateCommunity(id: String!, name: String!): Community!
   updateMyProfile(bio: String, name: String): Profile
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
+  updateUser(email: String): User!
 }
 
 type PaginatedPosts {
@@ -134,11 +135,13 @@ type Subscription {
 }
 
 type User {
+  email: String
   githubBio: String!
   githubId: String!
   githubLogin: String!
   id: Int!
   profiles: [Profile!]!
+  setting: Setting
 }
 
 type Video {

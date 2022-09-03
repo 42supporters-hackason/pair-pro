@@ -104,6 +104,7 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
+    email?: string | null; // String
     githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
@@ -162,6 +163,7 @@ export interface NexusGenFieldTypes {
     updateCommunity: NexusGenRootTypes['Community']; // Community!
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
+    updateUser: NexusGenRootTypes['User']; // User!
   }
   PaginatedPosts: { // field return type
     count: number; // Int!
@@ -237,11 +239,13 @@ export interface NexusGenFieldTypes {
     waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
+    email: string | null; // String
     githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
+    setting: NexusGenRootTypes['Setting'] | null; // Setting
   }
   Video: { // field return type
     accessToken: string; // String!
@@ -286,6 +290,7 @@ export interface NexusGenFieldTypeNames {
     updateCommunity: 'Community'
     updateMyProfile: 'Profile'
     updatePost: 'Post'
+    updateUser: 'User'
   }
   PaginatedPosts: { // field return type name
     count: 'Int'
@@ -361,11 +366,13 @@ export interface NexusGenFieldTypeNames {
     waitForMessage: 'Message'
   }
   User: { // field return type name
+    email: 'String'
     githubBio: 'String'
     githubId: 'String'
     githubLogin: 'String'
     id: 'Int'
     profiles: 'Profile'
+    setting: 'Setting'
   }
   Video: { // field return type name
     accessToken: 'String'
@@ -424,6 +431,9 @@ export interface NexusGenArgTypes {
       id: string; // String!
       requiredSkillsIds?: Array<number | null> | null; // [Int]
       title?: string | null; // String
+    }
+    updateUser: { // args
+      email?: string | null; // String
     }
   }
   Query: {
