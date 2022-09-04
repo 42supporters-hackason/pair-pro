@@ -33,6 +33,7 @@ type Message {
 }
 
 type Mutation {
+  UpdateUserSettings(sendEmailOnMatching: Boolean): Setting!
   authGithub(code: String!): AuthPayLoad!
   completePairProgramming(postId: String!): Post!
   createCommunity(name: String!): Community!
@@ -47,6 +48,7 @@ type Mutation {
   updateCommunity(id: String!, name: String!): Community!
   updateMyProfile(bio: String, name: String): Profile
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
+  updateUser(email: String): User!
 }
 
 type PaginatedPosts {
@@ -117,6 +119,10 @@ type Query {
   unmatchedPosts(driverNameFilter: String, keywordFilter: String, requiredSkillsFilter: Int, skip: Int, take: Int): PaginatedPosts!
 }
 
+type Setting {
+  sendEmailOnMatching: Boolean!
+}
+
 type Skill {
   category: String
   id: Int!
@@ -129,11 +135,13 @@ type Subscription {
 }
 
 type User {
+  email: String
   githubBio: String!
   githubId: String!
   githubLogin: String!
   id: Int!
   profiles: [Profile!]!
+  setting: Setting
 }
 
 type Video {
