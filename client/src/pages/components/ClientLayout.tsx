@@ -133,7 +133,7 @@ export const ClientLayout = () => {
             onAgree={changeCommunity}
             onCancel={setOpenChangeCommunityModal.off}
           >
-            コミュニティを変更しますか？
+            コミュニティを移動しますか？
           </AgreeModal>
         </Box>
       </Modal>
