@@ -8,6 +8,7 @@ type AuthPayLoad {
 }
 
 type Community {
+  creator: Profile
   id: String!
   name: String!
   profiles: [Profile!]!
@@ -46,6 +47,7 @@ type Mutation {
   post(description: String!, requiredSkillsId: [Int!]!, title: String!): Post!
   registerNavigator(navigatorId: Int!, postId: String!): Post!
   updateCommunity(id: String!, name: String!): Community!
+  updateMyCommunity(name: String): Community!
   updateMyProfile(bio: String, name: String): Profile
   updatePost(description: String, id: String!, requiredSkillsIds: [Int], title: String): Post!
   updateUser(email: String): User!
@@ -86,6 +88,7 @@ type Post {
 type Profile {
   bio: String!
   community: Community!
+  createdCommunities: [Community!]!
   driverPost: [Post!]!
   id: Int!
   matchingPoint: Int!

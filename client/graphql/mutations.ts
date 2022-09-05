@@ -181,3 +181,11 @@ export const EXIT_COMMUNITY = gql`
     }
   }
 `;
+
+export const EDIT_COMMUNITY_NAME = gql`
+  mutation editCommunityName($name: String!) {
+    updateMyCommunity(name: $name) {
+      id
+    }
+  }
+`;

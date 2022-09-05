@@ -25,6 +25,7 @@ export type AuthPayLoad = {
 
 export type Community = {
   __typename?: 'Community';
+  creator?: Maybe<Profile>;
   id: Scalars['String'];
   name: Scalars['String'];
   profiles: Array<Profile>;
@@ -61,6 +62,7 @@ export type Mutation = {
   post: Post;
   registerNavigator: Post;
   updateCommunity: Community;
+  updateMyCommunity: Community;
   updateMyProfile?: Maybe<Profile>;
   updatePost: Post;
   updateUser: User;
@@ -132,6 +134,11 @@ export type MutationUpdateCommunityArgs = {
 };
 
 
+export type MutationUpdateMyCommunityArgs = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationUpdateMyProfileArgs = {
   bio?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -191,6 +198,7 @@ export type Profile = {
   __typename?: 'Profile';
   bio: Scalars['String'];
   community: Community;
+  createdCommunities: Array<Community>;
   driverPost: Array<Post>;
   id: Scalars['Int'];
   matchingPoint: Scalars['Int'];
@@ -402,6 +410,13 @@ export type ExitCommunityMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type ExitCommunityMutation = { __typename?: 'Mutation', deleteMyProfile?: { __typename?: 'AuthPayLoad', token: string } | null };
 
+export type EditCommunityNameMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type EditCommunityNameMutation = { __typename?: 'Mutation', updateMyCommunity: { __typename?: 'Community', id: string } };
+
 export type FetchSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -476,7 +491,7 @@ export type FetchCurrentCommunityQueryVariables = Exact<{
 }>;
 
 
-export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } | null, profilesInMyCommunity: { __typename?: 'PaginatedProfiles', count: number, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } };
+export type FetchCurrentCommunityQuery = { __typename?: 'Query', myCurrentCommunity?: { __typename?: 'Community', id: string, name: string, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }>, creator?: { __typename?: 'Profile', id: number } | null } | null, profilesInMyCommunity: { __typename?: 'PaginatedProfiles', count: number, profiles: Array<{ __typename?: 'Profile', id: number, name: string, bio: string, user: { __typename?: 'User', githubLogin: string } }> } };
 
 export type FetchNavigatedSkillsListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1003,6 +1018,39 @@ export function useExitCommunityMutation(baseOptions?: Apollo.MutationHookOption
 export type ExitCommunityMutationHookResult = ReturnType<typeof useExitCommunityMutation>;
 export type ExitCommunityMutationResult = Apollo.MutationResult<ExitCommunityMutation>;
 export type ExitCommunityMutationOptions = Apollo.BaseMutationOptions<ExitCommunityMutation, ExitCommunityMutationVariables>;
+export const EditCommunityNameDocument = gql`
+    mutation editCommunityName($name: String!) {
+  updateMyCommunity(name: $name) {
+    id
+  }
+}
+    `;
+export type EditCommunityNameMutationFn = Apollo.MutationFunction<EditCommunityNameMutation, EditCommunityNameMutationVariables>;
+
+/**
+ * __useEditCommunityNameMutation__
+ *
+ * To run a mutation, you first call `useEditCommunityNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditCommunityNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editCommunityNameMutation, { data, loading, error }] = useEditCommunityNameMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useEditCommunityNameMutation(baseOptions?: Apollo.MutationHookOptions<EditCommunityNameMutation, EditCommunityNameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditCommunityNameMutation, EditCommunityNameMutationVariables>(EditCommunityNameDocument, options);
+      }
+export type EditCommunityNameMutationHookResult = ReturnType<typeof useEditCommunityNameMutation>;
+export type EditCommunityNameMutationResult = Apollo.MutationResult<EditCommunityNameMutation>;
+export type EditCommunityNameMutationOptions = Apollo.BaseMutationOptions<EditCommunityNameMutation, EditCommunityNameMutationVariables>;
 export const FetchSkillsDocument = gql`
     query fetchSkills {
   skills {
@@ -1531,6 +1579,9 @@ export const FetchCurrentCommunityDocument = gql`
       user {
         githubLogin
       }
+    }
+    creator {
+      id
     }
   }
   profilesInMyCommunity(skip: $skip, take: $take) {

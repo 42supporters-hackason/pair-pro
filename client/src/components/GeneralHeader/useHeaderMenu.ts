@@ -31,6 +31,7 @@ export const useClientHeaderMenu = ({
     goToMember,
     goToExplanation,
     goToStatistics,
+    goToEditCommunity,
   } = useClientRoute();
 
   return {
@@ -58,8 +59,12 @@ export const useClientHeaderMenu = ({
         action: goToEditProfile,
       },
       {
-        label: "コミュニティを変更する",
+        label: "コミュニティを移動する",
         action: onChangeCommunity,
+      },
+      {
+        label: "コミュニティ名を変更する",
+        action: goToEditCommunity,
       },
       {
         label: "アプリの使い方",

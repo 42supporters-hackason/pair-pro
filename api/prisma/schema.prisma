@@ -11,9 +11,11 @@ datasource db {
 }
 
 model Community {
-  id       String    @id @default(uuid())
-  name     String
-  profiles Profile[] @relation(name: "Community")
+  id        String    @id @default(uuid())
+  name      String
+  profiles  Profile[] @relation(name: "Community")
+  creator   Profile?  @relation(name: "CommunityCreator", fields: [creatorId], references: [id])
+  creatorId Int?
 }
 
 model User {
@@ -27,25 +29,26 @@ model User {
 }
 
 model Profile {
-  id            Int       @id @default(autoincrement())
-  createdAt     DateTime  @default(now())
-  name          String
-  matchingPoint Int
-  bio           String
-  driverPost    Post[]    @relation(name: "Driver")
-  navigatorPost Post[]    @relation(name: "Navigator")
-  messages      Message[] @relation(name: "createdBy")
-  user          User      @relation(name: "User", fields: [userId], references: [id])
-  userId        Int
-  community     Community @relation(name: "Community", fields: [communityId], references: [id])
-  communityId   String
+  id                 Int         @id @default(autoincrement())
+  createdAt          DateTime    @default(now())
+  name               String
+  matchingPoint      Int
+  bio                String
+  driverPost         Post[]      @relation(name: "Driver")
+  navigatorPost      Post[]      @relation(name: "Navigator")
+  messages           Message[]   @relation(name: "createdBy")
+  user               User        @relation(name: "User", fields: [userId], references: [id])
+  userId             Int
+  community          Community   @relation(name: "Community", fields: [communityId], references: [id])
+  communityId        String
+  createdCommunities Community[] @relation(name: "CommunityCreator")
 }
 
 // User one-one Setting. boolやenumで管理するような設定項目をUserから分離
 model Setting {
-  id                  Int     @id @default(autoincrement())
-  user                User    @relation(fields: [userId], references: [id])
-  userId              Int     @unique
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
 
   sendEmailOnMatching Boolean @default(true)
 }

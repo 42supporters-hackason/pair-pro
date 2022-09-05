@@ -1,10 +1,10 @@
-import { Profile, User } from "@prisma/client";
+import { Community, Profile, User } from "@prisma/client";
 import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 import { jwtKey } from "../utils/auth";
 import * as jwt from "jsonwebtoken";
 import { defaultMatchingPoint } from "./Profile";
 
-export const Community = objectType({
+export const CommunityObject = objectType({
   name: "Community",
   definition(t) {
     t.nonNull.string("id");
@@ -15,6 +15,14 @@ export const Community = objectType({
         return context.prisma.community
           .findUnique({ where: { id: parent.id } })
           .profiles();
+      },
+    });
+    t.field("creator", {
+      type: "Profile",
+      resolve(parent, args, context) {
+        return context.prisma.community
+          .findUnique({ where: { id: parent.id } })
+          .creator();
       },
     });
   },
@@ -67,10 +75,45 @@ export const CommunityMutation = extendType({
       args: {
         name: nonNull(stringArg()),
       },
-      resolve(parent, args, context) {
-        return context.prisma.community.create({
+      async resolve(parent, args, context) {
+        const { userId } = context.expectUserLoggedIn();
+
+        const me = await context.prisma.user.findUnique({
+          where: { id: userId },
+          include: {
+            profiles: {
+              include: {
+                community: true,
+              },
+            },
+          },
+        });
+        if (!me) {
+          throw new Error("unreachable");
+        }
+        const profile = await context.prisma.profile.create({
+          data: {
+            name: me.githubLogin,
+            matchingPoint: defaultMatchingPoint,
+            bio: me.githubBio,
+            user: {
+              connect: { id: userId },
+            },
+            community: {
+              create: {
+                name: args.name,
+              },
+            },
+          },
+        });
+
+        return context.prisma.community.update({
+          where: {
+            id: profile.communityId,
+          },
           data: {
             name: args.name,
+            creatorId: profile.id,
           },
         });
       },
@@ -161,10 +204,40 @@ export const CommunityMutation = extendType({
       },
       resolve(parent, args, context) {
         const { communityId } = args;
+        // todo(takumi) validation
         return context.prisma.community.delete({
           where: { id: communityId },
         });
       },
     });
+
+    t.nonNull.field("updateMyCommunity", {
+      type: "Community",
+      args: {
+        name: stringArg(),
+      },
+      async resolve(parent, args, context) {
+        const { communityId, profileId } = context.expectUserJoinedCommunity();
+        const { name } = args;
+
+        const myCommunity = (await context.prisma.community.findUnique({
+          where: { id: communityId },
+        })) as Community;
+        validateOwnership(profileId, myCommunity);
+
+        return context.prisma.community.update({
+          where: { id: communityId },
+          data: {
+            name: name ?? myCommunity.name,
+          },
+        });
+      },
+    });
   },
 });
+
+const validateOwnership = (profileId: number, community: Community) => {
+  if (profileId != community.creatorId) {
+    throw new Error("no right to do this");
+  }
+};
