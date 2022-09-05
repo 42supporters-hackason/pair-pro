@@ -251,6 +251,9 @@ export const FETCH_CURRENT_COMMUNITY = gql`
           githubLogin
         }
       }
+      creator {
+        id
+      }
     }
     profilesInMyCommunity(skip: $skip, take: $take) {
       count

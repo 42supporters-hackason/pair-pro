@@ -113,9 +113,10 @@ export const CreateCommunityPage = () => {
             onAgree={handleCreateCommunity}
             onCancel={setOpenModal.off}
           >
-            確定後にコミュニティ名を変更することはできません。
-            <br />
-            本当によろしいですか？
+            <Typography fontWeight="bold" variant="h6">
+              {getValues("communityName")}
+            </Typography>
+            このコミュニティを作成しますか？
           </AgreeModal>
         </Box>
       </Modal>

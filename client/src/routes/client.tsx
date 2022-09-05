@@ -47,6 +47,11 @@ const { StatisticsPage } = lazyImport(
   "StatisticsPage"
 );
 
+const { EditCommunityPage } = lazyImport(
+  () => import("../pages/client/edit/community"),
+  "EditCommunityPage"
+);
+
 const HOME = "home";
 const APPLY = "apply";
 const RECRUIT = "recruit";
@@ -57,6 +62,7 @@ const POST = "post";
 const EXPLANATION = "explanation";
 const MEMBER = "member";
 const STATISTICS = "statistics";
+const COMMUNITY = "community";
 
 export const CLIENT_ROUTE_PATH = {
   HOME: `/${HOME}`,
@@ -65,6 +71,7 @@ export const CLIENT_ROUTE_PATH = {
   CHAT: `/${CHAT}`,
   EDIT_PROFILE: `/${EDIT}/${PROFILE}`,
   EDIT_POST: `/${EDIT}/${POST}`,
+  EDIT_COMMUNITY: `/${EDIT}/${COMMUNITY}`,
   EXPLANATION: `/${EXPLANATION}`,
   MEMBER: `/${MEMBER}`,
   STATISTICS: `/${STATISTICS}`,
@@ -98,6 +105,10 @@ export const clientRoutes: RouteObject[] = [
       {
         path: CLIENT_ROUTE_PATH.EDIT_POST,
         element: <EditPostPage />,
+      },
+      {
+        path: CLIENT_ROUTE_PATH.EDIT_COMMUNITY,
+        element: <EditCommunityPage />,
       },
       {
         path: CLIENT_ROUTE_PATH.EXPLANATION,
