@@ -16,12 +16,13 @@ interface Props {
  * client/memberで使用されるhooks
  */
 export const useMemberHooks = ({ take, skip }: Props) => {
-  const { data: currentCommunityData } = useFetchCurrentCommunityQuery({
-    variables: {
-      take,
-      skip,
-    },
-  });
+  const { data: currentCommunityData, refetch: refetchCurrentCommunity } =
+    useFetchCurrentCommunityQuery({
+      variables: {
+        take,
+        skip,
+      },
+    });
   /**
    * コミュニティ名
    */
@@ -61,5 +62,6 @@ export const useMemberHooks = ({ take, skip }: Props) => {
     paginationCount,
     firstCommunityMember,
     secondCommunityMember,
+    refetchCurrentCommunity,
   };
 };

@@ -14,6 +14,8 @@ model Community {
   id       String    @id @default(uuid())
   name     String
   profiles Profile[] @relation(name: "Community")
+  creator Profile? @relation(name: "CommunityCreator", fields: [creatorId], references: [id])
+  creatorId Int?
 }
 
 model User {
@@ -39,6 +41,7 @@ model Profile {
   userId        Int
   community     Community @relation(name: "Community", fields: [communityId], references: [id])
   communityId   String
+  createdCommunities Community[] @relation(name: "CommunityCreator")
 }
 
 // User one-one Setting. boolやenumで管理するような設定項目をUserから分離

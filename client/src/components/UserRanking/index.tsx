@@ -44,7 +44,7 @@ export const UserRanking = ({ name, githubLogin, bio, count, rank }: Props) => {
           sx={{ display: "flex", alignItems: "center", gap: 3, width: "60%" }}
         >
           <Avatar src={`https://github.com/${githubLogin}.png`} />
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "80%" }}>
             <Typography fontWeight="bold">{name}</Typography>
             <Typography
               sx={{

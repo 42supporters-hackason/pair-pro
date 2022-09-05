@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { GithubLoginButton } from "react-social-login-buttons";
 import logo from "../../assets/logo_transparent.png";
 import backgroundImg from "../../assets/p2p_background.jpg";
@@ -14,6 +15,8 @@ export const LoginPage = () => {
   const { goToHome } = useClientRoute();
   const { goToCommunity } = usePublicRoute();
 
+  const isMobile = useMediaQuery("(max-width:640px)");
+
   useEffect(() => {
     if (loginStatus === "authFinished") {
       goToCommunity({ replace: true });
@@ -22,6 +25,32 @@ export const LoginPage = () => {
       goToHome({ replace: true });
     }
   }, [loginStatus, goToCommunity, goToHome]);
+
+  if (isMobile) {
+    return (
+      <>
+        <Box
+          component="img"
+          src={backgroundImg}
+          sx={{
+            height: "100vh",
+            width: "100%",
+            position: "absolute",
+            zIndex: "-999",
+          }}
+        />
+        <Typography
+          sx={{ m: "auto", textAlign: "center", pt: "200px" }}
+          fontWeight="bold"
+        >
+          お使いの画面幅では使用できません。
+          <br />
+          お手持ちのPC等でご利用ください。
+        </Typography>
+      </>
+    );
+  }
+
   return (
     <>
       <Box
@@ -71,26 +100,52 @@ export const LoginPage = () => {
             >
               アプリの使い方
             </Typography>
-            <Box component="ol" sx={{ p: 1 }}>
+            <Box sx={{ p: 1 }}>
               <Card style={{ height: "auto" }}>
                 <Typography variant="h6" fontWeight="bold" sx={{ mb: "10px" }}>
-                  ペアプロ相手とマッチングする方法は2つ
+                  コミュニティについて
                 </Typography>
-                <Typography
-                  component="li"
-                  fontWeight="bold"
-                  sx={{ mb: "5px", ml: "10px" }}
-                >
-                  自分が興味のある内容で募集をかけ、
+                <Typography sx={{ mb: "5px", ml: "10px" }}>
+                  「ぺあぷろ！」は特定のコミュニティの中で使用するサービスです。
+                  (サークル、会社、友人同士など)
                   <br />
-                  マッチングが成立するのを待つ
+                  そのため、以下のようにしてコミュニティに属す必要があります。
+                  <br />
+                  <br />
+                  <b>- 自ら新規コミュニティを作る</b>
+                  <br />
+                  <b>- 既存のコミュニティに参加する</b>
+                  <br />
+                  <br />
+                  (＊既存のコミュニティに参加するためにはコミュニティIDが必要になります。)
+                  <br />
                 </Typography>
-                <Typography
-                  component="li"
-                  fontWeight="bold"
-                  sx={{ ml: "10px" }}
-                >
-                  公開されている募集一覧から好きな相手を見つける
+              </Card>
+            </Box>
+            <Box component="ul" sx={{ p: 1 }}>
+              <Card style={{ height: "auto" }}>
+                <Typography variant="h6" fontWeight="bold" sx={{ mb: "10px" }}>
+                  「ぺあぷろ！」における
+                  <br />
+                  ドライバーとナビゲータとは？
+                </Typography>
+                <Typography component="li" sx={{ mb: "5px", ml: "10px" }}>
+                  <b>ドライバー</b>
+                  <br />
+                  <b>
+                    自分の好きな技術、気になるテーマでマッチングを募集する立場です
+                  </b>
+                  <br />
+                  そのため、「最近気になる技術があるんだけど、誰かツヨツヨな人に教えてもらいたいな〜」なんて人は積極的に募集をしましょう！
+                </Typography>
+                <Typography component="li" sx={{ mb: "5px", ml: "10px" }}>
+                  <b>ナビゲータ</b>
+                  <br />
+                  <b>
+                    ナビゲータはドライバーが募集している一覧から、気になったテーマを選択してマッチングします。
+                  </b>
+                  <br />
+                  人に教えることで学びはより深まります。自分の得意とする分野で困ってるドライバーがいたら教えてあげましょう！
                 </Typography>
               </Card>
             </Box>
@@ -99,18 +154,17 @@ export const LoginPage = () => {
                 <Typography variant="h6" fontWeight="bold" sx={{ mb: "10px" }}>
                   マッチングポイント(MP)について
                 </Typography>
-                <Typography component="li" fontWeight="bold" sx={{ mb: "5px" }}>
-                  自分の好きな内容で募集をかけると、
-                  <br />
-                  マッチングポイントが1つ減ります。
+                <Typography component="li" sx={{ mb: "5px" }}>
+                  自分の好きな内容で募集をかける(<b>ドライバーになる</b>)と、
+                  マッチングポイントが<b>1つ減ります</b>。
                 </Typography>
-                <Typography component="li" fontWeight="bold" sx={{ mb: "5px" }}>
-                  公開されている募集一覧からマッチングするとポイントが1つ増えます。
+                <Typography component="li" sx={{ mb: "5px" }}>
+                  公開されている募集一覧からマッチングする(
+                  <b>ナビゲータになる</b>)とポイントが
+                  <b>1つ増えます</b>。
                 </Typography>
-                <Typography component="li" fontWeight="bold">
-                  積極的にマッチングをし、
-                  <br />
-                  ポイントを貯めて自分の好きなテーマでペアプロをしましょう！
+                <Typography>
+                  積極的にマッチングをして自分の好きなテーマでペアプロをしましょう！
                 </Typography>
               </Card>
             </Box>
@@ -119,16 +173,23 @@ export const LoginPage = () => {
                 <Typography variant="h6" fontWeight="bold" sx={{ mb: "10px" }}>
                   マッチングした後の流れ
                 </Typography>
-                <Typography component="li" fontWeight="bold">
-                  マッチング相手とチャットでペアプロ日時を決めましょう
+                <Typography component="li">
+                  マッチング相手と<b>チャットでペアプロ日時を決めましょう</b>
                 </Typography>
-                <Typography component="li" fontWeight="bold">
-                  日時が決まったらペアプロルームで通話をしてペアプロを実践！
+                <Typography component="li">
+                  ペアプロ当日になったら、<b>通話をしてペアプロ実践！</b>
+                  <br />
+                  画面共有なども駆使して学びを深めましょう！
                 </Typography>
               </Card>
             </Box>
           </Box>
-          <Box sx={{ width: "50%", my: "auto" }}>
+          <Box
+            sx={{
+              width: "50%",
+              my: "auto",
+            }}
+          >
             <Card
               style={{
                 borderRadius: "999px",

@@ -36,6 +36,13 @@ export const useClientRoute = () => {
     [navigate]
   );
 
+  const goToEditCommunity = useCallback(
+    (options?: NavigateOptions) => {
+      navigate(CLIENT_ROUTE_PATH.EDIT_COMMUNITY, options);
+    },
+    [navigate]
+  );
+
   const goToExplanation = useCallback(
     (options?: NavigateOptions) => {
       navigate(CLIENT_ROUTE_PATH.EXPLANATION, options);
@@ -95,6 +102,7 @@ export const useClientRoute = () => {
     goToRecruit,
     goToEditProfile,
     goToEditPost,
+    goToEditCommunity,
     goToExplanation,
     goToMember,
     goToChat,

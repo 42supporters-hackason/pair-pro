@@ -31,16 +31,17 @@ export const useClientHeaderMenu = ({
     goToMember,
     goToExplanation,
     goToStatistics,
+    goToEditCommunity,
   } = useClientRoute();
 
   return {
     listMenu: [
       {
-        label: "ペアプロを募集する",
+        label: "ドライバーになる",
         action: goToApply,
       },
       {
-        label: "投稿一覧を見る",
+        label: "ナビゲータになる",
         action: goToRecruit,
       },
       {
@@ -58,8 +59,12 @@ export const useClientHeaderMenu = ({
         action: goToEditProfile,
       },
       {
-        label: "コミュニティを変更する",
+        label: "コミュニティを移動する",
         action: onChangeCommunity,
+      },
+      {
+        label: "コミュニティ名を変更する",
+        action: goToEditCommunity,
       },
       {
         label: "アプリの使い方",

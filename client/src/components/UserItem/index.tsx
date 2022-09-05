@@ -28,8 +28,15 @@ export const UserItem = ({ name, githubLogin, bio }: Props) => {
         sx={{ display: "flex", alignItems: "center", gap: 3, width: "100%" }}
       >
         <Avatar src={`https://github.com/${githubLogin}.png`} />
-        <Box sx={{ width: "100%" }}>
-          <Typography fontWeight="bold">{name}</Typography>
+        <Box sx={{ width: "70%" }}>
+          <Typography
+            fontWeight="bold"
+            sx={{
+              wordBreak: "break-all",
+            }}
+          >
+            {name}
+          </Typography>
           <Typography
             sx={{
               overflow: "hidden",
@@ -37,6 +44,7 @@ export const UserItem = ({ name, githubLogin, bio }: Props) => {
               display: "-webkit-box",
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
+              wordBreak: "break-all",
             }}
           >
             {bio}
@@ -54,6 +62,7 @@ export const UserItem = ({ name, githubLogin, bio }: Props) => {
             flexDirection: "column",
             alignItems: "center",
             gap: "1px",
+            width: "20%",
           }}
         >
           <OpenInNewIcon sx={{ width: "20px", height: "20px" }} />

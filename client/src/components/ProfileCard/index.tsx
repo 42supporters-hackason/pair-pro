@@ -91,7 +91,14 @@ export const ProfileCard = ({
           >
             <Box>
               <Typography>名前</Typography>
-              <Typography fontWeight="bold">{name}</Typography>
+              <Typography
+                fontWeight="bold"
+                sx={{
+                  wordBreak: "break-all",
+                }}
+              >
+                {name}
+              </Typography>
             </Box>
             {bio && (
               <Box
@@ -102,7 +109,14 @@ export const ProfileCard = ({
                 }}
               >
                 <Typography>自己紹介</Typography>
-                <Typography fontWeight="bold">{bio}</Typography>
+                <Typography
+                  fontWeight="bold"
+                  sx={{
+                    wordBreak: "break-all",
+                  }}
+                >
+                  {bio}
+                </Typography>
               </Box>
             )}
             <Box>
@@ -117,7 +131,7 @@ export const ProfileCard = ({
               >
                 <Box
                   component="img"
-                  sx={{ width: "350px" }}
+                  sx={{ width: "100%" }}
                   src={`https://github-readme-stats.vercel.app/api?username=${githubLogin}&theme=onedark&show_icons=true`}
                 />
               </Box>
@@ -131,25 +145,37 @@ export const ProfileCard = ({
               p: 3,
               mr: 3,
               gap: 3,
-              width: "100%",
+              width: "60%",
               borderRadius: "20px",
             }}
           >
             <Box>
               <Typography>募集タイトル</Typography>
-              <Typography fontWeight="bold" variant="h6">
+              <Typography
+                fontWeight="bold"
+                variant="h6"
+                sx={{
+                  wordBreak: "break-all",
+                }}
+              >
                 {title}
               </Typography>
             </Box>
             <Box>
               <Typography>募集詳細</Typography>
-              <Typography fontWeight="bold" variant="h6">
+              <Typography
+                fontWeight="bold"
+                variant="h6"
+                sx={{
+                  wordBreak: "break-all",
+                }}
+              >
                 {content}
               </Typography>
             </Box>
             <Box>
               <Typography>使用言語</Typography>
-              <Box sx={{ display: "flex", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                 {languages &&
                   languages.map((language) => {
                     return (
