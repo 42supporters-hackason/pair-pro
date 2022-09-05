@@ -52,6 +52,16 @@ export const ProfileObject = objectType({
           .community()) as Community;
       },
     });
+    t.nonNull.list.nonNull.field("createdCommunities", {
+      type: "Community",
+      resolve(parent, args, context) {
+        return context.prisma.profile
+          .findUnique({
+            where: { id: parent.id },
+          })
+          .createdCommunities();
+      }
+    })
   },
 });
 

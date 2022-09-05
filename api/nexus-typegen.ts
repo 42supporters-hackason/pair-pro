@@ -127,6 +127,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
   }
   Community: { // field return type
+    creator: NexusGenRootTypes['Profile'] | null; // Profile
     id: string; // String!
     name: string; // String!
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
@@ -156,6 +157,7 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Post']; // Post!
     registerNavigator: NexusGenRootTypes['Post']; // Post!
     updateCommunity: NexusGenRootTypes['Community']; // Community!
+    updateMyCommunity: NexusGenRootTypes['Community']; // Community!
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
   }
@@ -189,6 +191,7 @@ export interface NexusGenFieldTypes {
   Profile: { // field return type
     bio: string; // String!
     community: NexusGenRootTypes['Community']; // Community!
+    createdCommunities: NexusGenRootTypes['Community'][]; // [Community!]!
     driverPost: NexusGenRootTypes['Post'][]; // [Post!]!
     id: number; // Int!
     matchingPoint: number; // Int!
@@ -247,6 +250,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Community: { // field return type name
+    creator: 'Profile'
     id: 'String'
     name: 'String'
     profiles: 'Profile'
@@ -276,6 +280,7 @@ export interface NexusGenFieldTypeNames {
     post: 'Post'
     registerNavigator: 'Post'
     updateCommunity: 'Community'
+    updateMyCommunity: 'Community'
     updateMyProfile: 'Profile'
     updatePost: 'Post'
   }
@@ -309,6 +314,7 @@ export interface NexusGenFieldTypeNames {
   Profile: { // field return type name
     bio: 'String'
     community: 'Community'
+    createdCommunities: 'Community'
     driverPost: 'Post'
     id: 'Int'
     matchingPoint: 'Int'
@@ -400,6 +406,9 @@ export interface NexusGenArgTypes {
     updateCommunity: { // args
       id: string; // String!
       name: string; // String!
+    }
+    updateMyCommunity: { // args
+      name?: string | null; // String
     }
     updateMyProfile: { // args
       bio?: string | null; // String
