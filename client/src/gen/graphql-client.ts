@@ -48,6 +48,7 @@ export type Message = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  UpdateUserSettings: Setting;
   authGithub: AuthPayLoad;
   completePairProgramming: Post;
   createCommunity: Community;
@@ -62,6 +63,12 @@ export type Mutation = {
   updateCommunity: Community;
   updateMyProfile?: Maybe<Profile>;
   updatePost: Post;
+  updateUser: User;
+};
+
+
+export type MutationUpdateUserSettingsArgs = {
+  sendEmailOnMatching?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -136,6 +143,11 @@ export type MutationUpdatePostArgs = {
   id: Scalars['String'];
   requiredSkillsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   title?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  email?: InputMaybe<Scalars['String']>;
 };
 
 export type PaginatedPosts = {
@@ -254,6 +266,11 @@ export type QueryUnmatchedPostsArgs = {
   take?: InputMaybe<Scalars['Int']>;
 };
 
+export type Setting = {
+  __typename?: 'Setting';
+  sendEmailOnMatching: Scalars['Boolean'];
+};
+
 export type Skill = {
   __typename?: 'Skill';
   category?: Maybe<Scalars['String']>;
@@ -274,11 +291,13 @@ export type SubscriptionWaitForMessageArgs = {
 
 export type User = {
   __typename?: 'User';
+  email?: Maybe<Scalars['String']>;
   githubBio: Scalars['String'];
   githubId: Scalars['String'];
   githubLogin: Scalars['String'];
   id: Scalars['Int'];
   profiles: Array<Profile>;
+  setting?: Maybe<Setting>;
 };
 
 export type Video = {
@@ -300,6 +319,13 @@ export type UpdateProfileMutationVariables = Exact<{
 
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateMyProfile?: { __typename?: 'Profile', name: string, bio: string } | null };
+
+export type UpdateEmailSettingMutationVariables = Exact<{
+  sendEmailOnMatching: Scalars['Boolean'];
+}>;
+
+
+export type UpdateEmailSettingMutation = { __typename?: 'Mutation', UpdateUserSettings: { __typename?: 'Setting', sendEmailOnMatching: boolean } };
 
 export type CreatePostMutationVariables = Exact<{
   description: Scalars['String'];
@@ -437,7 +463,7 @@ export type FetchMessagesQuery = { __typename?: 'Query', messagesByPostId: Array
 export type FetchMeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchMeQuery = { __typename?: 'Query', myProfile: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } };
+export type FetchMeQuery = { __typename?: 'Query', myProfile: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string, email?: string | null, setting?: { __typename?: 'Setting', sendEmailOnMatching: boolean } | null } } };
 
 export type FetchMyCommunitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -565,6 +591,39 @@ export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const UpdateEmailSettingDocument = gql`
+    mutation updateEmailSetting($sendEmailOnMatching: Boolean!) {
+  UpdateUserSettings(sendEmailOnMatching: $sendEmailOnMatching) {
+    sendEmailOnMatching
+  }
+}
+    `;
+export type UpdateEmailSettingMutationFn = Apollo.MutationFunction<UpdateEmailSettingMutation, UpdateEmailSettingMutationVariables>;
+
+/**
+ * __useUpdateEmailSettingMutation__
+ *
+ * To run a mutation, you first call `useUpdateEmailSettingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEmailSettingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEmailSettingMutation, { data, loading, error }] = useUpdateEmailSettingMutation({
+ *   variables: {
+ *      sendEmailOnMatching: // value for 'sendEmailOnMatching'
+ *   },
+ * });
+ */
+export function useUpdateEmailSettingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEmailSettingMutation, UpdateEmailSettingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEmailSettingMutation, UpdateEmailSettingMutationVariables>(UpdateEmailSettingDocument, options);
+      }
+export type UpdateEmailSettingMutationHookResult = ReturnType<typeof useUpdateEmailSettingMutation>;
+export type UpdateEmailSettingMutationResult = Apollo.MutationResult<UpdateEmailSettingMutation>;
+export type UpdateEmailSettingMutationOptions = Apollo.BaseMutationOptions<UpdateEmailSettingMutation, UpdateEmailSettingMutationVariables>;
 export const CreatePostDocument = gql`
     mutation createPost($description: String!, $title: String!, $requiredSkillsId: [Int!]!) {
   post(
@@ -1382,6 +1441,10 @@ export const FetchMeDocument = gql`
     bio
     user {
       githubLogin
+      email
+      setting {
+        sendEmailOnMatching
+      }
     }
   }
 }
