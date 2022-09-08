@@ -26,7 +26,7 @@ export const ApplyPage = () => {
    */
   const [openModal, setOpenModal] = useBoolean(false);
   const { goToHome } = useClientRoute();
-  const { createPost, languagesData } = useApplyHooks();
+  const { createPost, languagesData, canPost } = useApplyHooks();
 
   const languages = languagesData?.skills.map(({ name }) => name);
 
@@ -69,6 +69,18 @@ export const ApplyPage = () => {
       <Typography variant="h6" fontWeight="bold" sx={{ textAlign: "center" }}>
         情報を入力してマッチング相手を募集しましょう
       </Typography>
+      {!canPost && (
+        <Typography
+          color="error.main"
+          fontWeight="bold"
+          variant="subtitle1"
+          sx={{ textAlign: "center", mt: 3 }}
+        >
+          マッチングポイントが不足しています。
+          <br />
+          ナビゲータになってポイントを取得してください。
+        </Typography>
+      )}
       <Box
         sx={{
           display: "flex",
@@ -140,7 +152,6 @@ export const ApplyPage = () => {
         </Box>
         <Button
           sx={{
-            mb: "35px",
             mt: "15px",
             width: "450px",
             height: "50px",
@@ -148,13 +159,14 @@ export const ApplyPage = () => {
           }}
           variant="contained"
           type="submit"
+          disabled={!canPost}
         >
           上記の内容で募集をする
         </Button>
+        <BackButton style={{ width: "450px" }} onClick={() => goToHome()}>
+          戻る
+        </BackButton>
       </Box>
-      <BackButton style={{ width: "450px" }} onClick={() => goToHome()}>
-        戻る
-      </BackButton>
       <Modal open={openModal} onClose={setOpenModal.off}>
         <Box
           sx={{

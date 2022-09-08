@@ -1,7 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useProfile } from "../../context/auth";
 import {
   useCreatePostMutation,
+  useFetchMeQuery,
   useFetchMyPostQuery,
   useFetchSkillsQuery,
 } from "../../gen/graphql-client";
@@ -28,6 +29,18 @@ export const useApplyHooks = () => {
   const { data: languagesData } = useFetchSkillsQuery();
   const { goToHome } = useClientRoute();
   const { refetch: refetchMyPosts } = useFetchMyPostQuery();
+  const { data: meData } = useFetchMeQuery();
+
+  /**
+   * MPが存在するか？
+   */
+  const canPost = useMemo(
+    () =>
+      meData?.myProfile.matchingPoint
+        ? meData.myProfile.matchingPoint > 0
+        : false,
+    [meData]
+  );
 
   /**
    * POSTを作成するhandler
@@ -65,5 +78,5 @@ export const useApplyHooks = () => {
     ]
   );
 
-  return { createPost, languagesData };
+  return { createPost, languagesData, canPost };
 };
