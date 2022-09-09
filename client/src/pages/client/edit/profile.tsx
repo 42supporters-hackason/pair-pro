@@ -127,6 +127,11 @@ export const EditProfilePage = () => {
           label="通知用メールアドレス"
           {...register("email")}
         />
+        {errors.email && (
+          <Typography sx={{ mt: "5px", color: "error.main" }}>
+            {errors.email.message}
+          </Typography>
+        )}
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Typography fontWeight="bold">メール通知を受け取る</Typography>
