@@ -14,6 +14,7 @@ import {
   useFetchMeQuery,
   useUpdateEmailSettingMutation,
   useUpdateProfileMutation,
+  useUpdateUserMutation,
 } from "../../../gen/graphql-client";
 import { useBoolean } from "../../../hooks/useBoolean";
 import { useClientRoute } from "../../../hooks/useClientRoute";
@@ -32,6 +33,7 @@ export const EditProfilePage = () => {
   const { goToHome } = useClientRoute();
   const { data: meData, loading } = useFetchMeQuery();
   const [isEmailToggle, setIsEmailToggle] = useBoolean(false);
+  const [updateUser] = useUpdateUserMutation();
 
   /**
    * form validation
@@ -46,7 +48,10 @@ export const EditProfilePage = () => {
   });
 
   const handleEditProfile: SubmitHandler<EditProfileSchema> = useCallback(
-    async ({ name, bio }) => {
+    async ({ name, bio, email }) => {
+      await updateUser({
+        variables: { email },
+      });
       await updateEmailSetting({
         variables: { sendEmailOnMatching: isEmailToggle },
       });
@@ -57,7 +62,7 @@ export const EditProfilePage = () => {
         },
       });
     },
-    [updateProfile, goToHome, updateEmailSetting, isEmailToggle]
+    [updateProfile, goToHome, updateEmailSetting, isEmailToggle, updateUser]
   );
 
   useEffect(() => {
