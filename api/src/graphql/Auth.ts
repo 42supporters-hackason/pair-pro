@@ -37,6 +37,7 @@ export const AuthMutation = extendType({
           id: githubId,
           login: githubLogin,
           bio: githubBio,
+          email,
         } = await getGithubInfo(access_token);
 
         let user = (await context.prisma.user.findFirst({
@@ -49,6 +50,7 @@ export const AuthMutation = extendType({
               githubLogin,
               githubId,
               githubBio: githubBio ?? "",
+              email: email ?? "",
             },
           });
         }
@@ -103,5 +105,12 @@ async function getGithubInfo(access_token: string) {
       },
     }
   );
-  return user.data.viewer;
+  const { data: data } = await axios.get("https://api.github.com/user/emails", {
+    headers: { Authorization: `Bearer ${access_token}` },
+  });
+  const primaryEmail = data.find((email: any) => email.primary);
+  if (!primaryEmail) {
+    console.error("error: no primary email");
+  }
+  return { ...user.data.viewer, email: primaryEmail?.email };
 }
