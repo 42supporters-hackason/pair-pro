@@ -93,6 +93,9 @@ export interface NexusGenObjects {
     name: string; // String!
   }
   Query: {};
+  Setting: { // root type
+    sendEmailOnMatching: boolean; // Boolean!
+  }
   Skill: { // root type
     category?: string | null; // String
     id: number; // Int!
@@ -101,6 +104,7 @@ export interface NexusGenObjects {
   }
   Subscription: {};
   User: { // root type
+    email?: string | null; // String
     githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
@@ -145,6 +149,7 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Post']; // Post!
   }
   Mutation: { // field return type
+    UpdateUserSettings: NexusGenRootTypes['Setting']; // Setting!
     authGithub: NexusGenRootTypes['AuthPayLoad']; // AuthPayLoad!
     completePairProgramming: NexusGenRootTypes['Post']; // Post!
     createCommunity: NexusGenRootTypes['Community']; // Community!
@@ -160,6 +165,7 @@ export interface NexusGenFieldTypes {
     updateMyCommunity: NexusGenRootTypes['Community']; // Community!
     updateMyProfile: NexusGenRootTypes['Profile'] | null; // Profile
     updatePost: NexusGenRootTypes['Post']; // Post!
+    updateUser: NexusGenRootTypes['User']; // User!
   }
   PaginatedPosts: { // field return type
     count: number; // Int!
@@ -223,6 +229,9 @@ export interface NexusGenFieldTypes {
     skills: NexusGenRootTypes['Skill'][]; // [Skill!]!
     unmatchedPosts: NexusGenRootTypes['PaginatedPosts']; // PaginatedPosts!
   }
+  Setting: { // field return type
+    sendEmailOnMatching: boolean; // Boolean!
+  }
   Skill: { // field return type
     category: string | null; // String
     id: number; // Int!
@@ -233,11 +242,13 @@ export interface NexusGenFieldTypes {
     waitForMessage: NexusGenRootTypes['Message'] | null; // Message
   }
   User: { // field return type
+    email: string | null; // String
     githubBio: string; // String!
     githubId: string; // String!
     githubLogin: string; // String!
     id: number; // Int!
     profiles: NexusGenRootTypes['Profile'][]; // [Profile!]!
+    setting: NexusGenRootTypes['Setting'] | null; // Setting
   }
   Video: { // field return type
     accessToken: string; // String!
@@ -268,6 +279,7 @@ export interface NexusGenFieldTypeNames {
     post: 'Post'
   }
   Mutation: { // field return type name
+    UpdateUserSettings: 'Setting'
     authGithub: 'AuthPayLoad'
     completePairProgramming: 'Post'
     createCommunity: 'Community'
@@ -283,6 +295,7 @@ export interface NexusGenFieldTypeNames {
     updateMyCommunity: 'Community'
     updateMyProfile: 'Profile'
     updatePost: 'Post'
+    updateUser: 'User'
   }
   PaginatedPosts: { // field return type name
     count: 'Int'
@@ -346,6 +359,9 @@ export interface NexusGenFieldTypeNames {
     skills: 'Skill'
     unmatchedPosts: 'PaginatedPosts'
   }
+  Setting: { // field return type name
+    sendEmailOnMatching: 'Boolean'
+  }
   Skill: { // field return type name
     category: 'String'
     id: 'Int'
@@ -356,11 +372,13 @@ export interface NexusGenFieldTypeNames {
     waitForMessage: 'Message'
   }
   User: { // field return type name
+    email: 'String'
     githubBio: 'String'
     githubId: 'String'
     githubLogin: 'String'
     id: 'Int'
     profiles: 'Profile'
+    setting: 'Setting'
   }
   Video: { // field return type name
     accessToken: 'String'
@@ -369,6 +387,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    UpdateUserSettings: { // args
+      sendEmailOnMatching?: boolean | null; // Boolean
+    }
     authGithub: { // args
       code: string; // String!
     }
@@ -419,6 +440,9 @@ export interface NexusGenArgTypes {
       id: string; // String!
       requiredSkillsIds?: Array<number | null> | null; // [Int]
       title?: string | null; // String
+    }
+    updateUser: { // args
+      email?: string | null; // String
     }
   }
   Query: {

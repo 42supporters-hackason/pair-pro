@@ -7,6 +7,7 @@ import {
   stringArg,
   list,
 } from "nexus";
+import { sendMatchingNotificationMail } from "../utils/mailer";
 
 export const Post = objectType({
   name: "Post",
@@ -386,11 +387,23 @@ export const PostMutation = extendType({
           throw new Error("Navigator does not belong to the same community");
         }
 
+        /////////////// TODO: エラーが発生する可能性があるので、トランザクションを張る
+
         // increment navigator's matching point
         await context.prisma.profile.update({
           where: { id: navigatorId },
           data: { matchingPoint: navigator.matchingPoint + 1 },
         });
+
+        try {
+          await sendMatchingNotificationMail({
+            on: post,
+            to: post.driver,
+            matchedBy: navigator,
+          });
+        } catch (e) {
+          console.error(e);
+        }
 
         // update navigator
         return context.prisma.post.update({
@@ -399,6 +412,8 @@ export const PostMutation = extendType({
             navigator: { connect: { id: navigatorId } },
           },
         });
+
+        /////////////// トランザクションここまで
       },
     });
 
