@@ -387,7 +387,7 @@ export const PostMutation = extendType({
           throw new Error("Navigator does not belong to the same community");
         }
 
-        /////////////// エラーが発生する可能性があるので、トランザクションを張る
+        /////////////// TODO: エラーが発生する可能性があるので、トランザクションを張る
 
         // increment navigator's matching point
         await context.prisma.profile.update({
@@ -395,11 +395,15 @@ export const PostMutation = extendType({
           data: { matchingPoint: navigator.matchingPoint + 1 },
         });
 
-        await sendMatchingNotificationMail({
-          on: post,
-          to: post.driver,
-          matchedBy: navigator,
-        });
+        try {
+          await sendMatchingNotificationMail({
+            on: post,
+            to: post.driver,
+            matchedBy: navigator,
+          });
+        } catch (e) {
+          console.error(e);
+        }
 
         // update navigator
         return context.prisma.post.update({
@@ -409,7 +413,7 @@ export const PostMutation = extendType({
           },
         });
 
-        ///////////////
+        /////////////// トランザクションここまで
       },
     });
 
