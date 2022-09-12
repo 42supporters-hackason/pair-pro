@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
+  Switch,
   TextareaAutosize,
   TextField,
   Typography,
@@ -11,9 +12,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { BackButton } from "../../../components/BackButton";
 import {
   useFetchMeQuery,
+  useUpdateEmailSettingMutation,
   useUpdateProfileMutation,
+  useUpdateUserMutation,
 } from "../../../gen/graphql-client";
+import { useBoolean } from "../../../hooks/useBoolean";
 import { useClientRoute } from "../../../hooks/useClientRoute";
+import { LoadingPage } from "../../public/loading";
 import {
   editProfileSchema,
   EditProfileSchema,
@@ -24,8 +29,11 @@ export const EditProfilePage = () => {
    * misc.
    */
   const [updateProfile] = useUpdateProfileMutation();
+  const [updateEmailSetting] = useUpdateEmailSettingMutation();
   const { goToHome } = useClientRoute();
-  const { data: meData } = useFetchMeQuery();
+  const { data: meData, loading } = useFetchMeQuery();
+  const [isEmailToggle, setIsEmailToggle] = useBoolean(false);
+  const [updateUser] = useUpdateUserMutation();
 
   /**
    * form validation
@@ -34,16 +42,19 @@ export const EditProfilePage = () => {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
-    defaultValues: {
-      name: meData?.myProfile.name ?? "",
-      bio: meData?.myProfile.bio ?? "",
-    },
   });
 
   const handleEditProfile: SubmitHandler<EditProfileSchema> = useCallback(
-    async ({ name, bio }) => {
+    async ({ name, bio, email }) => {
+      await updateUser({
+        variables: { email },
+      });
+      await updateEmailSetting({
+        variables: { sendEmailOnMatching: isEmailToggle },
+      });
       await updateProfile({
         variables: { name, bio },
         onCompleted: () => {
@@ -51,8 +62,25 @@ export const EditProfilePage = () => {
         },
       });
     },
-    [updateProfile, goToHome]
+    [updateProfile, goToHome, updateEmailSetting, isEmailToggle, updateUser]
   );
+
+  useEffect(() => {
+    setValue("name", meData?.myProfile.name ?? "");
+    setValue("bio", meData?.myProfile.bio ?? "");
+    setValue("email", meData?.myProfile.user.email ?? "");
+    setIsEmailToggle.set(
+      meData?.myProfile.user.setting?.sendEmailOnMatching ?? false
+    );
+    // eslint-disable-next-line
+  }, [setValue, meData]);
+
+  /**
+   * RHFのdefault valueに値をsetするためにfetchが完了するまで待つ
+   */
+  if (loading) {
+    return <LoadingPage />;
+  }
 
   return (
     <Box
@@ -62,7 +90,7 @@ export const EditProfilePage = () => {
         flexDirection: "column",
         alignItems: "center",
         mt: "30px",
-        gap: "40px",
+        gap: "25px",
         width: "100%",
       }}
       onSubmit={handleSubmit(handleEditProfile)}
@@ -93,10 +121,26 @@ export const EditProfilePage = () => {
           {...register("bio")}
         />
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box>
+        <TextField
+          sx={{ width: "500px" }}
+          label="通知用メールアドレス"
+          {...register("email")}
+        />
+        {errors.email && (
+          <Typography sx={{ mt: "5px", color: "error.main" }}>
+            {errors.email.message}
+          </Typography>
+        )}
+      </Box>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography fontWeight="bold">メール通知を受け取る</Typography>
+        <Switch checked={isEmailToggle} onChange={setIsEmailToggle.toggle} />
+      </Box>
+      <Box sx={{ display: "flex", flexDirection: "column", mb: 1 }}>
         <Button
           sx={{
-            mb: "35px",
+            mb: "15px",
             mt: "15px",
             width: "450px",
             height: "50px",

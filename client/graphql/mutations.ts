@@ -33,6 +33,22 @@ export const UPDATE_PROFILE = gql`
   }
 `;
 
+export const UPDATE_EMAIL_SETTING = gql`
+  mutation updateEmailSetting($sendEmailOnMatching: Boolean!) {
+    UpdateUserSettings(sendEmailOnMatching: $sendEmailOnMatching) {
+      sendEmailOnMatching
+    }
+  }
+`;
+
+export const UPDATE_USER = gql`
+  mutation updateUser($email: String!) {
+    updateUser(email: $email) {
+      id
+    }
+  }
+`;
+
 /**
  * post
  */

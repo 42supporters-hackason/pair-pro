@@ -213,6 +213,10 @@ export const FETCH_ME = gql`
       bio
       user {
         githubLogin
+        email
+        setting {
+          sendEmailOnMatching
+        }
       }
     }
   }
