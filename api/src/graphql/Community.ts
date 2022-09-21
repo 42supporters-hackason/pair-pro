@@ -14,7 +14,9 @@ export const CommunityObject = objectType({
       resolve(parent, args, context) {
         return context.prisma.community
           .findUnique({ where: { id: parent.id } })
-          .profiles();
+          .profiles({
+            where: { deletedAt: null },
+          });
       },
     });
     t.field("creator", {
@@ -46,7 +48,9 @@ export const CommunityQuery = extendType({
         const { userId } = context.expectUserLoggedIn();
 
         const profiles = await context.prisma.profile.findMany({
-          where: { userId },
+          where: {
+            AND: [{ userId }, { deletedAt: null }],
+          },
           include: { community: true },
         });
         return profiles.map((profile) => profile.community);
@@ -187,6 +191,13 @@ export const CommunityMutation = extendType({
               },
             },
           });
+        }
+        // 一度脱退したコミュニティにもう一度入る場合
+        if (!!profile.deletedAt) {
+          await context.prisma.profile.update({
+            where: { id: profile.id },
+            data: { deletedAt: null }
+          })
         }
 
         const token = jwt.sign(

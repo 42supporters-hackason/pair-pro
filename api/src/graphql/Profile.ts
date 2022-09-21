@@ -60,8 +60,8 @@ export const ProfileObject = objectType({
             where: { id: parent.id },
           })
           .createdCommunities();
-      }
-    })
+      },
+    });
   },
 });
 
@@ -79,9 +79,12 @@ export const ProfileQuery = extendType({
     t.nonNull.list.nonNull.field("profiles", {
       type: "Profile",
       resolve(parent, args, context) {
-        return context.prisma.profile.findMany();
+        return context.prisma.profile.findMany({
+          where: { deletedAt: null },
+        });
       },
     });
+    // 念の為、論理削除済みのprofileも検索可能に
     t.field("profile", {
       type: "Profile",
       args: {
@@ -116,7 +119,9 @@ export const ProfileQuery = extendType({
         const { skip, take } = args;
 
         const profiles = await context.prisma.profile.findMany({
-          where: { communityId },
+          where: {
+            AND: [{ communityId }, { deletedAt: null }],
+          },
           skip: skip as number | undefined,
           take: take as number | undefined,
         });
@@ -163,8 +168,9 @@ export const ProfileMutation = extendType({
       async resolve(parent, args, context) {
         const { userId, profileId } = context.expectUserJoinedCommunity();
 
-        await context.prisma.profile.delete({
+        await context.prisma.profile.update({
           where: { id: profileId },
+          data: { deletedAt: new Date() },
         });
 
         const me = (await context.prisma.user.findUnique({

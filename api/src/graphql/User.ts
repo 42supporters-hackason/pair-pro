@@ -15,7 +15,9 @@ export const UserObject = objectType({
           .findUnique({
             where: { id: parent.id },
           })
-          .profiles();
+          .profiles({
+            where: { deletedAt: null },
+          });
       },
     });
     t.field("setting", {
