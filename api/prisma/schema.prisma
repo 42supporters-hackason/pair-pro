@@ -42,6 +42,7 @@ model Profile {
   community          Community   @relation(name: "Community", fields: [communityId], references: [id])
   communityId        String
   createdCommunities Community[] @relation(name: "CommunityCreator")
+  deletedAt          DateTime?
 }
 
 // User one-one Setting. boolやenumで管理するような設定項目をUserから分離

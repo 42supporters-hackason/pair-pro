@@ -103,7 +103,9 @@ export const PostQuery = extendType({
 
         const profileIds = (
           await context.prisma.profile.findMany({
-            where: { communityId },
+            where: {
+              AND: [{ communityId }, { deletedAt: null }],
+            },
           })
         ).map((p) => p.id);
 
@@ -375,8 +377,10 @@ export const PostMutation = extendType({
         }
 
         // check if the navigator exists
-        const navigator = await context.prisma.profile.findUnique({
-          where: { id: navigatorId },
+        const navigator = await context.prisma.profile.findFirst({
+          where: {
+            AND: [{ id: navigatorId }, { deletedAt: null }],
+          },
         });
         if (!navigator) {
           throw new Error("There is no such navigator");
