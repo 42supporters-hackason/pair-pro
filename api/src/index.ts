@@ -7,7 +7,7 @@ import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 
-import { context } from "./context";
+import { context, contextForWs } from "./context";
 import { schema } from "./schema";
 
 const app = express();
@@ -18,7 +18,7 @@ const wsServer = new WebSocketServer({
   path: "/graphql",
 });
 
-const serverCleanup = useServer({ schema, context }, wsServer);
+const serverCleanup = useServer({ schema, context: contextForWs }, wsServer);
 
 const server = new ApolloServer({
   schema,
