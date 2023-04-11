@@ -239,7 +239,8 @@ export interface NexusGenFieldTypes {
     name: string; // String!
   }
   Subscription: { // field return type
-    waitForMessage: NexusGenRootTypes['Message'] | null; // Message
+    waitForMessage: NexusGenRootTypes['Message']; // Message!
+    waitForMessageNotification: NexusGenRootTypes['Post']; // Post!
   }
   User: { // field return type
     email: string | null; // String
@@ -370,6 +371,7 @@ export interface NexusGenFieldTypeNames {
   }
   Subscription: { // field return type name
     waitForMessage: 'Message'
+    waitForMessageNotification: 'Post'
   }
   User: { // field return type name
     email: 'String'

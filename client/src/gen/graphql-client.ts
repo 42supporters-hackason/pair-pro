@@ -289,7 +289,8 @@ export type Skill = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  waitForMessage?: Maybe<Message>;
+  waitForMessage: Message;
+  waitForMessageNotification: Post;
 };
 
 
@@ -532,7 +533,12 @@ export type FetchMessageSubscriptionVariables = Exact<{
 }>;
 
 
-export type FetchMessageSubscription = { __typename?: 'Subscription', waitForMessage?: { __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } } | null };
+export type FetchMessageSubscription = { __typename?: 'Subscription', waitForMessage: { __typename?: 'Message', id: number, content: string, createdBy: { __typename?: 'Profile', id: number, name: string, matchingPoint: number, bio: string, user: { __typename?: 'User', githubLogin: string } } } };
+
+export type MessageNotificationSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MessageNotificationSubscription = { __typename?: 'Subscription', waitForMessageNotification: { __typename?: 'Post', id: string } };
 
 
 export const SignInDocument = gql`
@@ -1908,3 +1914,32 @@ export function useFetchMessageSubscription(baseOptions: Apollo.SubscriptionHook
       }
 export type FetchMessageSubscriptionHookResult = ReturnType<typeof useFetchMessageSubscription>;
 export type FetchMessageSubscriptionResult = Apollo.SubscriptionResult<FetchMessageSubscription>;
+export const MessageNotificationDocument = gql`
+    subscription messageNotification {
+  waitForMessageNotification {
+    id
+  }
+}
+    `;
+
+/**
+ * __useMessageNotificationSubscription__
+ *
+ * To run a query within a React component, call `useMessageNotificationSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageNotificationSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageNotificationSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMessageNotificationSubscription(baseOptions?: Apollo.SubscriptionHookOptions<MessageNotificationSubscription, MessageNotificationSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<MessageNotificationSubscription, MessageNotificationSubscriptionVariables>(MessageNotificationDocument, options);
+      }
+export type MessageNotificationSubscriptionHookResult = ReturnType<typeof useMessageNotificationSubscription>;
+export type MessageNotificationSubscriptionResult = Apollo.SubscriptionResult<MessageNotificationSubscription>;

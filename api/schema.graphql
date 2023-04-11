@@ -134,7 +134,8 @@ type Skill {
 }
 
 type Subscription {
-  waitForMessage(postId: String!): Message
+  waitForMessage(postId: String!): Message!
+  waitForMessageNotification: Post!
 }
 
 type User {

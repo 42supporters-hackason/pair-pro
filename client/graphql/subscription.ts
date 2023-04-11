@@ -17,3 +17,11 @@ export const FETCH_MESSAGE = gql`
     }
   }
 `;
+
+export const MESSAGE_NOTIFICATION = gql`
+  subscription messageNotification {
+    waitForMessageNotification {
+      id
+    }
+  }
+`;
